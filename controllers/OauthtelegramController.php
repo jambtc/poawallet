@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 
 use app\models\Users;
 use app\models\UsersSearch;
+use app\models\Socialusers;
 
 
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
@@ -47,15 +48,10 @@ class OauthtelegramController extends Controller
 		// else
 		//   $this->redirect(array('site/login'));
 
-
-
-
-
   }
 
 
 
-}
 // namespace app\controllers;
 //
 // use Yii;
@@ -210,4 +206,4 @@ class OauthtelegramController extends Controller
 		$auth_data_json = CJSON::encode($auth_data);
 	  setcookie('tg_user', $auth_data_json);
 	}
-// }
+}
