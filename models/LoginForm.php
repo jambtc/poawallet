@@ -6,76 +6,95 @@ use Yii;
 use yii\base\Model;
 
 /**
- * LoginForm is the model behind the login form.
- *
- * @property-read User|null $user This property is read-only.
- *
+ * LoginForm class.
+ * LoginForm is the data structure for keeping
+ * user login form data. It is used by the 'login' action of 'SiteController'.
  */
 class LoginForm extends Model
 {
-    public $username;
-    public $password;
-    public $rememberMe = true;
+	public $username;
+	public $password;
+	public $rememberMe = true;
 
-    private $_user = false;
+	// provider utilizzato: facebook, google, telegram
+	public $oauth_provider;
+
+	private $_user = false;
 
 
-    /**
-     * @return array the validation rules.
-     */
-    public function rules()
-    {
-        return [
-            // username and password are both required
-            [['username', 'password'], 'required'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-        ];
-    }
 
-    /**
-     * Validates the password.
-     * This method serves as the inline validation for password.
-     *
-     * @param string $attribute the attribute currently being validated
-     * @param array $params the additional name-value pairs given in the rule
-     */
-    public function validatePassword($attribute, $params)
-    {
-        if (!$this->hasErrors()) {
-            $user = $this->getUser();
+	/**
+	 * @return array the validation rules.
+	 */
+	public function rules()
+	{
+			return [
+					// username and password are both required
+					[['username', 'password'], 'required'],
+					// rememberMe must be a boolean value
+					['rememberMe', 'boolean'],
+					// password is validated by authenticate()
+					['password', 'authenticate'],
 
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            }
-        }
-    }
+					// username has to be a valid email address
+					['username', 'email', 'message'=>Yii::t('lang','Email hasn\'t right format.')],
+			];
+	}
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
-     */
-    public function login()
-    {
-        if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
-        }
-        return false;
-    }
 
-    /**
-     * Finds user by [[username]]
-     *
-     * @return User|null
-     */
-    public function getUser()
-    {
-        if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
-        }
+	/**
+	 * Declares attribute labels.
+	 */
+	public function attributeLabels()
+	{
+		return array(
+			'username'=>Yii::t('model','Email'),
+			'password'=>Yii::t('model','Password'),
+			// 'ga_cod'=>Yii::t('model','Google 2FA'),
+		);
+	}
 
-        return $this->_user;
-    }
+	/**
+	 * Authenticates the password.
+	 * This is the 'authenticate' validator as declared in rules().
+	 * @param string $attribute the name of the attribute to be validated.
+	 * @param array $params additional parameters passed with rule when being executed.
+	 */
+	public function authenticate($attribute,$params)
+	{
+		if (!$this->hasErrors()) {
+				$user = $this->getUser();
+
+				if (!$user || !$user->validatePassword($this->password)) {
+						$this->addError($attribute, 'Incorrect username or password.');
+				}
+		}
+	}
+
+	/**
+	 * Logs in a user using the provided username and password.
+	 * @return bool whether the user is logged in successfully
+	 */
+	public function login()
+	{
+			if ($this->validate()) {
+					return Yii::$app->user->login($this->getUser(), 3600*24*30);
+			}
+			return false;
+	}
+
+	/**
+	 * Finds user by [[username]]
+	 *
+	 * @return User|null
+	 */
+	public function getUser()
+	{
+			if ($this->_user === false) {
+					$this->_user = User::findUserByProvider($this->username,$this->oauth_provider);
+			}
+
+			return $this->_user;
+	}
+
 }

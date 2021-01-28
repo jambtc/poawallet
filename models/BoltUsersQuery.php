@@ -3,11 +3,11 @@
 namespace app\models;
 
 /**
- * This is the ActiveQuery class for [[BoltTokens]].
+ * This is the ActiveQuery class for [[BoltUsers]].
  *
- * @see BoltTokens
+ * @see BoltUsers
  */
-class BoltTokensQuery extends \yii\db\ActiveQuery
+class BoltUsersQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class BoltTokensQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltTokens[]|array
+     * @return BoltUsers[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class BoltTokensQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltTokens|array|null
+     * @return BoltUsers|array|null
      */
     public function one($db = null)
     {

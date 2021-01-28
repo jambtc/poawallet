@@ -75,6 +75,16 @@ class SiteController extends Controller
     }
 
     /**
+     * Displays homepage.
+     *
+     * @return string
+     */
+    public function actionDash()
+    {
+        return $this->render('index');
+    }
+
+    /**
      * Login action.
      *
      * @return Response|string
