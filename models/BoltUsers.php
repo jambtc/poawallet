@@ -16,8 +16,14 @@ use Yii;
  * @property string $oauth_provider
  * @property string $oauth_uid
  */
-class BoltUsers extends \yii\db\ActiveRecord
+class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    // public $id;
+    // public $username;
+    // public $password;
+    // public $authKey;
+    // public $accessToken;
+
     /**
      * {@inheritdoc}
      */
@@ -32,9 +38,9 @@ class BoltUsers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['email', 'password', 'activation_code', 'status_activation_code', 'oauth_provider', 'oauth_uid'], 'required'],
+            [['username', 'password', 'activation_code', 'status_activation_code', 'oauth_provider', 'oauth_uid'], 'required'],
             [['status_activation_code'], 'integer'],
-            [['email', 'password'], 'string', 'max' => 255],
+            [['username', 'password, authKey, accessToken'], 'string', 'max' => 255],
             [['ga_secret_key'], 'string', 'max' => 16],
             [['activation_code'], 'string', 'max' => 50],
             [['oauth_provider'], 'string', 'max' => 8],
@@ -63,8 +69,8 @@ class BoltUsers extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_user' => Yii::t('app', 'Id User'),
-            'email' => Yii::t('app', 'Email'),
+            'id' => Yii::t('app', 'Id User'),
+            'username' => Yii::t('app', 'Email'),
             'password' => Yii::t('app', 'Password'),
             'ga_secret_key' => Yii::t('app', 'Ga Secret Key'),
             'activation_code' => Yii::t('app', 'Activation Code'),
@@ -74,5 +80,126 @@ class BoltUsers extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+      return self::findOne(['accessToken'=>$token]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        return self::findOne(['username'=>$username]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findUserByProvider($username,$oauth_provider)
+    {
+      $record = self::findOne([
+        'username'=>$username,
+        'oauth_provider'=>$oauth_provider,
+      ]);
+
+      if($record===null){
+    		return null;
+    	}	else {
+        $social = BoltSocialUsers::find()
+          ->where([
+      			'oauth_uid'=>$record->oauth_uid,
+      			'oauth_provider'=>$oauth_provider,
+      		])
+          ->one();
+
+				// fix per salvare un social user nel caso non fosse stato salvato
+				if (null === $social){
+					$explodemail = explode('@',$username);
+					$explodename = explode('.',$explodemail[0]);
+
+					$social = new BoltSocialUsers();
+					$social->oauth_provider = $oauth_provider;
+					$social->oauth_uid = $record->oauth_uid;
+					$social->id_user = $record->id_user;
+					$social->first_name = $explodename[0];
+					$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
+					$social->username = $explodemail[0];
+					$social->email = $username;
+					$social->picture = 'css/images/anonymous.png';
+
+					$social->save();
+				}
+
+				$array = array(
+					'id_user' => $record->id,
+					'name' => $social->first_name,
+					'surname' => $social->last_name,
+					'email' => $username,
+					'username' => $social->username,
+					'picture' => $social->picture,
+					'provider'=> $social->oauth_provider,
+					'oauth_uid'=> $record->oauth_uid,
+					'facade' => 'dashboard',
+				);
+
+        Yii::$app->session->set('objUser',$array);
+
+        return $record;
+  		}
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+        // return $this->password === $password;
+    }
 
 }

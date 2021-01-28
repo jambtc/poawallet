@@ -91,7 +91,7 @@ class LoginForm extends Model
 	public function getUser()
 	{
 			if ($this->_user === false) {
-					$this->_user = User::findUserByProvider($this->username,$this->oauth_provider);
+					$this->_user = BoltUsers::findUserByProvider($this->username,$this->oauth_provider);
 			}
 
 			return $this->_user;

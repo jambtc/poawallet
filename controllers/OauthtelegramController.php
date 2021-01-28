@@ -50,42 +50,23 @@ class OauthtelegramController extends Controller
 		}
 		return $this->goHome();
 
-		// if($model->validate() && $model->login())
-		// 	$this->redirect(array('site/dash'));
-		// else
-		//   $this->redirect(array('site/login'));
-
   }
 
 
 	private function saveUserData($auth_data)
 	{
-		$data = [
+		$model = BoltUsers::find()
+    ->where([
 			'oauth_provider'=>'telegram',
 			'oauth_uid'=>$auth_data['id'],
-		];
-
-
-		$model = BoltUsers::find()
-    ->where($data)
+		])
     ->one();
 
-		// the following will retrieve the user 'CeBe' from the database
-		// $user = new BoltUsers;
-		// $model = $user::findOne($data);
-
-		// $searchModel = new BoltUsersSearch;
-		// $dataProvider = $searchModel->search($data);
-
-		// $model = new BoltUsers;
-		// $model->load($data);
-
-		// echo "<pre>".print_r($model,true)."</pre>";
 
 
 		if (null === $model){
 			$model = new BoltUsers();
-			$model->email = $auth_data['email'];
+			$model->username = $auth_data['email'];
 			$model->password = $auth_data['id'];
 			$model->ga_secret_key = null;
 			$model->activation_code = '0';
@@ -114,7 +95,7 @@ class OauthtelegramController extends Controller
 		}else{
 			// $social = Socialusers::model()->findByAttributes(['id_user'=>$model->id_user]);
 			$social = BoltSocialusers::find()
-	    ->where(['id_user'=>$model->id_user])
+	    ->where(['id_user'=>$model->id])
 	    ->one();
 			// $social = new Socialusers;
 			// $social->load(['id_user'=>$model->id_user]);
@@ -124,7 +105,7 @@ class OauthtelegramController extends Controller
 
 			$social->oauth_provider = 'telegram';
 			$social->oauth_uid = $auth_data['id'];
-			$social->id_user = $model->id_user;
+			$social->id_user = $model->id;
 			$social->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
 			$social->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 			$social->username = (isset($auth_data['username']) ? $auth_data['username'] : '');
