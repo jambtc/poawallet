@@ -12,30 +12,32 @@ use app\models\BoltSocialusers;
 use app\models\LoginForm;
 
 use yii\helpers\Json;
+use yii\helpers\Url;
 
 
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
+Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
 
-class OauthtelegramController extends Controller
+class OauthgoogleController extends Controller
 {
-	public $bot_token;
-	public $bot_username;
+	public function actionResetCookies()
+	{
+		setcookie('G_AUTHUSER_LOGOUT','');
+	}
 
 	public function actionCheckAuthorization()
   {
-		$bot_token = \settings::load()->telegramToken; // place bot token of your bot here
-		$bot_username = \settings::load()->telegramBotName; // place username of your bot here
+		if (isset($_COOKIE['G_AUTHUSER_LOGOUT']) && $_COOKIE['G_AUTHUSER_LOGOUT'] == 'TRUE'){
+			setcookie('G_AUTHUSER_LOGOUT','');
+			$auth_data['success'] = false;
+			echo Json::encode($auth_data);
+			exit(1);
+		}
 
-		$login = new \telegram($bot_username,$bot_token);
-		$auth_data = $login->checkTelegramAuthorization($_GET);
+		$login = new \google(false);
+		$auth_data = $_GET;
 
-		// FIX CAMBIO USERNAME IN TELEGRAM
-		$auth_data['email'] = $auth_data['id'] .'@telegram.com';
-		$auth_data['oauth_provider'] = 'telegram';
-
-		// echo "<pre>".print_r($auth_data,true)."</pre>";
-		// exit;
+		$auth_data['oauth_provider'] = 'google';
 
 		$this->saveUserData($auth_data);
 		//
@@ -45,11 +47,16 @@ class OauthtelegramController extends Controller
 		$model->oauth_provider = $auth_data['oauth_provider'];
 		//
 
+		// $auth_data['success'] = false;
+		// if ($model->validate() && $model->login()) {
+		// 	$auth_data['success'] = true;
+		// }
+		// echo Json::encode($auth_data);
+
 		if ($model->validate() && $model->login()) {
 				return $this->redirect(['site/dash']);
 		}
 		return $this->goHome();
-
   }
 
 
@@ -62,10 +69,9 @@ class OauthtelegramController extends Controller
 		])
     ->one();
 
-
-
 		if (null === $model){
 			$model = new BoltUsers();
+
 			$model->username = $auth_data['email'];
 			$model->password = $auth_data['id'];
 			$model->ga_secret_key = null;
@@ -76,8 +82,19 @@ class OauthtelegramController extends Controller
 			$model->authKey = Yii::$app->security->generateRandomString();
 			$model->accessToken = Yii::$app->getSecurity()->generatePasswordHash($model->getAuthKey());
 
+			// echo "<pre>".print_r($model->attributes,true)."</pre>";
+			//  // exit;
+			// if ($model->validate()){
+			// 	echo "valido";
+			// }else{
+			// 	echo "non valido";
+			// }
+			// exit;
+
+
 			if ($model->save()){
 				$social = new BoltSocialusers();
+
 				$social->oauth_provider = $auth_data['oauth_provider'];
 				$social->oauth_uid = $auth_data['id'];
 				$social->id_user = $model->id;
@@ -85,7 +102,7 @@ class OauthtelegramController extends Controller
 				$social->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 				$social->username = (isset($auth_data['username']) ? $auth_data['username'] : '');
 				$social->email = $auth_data['email'];
-				$social->picture = (isset($auth_data['photo_url']) ? $auth_data['photo_url'] : '');
+				$social->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
 				if (!($social->save())){
 					echo "<pre>".print_r($social,true)."</pre>";
 					exit;
@@ -112,7 +129,7 @@ class OauthtelegramController extends Controller
 			$social->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 			$social->username = (isset($auth_data['username']) ? $auth_data['username'] : '');
 			$social->email = $auth_data['email'];
-			$social->picture = (isset($auth_data['photo_url']) ? $auth_data['photo_url'] : 'css/images/anonymous.png');
+			$social->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
 			if (!($social->save())){
 				echo "<pre>".print_r($social,true)."</pre>";
 				exit;
@@ -120,6 +137,5 @@ class OauthtelegramController extends Controller
 		}
 
 		$auth_data_json = Json::encode($auth_data);
-	  setcookie('tg_user', $auth_data_json);
 	}
 }

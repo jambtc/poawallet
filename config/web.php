@@ -48,7 +48,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\BoltUsers',
+            'identityClass' => 'app\models\BoltLogin',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [

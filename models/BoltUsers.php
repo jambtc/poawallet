@@ -16,14 +16,8 @@ use Yii;
  * @property string $oauth_provider
  * @property string $oauth_uid
  */
-class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class BoltUsers extends \yii\db\ActiveRecord
 {
-    // public $id;
-    // public $username;
-    // public $password;
-    // public $authKey;
-    // public $accessToken;
-
     /**
      * {@inheritdoc}
      */
@@ -40,7 +34,7 @@ class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
         return [
             [['username', 'password', 'activation_code', 'status_activation_code', 'oauth_provider', 'oauth_uid'], 'required'],
             [['status_activation_code'], 'integer'],
-            [['username', 'password, authKey, accessToken'], 'string', 'max' => 255],
+            [['username', 'password', 'authKey', 'accessToken'], 'string', 'max' => 255],
             [['ga_secret_key'], 'string', 'max' => 16],
             [['activation_code'], 'string', 'max' => 50],
             [['oauth_provider'], 'string', 'max' => 8],
@@ -60,7 +54,8 @@ class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
   	public function hashIt($attribute,$params)
   	{
         if ($this->isNewRecord)
-  		    $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+          $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+
   	}
 
     /**
@@ -80,91 +75,6 @@ class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentity($id)
-    {
-        return self::findOne($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-      return self::findOne(['accessToken'=>$token]);
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findByUsername($username)
-    {
-        return self::findOne(['username'=>$username]);
-    }
-
-    /**
-     * Finds user by username
-     *
-     * @param string $username
-     * @return static|null
-     */
-    public static function findUserByProvider($username,$oauth_provider)
-    {
-      $record = self::findOne([
-        'username'=>$username,
-        'oauth_provider'=>$oauth_provider,
-      ]);
-
-      if($record===null){
-    		return null;
-    	}	else {
-        $social = BoltSocialUsers::find()
-          ->where([
-      			'oauth_uid'=>$record->oauth_uid,
-      			'oauth_provider'=>$oauth_provider,
-      		])
-          ->one();
-
-				// fix per salvare un social user nel caso non fosse stato salvato
-				if (null === $social){
-					$explodemail = explode('@',$username);
-					$explodename = explode('.',$explodemail[0]);
-
-					$social = new BoltSocialUsers();
-					$social->oauth_provider = $oauth_provider;
-					$social->oauth_uid = $record->oauth_uid;
-					$social->id_user = $record->id_user;
-					$social->first_name = $explodename[0];
-					$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
-					$social->username = $explodemail[0];
-					$social->email = $username;
-					$social->picture = 'css/images/anonymous.png';
-
-					$social->save();
-				}
-
-				$array = array(
-					'id_user' => $record->id,
-					'name' => $social->first_name,
-					'surname' => $social->last_name,
-					'email' => $username,
-					'username' => $social->username,
-					'picture' => $social->picture,
-					'provider'=> $social->oauth_provider,
-					'oauth_uid'=> $record->oauth_uid,
-					'facade' => 'dashboard',
-				);
-
-        Yii::$app->session->set('objUser',$array);
-
-        return $record;
-  		}
-    }
 
     /**
      * {@inheritdoc}
@@ -182,13 +92,6 @@ class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
         return $this->authKey;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
 
     /**
      * Validates password
@@ -199,7 +102,6 @@ class BoltUsers extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
     public function validatePassword($password)
     {
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
-        // return $this->password === $password;
     }
 
 }

@@ -11,6 +11,7 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
 Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
+Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
 ?>
@@ -23,6 +24,11 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
+
+    <meta name="google-signin-client_id" content="<?php echo \settings::load()->GoogleOauthClientId; ?>">
+
+    <!-- Manifest Progressive Web App -->
+    <link rel="manifest" href="manifest.json">
 
     <!-- Google font file. If you want you can change. -->
   	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900" rel="stylesheet">
