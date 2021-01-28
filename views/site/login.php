@@ -16,9 +16,14 @@ $settings = settings::load();
 // echo "<pre>".print_r($settings,true)."</pre>";
 // exit;
 
-// load telegram infos
+// load telegram oauth infos
 Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
 $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
+
+// load google oauth infos
+Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
+$checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
+;
 ?>
 <div class="site-login">
   <div class="body-content">
@@ -74,6 +79,27 @@ $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
     </div>
     <?php ActiveForm::end(); ?>
   </div>
+</div>
+
+<!-- Google access -->
+<div class="modal fade" id="modal-google" tabindex="-1" role="dialog" aria-labelledby="GoogleModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content alert-primary txt-extra-bold">
+			<div class="modal-header">
+				<div class="modal-title text-light" id="GoogleModalLabel"><?php echo Yii::t('app','Sign in with Google'); ?></div>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<center>
+						<?php
+					  $loginGoogle = new google($checkGoogleAuthorization);
+						echo $loginGoogle->loginButton();
+						?>
+					</center>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Telegram access -->
