@@ -41,7 +41,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
 
-    if (Yii::$app->user->getIsGuest()) {
+    // if (Yii::$app->user->getIsGuest()) {
       NavBar::begin([
         // 'brandLabel' => Yii::$app->name,
         'brandLabel' => Html::img('@web/css/images/logo.png', [
@@ -61,24 +61,24 @@ AppAsset::register($this);
           ['label' => 'Home', 'url' => ['/site/index']],
           ['label' => 'About', 'url' => ['/site/about']],
           ['label' => 'Contact', 'url' => ['/site/contact']],
-          // Yii::$app->user->isGuest ? (
-          //   ['label' => 'Login', 'url' => ['/site/login']]
-          //   ) : (
-          //     '<li>'
-          //     . Html::beginForm(['/site/logout'], 'post')
-          //     . Html::submitButton(
-          //       'Logout (' . Yii::$app->user->identity->username . ')',
-          //       ['class' => 'btn btn-link logout']
-          //       )
-          //       . Html::endForm()
-          //       . '</li>'
-          //       )
+          Yii::$app->user->isGuest ? (
+            ['label' => 'Login', 'url' => ['/site/login']]
+            ) : (
+              '<li>'
+              . Html::beginForm(['/site/logout'], 'post')
+              . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+                )
+                . Html::endForm()
+                . '</li>'
+                )
               ],
             ]);
             NavBar::end();
-    } else {
-      include 'navmenu.php';
-    }
+    // } else {
+    //   include 'navmenu.php';
+    // }
 
     ?>
 
@@ -94,6 +94,12 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
 <?php
+if (Yii::$app->user->getIsGuest()) {
+  echo "user is not logged";
+}else{
+  echo "user is logged in";
+}
+
 // echo  Yii::getAlias('@packages');
  // echo packages\logo\footer();
  // echo Yii::$app->logo->footer(); // cdt - CustomDateTime
