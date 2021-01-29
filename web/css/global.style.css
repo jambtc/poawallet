@@ -100,7 +100,7 @@ input,button, select, textarea, label{
 body{
 	margin: 0;
 	padding: 0;
-	background-color: #FFF;
+	background-color: #4465a9 ; /*#FFF;*/
 	font-family: Nunito;
 	font-size: 14px;
 	color: #777;
