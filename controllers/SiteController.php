@@ -71,18 +71,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->redirect(['wallet/index']);
+        }
         return $this->render('index');
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionDash()
-    {
-        return $this->render('index');
-    }
 
     /**
      * Login action.

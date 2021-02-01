@@ -5,7 +5,7 @@
 /* @var $model app\models\LoginForm */
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use yii\helpers\Url;
 
 $this->title = 'Login';
@@ -68,7 +68,7 @@ $checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
 
 
 
-    <div class="form-group">
+    <div class="form-group row">
         <div class="col-lg-offset-1 col-lg-11">
             <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
         </div>

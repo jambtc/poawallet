@@ -5,8 +5,8 @@
 
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
@@ -40,6 +40,7 @@ AppAsset::register($this);
 
     <!-- Template global css file. Requared all pages -->
   	<link rel="stylesheet" type="text/css" href="css/global.style.css">
+    <link rel="stylesheet" type="text/css" href="css/site.css">
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -52,11 +53,12 @@ AppAsset::register($this);
         // 'brandLabel' => Yii::$app->name,
         'brandLabel' => Html::img('@web/css/images/logo.png', [
           'alt'=>Yii::$app->name,
-          'style' => 'width: 45px; margin-top: -11px; display: inline;',
+          'style' => 'width: 45px; display: inline;',
           ]). '<span style="margin-left: 10px;">'.Yii::$app->name.'</span>',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-          'class' => 'navbar-inverse navbar-fixed-top',
+          // 'class' => 'navbar-inverse navbar-fixed-top',
+          'class' => 'navbar navbar-expand-lg navbar-light bg-light',
         ],
       ]);
       echo Nav::widget([
@@ -99,21 +101,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-<?php
-if (Yii::$app->user->getIsGuest()) {
-  echo "user is not logged";
-}else{
-  echo "user is logged in";
-}
-
-// echo  Yii::getAlias('@packages');
- // echo packages\logo\footer();
- // echo Yii::$app->logo->footer(); // cdt - CustomDateTime
- echo logo::footer();
-?>
-        <!-- <p class="pull-left"></p> -->
-
-        <!-- <p class="pull-right"></p> -->
+      <?= logo::footer(); ?>
     </div>
 </footer>
 

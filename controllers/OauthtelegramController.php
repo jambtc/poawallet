@@ -46,7 +46,7 @@ class OauthtelegramController extends Controller
 		//
 
 		if ($model->validate() && $model->login()) {
-				return $this->redirect(['site/dash']);
+				return $this->redirect(['wallet/index']);
 		}
 		return $this->goHome();
 

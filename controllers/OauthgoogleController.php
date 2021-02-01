@@ -54,7 +54,7 @@ class OauthgoogleController extends Controller
 		// echo Json::encode($auth_data);
 
 		if ($model->validate() && $model->login()) {
-				return $this->redirect(['site/dash']);
+				return $this->redirect(['wallet/index']);
 		}
 		return $this->goHome();
   }
