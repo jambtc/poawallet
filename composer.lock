@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dbda4dd38ca20f62457fed3c81927467",
+    "content-hash": "e06bdb12edf41cabca91226cc051f903",
     "packages": [
         {
             "name": "bower-asset/inputmask",
@@ -346,6 +346,138 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/master"
             },
             "time": "2020-06-29T00:56:53+00:00"
+        },
+        {
+            "name": "jambtc/yii2-oauth-facebook",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jambtc/yii2-oauth-facebook.git",
+                "reference": "4e8fa67ef6cdb30bcd554ff5f3059352a4eedfe6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jambtc/yii2-oauth-facebook/zipball/4e8fa67ef6cdb30bcd554ff5f3059352a4eedfe6",
+                "reference": "4e8fa67ef6cdb30bcd554ff5f3059352a4eedfe6",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "jambtc\\oauthfacebook\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio Casizzone",
+                    "email": "jambtc@gmail.com"
+                }
+            ],
+            "description": "yii2 oauth Facebook Authorization Login",
+            "keywords": [
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/jambtc/yii2-oauth-facebook/issues",
+                "source": "https://github.com/jambtc/yii2-oauth-facebook/tree/1.0.1"
+            },
+            "time": "2021-02-01T19:09:40+00:00"
+        },
+        {
+            "name": "jambtc/yii2-oauth-google",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jambtc/yii2-oauth-google.git",
+                "reference": "6c1d21d3725d1188d361f327fd47fd262bf442bd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jambtc/yii2-oauth-google/zipball/6c1d21d3725d1188d361f327fd47fd262bf442bd",
+                "reference": "6c1d21d3725d1188d361f327fd47fd262bf442bd",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "jambtc\\oauthgoogle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio Casizzone",
+                    "email": "jambtc@gmail.com"
+                }
+            ],
+            "description": "yii2 oauth Google Authorization Login",
+            "keywords": [
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/jambtc/yii2-oauth-google/issues",
+                "source": "https://github.com/jambtc/yii2-oauth-google/tree/1.0.0"
+            },
+            "time": "2021-02-01T18:16:03+00:00"
+        },
+        {
+            "name": "jambtc/yii2-oauth-telegram",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jambtc/yii2-oauth-telegram.git",
+                "reference": "e83c850818fdaaff39ec687d6420daf2ef54c6e0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jambtc/yii2-oauth-telegram/zipball/e83c850818fdaaff39ec687d6420daf2ef54c6e0",
+                "reference": "e83c850818fdaaff39ec687d6420daf2ef54c6e0",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "jambtc\\oauthtelegram\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Sergio Casizzone",
+                    "email": "jambtc@gmail.com"
+                }
+            ],
+            "description": "yii2 oauth Telegram Authorization Login",
+            "keywords": [
+                "extension",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/jambtc/yii2-oauth-telegram/issues",
+                "source": "https://github.com/jambtc/yii2-oauth-telegram/tree/1.0.0"
+            },
+            "time": "2021-02-01T17:47:40+00:00"
         },
         {
             "name": "npm-asset/bootstrap",

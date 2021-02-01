@@ -3,19 +3,18 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-
 use yii\base\Model;
 use yii\db\ActiveRecord;
-
 use app\models\BoltUsers;
 use app\models\BoltSocialusers;
 use app\models\LoginForm;
-
 use yii\helpers\Json;
+
+use jambtc\oauthtelegram;
 
 
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
+// Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
 
 class OauthtelegramController extends Controller
 {
@@ -27,7 +26,7 @@ class OauthtelegramController extends Controller
 		$bot_token = \settings::load()->telegramToken; // place bot token of your bot here
 		$bot_username = \settings::load()->telegramBotName; // place username of your bot here
 
-		$login = new \telegram($bot_username,$bot_token);
+		$login = new \jambtc\oauthtelegram\telegram($bot_username,$bot_token);
 		$auth_data = $login->checkTelegramAuthorization($_GET);
 
 		// FIX CAMBIO USERNAME IN TELEGRAM

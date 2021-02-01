@@ -8,6 +8,10 @@ use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Url;
 
+use jambtc\oauthtelegram;
+use jambtc\oauthgoogle;
+use jambtc\oauthfacebook;
+
 $this->title = 'Login';
 // $this->params['breadcrumbs'][] = $this->title;
 
@@ -16,14 +20,10 @@ $settings = settings::load();
 // echo "<pre>".print_r($settings,true)."</pre>";
 // exit;
 
-// load telegram oauth infos
-Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
 $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
+$checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization']);
+$checkFacebookAuthorization = Url::to(['oauthfacebook/check-authorization']);
 
-// load google oauth infos
-Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
-$checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
-;
 ?>
 <div class="site-login">
   <div class="body-content">
@@ -61,12 +61,8 @@ $checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
         ],
     ]); ?>
 
-<?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-<?= $form->field($model, 'password')->passwordInput() ?>
-
-
-
+    <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+    <?= $form->field($model, 'password')->passwordInput() ?>
 
     <div class="form-group row">
         <div class="col-lg-offset-1 col-lg-11">
@@ -81,18 +77,48 @@ $checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
   </div>
 </div>
 
-<!-- Google access -->
-<div class="modal fade" id="modal-google" tabindex="-1" role="dialog" aria-labelledby="GoogleModalLabel" aria-hidden="true" style="display: none;">
+<!-- Facebook access -->
+<div class="modal fade" id="modal-facebook" tabindex="-1" role="dialog" aria-labelledby="FacebookModalLabel" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg" role="document">
-	<div class="modal-content alert-primary txt-extra-bold">
+	<div class="modal-content alert-primary txt-extra-bold text-primary">
 			<div class="modal-header">
-				<div class="modal-title text-light" id="GoogleModalLabel"><?php echo Yii::t('app','Sign in with Google'); ?></div>
+				<div class="modal-title" id="FacebookModalLabel"><?php echo Yii::t('app','Sign in with Facebook'); ?></div>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
 					<center>
 						<?php
-					  $loginGoogle = new google($checkGoogleAuthorization);
+            $sourceLanguage = explode('-',\Yii::$app->language);
+            $language = $sourceLanguage[0];
+            $country = strtoupper($sourceLanguage[1]);
+
+            $loginFB = new jambtc\oauthfacebook\facebook(
+                $settings->facebookAppID,
+                $settings->facebookAppVersion,
+                $language,
+                $country,
+                $checkFacebookAuthorization);
+						echo $loginFB->loginButton();
+						?>
+					</center>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Google access -->
+<div class="modal fade" id="modal-google" tabindex="-1" role="dialog" aria-labelledby="GoogleModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-content alert-primary txt-extra-bold text-primary">
+			<div class="modal-header">
+				<div class="modal-title" id="GoogleModalLabel"><?php echo Yii::t('app','Sign in with Google'); ?></div>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<center>
+						<?php
+					  $loginGoogle = new jambtc\oauthgoogle\google($checkGoogleAuthorization);
 						echo $loginGoogle->loginButton();
 						?>
 					</center>
@@ -105,15 +131,15 @@ $checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization'])
 <!-- Telegram access -->
 <div class="modal fade" id="modal-telegram" tabindex="-1" role="dialog" aria-labelledby="TelegramModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content alert-primary txt-extra-bold">
+    <div class="modal-content alert-primary txt-extra-bold text-primary">
       <div class="modal-header">
-        <div class="modal-title text-light" id="TelegramModalLabel"><?php echo Yii::t('app','Sign in with Telegram'); ?></div>
+        <div class="modal-title" id="TelegramModalLabel"><?php echo Yii::t('app','Sign in with Telegram'); ?></div>
       </div>
       <div class="modal-body">
         <div class="form-group">
           <center>
             <?php
-            $loginTelegram = new telegram($settings->telegramBotName,$settings->telegramToken);
+            $loginTelegram = new jambtc\oauthtelegram\telegram($settings->telegramBotName,$settings->telegramToken);
             echo $loginTelegram->loginButton($checkTelegramAuthorization,'large');
             ?>
           </center>

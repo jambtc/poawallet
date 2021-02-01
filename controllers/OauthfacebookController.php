@@ -11,45 +11,26 @@ use app\models\LoginForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
-use jambtc\oauthgoogle;
+use jambtc\oauthfacebook;
 
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
 
-class OauthgoogleController extends Controller
+class OauthfacebookController extends Controller
 {
-	public function actionResetCookies()
-	{
-		setcookie('G_AUTHUSER_LOGOUT','');
-	}
+
 
 	public function actionCheckAuthorization()
   {
-		if (isset($_COOKIE['G_AUTHUSER_LOGOUT']) && $_COOKIE['G_AUTHUSER_LOGOUT'] == 'TRUE'){
-			setcookie('G_AUTHUSER_LOGOUT','');
-			$auth_data['success'] = false;
-			echo Json::encode($auth_data);
-			exit(1);
-		}
-
-		$login = new \jambtc\oauthgoogle\google(false);
-		$auth_data = $_GET;
-
-		$auth_data['oauth_provider'] = 'google';
+		$auth_data = $_POST;
+		$auth_data['oauth_provider'] = 'facebook';
 
 		$this->saveUserData($auth_data);
 		//
 		$model=new LoginForm;
-		$model->username = $auth_data['email'];
+		$model->username = $auth_data['id'] .'@facebook.com'; // fix email change fb
 		$model->password = $auth_data['id'];
 		$model->oauth_provider = $auth_data['oauth_provider'];
 		//
-
-		// $auth_data['success'] = false;
-		// if ($model->validate() && $model->login()) {
-		// 	$auth_data['success'] = true;
-		// }
-		// echo Json::encode($auth_data);
 
 		if ($model->validate() && $model->login()) {
 				return $this->redirect(['wallet/index']);
@@ -70,7 +51,7 @@ class OauthgoogleController extends Controller
 		if (null === $model){
 			$model = new BoltUsers();
 
-			$model->username = $auth_data['email'];
+			$model->username = $auth_data['id'] .'@facebook.com'; //$auth_data['email'];
 			$model->password = $auth_data['id'];
 			$model->ga_secret_key = null;
 			$model->activation_code = '0';
@@ -79,16 +60,6 @@ class OauthgoogleController extends Controller
 			$model->oauth_uid = $auth_data['id'];
 			$model->authKey = Yii::$app->security->generateRandomString();
 			$model->accessToken = Yii::$app->getSecurity()->generatePasswordHash($model->getAuthKey());
-
-			// echo "<pre>".print_r($model->attributes,true)."</pre>";
-			//  // exit;
-			// if ($model->validate()){
-			// 	echo "valido";
-			// }else{
-			// 	echo "non valido";
-			// }
-			// exit;
-
 
 			if ($model->save()){
 				$social = new BoltSocialusers();
@@ -100,7 +71,8 @@ class OauthgoogleController extends Controller
 				$social->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 				$social->username = (isset($auth_data['username']) ? $auth_data['username'] : '');
 				$social->email = $auth_data['email'];
-				$social->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
+				$social->picture = 'https://graph.facebook.com/'. $auth_data['id'] .'/picture';
+
 				if (!($social->save())){
 					echo "<pre>".print_r($social,true)."</pre>";
 					exit;
@@ -127,12 +99,15 @@ class OauthgoogleController extends Controller
 			$social->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 			$social->username = (isset($auth_data['username']) ? $auth_data['username'] : '');
 			$social->email = $auth_data['email'];
-			$social->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
+			// $social->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
+			$social->picture = 'https://graph.facebook.com/'. $auth_data['id'] .'/picture';
 			if (!($social->save())){
 				echo "<pre>".print_r($social,true)."</pre>";
 				exit;
 			}
 		}
+		// FIX CAMBIO mail IN FB
+		$auth_data['email'] = $auth_data['id'] .'@facebook.com'; //$auth_data['email'];
 
 		$auth_data_json = Json::encode($auth_data);
 	}
