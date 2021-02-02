@@ -23,7 +23,7 @@ class BoltUsers extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bolt_users';
+        return 'mp_users';
     }
 
     /**

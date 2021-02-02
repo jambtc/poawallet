@@ -10,6 +10,13 @@ use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Wallet');
 // $this->params['breadcrumbs'][] = $this->title;
+// echo "<pre>";
+// var_dump(Yii::$app->user->identity);
+// echo "</pre>";
+// echo "<pre>";
+// var_dump(Yii::$app->session->get('objUser'));
+// echo "</pre>";
+
 ?>
 <!-- <div class="bolt-tokens-index">
   <div class="body-content dash-balance jumbotron" style="padding-bottom: 0px;">

@@ -52,7 +52,7 @@ $checkFacebookAuthorization = Url::to(['oauthfacebook/check-authorization']);
     <div class="form-label-divider"><span>OR</span></div>
     <div class="form-divider"></div>
 
-    <?php $form = ActiveForm::begin([
+    <?php $form = \yii\bootstrap4\ActiveForm::begin([
         'id' => 'login-form',
         'layout' => 'horizontal',
         'fieldConfig' => [

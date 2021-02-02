@@ -14,8 +14,6 @@ Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
-
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -46,24 +44,27 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php $this->beginContent('@app/views/layouts/base.php') ?>
+
+<div class="wrap h-100 d-flex flex-column">
+
+  <?php echo $this->render('_header'); ?>
 
 
-<main class="d-flex">
-    <?php echo $this->render('_sidebar'); ?>
-    <div class="content-wrapper">
+  <main class="d-flex">
+
+    <div class="content-wrapper d-flex-login p-3">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-</main>
+
+  </main>
 
 
 
-
-<?php $this->endContent() ?>
+</div>
 
 <footer class="footer">
     <div class="container">
