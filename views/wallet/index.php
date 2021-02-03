@@ -1,7 +1,9 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -41,6 +43,7 @@ $this->title = Yii::t('app', 'Wallet');
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
+        'showHeader'=> false,
         'tableOptions' => ['class' => 'table table-sm mb-2'],
         // 'layout' => "{summary}\n{items}\n{pager}",
         'layout' => "{items}",
@@ -63,10 +66,12 @@ $this->title = Yii::t('app', 'Wallet');
                   }
                   ($data->type == 'token') ? $coinImg = 'coin5' : 'coin2';
 
-                  $line = '<div class="container-fluid m-0 p-0">
+                  $line = '
+                  <a href="'.Url::to(['bolt-tokens/view', 'id' => $data->id_token]).'" />
+                  <div class="container-fluid m-0 p-0">
                         <div class="row">
                             <div class="col-12 m0 p-0">
-                                <div class="card">
+                                <div class="card no-border">
                                     <div class="transaction-card-horizontal">
                                         <div class="img-square-wrapper">
                                             <img class="img-xxs" src="css/img/content/'.$coinImg.'.png" alt="coin image">
@@ -86,7 +91,8 @@ $this->title = Yii::t('app', 'Wallet');
                                 </div>
                             </div>
                         </div>
-                    </div>';
+                    </div>
+                    </a>';
 
                    return $line;
                },

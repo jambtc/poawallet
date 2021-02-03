@@ -64,6 +64,9 @@ aside .nav-pills .nav-link.active {
 .img-xxs {
     max-width: 50px;
 }
+.no-border {
+    border: 0px transparent !important;
+}
 
 
 
