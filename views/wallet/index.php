@@ -2,11 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Wallet');
+
+$receiveUrl = Url::to(['wallet/receive']);
 ?>
 
 
@@ -27,7 +30,7 @@ $this->title = Yii::t('app', 'Wallet');
                <span><?= Yii::t('lang','Send');?> </span>
             </div>
             <div class="serv-item">
-               <a href="#" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
+               <a href="<?= $receiveUrl ?>" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
                <span><?= Yii::t('lang','Receive');?> </span>
             </div>
           </div>
