@@ -79,33 +79,18 @@ class WalletController extends Controller
 			$fromAddress = '0x0000000000000000000000000000000000000000';
 		}else{
 			$wallet = BoltWallets::find()
-	    ->where([
-				'id_wallet'=>$settings->id_wallet,
-			])
-	    ->one();
+	    		->andWhere(['id_wallet'=>$settings->id_wallet])
+	    		->one();
 
 			$fromAddress = $wallet->wallet_address;
 		}
 
-
 		$searchModel = new BoltTokensSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$dataProvider->setPagination(['pageSize' => 10]);
+		$dataProvider->setPagination(['pageSize' => 5]);
 		$dataProvider->query
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
-
-		// $dataProvider = new ActiveDataProvider([
-    //     'query' => BoltTokensSearch::find()
-    //   			->orwhere(['=','to_address', $fromAddress])
-		//     		->orwhere(['=','from_address', $fromAddress]),
-		// ]);
-
-
-
-
-		// $searchModel = new BoltTokensSearch();
-		// $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
 		return $this->render('index', [
 				'searchModel' => $searchModel,

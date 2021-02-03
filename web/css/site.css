@@ -39,8 +39,39 @@ aside .nav-pills .nav-link.active {
     max-width: 420px;
 }
 
+/*
+* WALLET DASHBOARD
+*
+*/
+
 /* PULSANTI send e receive*/
 .serv-item {
     width: 50%;
     font-size: 20px;
+}
+/* TABELLA TRANSAZIONI */
+.transaction-card-horizontal {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.transaction-card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 0px 0px 0px 0px;
+}
+.img-xxs {
+    max-width: 50px;
+}
+
+
+
+
+.footer {
+    height: 60px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    color: #16394a;
+    font-size: 0.8em;
 }

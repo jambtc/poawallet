@@ -72,12 +72,19 @@ $config = [
         ],
         'db' => $db,
 
+        // this component manage the url creation 
         // 'urlManager' => [
         //     'enablePrettyUrl' => true,
         //     'showScriptName' => false,
         //     'rules' => [
         //     ],
         // ],
+
+        // this component add timestamp to downloaded css or javascript
+        // to avoid forced refresh during develop
+        'assetManager' => [
+            'appendTimestamp' => true
+        ],
 
     ],
     'params' => $params,

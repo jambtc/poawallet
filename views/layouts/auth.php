@@ -52,7 +52,7 @@ AppAsset::register($this);
 
   <main class="d-flex">
 
-    <div class="content-wrapper d-flex-login p-3">
+    <div class="content-wrapper d-flex-login p-3 container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
