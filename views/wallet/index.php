@@ -71,7 +71,7 @@ $this->title = Yii::t('app', 'Wallet');
                   <div class="container-fluid m-0 p-0">
                         <div class="row">
                             <div class="col-12 m0 p-0">
-                                <div class="card no-border">
+                                <div class="card shadow">
                                     <div class="transaction-card-horizontal">
                                         <div class="img-square-wrapper">
                                             <img class="img-xxs" src="css/img/content/'.$coinImg.'.png" alt="coin image">
@@ -92,7 +92,8 @@ $this->title = Yii::t('app', 'Wallet');
                             </div>
                         </div>
                     </div>
-                    </a>';
+                    </a>
+                    <div class="form-mini-divider"></div>';
 
                    return $line;
                },
