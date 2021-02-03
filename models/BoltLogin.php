@@ -16,6 +16,7 @@ use Yii;
  * @property string $oauth_provider
  * @property string $oauth_uid
  */
+
 class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     /**
@@ -39,6 +40,10 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
             [['activation_code'], 'string', 'max' => 50],
             [['oauth_provider'], 'string', 'max' => 8],
             [['oauth_uid'], 'string', 'max' => 100],
+
+            // [['email'], 'string', 'max' => 100],
+            // [['first_name', 'last_name'], 'string', 'max' => 255],
+            // [['picture'], 'string', 'max' => 255],
         ];
     }
 
@@ -79,55 +84,48 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
      */
     public static function findUserByProvider($username,$oauth_provider)
     {
-      $record = self::findOne([
-        'username'=>$username,
-        'oauth_provider'=>$oauth_provider,
-      ]);
+        $record = self::findOne([
+            'username'=>$username,
+            'oauth_provider'=>$oauth_provider,
+        ]);
 
-      if($record===null){
-    		return null;
-    	}	else {
-        $social = BoltSocialUsers::find()
-          ->where([
-      			'oauth_uid'=>$record->oauth_uid,
-      			'oauth_provider'=>$oauth_provider,
-      		])
-          ->one();
+        if($record===null){
+        	return null;
+        } else {
+            $social = BoltSocialUsers::find()
+              ->where([
+          			'oauth_uid'=>$record->oauth_uid,
+          			'oauth_provider'=>$oauth_provider,
+          		])->one();
 
-				// fix per salvare un social user nel caso non fosse stato salvato
-				if (null === $social){
-					$explodemail = explode('@',$username);
-					$explodename = explode('.',$explodemail[0]);
+        	// fix per salvare un social user nel caso non fosse stato salvato
+        	if (null === $social){
+        		$explodemail = explode('@',$username);
+        		$explodename = explode('.',$explodemail[0]);
 
-					$social = new BoltSocialUsers();
-					$social->oauth_provider = $oauth_provider;
-					$social->oauth_uid = $record->oauth_uid;
-					$social->id_user = $record->id_user;
-					$social->first_name = $explodename[0];
-					$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
-					$social->username = $explodemail[0];
-					$social->email = $username;
-					$social->picture = 'css/images/anonymous.png';
+        		$social = new BoltSocialUsers();
+        		$social->oauth_provider = $oauth_provider;
+        		$social->oauth_uid = $record->oauth_uid;
+        		$social->id_user = $record->id_user;
+        		$social->first_name = $explodename[0];
+        		$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
+        		$social->username = $explodemail[0];
+        		$social->email = $username;
+        		$social->picture = 'css/images/anonymous.png';
 
-					$social->save();
-				}
+        		$social->save();
+        	}
 
-				$obj = (object) [
-					'id_user' => $record->id,
-					'name' => $social->first_name,
-					'surname' => $social->last_name,
-					'email' => $username,
-					'username' => $social->username,
-					'picture' => $social->picture,
-					'provider'=> $social->oauth_provider,
-					'oauth_uid'=> $record->oauth_uid,
-					'facade' => 'dashboard',
-				];
+            $record->first_name = $social->first_name;
+            $record->last_name = $social->last_name;
+            $record->email = $username;
+            $record->picture = $social->picture;
+            $record->provider = $social->oauth_provider;
+            $record->facade = 'dashboard';
+            $record->save();
 
-        Yii::$app->session->set('objUser',$obj);
-
-        return $record;
-  		}
+            return $record;
+      	}
     }
 
     /**
