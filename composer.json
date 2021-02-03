@@ -20,7 +20,8 @@
         "yiisoft/yii2-bootstrap4": "^2.0",
         "jambtc/yii2-oauth-telegram": "^1.0",
         "jambtc/yii2-oauth-google": "^1.0",
-        "jambtc/yii2-oauth-facebook": "^1.0"
+        "jambtc/yii2-oauth-facebook": "^1.0",
+        "2amigos/qrcode-library": "~1.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

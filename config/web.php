@@ -15,9 +15,6 @@ $config = [
         '@packages' => '/var/www/html/yii2-packages/',
     ],
     'components' => [
-      // 'logo' => [
-      //   'class' => '/var/www/html/yii2-packages/logo',
-      // ],
         'i18n' => [
             'translations' => [
                 'lang*' => [
@@ -72,7 +69,7 @@ $config = [
         ],
         'db' => $db,
 
-        // this component manage the url creation 
+        // this component manage the url creation
         // 'urlManager' => [
         //     'enablePrettyUrl' => true,
         //     'showScriptName' => false,
