@@ -13,28 +13,31 @@ $this->title = Yii::t('app', 'Wallet');
 
 
 <main class="margin mt-0">
-    <div class="dash-balance">
-        <div class="d-flex align-items-center mt-30">
-          <div class="d-flex flex-grow">
-              <div class="mr-auto">
-                  <h1 class="b-val"> $2,589.50 </h1>
-                  <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
+    <section class="wallets-list container">
+    <!-- <div class="dash-balance container"> -->
+        <div class="wallet-address">
+            <div class="d-flex align-items-center mt-30">
+              <div class="d-flex flex-grow">
+                  <div class="mr-auto">
+                      <h1 class="b-val"> $2,589.50 </h1>
+                      <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
+                  </div>
               </div>
-          </div>
-        </div>
-        <div class="services-bulk">
-         <div class="content-row">
-            <div class="serv-item">
-               <a href="#" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
-               <span><?= Yii::t('lang','Send');?> </span>
             </div>
-            <div class="serv-item">
-               <a href="#" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
-               <span><?= Yii::t('lang','Receive');?> </span>
+            <div class="services-bulk">
+             <div class="content-row">
+                <div class="serv-item">
+                   <a href="#" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
+                   <span><?= Yii::t('lang','Send');?> </span>
+                </div>
+                <div class="serv-item">
+                   <a href="#" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
+                   <span><?= Yii::t('lang','Receive');?> </span>
+                </div>
+              </div>
             </div>
-          </div>
         </div>
-    </div>
+    </section>
 
     <section class="trans-sec container mb-2">
       <h4 class="title-main mt-0 "><?= Yii::t('lang','Recent Transactions');?></h4>
@@ -44,7 +47,7 @@ $this->title = Yii::t('app', 'Wallet');
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'showHeader'=> false,
-        'tableOptions' => ['class' => 'table table-sm mb-2'],
+        'tableOptions' => ['class' => 'table table-sm mb-3 ml-1 mr-1'],
         // 'layout' => "{summary}\n{items}\n{pager}",
         'layout' => "{items}",
         'columns' => [
@@ -74,10 +77,10 @@ $this->title = Yii::t('app', 'Wallet');
                                 <div class="card shadow">
                                     <div class="transaction-card-horizontal">
                                         <div class="img-square-wrapper">
-                                            <img class="img-xxs" src="css/img/content/'.$coinImg.'.png" alt="coin image">
+                                            <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
                                         </div>
                                         <div class="transaction-card-body ml-1">
-                                            <h6 class="card-title">'.substr($data->to_address,0,21).'...</h6>
+                                            <h6 class="card-title pt-2">'.substr($data->to_address,0,21).'...</h6>
                                             <p class="card-text">
                                             <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                             </p>
@@ -93,7 +96,7 @@ $this->title = Yii::t('app', 'Wallet');
                         </div>
                     </div>
                     </a>
-                    <div class="form-mini-divider"></div>';
+                    ';
 
                    return $line;
                },
