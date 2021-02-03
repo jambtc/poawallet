@@ -23,7 +23,7 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
      */
     public static function tableName()
     {
-        return 'bolt_users';
+        return 'mp_users';
     }
 
     /**
@@ -112,7 +112,7 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
 					$social->save();
 				}
 
-				$array = array(
+				$obj = (object) [
 					'id_user' => $record->id,
 					'name' => $social->first_name,
 					'surname' => $social->last_name,
@@ -122,9 +122,9 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
 					'provider'=> $social->oauth_provider,
 					'oauth_uid'=> $record->oauth_uid,
 					'facade' => 'dashboard',
-				);
+				];
 
-        Yii::$app->session->set('objUser',$array);
+        Yii::$app->session->set('objUser',$obj);
 
         return $record;
   		}

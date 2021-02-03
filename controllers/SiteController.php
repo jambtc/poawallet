@@ -71,6 +71,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout = 'auth';
+        
         if (!Yii::$app->user->isGuest) {
             return $this->redirect(['wallet/index']);
         }
@@ -85,6 +87,8 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $this->layout = 'auth';
+
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }

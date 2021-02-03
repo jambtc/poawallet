@@ -7,7 +7,7 @@ $this->title = Yii::$app->id;
 
   <div class="site-login">
 
-      <div class="body-content dash-balance jumbotron" style="padding-bottom: 0px;">
+      <div class="body-content dash-balance jumbotron  text-center pb-0">
         <h2  class="txt-white"><?php echo Yii::$app->id; ?></h2>
         <div class="form-divider"></div>
         <h5 class="txt-white">

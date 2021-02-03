@@ -14,8 +14,6 @@ Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
-
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -36,7 +34,7 @@ AppAsset::register($this);
   	<link href="https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,900" rel="stylesheet">
 
     <!-- Fontawesome font file css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+  	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 
     <?php $this->head() ?>
 
@@ -46,24 +44,27 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php $this->beginContent('@app/views/layouts/base.php') ?>
+
+<div class="wrap h-100 d-flex flex-column">
+
+  <?php echo $this->render('_header'); ?>
 
 
-<main class="d-flex">
-    <?php echo $this->render('_sidebar'); ?>
-    <div class="content-wrapper">
+  <main class="d-flex">
+
+    <div class="content-wrapper d-flex-login p-3 container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
-</main>
+
+  </main>
 
 
 
-
-<?php $this->endContent() ?>
+</div>
 
 <footer class="footer">
     <div class="container">
