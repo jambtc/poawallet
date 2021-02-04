@@ -9,13 +9,14 @@ use yii\grid\GridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Wallet');
+
+$receiveUrl = Url::to(['wallet/receive']);
 ?>
 
 
 <main class="margin mt-0">
     <section class="wallets-list container">
-    <!-- <div class="dash-balance container"> -->
-        <div class="wallet-address">
+       <div class="wallet-address">
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
@@ -24,18 +25,19 @@ $this->title = Yii::t('app', 'Wallet');
                   </div>
               </div>
             </div>
-            <div class="services-bulk">
+
+           <div class="services-bulk">
              <div class="content-row">
                 <div class="serv-item">
                    <a href="#" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
                    <span><?= Yii::t('lang','Send');?> </span>
                 </div>
                 <div class="serv-item">
-                   <a href="#" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
+                  <a href="<?= $receiveUrl ?>" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
                    <span><?= Yii::t('lang','Receive');?> </span>
                 </div>
-              </div>
             </div>
+           </div>  
         </div>
     </section>
 

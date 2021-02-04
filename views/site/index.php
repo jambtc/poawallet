@@ -11,7 +11,7 @@ $this->title = Yii::$app->id;
         <h2  class="txt-white"><?php echo Yii::$app->id; ?></h2>
         <div class="form-divider"></div>
         <h5 class="txt-white">
-          <?php echo Yii::$app->id; ?> –  is a mobile-based website created as a wallet to pay for things like paying for internet, electricity, tickets, events, charity and much more and others. Built with the Framework7, a template with a clean and modern design, and a neat layout.
+          <?php echo Yii::$app->id; ?> –  is a mobile-based website created as a wallet to pay for things like paying for internet, electricity, tickets, events, charity and much more and others. Built with the <span class="txt-orange">Yii2 Framework</span>, a template with a clean and modern design, and a neat layout.
         </h5>
 
         <div class="form-divider"></div>
