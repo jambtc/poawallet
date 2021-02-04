@@ -16,6 +16,7 @@ main {
     justify-content: center;
 }
 
+/* MENU SIDEBAR */
 aside {
     min-width: 200px;
 }
@@ -64,10 +65,12 @@ aside .nav-pills .nav-link.active {
 .img-xxs {
     max-width: 50px;
 }
+.table thead th {
+  border-bottom: 2px solid transparent !important;
+}
 
 
-
-
+/* FOOTER */
 .footer {
     height: 60px;
     border-top: 1px solid #ddd;
