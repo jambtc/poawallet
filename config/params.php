@@ -6,5 +6,5 @@ return [
     'senderName' => 'Example.com mailer',
     'logoApplicazione' => '/css/images/logo.png',
     'website' => 'www.txlab.it',
-    'adminName' => 'admin',
+    'adminName' => 'txLab',
 ];
