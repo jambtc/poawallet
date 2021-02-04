@@ -65,11 +65,6 @@ AppAsset::register($this);
 
 <?php $this->endContent() ?>
 
-<footer class="footer">
-    <div class="container">
-      <?= logo::footer(); ?>
-    </div>
-</footer>
 
 <?php $this->endBody() ?>
 <!-- Template global script file. requared all pages -->
