@@ -13,7 +13,7 @@ NavBar::begin([
   'brandUrl' => Yii::$app->homeUrl,
   'options' => [
     // 'class' => 'navbar-inverse navbar-fixed-top',
-    'class' => 'navbar navbar-expand-lg navbar-light bg-light shadow',
+    'class' => 'navbar navbar-expand-md navbar-light shadow mb-0',
   ],
 ]);
 

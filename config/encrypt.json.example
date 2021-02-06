@@ -1,0 +1,5 @@
+{
+    "secret_key" : "xxx",
+    "secret_iv" : "yyy",
+    "encrypt_method" : "AES-256-CBC"
+}

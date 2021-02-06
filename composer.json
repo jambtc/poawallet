@@ -21,7 +21,11 @@
         "jambtc/yii2-oauth-telegram": "^1.0",
         "jambtc/yii2-oauth-google": "^1.0",
         "jambtc/yii2-oauth-facebook": "^1.0",
-        "2amigos/qrcode-library": "~1.1"
+        "2amigos/qrcode-library": "~1.1",
+        "sc0vu/web3.php": "dev-master",
+        "yiisoft/yii2-httpclient": "^2.0",
+        "drsdre/yii2-wizardwidget": "*",
+        "blocktrail/cryptojs-aes-php": "^0.1.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -7,4 +7,5 @@ return [
     'logoApplicazione' => '/css/images/logo.png',
     'website' => 'www.txlab.it',
     'adminName' => 'txLab',
+    'encryptionFile' => dirname(__FILE__).'/encrypt.json'
 ];

@@ -46,4 +46,13 @@ class BoltWallets extends \yii\db\ActiveRecord
             'blocknumber' => Yii::t('app', 'Blocknumber'),
         ];
     }
+
+    /**
+     * {@inheritdoc}
+     * @return BoltWalletsQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new BoltWalletsQuery(get_called_class());
+    }
 }

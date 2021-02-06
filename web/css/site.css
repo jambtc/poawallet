@@ -1,10 +1,11 @@
 html,
 body {
     height: 100%;
+    font-size: 14px; !important;
 }
 
 main {
-    flex: 1;
+    /* flex: 1; */
     margin-top: 0px;
 }
 .content-wrapper {
@@ -15,6 +16,19 @@ main {
     align-items: center;
     justify-content: center;
 }
+
+.navbar {
+    min-height: 65px;
+}
+.navbar-collapse {
+    z-index: 100;
+}
+.navbar-nav {
+    background-color: #f8f9fa;
+    width: fit-content;
+    padding: 10px;
+}
+
 
 /* MENU SIDEBAR */
 aside {
@@ -72,8 +86,53 @@ aside .nav-pills .nav-link.active {
 
 .table thead th {
   border-bottom: 2px solid transparent !important;
-
 }
+.table tr td {
+  border-bottom: 1px solid transparent !important;
+}
+.table-96 {
+    max-width: 96% !important;
+}
+
+/* INPUT FORM */
+label {
+    color: #ddd !important;
+}
+.card > .card-header > h4 {
+    color: #eee;
+}
+
+/* WIZARD WALLET GENERATION */
+#stepwizard_step3_save {
+    display: none;
+}
+
+/* .wizard {
+    position: inherit !important;
+    background-color: inherit !important;
+    top: -60px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    width: inherit;
+    font-size: 14px;
+}
+.tab-content {
+    margin-top: -40px;
+}
+@media( max-width : 585px ) {
+
+    .wizard {
+        width: 100%;
+        height: auto !important;
+    }
+
+    .wizard li span.round-tab {
+        font-size: inherit;
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+} */
 
 /* FOOTER */
 .footer {

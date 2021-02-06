@@ -11,6 +11,7 @@ use yii\grid\GridView;
 $this->title = Yii::t('app', 'Wallet');
 
 $receiveUrl = Url::to(['wallet/receive']);
+$sendUrl = Url::to(['wallet/send']);
 ?>
 
 
@@ -20,7 +21,7 @@ $receiveUrl = Url::to(['wallet/receive']);
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
-                      <h1 class="b-val"> $2,589.50 </h1>
+                      <h1 class="b-val"><i class="fa fa-star"></i> <?= $balance ?> </h1>
                       <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
                   </div>
               </div>
@@ -29,7 +30,7 @@ $receiveUrl = Url::to(['wallet/receive']);
            <div class="services-bulk">
              <div class="content-row">
                 <div class="serv-item">
-                   <a href="#" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
+                   <a href="<?= $sendUrl ?>" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
                    <span><?= Yii::t('lang','Send');?> </span>
                 </div>
                 <div class="serv-item">
@@ -37,19 +38,18 @@ $receiveUrl = Url::to(['wallet/receive']);
                    <span><?= Yii::t('lang','Receive');?> </span>
                 </div>
             </div>
-           </div>  
+           </div>
         </div>
     </section>
 
-    <section class="trans-sec container mb-2">
-      <h4 class="title-main mt-0 "><?= Yii::t('lang','Recent Transactions');?></h4>
-
+    <section class="trans-sec container mb-2 dash-balance">
+      <h4 class="title-main mt-0 text-light"><?= Yii::t('lang','Recent Transactions');?></h4>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'showHeader'=> false,
-        'tableOptions' => ['class' => 'table table-sm mb-3 ml-1 mr-1'],
+        'tableOptions' => ['class' => 'table-96 table table-sm mb-3 ml-1 mr-1'],
         // 'layout' => "{summary}\n{items}\n{pager}",
         'layout' => "{items}",
         'columns' => [
