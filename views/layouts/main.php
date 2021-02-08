@@ -70,8 +70,6 @@ AppAsset::register($this);
 <!-- Template global script file. requared all pages -->
 <script src="js/global.script.js"></script>
 
-
-
 <!-- Call Service Worker-->
 <script src="src/js/promise.js"></script>
 <script src="src/js/fetch.js"></script>

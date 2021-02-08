@@ -70,7 +70,7 @@ var dbPromise = idb.open('megapay', 1, function(db) {
 // datas with same id will be overwritten, otherwise
 // wil be added
 function writeData(table, data) {
-	//console.log('[IndexedDb storing datas]', table, data);
+	console.log('[IndexedDb storing datas]', table, data);
 	return dbPromise
 		.then(function(db) {
 			var tx = db.transaction(table, 'readwrite');
@@ -101,7 +101,7 @@ function readFromId(table,id) {
 }
 
 function clearAllData(table) {
-	// console.log("[IndexedDb delete table]", table);
+	console.log("[IndexedDb delete table]", table);
   return dbPromise
     .then(function(db) {
       var tx = db.transaction(table, 'readwrite');

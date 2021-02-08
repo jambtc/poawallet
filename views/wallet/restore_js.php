@@ -7,7 +7,7 @@ $options = [
     'invalidSeedMEssage' => Yii::t('lang','Invalid seed!'),
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
-    'cryptURL' => Url::to(['/wallet/crypt'])
+    'cryptURL' => Url::to(['/wallet/crypt']),
     // ...
 ];
 $this->registerJs(
@@ -97,29 +97,33 @@ $wallet_restore = <<<JS
         						};
         						console.log('[Restore]: address and key in post: ', walletPost);
 
-        						writeData('wallet', walletPost)
-        							.then(function() {
-        								console.log('[Restore]: Saved wallet info in indexedDB', walletPost);
-        								//$('#cryptConferma').html('<img width=20 src="'+ajax_loader_url+'" alt="'+Yii.t('js','loading...')+'">');
-        							})
+                                clearAllData('wallet')
+                                .then(function () {
+                                    writeData('wallet', walletPost)
+                                    .then(function() {
+                                        console.log('[Restore]: Saved wallet info in indexedDB', walletPost);
+                                        //$('#cryptConferma').html('<img width=20 src="'+ajax_loader_url+'" alt="'+Yii.t('js','loading...')+'">');
+                                    })
                                     .then(function() {
                                         var seedPost = {
                                             id : new Date().toISOString(), // id of indexedDB
                                             cryptedseed : seed_crypted,
                                         }
                                         writeData('mseed', seedPost)
-                                            .then(function() {
-                                                // imposta il valore dell'address nella campo input nascosto
-                                                $('#wizardwalletform-address').val(address);
-                                                // Quindi, chiedo di installare la webapp sulla home del cell
-                                    			saveOnDesktop();
-                                                // quindi invio il submit per salvare
-                                                // l'address in archivio
-                                                setTimeout(function(){
-                                                    wizardForm.submit ();
-                                                }, 50);
-                                            });
+                                        .then(function() {
+                                            // imposta il valore dell'address nella campo input nascosto
+                                            $('#wizardwalletform-address').val(address);
+                                            // Quindi, chiedo di installare la webapp sulla home del cell
+                                            saveOnDesktop();
+                                            // quindi invio il submit per salvare
+                                            // l'address in archivio
+                                            setTimeout(function(){
+                                                wizardForm.submit ();
+                                            }, 50);
+                                        });
                                     });
+
+                                });
                             }
                         )
     				});

@@ -25,7 +25,8 @@
         "sc0vu/web3.php": "dev-master",
         "yiisoft/yii2-httpclient": "^2.0",
         "drsdre/yii2-wizardwidget": "*",
-        "blocktrail/cryptojs-aes-php": "^0.1.0"
+        "brainfoolong/cryptojs-aes-php": "^2.1",
+        "web3p/ethereum-tx": "^0.4.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

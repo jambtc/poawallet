@@ -107,7 +107,7 @@ label {
     display: none;
 }
 
-/* .wizard {
+.wizard {
     position: inherit !important;
     background-color: inherit !important;
     top: -60px;
@@ -118,6 +118,9 @@ label {
 }
 .tab-content {
     margin-top: -40px;
+}
+.wizard > .nav-tabs {
+    margin-top: 0px !important;
 }
 @media( max-width : 585px ) {
 
@@ -132,7 +135,7 @@ label {
         height: 50px;
         line-height: 50px;
     }
-} */
+}
 
 /* FOOTER */
 .footer {

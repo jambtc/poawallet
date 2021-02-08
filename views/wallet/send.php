@@ -19,6 +19,8 @@ $form = ActiveForm::begin([
 
 ]);
 
+include ('send_js.php');
+
 
 
 $wizard_config = [
@@ -31,6 +33,7 @@ $wizard_config = [
 							'fromAddress' => $fromAddress,
 							'sendTokenForm' => $sendTokenForm,
 							'form' => $form,
+							'balance' => $balance
 						]),
 			'buttons' => [
 				'save' => [
@@ -83,7 +86,9 @@ $wizard_config = [
         </div>
     </section>
     <section class="trans-sec container mb-2 dash-balance">
+
 		<?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>
+		 
 	</section>
 </main>
 

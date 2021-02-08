@@ -11,9 +11,9 @@ use yii\helpers\Html;
 
 <div class="card bg-transparent no-border">
   <div class="card-body bg-primary">
-      <!-- DA -->
+      <!-- amount to send -->
       <div class="form-group">
-          quantità da inviare: 1 token
+          <p class="alert alert-info amount-to-send"></p>
       </div>
 
       <!-- MESSAGGIO -->
@@ -25,13 +25,13 @@ use yii\helpers\Html;
   </div>
   <div class="card-footer">
       <?= Html::submitButton('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','send'), [
-            'class' => 'btn btn-primary float-right',
-            'data-method' => 'post',
+            'class' => 'btn btn-primary float-right pay-submit',
+            // 'data-method' => 'post',
             // 'data-pjax' => 1
             // 'data-confirm' => 'Are you sure?'
         ]);
       ?>
   </div>
-  
+
 
 </div>

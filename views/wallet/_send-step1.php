@@ -18,13 +18,13 @@
       <!-- A -->
       <div class="form-group">
           <?= $form->field($sendTokenForm, 'to')->textInput(['autofocus' => true, 'validate' ]) ?>
-
       </div>
       <!-- IMPORTO -->
       <div class="form-group">
-
          <?= $form->field($sendTokenForm, 'amount')->textInput(['type' => 'number']) ?>
+         <?= $form->field($sendTokenForm, 'balance')->hiddenInput(['value' => $balance])->label(false) ?>
       </div>
+      <?= $form->errorSummary($sendTokenForm, ['id' => 'error-summary']) ?>
 
   </div>
 

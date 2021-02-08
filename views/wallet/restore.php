@@ -18,7 +18,7 @@ $form = ActiveForm::begin([
 
 ]);
 
-include ('js_script.php');
+include ('restore_js.php');
 
 
 ?>
@@ -27,7 +27,7 @@ include ('js_script.php');
 	<div class="body-content">
 		<div class="card bg-transparent no-border">
 			<div class="card-header">
-				<h2>Installazione</h2>
+				<h2><?php echo Yii::t('lang','Setup');?></h2>
 			</div>
 		  <div class="card-body bg-primary">
 		      <div class="form-group">
@@ -41,7 +41,7 @@ include ('js_script.php');
 				  <div class="invalid-feedback alert-danger" id="seed-error" ></div>
 		      </div>
 
-			  <?= $form->field($formModel, 'address')->hiddenInput() ?>
+			  <?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
 
 		  </div>
 		  <div class="card-footer">

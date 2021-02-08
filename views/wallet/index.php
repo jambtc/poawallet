@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 
+Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -59,48 +61,49 @@ $sendUrl = Url::to(['wallet/send']);
                'format' => 'raw',
                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                'value' => function ($data) use ($fromAddress) {
-                  $dateLN = date("d M `y",$data->invoice_timestamp);
-                  $timeLN = date("H:i:s",$data->invoice_timestamp);
-
-                  if ($data->from_address == $fromAddress){
-                    $price = '- '.$data->token_price;
-                    $color = 'red';
-                  } else {
-                    $price = $data->token_price;
-                    $color = 'green';
-                  }
-                  ($data->type == 'token') ? $coinImg = 'coin5' : 'coin2';
-
-                  $line = '
-                  <a href="'.Url::to(['bolt-tokens/view', 'id' => $data->id_token]).'" />
-                  <div class="container-fluid m-0 p-0">
-                        <div class="row">
-                            <div class="col-12 m0 p-0">
-                                <div class="card shadow">
-                                    <div class="transaction-card-horizontal">
-                                        <div class="img-square-wrapper">
-                                            <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
-                                        </div>
-                                        <div class="transaction-card-body ml-1">
-                                            <h6 class="card-title pt-2">'.substr($data->to_address,0,21).'...</h6>
-                                            <p class="card-text">
-                                            <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
-                                            </p>
-                                        </div>
-                                        <div class="card-footer">
-                                            <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
-                                            <small class="text-capitalize text-muted text-center">'.$data->status.'</small>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </a>
-                    ';
-
-                   return $line;
+                  return \webapp::showTransactionRow($data,$fromAddress);
+                  // $dateLN = date("d M `y",$data->invoice_timestamp);
+                  // $timeLN = date("H:i:s",$data->invoice_timestamp);
+                  //
+                  // if ($data->from_address == $fromAddress){
+                  //   $price = '- '.$data->token_price;
+                  //   $color = 'red';
+                  // } else {
+                  //   $price = $data->token_price;
+                  //   $color = 'green';
+                  // }
+                  // ($data->type == 'token') ? $coinImg = 'coin5' : 'coin2';
+                  //
+                  // $line = '
+                  // <a href="'.Url::to(['bolt-tokens/view', 'id' => $data->id_token]).'" />
+                  // <div class="container-fluid m-0 p-0">
+                  //       <div class="row">
+                  //           <div class="col-12 m0 p-0">
+                  //               <div class="card shadow">
+                  //                   <div class="transaction-card-horizontal">
+                  //                       <div class="img-square-wrapper">
+                  //                           <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
+                  //                       </div>
+                  //                       <div class="transaction-card-body ml-1">
+                  //                           <h6 class="card-title pt-2">'.substr($data->to_address,0,21).'...</h6>
+                  //                           <p class="card-text">
+                  //                           <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
+                  //                           </p>
+                  //                       </div>
+                  //                       <div class="card-footer">
+                  //                           <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
+                  //                           <small class="text-capitalize text-muted text-center">'.$data->status.'</small>
+                  //                       </div>
+                  //                   </div>
+                  //
+                  //               </div>
+                  //           </div>
+                  //       </div>
+                  //   </div>
+                  //   </a>
+                  //   ';
+                  //
+                  //  return $line;
                },
             ],
 

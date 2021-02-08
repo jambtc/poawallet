@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\validators\Validator;
 
 Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 
 // echo "<pre>".print_r(Yii::$classMap,true)."</pre>";
@@ -36,11 +37,14 @@ class SendTokenForm extends Model
     {
         return [
             [['from', 'to', 'amount'], 'required'],
-            ['amount', 'number'],
+            [['amount'], 'number'],
             [['memo'], 'string', 'max' => 500],
 
             // to is validated by isValidAddress()
             [['to'], 'isValidAddress'],
+
+            // to is validated by isValidAddress()
+            [['amount'], 'validateAmount'],
 
         ];
     }
@@ -57,6 +61,22 @@ class SendTokenForm extends Model
 			'memo' => Yii::t('model','Message'),
 		];
 	}
+
+
+    /**
+	 * @param POST amount to check decimals in the smart contract
+	 */
+    public function validateAmount($attribute, $params)
+    {
+        $settings = \settings::load();
+        if ($this->amount == 0)
+            $this->addError($attribute, 'There are too decimals.');
+
+        if ((int)$this->amount != $this->amount) {
+            if (strlen($this->amount) - strrpos($this->amount, '.') - 1 > $settings->poa_decimals)
+                $this->addError($attribute, 'There are too decimals.');
+        }
+    }
 
     /**
 	 * @param POST string address the Ethereum Address to be paid

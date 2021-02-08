@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1b69ebdbbdbd119557fc587fe739500c",
+    "content-hash": "193a7a2206b7c5ee5100b3f5b66b9733",
     "packages": [
         {
             "name": "2amigos/qrcode-library",
@@ -128,46 +128,6 @@
             "time": "2017-10-17T09:59:25+00:00"
         },
         {
-            "name": "blocktrail/cryptojs-aes-php",
-            "version": "v0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blocktrail/cryptojs-aes-php.git",
-                "reference": "c114ebf0b5c080ca3e5f857de30d5be74fa01cbe"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blocktrail/cryptojs-aes-php/zipball/c114ebf0b5c080ca3e5f857de30d5be74fa01cbe",
-                "reference": "c114ebf0b5c080ca3e5f857de30d5be74fa01cbe",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.8"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blocktrail\\CryptoJSAES\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ruben de Vries",
-                    "email": "ruben@rubensayshi.com"
-                }
-            ],
-            "description": "Small openssl_encrypt/decrypt wrapper to be compatible with CryptoJS.AES",
-            "support": {
-                "issues": "https://github.com/blocktrail/cryptojs-aes-php/issues",
-                "source": "https://github.com/blocktrail/cryptojs-aes-php/tree/master"
-            },
-            "time": "2015-08-07T15:55:15+00:00"
-        },
-        {
             "name": "bower-asset/bootstrap",
             "version": "v3.4.1",
             "source": {
@@ -262,6 +222,62 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "brainfoolong/cryptojs-aes-php",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/brainfoolong/cryptojs-aes-php.git",
+                "reference": "b73384d8c683d80a682521c827e16dba692ced10"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/brainfoolong/cryptojs-aes-php/zipball/b73384d8c683d80a682521c827e16dba692ced10",
+                "reference": "b73384d8c683d80a682521c827e16dba692ced10",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "php": ">=7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Nullix\\CryptoJsAes\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roland Eigelsreiter",
+                    "homepage": "https://github.com/brainfoolong/cryptojs-aes-php",
+                    "role": "Developer"
+                }
+            ],
+            "description": "CryptoJS 3.x AES encryption/decryption on client side with Javascript and on server side with PHP",
+            "homepage": "https://github.com/brainfoolong/cryptojs-aes-php",
+            "keywords": [
+                "aes",
+                "encryption",
+                "javascript",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/brainfoolong/cryptojs-aes-php/issues",
+                "source": "https://github.com/brainfoolong/cryptojs-aes-php/tree/2.1.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/brainfoolong",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-01-15T10:16:05+00:00"
         },
         {
             "name": "cebe/markdown",
@@ -1282,6 +1298,152 @@
             "time": "2019-10-03T14:41:19+00:00"
         },
         {
+            "name": "simplito/bigint-wrapper-php",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplito/bigint-wrapper-php.git",
+                "reference": "cf21ec76d33f103add487b3eadbd9f5033a25930"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplito/bigint-wrapper-php/zipball/cf21ec76d33f103add487b3eadbd9f5033a25930",
+                "reference": "cf21ec76d33f103add487b3eadbd9f5033a25930",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BI\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simplito Team",
+                    "email": "s.smyczynski@simplito.com",
+                    "homepage": "https://simplito.com"
+                }
+            ],
+            "description": "Common interface for php_gmp and php_bcmath modules",
+            "support": {
+                "issues": "https://github.com/simplito/bigint-wrapper-php/issues",
+                "source": "https://github.com/simplito/bigint-wrapper-php/tree/1.0.0"
+            },
+            "time": "2018-02-27T12:38:08+00:00"
+        },
+        {
+            "name": "simplito/bn-php",
+            "version": "1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplito/bn-php.git",
+                "reference": "e852fcd27e4acbc32459606d7606e45a85e42465"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplito/bn-php/zipball/e852fcd27e4acbc32459606d7606e45a85e42465",
+                "reference": "e852fcd27e4acbc32459606d7606e45a85e42465",
+                "shasum": ""
+            },
+            "require": {
+                "simplito/bigint-wrapper-php": "~1.0.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BN\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simplito Team",
+                    "email": "s.smyczynski@simplito.com",
+                    "homepage": "https://simplito.com"
+                }
+            ],
+            "description": "Big number implementation compatible with bn.js",
+            "support": {
+                "issues": "https://github.com/simplito/bn-php/issues",
+                "source": "https://github.com/simplito/bn-php/tree/1.1.2"
+            },
+            "time": "2018-04-12T11:07:43+00:00"
+        },
+        {
+            "name": "simplito/elliptic-php",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplito/elliptic-php.git",
+                "reference": "a2612c8289270bd00086d1c070efc3fca9d7abce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplito/elliptic-php/zipball/a2612c8289270bd00086d1c070efc3fca9d7abce",
+                "reference": "a2612c8289270bd00086d1c070efc3fca9d7abce",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gmp": "*",
+                "simplito/bn-php": "~1.1.0"
+            },
+            "require-dev": {
+                "phpbench/phpbench": "@dev",
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Elliptic\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Simplito Team",
+                    "email": "s.smyczynski@simplito.com",
+                    "homepage": "https://simplito.com"
+                }
+            ],
+            "description": "Fast elliptic curve cryptography",
+            "homepage": "https://github.com/simplito/elliptic-php",
+            "keywords": [
+                "Curve25519",
+                "ECDSA",
+                "Ed25519",
+                "EdDSA",
+                "cryptography",
+                "curve",
+                "ecc",
+                "ecdh",
+                "elliptic",
+                "nistp192",
+                "nistp224",
+                "nistp256",
+                "nistp384",
+                "nistp521",
+                "secp256k1"
+            ],
+            "support": {
+                "issues": "https://github.com/simplito/elliptic-php/issues",
+                "source": "https://github.com/simplito/elliptic-php/tree/1.0.7"
+            },
+            "time": "2021-01-12T11:40:37+00:00"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v6.2.5",
             "source": {
@@ -1762,6 +1924,137 @@
                 }
             ],
             "time": "2021-01-07T16:49:33+00:00"
+        },
+        {
+            "name": "web3p/ethereum-tx",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web3p/ethereum-tx.git",
+                "reference": "be5a1063f8cf0f9c9419be87b9c925e3d95eb6ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web3p/ethereum-tx/zipball/be5a1063f8cf0f9c9419be87b9c925e3d95eb6ab",
+                "reference": "be5a1063f8cf0f9c9419be87b9c925e3d95eb6ab",
+                "shasum": ""
+            },
+            "require": {
+                "kornrunner/keccak": "~1",
+                "simplito/elliptic-php": "~1.0.6",
+                "web3p/ethereum-util": "~0.1.2",
+                "web3p/rlp": "0.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Web3p\\EthereumTx\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sc0Vu",
+                    "email": "alk03073135@gmail.com"
+                }
+            ],
+            "description": "Ethereum transaction library in PHP.",
+            "support": {
+                "issues": "https://github.com/web3p/ethereum-tx/issues",
+                "source": "https://github.com/web3p/ethereum-tx/tree/0.4.1"
+            },
+            "time": "2020-11-15T09:53:10+00:00"
+        },
+        {
+            "name": "web3p/ethereum-util",
+            "version": "0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web3p/ethereum-util.git",
+                "reference": "c7b5edd1a3ca20d0dae93f6fb9d253c61dfb73c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web3p/ethereum-util/zipball/c7b5edd1a3ca20d0dae93f6fb9d253c61dfb73c6",
+                "reference": "c7b5edd1a3ca20d0dae93f6fb9d253c61dfb73c6",
+                "shasum": ""
+            },
+            "require": {
+                "kornrunner/keccak": "~1",
+                "php": "^7.1",
+                "simplito/elliptic-php": "~1.0.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Web3p\\EthereumUtil\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sc0Vu",
+                    "email": "alk03073135@gmail.com"
+                }
+            ],
+            "description": "A collection of utility functions for Ethereum written in PHP.",
+            "support": {
+                "issues": "https://github.com/web3p/ethereum-util/issues",
+                "source": "https://github.com/web3p/ethereum-util/tree/master"
+            },
+            "time": "2019-11-23T08:43:24+00:00"
+        },
+        {
+            "name": "web3p/rlp",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web3p/rlp.git",
+                "reference": "bc9e29f7a1f658408f25322ea21ff5687a851470"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web3p/rlp/zipball/bc9e29f7a1f658408f25322ea21ff5687a851470",
+                "reference": "bc9e29f7a1f658408f25322ea21ff5687a851470",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Web3p\\RLP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "sc0Vu",
+                    "email": "alk03073135@gmail.com"
+                }
+            ],
+            "description": "Recursive Length Prefix Encoding in PHP.",
+            "support": {
+                "issues": "https://github.com/web3p/rlp/issues",
+                "source": "https://github.com/web3p/rlp/tree/master"
+            },
+            "time": "2019-11-23T08:20:30+00:00"
         },
         {
             "name": "yiisoft/yii2",
