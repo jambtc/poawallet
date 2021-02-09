@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 use app\models\BoltTokens;
 use app\models\BoltTokensSearch;
 use app\models\BoltWallets;
+use app\models\BoltSocialusers;
 use app\models\SendTokenForm;
 use app\models\WizardWalletForm;
 
@@ -80,6 +81,12 @@ class WalletController extends Controller
 		return json_decode($substr, true);
 	}
 
+	public function beforeAction($action)
+	{
+    	$this->enableCsrfValidation = false;
+    	return parent::beforeAction($action);
+	}
+
 
 	/**
 	 * {@inheritdoc}
@@ -92,6 +99,7 @@ class WalletController extends Controller
 				'only' => [
 					'saveSubscription','index', 'qr','send','wizard',
 					'restore',
+					'validateTransaction',
 				],
 				'rules' => [
 					[
@@ -109,6 +117,7 @@ class WalletController extends Controller
 							'wizard',
 							'restore',
 							'generateTransaction',
+							'validateTransaction'
 
 						],
 						'roles' => ['@'],
@@ -140,30 +149,26 @@ class WalletController extends Controller
 	 * This function return the user wallet address
 	 */
 	 private function userAddress() {
-		// $settings = \settings::loadUser(Yii::$app->user->id);
- 		// if (empty($settings->id_wallet)){
- 		// 	$fromAddress = '0x0000000000000000000000000000000000000000';
- 		// }else{
- 		// 	$wallet = BoltWallets::find()
- 	    // 		->andWhere(['id_wallet'=>$settings->id_wallet])
- 	    // 		->one();
-		//
- 		// 	$fromAddress = $wallet->wallet_address;
- 		// }
-		// return $fromAddress;
-		// $settings = \settings::loadUser(Yii::$app->user->id);
- 		// if (empty($settings->id_wallet)){
- 		// 	$fromAddress = '0x0000000000000000000000000000000000000000';
- 		// }else{
  		$wallet = BoltWallets::find()
  	     		->andWhere(['id_user'=>Yii::$app->user->id])
  	    		->one();
+
 		if (null === $wallet){
 			$this->redirect(['wallet/wizard']);
 		} else {
 			return $wallet->wallet_address;
 		}
 	}
+
+	private function loadSocialUser()
+	{
+		$user = BoltSocialusers::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		return $user;
+	}
+
 
 
 	/**
@@ -186,6 +191,7 @@ class WalletController extends Controller
 				'dataProvider' => $dataProvider,
 				'fromAddress' => $fromAddress,
 				'balance' => $this->Balance($fromAddress),
+				'userImage' => $this->loadSocialUser()->picture,
 		]);
 	}
 
@@ -226,6 +232,7 @@ class WalletController extends Controller
  			'fromAddress' => $fromAddress,
 			'sendTokenForm' => $formModel,
 			'balance' => $this->Balance($fromAddress),
+			'userImage' => $this->loadSocialUser()->picture,
  		]);
  	}
 
@@ -366,18 +373,94 @@ class WalletController extends Controller
 
 		//adesso posso uscire CON IL JSON DA REGISTRARE NEL SW.
 		$data = [
-			'id' => $invoice_timestamp, //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
-			'id_token' => $webapp->encrypt($transaction->id_token),
-			'data'	=> $invoice_timestamp,
+			'id' => $webapp->encrypt($transaction->id_token), //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
 			'status' => $transaction->status,
-			'token_price' => $transaction->token_price,
-			'from_address' => $fromAccount,
-			'to_address' => $toAccount,
-			'url' => Url::to(['/transactions/view' ,'id'=>$webapp->encrypt($transaction->id_token)]),
+			'url' => Url::to(['/wallet/validate-transaction']),
+			'row' => $webapp->showTransactionRow($transaction,$fromAccount),
 		];
 
 		return $this->json($data);
  	}
+
+	// cerca la ricevuta dal transaction hash
+	// funzione invocata dal sw
+
+	// testing::
+	// curl -X POST -d 'id=S2hNeTVGQTkzWis0ekN3RDV3RVRmdz09' http://localhost/megapay/web/index.php?r=wallet%2Fvalidate-transaction
+	public function actionValidateTransaction()
+	{
+		set_time_limit(0); //imposto il time limit unlimited
+		$maxrequests = 30;
+		$requests = 1;
+
+		$webapp = new \webapp;
+		$settings = \settings::load();
+
+		$transaction = BoltTokens::find()
+ 	     		->andWhere(['id_token'=>$webapp->decrypt($_POST['id'])])
+ 	    		->one();
+
+		$poaNode = $webapp->getPoaNode();
+		if (!$poaNode)
+			throw new HttpException(404,'All Nodes are down...');
+
+		// cerco il nonce
+		$web3 = new Web3($poaNode);
+		$contract = new Contract($web3->provider, $settings->poa_abi);
+
+		while ($requests < $maxrequests)
+		{
+			$contract->eth->getTransactionReceipt($transaction->txhash, function ($err, $tx) {
+				if ($err !== null) {
+					throw $err;
+				}
+				if ($tx) {
+					$this->setTransaction($tx);
+					// echo "\nTransaction has mind:) block number: " . $tx->blockNumber . "\nTransaction dump:\n";
+					// var_dump($tx);
+					// exit;
+				}
+			});
+			$tx = $this->getTransaction();
+
+			if ($tx !== null){
+				break;
+			}
+			$requests ++;
+			sleep(1);
+
+		}
+		if ($tx === null){
+			$data = [
+				'id' => $_POST['id'], //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
+				'status' => $transaction->status,
+				'success' => false,
+			];
+
+			// throw new HttpException(404,'Transaction is null after '.$requests.' requests.');
+		} else {
+			$transaction->status = 'complete';
+			$transaction->token_ricevuti = $transaction->token_price;
+			$transaction->blocknumber = hexdec($tx->blockNumber);
+
+			if (!($transaction->save())){
+				throw new HttpException(404,$transaction->errors);
+			}
+
+			//adesso posso uscire CON IL JSON DA REGISTRARE NEL SW.
+			$data = [
+				'id' => $_POST['id'], //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
+				'status' => $transaction->status,
+				'success' => true,
+				'row' => $webapp->showTransactionRow($transaction,$transaction->from_address),
+				'balance' => $this->Balance($transaction->from_address),
+			];
+
+		}
+
+		return $this->json($data);
+
+	}
 
 	/* funzione per codificare il valore $value del tipo $type in hex */
 	private function Encode(string $type, $value): string {

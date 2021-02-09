@@ -1,65 +1,65 @@
 var dbPromise = idb.open('megapay', 1, function(db) {
 
 	//store per sincronizzazione ricezione
-	if (!db.objectStoreNames.contains('sync-receive'))
-	 	db.createObjectStore('sync-receive', {keyPath: 'id'});
-	// STORE PER STORAGE DATI DI RICEZIONE
-	if (!db.objectStoreNames.contains('np_receive'))
-		db.createObjectStore('np_receive', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-receive'))
+	//  	db.createObjectStore('sync-receive', {keyPath: 'id'});
+	// // STORE PER STORAGE DATI DI RICEZIONE
+	// if (!db.objectStoreNames.contains('np_receive'))
+	// 	db.createObjectStore('np_receive', {keyPath: 'id'});
 
 	//store per sincronizzazione check address
-	if (!db.objectStoreNames.contains('np_checkaddress'))
-		db.createObjectStore('np_checkaddress', {keyPath: 'id'});
-
-	//store per sincronizzazione del gas price
-	if (!db.objectStoreNames.contains('np_gasPrice'))
-		db.createObjectStore('np_gasPrice', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('np_checkaddress'))
+	// 	db.createObjectStore('np_checkaddress', {keyPath: 'id'});
+	//
+	// //store per sincronizzazione del gas price
+	// if (!db.objectStoreNames.contains('np_gasPrice'))
+	// 	db.createObjectStore('np_gasPrice', {keyPath: 'id'});
 
 
 
 	// STORE PER SINCRONIZZAZIONE INVIO ETH E TOKEN
-	if (!db.objectStoreNames.contains('sync-send-eth'))
-	 	db.createObjectStore('sync-send-eth', {keyPath: 'id'});
-	if (!db.objectStoreNames.contains('sync-send-erc20'))
-	 	db.createObjectStore('sync-send-erc20', {keyPath: 'id'});
-	if (!db.objectStoreNames.contains('np-send-eth'))
-	 	db.createObjectStore('np-send-eth', {keyPath: 'id'});
-	if (!db.objectStoreNames.contains('np-send-erc20'))
-	 	db.createObjectStore('np-send-erc20', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-send-eth'))
+	//  	db.createObjectStore('sync-send-eth', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-send-erc20'))
+	//  	db.createObjectStore('sync-send-erc20', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('np-send-eth'))
+	//  	db.createObjectStore('np-send-eth', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('np-send-erc20'))
+	//  	db.createObjectStore('np-send-erc20', {keyPath: 'id'});
 
 	//store per sincronizzazzione check txFound
-	if (!db.objectStoreNames.contains('sync-txPool'))
-	 	db.createObjectStore('sync-txPool', {keyPath: 'id'});
-	if (!db.objectStoreNames.contains('np-txPool'))
-	 	db.createObjectStore('np-txPool', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-txPool'))
+	//  	db.createObjectStore('sync-txPool', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('np-txPool'))
+	//  	db.createObjectStore('np-txPool', {keyPath: 'id'});
 
 	// store per allarme covid degli istituti
-	if (!db.objectStoreNames.contains('sync-alarm'))
-		db.createObjectStore('sync-alarm', {keyPath: 'id'});
-	if (!db.objectStoreNames.contains('sync-countdown'))
-		db.createObjectStore('sync-countdown', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-alarm'))
+	// 	db.createObjectStore('sync-alarm', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-countdown'))
+	// 	db.createObjectStore('sync-countdown', {keyPath: 'id'});
 
 
 	//store per sincronizzazzione blockchain
 	if (!db.objectStoreNames.contains('sync-blockchain'))
 		db.createObjectStore('sync-blockchain', {keyPath: 'id'});
 
-	if (!db.objectStoreNames.contains('np-transactions'))
-		db.createObjectStore('np-transactions', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('np-transactions'))
+	// 	db.createObjectStore('np-transactions', {keyPath: 'id'});
 
 	//store per il salvataggio della sottoscrizione push
-	if (!db.objectStoreNames.contains('subscriptions')) {
-	 	db.createObjectStore('subscriptions', {keyPath: 'id'});
-	}
+	// if (!db.objectStoreNames.contains('subscriptions')) {
+	//  	db.createObjectStore('subscriptions', {keyPath: 'id'});
+	// }
 	//store per verificare la presenza del wallet
 	if (!db.objectStoreNames.contains('wallet')) {
 	 	db.createObjectStore('wallet', {keyPath: 'id'});
 	}
 
 	//store per il salvataggio dei dati del pin
-	if (!db.objectStoreNames.contains('pin')) {
-	 	db.createObjectStore('pin', {keyPath: 'id'});
-	}
+	// if (!db.objectStoreNames.contains('pin')) {
+	//  	db.createObjectStore('pin', {keyPath: 'id'});
+	// }
 	//store per il salvataggio del seed
 	if (!db.objectStoreNames.contains('mseed')) {
 	 	db.createObjectStore('mseed', {keyPath: 'id'});

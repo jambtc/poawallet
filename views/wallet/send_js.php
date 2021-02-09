@@ -14,9 +14,10 @@ $options = [
     'decimalError' => Yii::t('lang','Use a maximum of 2 decimal places.'),
     'higherError' => Yii::t('lang','Amount is higher than Balance.'),
     'recipientError' => Yii::t('lang','Recipient address not entered.'),
-    'htmlTransactionBody' => '<div class="alert alert-info">
+    'htmlTransactionBody' => '<div class="alert alert-warning">
                                 <p class="generating">Generating transaction...</p>
                                 </div>',
+    //'textClose' => Yii::t('lang','Close'),
     // ...
 ];
 $this->registerJs(
@@ -104,22 +105,22 @@ $wallet_restore = <<<JS
             				dataType: "json",
                             beforeSend: function() {
         						$('.card-body').hide();
-                                // $('.wizard-inner').html('');
-                                // $('.pay-submit').hide();
+                                $('.wizard-inner').html('');
+                                $('.pay-submit').hide();
         						$('.card-body').after(yiiOptions.htmlTransactionBody);
         					},
             				success:function(data){
             					console.log('[send]: data from generate-transaction controller',data);
-                                $('.generating').after('<p>'+JSON.stringify(data,' ',2)+'</p>');
-                                writeData('sync-send-erc20', data).then(function() {
-        							console.log('[Send]: Registered sync-send request in indexedDB', data);
-        							//return serWork.sync.register('sync-new-erc20');
+                                $('.generating').parent().removeClass('alert-warning');
+                                $('.generating').html(data.row);
+                                $('.pay-close').show();
+
+                                writeData('sync-blockchain', data).then(function() {
+        							console.log('[Send]: Registered sync-blockchain request in indexedDB', data);
+        							return serWork.sync.register('sync-blockchain');
         						})
                                 .then(function() {
-        							//sendForm.submit ();
-                                    setTimeout(function(){
-                                        //sendForm.submit ();
-                                    }, 50);
+        							erc20.isReadySent(data.id);
         						})
 
             				},
@@ -127,18 +128,6 @@ $wallet_restore = <<<JS
             					console.log(j);
             				}
             			});
-
-
-						// writeData('sync-send-erc20', sendPost).then(function() {
-						// 	console.log('[Send]: Registered sync-send request in indexedDB', sendPost);
-						// 	return serWork.sync.register('sync-send-erc20');
-						// })
-                        // .then(function() {
-						// 	//sendForm.submit ();
-						// })
-						// .catch(function(err) {
-						// 	console.log(err);
-						// });
 					} else {
 						console.log('Chiave privata non trovata!');
 						return;
@@ -147,6 +136,31 @@ $wallet_restore = <<<JS
 			});
 		}
 	});
+
+    var erc20 = {
+        isReadySent: function(id){
+            readFromId('sync-blockchain',id)
+            .then(function(data) {
+                console.log('[isReadySent]: checking data from sync-blockchain indexedDB', data);
+                if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
+                {
+                    console.log('id token è:', id);
+                    $('.generating').addClass('animationTransaction');
+                    $('.generating').html(data[0].row);
+                    $('#total-balance').addClass('animationBalanceIn');
+                    $('.star-total-balance').addClass('animationStar');
+                    $('#total-balance').text(data[0].balance);
+
+                    clearAllData('sync-blockchain');
+                } else {
+                    setTimeout(function(){ erc20.isReadySent(id) }, 1000);
+                }
+            });
+        },
+
+    }
+
+
 
 JS;
 

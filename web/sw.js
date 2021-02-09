@@ -154,7 +154,7 @@ self.addEventListener('fetch', function (event) {
 
 
 	if (getFileExtension(parser.pathname) == 'php'
-		|| getFileExtension(parser.pathname) == 'css'
+		//|| getFileExtension(parser.pathname) == 'css'
 	){
 		console.log('[SW Parser] web ',parser.pathname);
 		event.respondWith(
@@ -511,8 +511,8 @@ self.addEventListener('sync', function(event) {
  				for (var dt of data) {
 					console.log('[Service worker] fetching sync-blockchain',dt);
 					var postData = new FormData();
-	  					postData.append('search_address', dt.search_address);
-							postData.append('chainBlock', dt.chainBlock);
+	  					postData.append('id', dt.id);
+						//postData.append('chainBlock', dt.chainBlock);
 
 	 				fetch(dt.url, {
 	 					method: 'POST',
@@ -524,24 +524,24 @@ self.addEventListener('sync', function(event) {
 	 				.then(function(json) {
 						if (json.success){
 							console.log('[Service worker] Risposta di blockchain/index',json);
-							const title = json.transactions[0].title;
-							const options = {
-								body: json.transactions[0].message,
-								icon: 'src/images/icons/app-icon-96x96.png',
-								vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-								badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-								tag: 'confirm-notification', //tag univoco per le notifiche.
-								renotify: true, //connseeo a tag. se è true notifica di nuovo
-								data: {
-								   openUrl: json.transactions[0].url,
-								},
-								actions: [
-									{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
-									{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
-								],
-							};
-						  self.registration.showNotification(title, options);
-							writeData('np-transactions', json);
+							// const title = json.transactions[0].title;
+							// const options = {
+							// 	body: json.transactions[0].message,
+							// 	icon: 'src/images/icons/app-icon-96x96.png',
+							// 	vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
+							// 	badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
+							// 	tag: 'confirm-notification', //tag univoco per le notifiche.
+							// 	renotify: true, //connseeo a tag. se è true notifica di nuovo
+							// 	data: {
+							// 	   openUrl: json.transactions[0].url,
+							// 	},
+							// 	actions: [
+							// 		{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
+							// 		{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
+							// 	],
+							// };
+						  	// self.registration.showNotification(title, options);
+							writeData('sync-blockchain', json);
 						}
  				 	})
  					.catch(function(err){

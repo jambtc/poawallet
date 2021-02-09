@@ -94,6 +94,55 @@ aside .nav-pills .nav-link.active {
     max-width: 96% !important;
 }
 
+.animationTransaction  {
+    animation: transactionAnimation 1.5s;
+    animation-fill-mode: both
+}
+@keyframes transactionAnimation {
+    from {
+        transform:scale(0.7);
+        opacity:0;
+        /* background: #000; */
+    }
+    to {
+        transform: scale(1);
+        opacity:1;
+        /* background: #002b36; */
+    }
+}
+
+.animationBalanceIn {
+    animation: balanceInAnimation 2s;
+    animation-fill-mode: both
+}
+
+
+@keyframes balanceInAnimation {
+    from {
+        transform:scale(0.4);
+        opacity:0;
+    }
+    to {
+        transform: scale(1);
+        opacity:1;
+    }
+}
+
+.animationStar {
+    animation: spin 1s linear;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(3600deg); }
+}
+
+
+.grid-view > .summary {
+    color: white;
+}
+
+
+
 /* INPUT FORM */
 label {
     color: #ddd !important;
@@ -122,6 +171,9 @@ label {
 .wizard > .nav-tabs {
     margin-top: 0px !important;
 }
+.wizard-inner {
+    min-height: 104px;
+}
 @media( max-width : 585px ) {
 
     .wizard {
@@ -135,6 +187,13 @@ label {
         height: 50px;
         line-height: 50px;
     }
+}
+
+/* PROFILE */
+
+.profile-av > img {
+    max-width: 40px;
+    max-height: 40px;
 }
 
 /* FOOTER */

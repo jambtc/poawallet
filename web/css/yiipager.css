@@ -1,0 +1,62 @@
+/**
+ * CSS styles for CLinkPager.
+ *
+ * @author Qiang Xue <qiang.xue@gmail.com>
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright &copy; 2008-2010 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ * @version $Id: pager.css 1678 2010-01-07 21:02:00Z qiang.xue $
+ * @since 1.0
+ */
+
+ul.pagination
+{
+	font-size:11px;
+	border:0;
+	margin:0;
+	padding:0;
+	line-height:100%;
+	display:inline;
+}
+
+ul.pagination li
+{
+	display:inline;
+}
+
+ul.pagination a:link,
+ul.pagination a:visited
+{
+	border:solid 1px #9aafe5;
+	font-weight:bold;
+	color:#efefef;
+	padding:3px 9px;
+	text-decoration:none;
+}
+
+ul.pagination .page a
+{
+	font-weight:normal;
+}
+
+ul.pagination a:hover
+{
+	border:solid 1px #0e509e;
+}
+
+ul.pagination .selected a
+{
+	background:#2e6ab1;
+	color:#FFFFFF;
+	font-weight:bold;
+}
+
+ul.pagination .hidden a,
+ul.pagination .hidden span
+{
+	border: solid 1px #DEDEDE;
+    padding: 1px 6px;
+	color: #888888;
+    font-weight: bold;
+    cursor: default;
+}

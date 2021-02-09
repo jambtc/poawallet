@@ -1,6 +1,5 @@
 <?php
 use yii\helpers\Url;
-// use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
 use drsdre\wizardwidget;
@@ -18,6 +17,8 @@ $form = ActiveForm::begin([
 	],
 
 ]);
+
+$userUrl = Url::to(['users/view','id'=>\webapp::encrypt(Yii::$app->user->identity->id)]);
 
 include ('send_js.php');
 
@@ -78,9 +79,12 @@ $wizard_config = [
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
-                      <h1 class="b-val"><i class="fa fa-star"></i> <?= $balance ?> </h1>
-                      <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
+					  <h1 class="b-val"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h1>
+ 					 <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
                   </div>
+				  <div class="ml-auto align-self-end">
+					  <a href="<?= $userUrl ?>" class="profile-av"><img src="<?= $userImage ?>"></a>
+				  </div>
               </div>
             </div>
         </div>
@@ -88,7 +92,7 @@ $wizard_config = [
     <section class="trans-sec container mb-2 dash-balance">
 
 		<?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>
-		 
+
 	</section>
 </main>
 

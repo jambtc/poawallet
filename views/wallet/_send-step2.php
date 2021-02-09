@@ -1,11 +1,7 @@
 <?php
 use yii\helpers\Html;
-// use yii\bootstrap4\ActiveForm;
-
-
-
+use yii\helpers\Url;
 ?>
-<?php //$form->errorSummary($sendTokenForm) ?>
 
 <?php $sendTokenForm->from = $fromAddress; ?>
 
@@ -25,12 +21,12 @@ use yii\helpers\Html;
   </div>
   <div class="card-footer">
       <?= Html::submitButton('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','send'), [
-            'class' => 'btn btn-primary float-right pay-submit',
-            // 'data-method' => 'post',
-            // 'data-pjax' => 1
-            // 'data-confirm' => 'Are you sure?'
+            'class' => 'btn button circle block blue pay-submit',
         ]);
       ?>
+      <a class="pay-close float-right" href="<?= Url::to(['/wallet/index'])?> " style="display: none;"/>
+          <button type="button" class="btn button circle block green"><?= Yii::t('lang','Close') ?></button>
+      </a>
   </div>
 
 

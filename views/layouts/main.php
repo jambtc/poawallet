@@ -43,6 +43,7 @@ AppAsset::register($this);
     <!-- Template global css file. Requared all pages -->
   	<link rel="stylesheet" type="text/css" href="css/global.style.css">
     <link rel="stylesheet" type="text/css" href="css/site.css">
+    <link rel="stylesheet" type="text/css" href="css/yiipager.css">
 </head>
 <body>
 <?php $this->beginBody() ?>

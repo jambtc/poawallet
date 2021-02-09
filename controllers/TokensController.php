@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\BoltTokens;
 use app\models\BoltTokensSearch;
+use app\models\BoltWallets;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * BoltTokensController implements the CRUD actions for BoltTokens model.
  */
-class BoltTokensController extends Controller
+class TokensController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,17 +31,40 @@ class BoltTokensController extends Controller
     }
 
     /**
+	 * This function return the user wallet address
+	 */
+	 private function userAddress() {
+ 		$wallet = BoltWallets::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		if (null === $wallet){
+			$this->redirect(['wallet/wizard']);
+		} else {
+			return $wallet->wallet_address;
+		}
+	}
+
+    /**
      * Lists all BoltTokens models.
      * @return mixed
      */
     public function actionIndex()
     {
+        $fromAddress = $this->userAddress();
+
         $searchModel = new BoltTokensSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->setPagination(['pageSize' => 10]);
+		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];
+		$dataProvider->query
+					->orwhere(['=','to_address', $fromAddress])
+					->orwhere(['=','from_address', $fromAddress]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'fromAddress' => $fromAddress,
         ]);
     }
 
@@ -57,57 +81,8 @@ class BoltTokensController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new BoltTokens model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new BoltTokens();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_token]);
-        }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing BoltTokens model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_token]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing BoltTokens model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
 
     /**
      * Finds the BoltTokens model based on its primary key value.
