@@ -3,20 +3,20 @@ var pin_numpad = `
 		<div class="easy-numpad-container">
 			<div class="easy-numpad-output-container">
 				<p class="easy-numpad-output alert alert-dark">
-					<div class="row h2" style="margin-left:0px;margin-top:-56px;">
-						<div class="col">
+					<div class="row h3" style="margin-left:0px;margin-top:-43px;">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-0"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-1"></i>
 						</div>
-							<div class="col">
+							<div class="col-auto">
 							<i class="fa fa-circle easy-dot-2"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-3"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-4"></i>
 						</div>
 					</div>
@@ -57,20 +57,20 @@ var pin_confirm_numpad = `
 		<div class="easy-numpad-container">
 			<div class="easy-numpad-output-container">
 				<p class="easy-numpad-output alert alert-dark">
-					<div class="row h2" style="margin-left:0px;margin-top:-56px;">
-						<div class="col">
+					<div class="row h3" style="margin-left:0px;margin-top:-43px;">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-0"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-1"></i>
 						</div>
-							<div class="col">
+							<div class="col-auto">
 							<i class="fa fa-circle easy-dot-2"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-3"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-4"></i>
 						</div>
 					</div>
@@ -110,20 +110,20 @@ var pin_ask_numpad = `
 		<div class="easy-numpad-container">
 			<div class="easy-numpad-output-container">
 				<p class="easy-numpad-output alert alert-dark">
-					<div class="row h2" style="margin-left:0px;margin-top:-56px;">
-						<div class="col">
+					<div class="row h3" style="margin-left:0px;margin-top:-43px;">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-0"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-1"></i>
 						</div>
-							<div class="col">
+							<div class="col-auto">
 							<i class="fa fa-circle easy-dot-2"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-3"></i>
 						</div>
-						<div class="col">
+						<div class="col-auto">
 							<i class="fa fa-circle easy-dot-4"></i>
 						</div>
 					</div>
@@ -171,10 +171,8 @@ function easypin(num) {
 
 	if (pin.length <= pinDigits){
 		//$('.easy-numpad-output').append('*');
-
-		$('.easy-dot-'+pin.length).removeClass('fa-circle').addClass('fa-check-circle');
-
-	  $('#pin_password').val( pin + num );
+		$('.easy-dot-'+pin.length).removeClass('fa-circle').addClass('fa-check-circle text-info');
+		$('#pin_password').val( pin + num );
 	}
 	if (pin.length == pinDigits){
 		$('#pinNewButton').prop('disabled', false);
@@ -185,15 +183,15 @@ function easypin(num) {
 
 // cancella un singolo carattere del pin
 function easy_pin_del(confirm=false) {
-  event.preventDefault();
-	if (navigator.vibrate){
-    navigator.vibrate(60);
-  }
+	event.preventDefault();
+		if (navigator.vibrate){
+		navigator.vibrate(60);
+	}
 
 	$('#pinNewButton').prop('disabled', true);
 	$('#pinNewButton').addClass('disabled');
 
-  var easy_numpad_output_val = $('.easy-numpad-output').html();
+  	var easy_numpad_output_val = $('.easy-numpad-output').html();
 	var easy_numpad_output_val_deleted = easy_numpad_output_val.slice(0, -1);
 	console.log('[pin] easy_numpad_output_val:',easy_numpad_output_val);
 	console.log('[pin] easy_numpad_output_val_deleted:',easy_numpad_output_val_deleted);
@@ -207,12 +205,14 @@ function easy_pin_del(confirm=false) {
 		var input = 'pin_password';
 	}
 	var pin_password = $('#'+input).val();
-  var pin_password_deleted = pin_password.slice(0, -1);
+  	var pin_password_deleted = pin_password.slice(0, -1);
 
 	console.log('[pin] pin_password:',pin_password);
 	console.log('[pin] pin_password_deleted:',pin_password_deleted.length);
 
+	$('.easy-dot-'+pin_password_deleted.length).removeClass('text-info');
 	$('.easy-dot-'+pin_password_deleted.length).removeClass('fa-check-circle').addClass('fa-circle');
+
 	$('.easy-numpad-output').removeClass('alert-primary');
 	$('.easy-numpad-output').removeClass('alert-danger');
 	$('.easy-numpad-output').addClass('alert-dark');
@@ -228,8 +228,11 @@ function easy_pin_clear(reset=true) {
     navigator.vibrate(60);
   }
 	//$('.easy-numpad-output').text('');
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < 5; i++){
+		$('.easy-dot-'+i).removeClass('text-info');
 		$('.easy-dot-'+i).removeClass('fa-check-circle').addClass('fa-circle');
+	}
+
 	$('.easy-numpad-output').removeClass('alert-primary');
 	$('.easy-numpad-output').removeClass('alert-danger');
 	$('.easy-numpad-output').addClass('alert-dark');
@@ -265,9 +268,8 @@ function easypinconfirm(num) {
 	console.log('lunghezza conferma pin',pin.length);
 
 	if (pin.length <= pinDigits){
-		//$('.easy-numpad-output').append('*');
-		$('.easy-dot-'+pin.length).removeClass('fa-circle').addClass('fa-check-circle');
-	  $('#pin_password_confirm').val( pin + num );
+		$('.easy-dot-'+pin.length).removeClass('fa-circle').addClass('fa-check-circle text-info');
+		$('#pin_password_confirm').val( pin + num );
 	}
 	if (pin.length == pinDigits){
 		console.log('verifica uguaglianza pin',$('#pin_password').val(),$('#pin_password_confirm').val());
@@ -302,61 +304,4 @@ function easypinconfirm(num) {
 		}
 
 	}
-}
-/*
-* aggiorno il timestamp del pin ad ogni refresh
-*/
-function updatePinTimestamp(){
-	isPinRequest = false;
-	dropNumpad(true);
-	readAllData('pin')
-		.then(function(old) {
-			var post = {
-				id		: new Date().getTime() /1000 | 0, // timestamp
-				stop	: old[0].stop,
-				pin     : old[0].pin,
-			};
-
-			clearAllData('pin')
-				.then(function(){
-					writeData('pin', post)
-						.then(function() {
-							console.log('[Pin Utility] Save updated pin info in indexedDB', post);
-							$('#pinRequestModal').modal("hide");
-							$('#pinRequestButton').text("Confirm");
-						})
-				})
-		})
-	return isPinRequest;
-}
-
-// funzione che richiede il pin dopo la scadenza del timestamp impostato in indexedDB
-function askPin(crypted_pin,mask=0){
-	$.ajax({
-		url:'index.php?r=wallet/decrypt',
-		type: "POST",
-		data: {'pass': crypted_pin},
-		dataType: "json",
-		success:function(data){
-			console.log('[Pin Utility] decrypted pin code',data);
-			$('#pin_password').val(data.decrypted);
-			$('.pin-confirm-numpad').append(pin_ask_numpad);
-			$('.easy-numpad-frame').css("top","1px");
-
-			if (mask==0){
-				$('#pinRequestModal').modal({
-					backdrop: 'static',
-					keyboard: false
-				});
-			}else{
-				$('#pinRemoveModal').modal({
-		      backdrop: 'static',
-		      keyboard: false
-		    });
-			}
-		},
-		error: function(j){
-			console.log('error');
-		}
-	});
 }

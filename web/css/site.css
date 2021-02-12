@@ -196,6 +196,10 @@ label {
     max-height: 40px;
 }
 
+.list-box .list-item {
+    background-color: #ddd;
+}
+
 /* FOOTER */
 .footer {
     height: 60px;

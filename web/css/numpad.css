@@ -1,0 +1,158 @@
+.errorMessage {
+    font-size: 0.8em;
+    color: red;
+    margin-top: 0px;
+    padding-top: 0px;
+}
+
+a {
+    text-decoration: none;
+}
+.easy-get:hover {
+    cursor: pointer;
+}
+/* latin */
+@font-face {
+  font-family: 'Orbitron';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Orbitron Regular'), local('Orbitron-Regular'), url(fonts/orbitron/yMJRMIlzdpvBhQQL_Qq7dy0.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+.easy-numpad-frame {
+    /* font-family: 'Orbitron'; */
+    position: relative;
+    /* top: -18px; */
+    left: 0px;
+
+    /* width: 112%; */
+    height: auto !important;
+    z-index: 999999;
+    display: flex;
+    disp Slay: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    background-color: rgba(236,240,241,0.95);
+
+    padding: 0px 0px 0px 0px;
+    /* margin-left: -18px; */
+}
+
+
+a#easy-numpad-close {
+    position: absolute;
+    right: -54px;
+    top: -56px;
+    background-color: #f44336;
+    color: #fff;
+    line-height: 1;
+    padding: 20px 21px;
+}
+.easy-numpad-output-container {
+    position: relative;
+    width: 100%;
+}
+.easy-numpad-output {
+    /* background-color: rgba(255, 255, 255, 0.8); */
+    background-color: rgba(53, 43, 43, 0.8);
+    min-height: 50px;
+    box-sizing: border-box;
+    margin: 0px 0px 5px 0px;;
+    text-align: right;
+    font-size: 0.9em;
+    color: #eee;
+    width: 102%;
+}
+.easy-numpad-output-bitcoin {
+    box-sizing: border-box;
+    margin: 0px 0px 5px 0px;
+    text-align: right;
+    font-size: 0.5em;
+    color: rgba(255, 120, 50, 0.8);
+}
+.easy-numpad-output-symbol {
+    position: relative;
+    font-size: 0.8em;
+    top:5px;
+    margin-left: 5px;
+}
+.easy-numpad-output-bitcoin-symbol {
+    position: relative;
+    font-size: 0.5em;
+    color: rgba(255, 120, 50, 0.8);
+    top:-13px;
+    margin-left: 5px;
+}
+
+.easy-numpad-container {
+    position: relative;
+    width: 100%;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    padding: 30px;
+	font-size: 40px;   /* GRANDEZZA DEL CARATTERE DA VISUALIZZARE NUMPAD */
+
+}
+.easy-numpad-number-container > table {
+    width: calc(100% + 6px);
+    position: relative;
+    /* left: -3px; */
+    /* top: -25px; */
+
+}
+.easy-numpad-number-container > table td {
+    border: 1px solid  gray;
+}
+.easy-numpad-number-container > table span {
+    display: block;
+    padding: 0px 0px 0px 0px;
+	/* background-color: rgba(28, 46, 126, 0.8); */
+  background-color: rgba(17, 20, 29, 0.8);
+    color: #fff;
+    text-align: center;
+}
+.easy-numpad table{
+	 background-color: rgba(28, 46, 126, 0.8);
+}
+.easy-numpad-number-container > table span:hover {
+    background-color: #616161;
+}
+
+.easy-numpad-number-container .del {
+    /* background-color: #ef5350; */
+    /* color: #ef5350; */
+}
+.easy-numpad-number-container .done {
+    position: relative;
+    top: -20px;
+	background-color: #388E3C;
+    font-size: .7em;
+}
+.easy-numpad-number-container .token {
+    position: relative;
+    top: -20px;
+    background-color: rgba(74, 135, 238, 1);
+    font-size: .7em;
+}
+.waiting_span{
+    position: relative;
+    float: right;
+    max-height: 31px;
+    padding: 0px 0px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    width: 76px;
+}
+.smaller{
+    text-transform: lowercase;
+    font-weight: lighter;
+}
+
+
+@media only screen and (min-width : 300px) and (max-width : 767px) {
+    a#easy-numpad-close {
+        right: 0px
+    }
+}

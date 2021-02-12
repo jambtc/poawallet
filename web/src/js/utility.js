@@ -56,10 +56,18 @@ var dbPromise = idb.open('megapay', 1, function(db) {
 	 	db.createObjectStore('wallet', {keyPath: 'id'});
 	}
 
+	console.log('ma sono arrivato wui??');
+
 	//store per il salvataggio dei dati del pin
-	// if (!db.objectStoreNames.contains('pin')) {
-	//  	db.createObjectStore('pin', {keyPath: 'id'});
-	// }
+	if (!db.objectStoreNames.contains('pin')) {
+	 	db.createObjectStore('pin', {keyPath: 'id'});
+	}
+	if (!db.objectStoreNames.contains('isPinRequest')) {
+	 	db.createObjectStore('isPinRequest', {keyPath: 'id'});
+	}
+	if (!db.objectStoreNames.contains('isPinLocked')) {
+	 	db.createObjectStore('isPinLocked', {keyPath: 'id'});
+	}
 	//store per il salvataggio del seed
 	if (!db.objectStoreNames.contains('mseed')) {
 	 	db.createObjectStore('mseed', {keyPath: 'id'});
@@ -81,7 +89,7 @@ function writeData(table, data) {
 }
 
 function readAllData(table) {
-	// console.log("[IndexedDb read table]", table);
+	console.log("[IndexedDb read table]", table);
 	return dbPromise
 		.then(function(db) {
 			var tx = db.transaction(table, 'readonly');

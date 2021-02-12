@@ -3,8 +3,8 @@ importScripts('src/js/idb.js');
 importScripts('src/js/utility.js');
 
 // quando cambi questi valori modificali anche in view/layouts/js_sw.php
-var CACHE_STATIC_NAME = 'megapay-static-001';
-var CACHE_DYNAMIC_NAME = 'megapay-dynamic-001';
+var CACHE_STATIC_NAME = 'megapay-static-003';
+var CACHE_DYNAMIC_NAME = 'megapay-dynamic-003';
 var STATIC_FILES = [
 	'/',
 	// 'offline.php',

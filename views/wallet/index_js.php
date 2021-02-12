@@ -24,9 +24,7 @@ $this->registerJs(
 $wallet_init = <<<JS
 $(function(){
     /*
-     *
      * FUNZIONE INIZIALE DI INIZIALIZZAZIONE DEL WALLET
-     *
     */
     //LEGGO LE INFORMAZIONI DEL WALLET DA IndexedDB
     var isEquel = null;
@@ -69,16 +67,12 @@ $(function(){
                         break;
                     }else{
                         console.log('2');
-
                         window.location.href = yiiOptions.initURL;
-                        break;
                     }
-                // }else{
-                //
+
                 }
             }else{
                 console.log('3');
-
                 window.location.href = yiiOptions.initURL;
 
             }
@@ -88,7 +82,6 @@ $(function(){
             console.log('[is isEquel true? ',isEquel);
             if (!isEquel){
                 console.log('4');
-
                 window.location.href = yiiOptions.initURL;
             }
         })
@@ -96,7 +89,6 @@ $(function(){
             //se c'è un errore, probabilmente non esiste il db wallet pertanto inizializzo
             if (!isEquel){
                 console.log('5');
-
                 window.location.href = yiiOptions.initURL;
             }
         });
