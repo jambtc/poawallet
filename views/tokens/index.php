@@ -14,13 +14,13 @@ $this->title = Yii::t('lang', 'Transactions');
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- <div class="form-divider"></div> -->
-<main class="margin mt-0">
-    <section class="wallets-list container">
-        <div class="form-divider"></div>
-    </section>
+<div class="dash-balance ">
+    <div class="dash-content relative">
+		<h3 class="w-text"><?= Yii::t('lang','Transaction list');?></h3>
+	</div>
 
-    <section class="trans-sec container mb-2 dash-balance">
-        <h4 class="title-main mt-0 text-light"><?= Yii::t('lang','Transaction list');?></h4>
+    <section class="mb-2">
+
 
         <?php Pjax::begin(); ?>
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -57,4 +57,4 @@ $this->title = Yii::t('lang', 'Transactions');
     </section>
 
 
-</main>
+</div>
