@@ -79,10 +79,10 @@ class BoltTokens extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return BoltTokensQuery the active query used by this AR class.
+     * @return \app\models\query\BoltTokensQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new BoltTokensQuery(get_called_class());
+        return new \app\models\query\BoltTokensQuery(get_called_class());
     }
 }

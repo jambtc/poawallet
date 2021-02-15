@@ -3,20 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\BoltSocialusers */
+Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
-//
-// var_dump($model);
-// exit;
-
-// $this->title = $model->id_social;
-// $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Bolt Socialusers'), 'url' => ['index']];
-// $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 
 // include ('sparkline_js.php');
-include ('pin-manage_js.php');
+include ('manage-options_js.php');
+include ('manage-pin_js.php');
+include ('manage-push_js.php');
 ?>
 <div class="dash-balance">
 	<div class="dash-content relative">
@@ -37,7 +31,7 @@ include ('pin-manage_js.php');
 	<div class="trader-info">
 		<h3><?= $model->first_name ?> <?= $model->last_name ?></h3>
 		<p><?= $model->email ?></p>
-		<!-- <ul class="trader-info-list list-unstyled">
+		<ul class="trader-info-list list-unstyled">
             <li>
 				<div class="profile3"><canvas width="59" height="50" style="display: inline-block; width: 59px; height: 50px; vertical-align: top;"></canvas></div>
 				<h2><?= $transactions ?></h2>
@@ -54,7 +48,7 @@ include ('pin-manage_js.php');
 				<small class="txt-muted"><?= Yii::t('lang','Received') ?></small>
 			</li>
 
-		</ul> -->
+		</ul>
 	</div>
 </section>
 <section class="bal-section container mt-30">
@@ -105,13 +99,13 @@ include ('pin-manage_js.php');
 		<div class="list-item">
 			<span class="list-item-title"><?= Yii::t('lang','PIN');?><small class="text-muted"></small></span>
 			<div class="pincodeslider sweet-check" >
-				<input type="checkbox" name="pincodeslider" value="1">
+				<!-- <input type="checkbox" name="pincodeslider" value="1"> -->
 				<div class="outline">
 					<span></span>
 				</div>
 			</div>
 			<div class="pincodeslider-remove sweet-check checked" style="display:none;" >
-				<input type="checkbox" name="pincodeslider-remove" value="1">
+				<!-- <input type="checkbox" name="pincodeslider-remove" value="1"> -->
 				<div class="outline">
 					<span></span>
 				</div>
@@ -119,7 +113,7 @@ include ('pin-manage_js.php');
 		</div>
 	</div>
 
-	<div class="list-box">
+	<!-- <div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?= Yii::t('lang','Two factors authentication');?> <small class="text-muted"></small></span>
 
@@ -130,9 +124,9 @@ include ('pin-manage_js.php');
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
-	<div class="list-box">
+	<!-- <div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?= Yii::t('lang','Backup Master Seed');?> <small class="text-muted"></small></span>
 
@@ -143,9 +137,9 @@ include ('pin-manage_js.php');
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
-	<div class="list-box">
+	<!-- <div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?php echo Yii::t('lang','Scan the blockchain');?> <small class="text-muted"></small></span>
 
@@ -156,9 +150,9 @@ include ('pin-manage_js.php');
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
-	<div class="list-box">
+	<!-- <div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?php echo Yii::t('lang','Save application on Homepage');?> <small class="text-muted"></small></span>
 
@@ -169,14 +163,15 @@ include ('pin-manage_js.php');
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 
 	<div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?php echo Yii::t('lang','PUSH notifications');?> <small class="text-muted"></small></span>
 
-			<div class="sweet-check checked">
-				<input type="checkbox" name="bookmark" value="1" checked="">
+			<div class="js-push-btn-modal sweet-check "
+					data-toggle="modal"
+					data-target="#pushEnableModal">
 				<div class="outline">
 					<span></span>
 				</div>
@@ -184,7 +179,7 @@ include ('pin-manage_js.php');
 		</div>
 	</div>
 
-	<div class="list-box">
+	<!-- <div class="list-box">
 		<div class="list-item">
 			<span class="list-item-title"><?php echo Yii::t('lang','Select language');?>
 	            <small class="text-muted">
@@ -204,89 +199,10 @@ include ('pin-manage_js.php');
 	                </div>
 	            </div>
 		</div>
-	</div>
+	</div> -->
 
 
 
 	<div class="form-divider"></div>
 
 </form>
-
-<!--  nuovo PIN -->
-<div class="modal fade " id="pinNewModal" tabindex="-1" role="dialog" aria-labelledby="pinNewModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content" style="min-width:360px;">
-			<div class="modal-header">
-				<h5 class="modal-title"><?php echo Yii::t('lang','New PIN');?></h5>
-			</div>
-			<div class="modal-body ">
-				<input type='hidden' id='pin_password' class='form-control' readonly="readonly"/>
-        		<div class="pin-numpad pin-newframe-numpad"></div>
-			</div>
-			<div class="modal-footer">
-        		<div class="form-group">
-					<button type="button" class="btn btn-secondary text-capitalize" data-dismiss="modal" id="pinNewButtonBack">
-						<i class="fa fa-backward"></i> <?php echo Yii::t('lang','back');?>
-					</button>
-				</div>
-				<div class="form-group">
-					<button type="button" disabled="disabled" class="btn btn-primary disabled  text-capitalize" id="pinNewButton">
-						<i class="fa fa-thumbs-up"></i> <?php echo Yii::t('lang','confirm');?>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- VERIFICA nuovo PIN -->
-<div class="modal fade " id="pinVerifyModal" tabindex="-1" role="dialog" aria-labelledby="pinVerifyModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content" style="min-width:360px;">
-			<div class="modal-header">
-				<h5 class="modal-title" id="pinVerifyModalLabel"><?php echo Yii::t('lang','PIN Verify');?></h5>
-			</div>
-			<div class="modal-body ">
-				<input type='hidden' id='pin_password_confirm' class='form-control' readonly="readonly"/>
-        		<div class="pin-confirm-numpad pin-newframe-numpad"></div>
-			</div>
-			<div class="modal-footer">
-                <div class="form-group">
-					<button type="button" class="btn btn-secondary text-capitalize" data-dismiss="modal" id="pinVerifyButtonBack">
-						<i class="fa fa-backward"></i> <?php echo Yii::t('lang','back');?>
-					</button>
-				</div>
-				<div class="form-group">
-					<button type="button" disabled="disabled" class="btn btn-primary text-capitalize disabled" id="pinVerifyButton">
-						<i class="fa fa-thumbs-up"></i> <span id='pinVerifyButtonText'><?php echo Yii::t('lang','confirm');?></span>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- RIMUOVI PIN -->
-<div class="modal fade " id="pinRemoveModal" tabindex="-1" role="dialog" aria-labelledby="pinRemoveModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm" role="document">
-		<div class="modal-content" style="min-width:360px;">
-			<div class="modal-header">
-				<h5 class="modal-title" id="pinRemoveModalLabel"><?php echo Yii::t('lang','Remove PIN');?></h5>
-			</div>
-			<div class="modal-body ">
-        		<div class="pin-remove-numpad pin-newframe-numpad"></div>
-			</div>
-			<div class="modal-footer">
-                <div class="form-group">
-					<button type="button" class="btn btn-secondary " data-dismiss="modal" id="pinRemoveButtonBack" >
-						<i class="fa fa-backward"></i> <?php echo Yii::t('lang','back');?>
-					</button>
-				</div>
-				<div class="form-group">
-					<button type="button" disabled="disabled" class="btn btn-primary disabled" id="pinRemoveButton" >
-						<i class="fa fa-thumbs-up"></i> <?php echo Yii::t('lang','confirm');?>
-					</button>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>

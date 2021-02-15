@@ -1,11 +1,11 @@
 <?php
 
-namespace app\models;
+namespace app\models\query;
 
 /**
  * This is the ActiveQuery class for [[BoltTokens]].
  *
- * @see BoltTokens
+ * @see app\models\BoltTokens
  */
 class BoltTokensQuery extends \yii\db\ActiveQuery
 {
@@ -16,7 +16,7 @@ class BoltTokensQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltTokens[]|array
+     * @return app\models\BoltTokens[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class BoltTokensQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltTokens|array|null
+     * @return app\models\BoltTokens|array|null
      */
     public function one($db = null)
     {

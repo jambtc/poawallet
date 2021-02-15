@@ -19,6 +19,7 @@ use app\models\BoltWallets;
 use app\models\BoltSocialusers;
 use app\models\SendTokenForm;
 use app\models\WizardWalletForm;
+use app\models\PushSubscriptions;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -143,7 +144,53 @@ class WalletController extends Controller
 		];
 	}
 
+	/**
+	 * Saves the Subscription for push messages.
+	 * @param POST VAPID KEYS
+	 * this function NOT REQUIRE user to login
+	 */
+	public function actionSaveSubscription()
+	{
+		// print_r($_POST)
+		// ini_set("allow_url_fopen", true);
+		// //
+ 		// $raw_post_data = file_get_contents('php://input');
+ 		// if (false === $raw_post_data) {
+ 		// 	throw new \Exception('Could not read from the php://input stream or invalid Subscription object received.');
+ 		// }
+ 		$raw = json_decode($_POST['subscription']);
+		$browser = $_SERVER['HTTP_USER_AGENT'];
 
+		$vapid = PushSubscriptions::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->identity->id])
+				->andWhere(['browser'=>$browser])
+				->andWhere(['type'=>'wallet'])
+ 	    		->one();
+
+		if (null === $vapid){
+			//save
+			$vapid = new PushSubscriptions;
+			$vapid->id_user = Yii::$app->user->identity->id;
+			$vapid->browser = $browser;
+			$vapid->endpoint = $raw->endpoint;
+			$vapid->auth = $raw->keys->auth;
+			$vapid->p256dh = $raw->keys->p256dh;
+			$vapid->type = 'wallet';
+
+			if (!$vapid->save()){
+				$data = ['response' => '[WalletController] SaveSubscription: Cannot save subscription on server!'];
+			} else {
+				$data = ['response' => '[WalletController] SaveSubscription: Subscription saved on server.'];
+			}
+		}else{
+			if (!$vapid->delete()){
+				$data = ['response' => '[WalletController] SaveSubscription: Cannot delete subscription on server!'];
+			} else {
+				$data = ['response' => '[WalletController] SaveSubscription: Subscription deleted on server.'];
+			}
+		}
+		return $this->json($data);
+	}
 
 	/**
 	 * This function return the user wallet address
