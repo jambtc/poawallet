@@ -25,6 +25,7 @@ class AppAsset extends AssetBundle
     public $js = [
         'js/pincode-global.js',
         'js/pincode-settings.js',
+        'js/notifications.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

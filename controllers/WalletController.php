@@ -546,50 +546,6 @@ class WalletController extends Controller
 
 
 
-	/*
-	 * This function generate a transaction
-	 */
-	// private function generateEmptyTransaction($fields)
-	// {
-	// 	$fields = (object) $fields;
-	//
-	// 	$settings = \settings::load();
-	//
-	// 	//salva la transazione ERC20
-	// 	$timestamp = time();
-	// 	$invoice_timestamp = $timestamp;
-	//
-	// 	//calcolo expiration time
-	// 	$totalseconds = $settings->poa_expiration * 60; //poa_expiration è in minuti, * 60 lo trasforma in secondi
-	// 	$expiration_timestamp = $timestamp + $totalseconds; //DEFAULT = 15 MINUTES
-	//
-	// 	//$rate = $this->getFiatRate(); // al momento il token è peggato 1/1 sull'euro
-	// 	$rate = 1; //eth::getFiatRate('token'); //
-	//
-	// 	$transaction = new BoltTokens;
-	// 	$transaction->id_user = Yii::$app->user->identity->id;
-	// 	$transaction->status = 'new';
-	// 	$transaction->type = 'token';
-	// 	$transaction->token_price = $fields->amount;
-	// 	$transaction->token_ricevuti = 0;
-	// 	$transaction->fiat_price = abs($rate * $fields->amount);
-	// 	$transaction->currency = 'EUR';
-	// 	$transaction->item_desc = 'wallet';
-	// 	$transaction->item_code = '0';
-	// 	$transaction->invoice_timestamp = $invoice_timestamp;
-	// 	$transaction->expiration_timestamp = $expiration_timestamp;
-	// 	$transaction->rate = $rate;
-	// 	$transaction->from_address = $fields->from;
-	// 	$transaction->to_address = $fields->to;
-	// 	$transaction->blocknumber = $this->Blocknumber();
-	// 	$transaction->txhash = '0x0';
-	// 	$transaction->memo = $fields->memo;
-	//
-	// 	if (!($transaction->save())){
-	// 		echo var_dump($transaction->errors);
-	// 		exit;
-	// 	}
-	// }
 
 	/*
 	* This function retrieve the token balance of an address

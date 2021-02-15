@@ -1,8 +1,12 @@
 <header class="no-background"> <!-- extra class no-background -->
 
 	<div class="search-button" data-search="open">
-		<img src="css/img/content/notification1.png" class="not-icon1" alt="">
-		<img src="css/img/content/notification2.png" class="not-icon2" alt="">
+		<span style="font-size: 2em;">
+			<i class="fas fa-bell"></i>
+			<span class="notify-quantity" style="display:none;" id="quantity_circle">
+				<div id="quantity_notify"></div>
+			</span>
+		</span>
 	</div>
 
 	<div class="navi-menu-button">

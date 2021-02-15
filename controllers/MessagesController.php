@@ -3,9 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BoltTokens;
-use app\models\search\BoltTokensSearch;
-use app\models\BoltWallets;
+use app\models\search\NotificationsSearch;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -13,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * BoltTokensController implements the CRUD actions for BoltTokens model.
  */
-class TokensController extends Controller
+class MessagesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,20 +29,6 @@ class TokensController extends Controller
         ];
     }
 
-    /**
-	 * This function return the user wallet address
-	 */
-	 private function userAddress() {
- 		$wallet = BoltWallets::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
- 	    		->one();
-
-		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
-		} else {
-			return $wallet->wallet_address;
-		}
-	}
 
     /**
      * Lists all BoltTokens models.
@@ -51,20 +36,16 @@ class TokensController extends Controller
      */
     public function actionIndex()
     {
-        $fromAddress = $this->userAddress();
-
-        $searchModel = new BoltTokensSearch();
+        $searchModel = new NotificationsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setPagination(['pageSize' => 10]);
-		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];
+		$dataProvider->sort->defaultOrder = ['id_notification' => SORT_DESC];
 		$dataProvider->query
-					->orwhere(['=','to_address', $fromAddress])
-					->orwhere(['=','from_address', $fromAddress]);
+					->andWhere(['id_user', Yii::$app->user->identity->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'fromAddress' => $fromAddress,
         ]);
     }
 
@@ -88,12 +69,12 @@ class TokensController extends Controller
      * Finds the BoltTokens model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BoltTokens the loaded model
+     * @return Notifications the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BoltTokens::findOne($id)) !== null) {
+        if (($model = Notifications::findOne($id)) !== null) {
             return $model;
         }
 
