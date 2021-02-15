@@ -22,9 +22,9 @@ include ('index_js.php');
 ?>
 
 
-<main class="margin mt-0">
-    <section class="wallets-list container">
-       <div class="wallet-address">
+<div class="dash-balance">
+    <!-- <section class="wallets-list container">
+       <div class="wallet-address"> -->
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
@@ -53,17 +53,18 @@ include ('index_js.php');
 	            </div>
             </div>
            </div>
-        </div>
-    </section>
+        <!-- </div>
+    </section> -->
+</div>
 
-    <section class="trans-sec container mb-2 dash-balance">
+    <section class="trans-sec container mb-2">
       <h4 class="title-main mt-0 text-light"><?= Yii::t('lang','Recent Transactions');?></h4>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'showHeader'=> false,
-        'tableOptions' => ['class' => 'table-96 table table-sm mb-3 ml-1 mr-1'],
+        'tableOptions' => ['class' => 'table-98 table table-sm mb-3 ml-1 mr-1'],
         // 'layout' => "{summary}\n{items}\n{pager}",
         'layout' => "{items}",
         'columns' => [
@@ -82,4 +83,4 @@ include ('index_js.php');
     ]); ?>
 
     </section>
-</main>
+</div>

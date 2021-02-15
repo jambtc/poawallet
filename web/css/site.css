@@ -90,8 +90,9 @@ aside .nav-pills .nav-link.active {
 .table tr td {
   border-bottom: 1px solid transparent !important;
 }
-.table-96 {
-    max-width: 96% !important;
+.table-98 {
+    max-width: 98% !important;
+    margin-top: -50px;
 }
 
 .animationTransaction  {

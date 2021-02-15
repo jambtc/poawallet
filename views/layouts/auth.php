@@ -4,16 +4,22 @@
 /* @var $content string */
 
 use app\widgets\Alert;
+
 use yii\helpers\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 
+
+
+
 Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
+
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -45,32 +51,39 @@ AppAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap h-100 d-flex flex-column">
+<div class="wrapper">
+    <?php
+    // mi serve per far caricare bootstrap4
+    NavBar::begin();
+    NavBar::end();
+    ?>
+    <div class="wrapper-inline">
+        <?php //$this->beginContent('@app/views/layouts/base.php') ?>
+        <main class="margin mt-0">
 
-  <?php echo $this->render('_header'); ?>
-
-
-  <main class="d-flex">
-
-    <div class="content-wrapper d-flex-login p-3 container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
+            <?= Alert::widget() ?>
+            <?= $content ?>
+        </main>
+        <?php //$this->endContent() ?>
+        <footer class="footer">
+            <div class="container">
+              <?= logo::footer(); ?>
+            </div>
+        </footer>
     </div>
 
-  </main>
+
 
 
 
 </div>
 
-<footer class="footer">
-    <div class="container">
-      <?= logo::footer(); ?>
-    </div>
-</footer>
+<?php echo $this->render('_oauth-modal'); ?>
+
+
+
+
+
 
 <?php $this->endBody() ?>
 <!-- Template global script file. requared all pages -->
