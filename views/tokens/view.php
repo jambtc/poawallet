@@ -11,7 +11,7 @@ Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
 \yii\web\YiiAsset::register($this);
 ?>
-<main class="margin mt-0">
+<div class="dash-balance">
     <div class="ref-card c2 mb-3">
 		<div class="dash-content relative">
 			<h3 class="w-text"><?= Yii::t('lang','Transaction details');?></h3>
@@ -20,7 +20,7 @@ $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
 			</div> -->
 		</div>
 	</div>
-    <section class="trans-sec bal-section container mt-0 purp">
+    <section class="trans-sec mt-0 purp" style="padding:15px 0px 0px 0px !important;">
 
 		<div class="ref-card ">
 			<div class="d-flex align-items-center">
@@ -82,4 +82,4 @@ $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
 
 
 
-</main>
+</div>

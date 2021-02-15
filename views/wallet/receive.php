@@ -12,7 +12,6 @@ $qrCode = (new QrCode($fromAddress))
 
 ?>
 
-<main class="margin mt-0">
     <div class="dash-balance">
 
         <div class="card text-center">
@@ -34,4 +33,3 @@ $qrCode = (new QrCode($fromAddress))
         </div>
 
     </div>
-</main>
