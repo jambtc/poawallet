@@ -24,6 +24,12 @@ NavBar::end();
 					<a href="<?= Url::to(['/wallet/index']) ?>"><img src="css/img/content/icons/2.png" alt=""><strong class="special"><?= Yii::t('lang','My Wallet') ?></strong> </a>
 				</li>
 				<li class="">
+					<a href="<?= Url::to(['/send/index']) ?>"><img src="css/img/content/icon1.png" alt=""><strong class="special"><?= Yii::t('lang','Send') ?></strong> </a>
+				</li>
+				<li class="">
+					<a href="<?= Url::to(['/receive/index']) ?>"><img src="css/img/content/icon2.png" alt=""><strong class="special"><?= Yii::t('lang','Receive') ?></strong> </a>
+				</li>
+				<li class="">
 					<a href="<?= Url::to(['/tokens/index']) ?>"><img src="css/img/content/icons/3.png" alt=""><strong class="special"><?= Yii::t('lang','Transactions') ?></strong> </a>
 				</li>
 				<li class="">

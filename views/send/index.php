@@ -5,6 +5,13 @@ use yii\bootstrap4\ActiveForm;
 use drsdre\wizardwidget;
 
 $this->title = Yii::$app->id;
+?>
+
+
+
+<?php
+
+
 
 $form = ActiveForm::begin([
 	'id' => 'send-form',
@@ -72,10 +79,9 @@ $wizard_config = [
 	// 'start_step' => 1, // Optional, start with a specific step
 ];
 ?>
-
-<main class="margin mt-0 ">
-    <section class="wallets-list container">
-        <div class="wallet-address">
+<div class="dash-balance ">
+    <!-- <section class="wallets-list container">
+        <div class="wallet-address"> -->
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
@@ -87,13 +93,13 @@ $wizard_config = [
 				  </div>
               </div>
             </div>
-        </div>
-    </section>
-    <section class="trans-sec container mb-2 dash-balance">
+        <!-- </div>
+    </section> -->
+	</div>
+    <section class="trans-sec container mb-2 dash-balance relative">
 
 		<?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>
 
 	</section>
-</main>
 
 <?php ActiveForm::end(); ?>

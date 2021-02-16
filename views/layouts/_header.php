@@ -1,5 +1,10 @@
-<header class="no-background"> <!-- extra class no-background -->
-
+<header class="no-background">
+	<?php if (Yii::$app->controller->id != 'wallet'): ?>
+	<!-- extra class no-background -->
+	<a class="go-back-link" href="javascript:history.back();">
+		<i class="fa fa-arrow-left"></i>
+	</a>
+	<?php endif ?>
 	<div class="search-button" data-search="open">
 		<span style="font-size: 1.5em;">
 			<i class="fas fa-bell"></i>

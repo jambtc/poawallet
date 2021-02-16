@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\query;
 
 /**
  * This is the ActiveQuery class for [[BoltWallets]].
@@ -30,5 +30,10 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
     public function one($db = null)
     {
         return parent::one($db);
+    }
+
+
+    public function userWalletAddress($id){
+        return $this->andWhere(['id_user'=>$id]);
     }
 }

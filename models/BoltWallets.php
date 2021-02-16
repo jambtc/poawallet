@@ -53,6 +53,6 @@ class BoltWallets extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new BoltWalletsQuery(get_called_class());
+        return new \app\models\query\BoltWalletsQuery(get_called_class());
     }
 }

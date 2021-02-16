@@ -12,8 +12,8 @@ Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 $this->title = Yii::t('app', 'Wallet');
 
-$receiveUrl = Url::to(['wallet/receive']);
-$sendUrl = Url::to(['wallet/send']);
+$receiveUrl = Url::to(['/receive/index']);
+$sendUrl = Url::to(['/send/index']);
 $userUrl = Url::to(['users/view','id'=>\webapp::encrypt(Yii::$app->user->identity->id)]);
 $tokensUrl = Url::to(['tokens/index']);
 

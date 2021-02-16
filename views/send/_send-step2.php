@@ -5,8 +5,8 @@ use yii\helpers\Url;
 
 <?php $sendTokenForm->from = $fromAddress; ?>
 
-<div class="card bg-transparent no-border">
-  <div class="card-body bg-primary">
+<div class="card bg-transparent">
+  <div class="card-body">
       <!-- amount to send -->
       <div class="form-group">
           <p class="alert alert-info amount-to-send"></p>

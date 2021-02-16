@@ -72,11 +72,10 @@ AppAsset::register($this);
 <?php
 echo $this->render('_pin-request');
 
- if (Yii::$app->controller->id == 'users'){
-     echo $this->render('_pin-manage');
-     echo $this->render('_push-manage');
-
- }
+if (Yii::$app->controller->id == 'users'){
+    echo $this->render('_pin-manage');
+    echo $this->render('_push-manage');
+}
 
 
 ?>

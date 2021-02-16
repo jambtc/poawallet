@@ -9,7 +9,7 @@
 
 <?php $sendTokenForm->from = $fromAddress; ?>
 
-<div class="card bg-primary no-border">
+<div class="card bg-transparent">
   <div class="card-body">
       <!-- DA -->
       <div class="form-group">
