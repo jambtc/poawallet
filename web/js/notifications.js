@@ -76,15 +76,8 @@ $(function () {
 
     };
     if($('#notification-list').length){
-        //controllo la pressione del pulsante conferma PIN ed aggiorno il timestamp
-        var notifyReadAll = document.querySelector('.notify-readAll');
-        notifyReadAll.addEventListener('click', function(){
-            notify.openAllEnvelopes();
-        });
-
-
-
         // chiamo la funzione al refresh della pagina
+        // se esiste l'header
         notify.check();
     }
 

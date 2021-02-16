@@ -83,16 +83,19 @@ class BackendController extends Controller
 	// aggiorna tutte le notifiche in "letta"
 	// update all rows
 	public function actionUpdateAllNews(){
-		$update = Yii::$app->db
-			->createCommand()
-			->update('np_notifications_readers', [
-				'alreadyread' => 1
-			])->execute();
+		// UPDATE `customer` SET `status` = 1 WHERE `email` LIKE `%@example.com%`
+		$update = NotificationsReaders::updateAll(
+			[
+				'alreadyread' => NotificationsReaders::STATUS_READ
+			],
+			[
+				'like', 'id_user', Yii::$app->user->id
+			]
+		);
 
 		Yii::$app->response->format = Response::FORMAT_JSON;
 
 		return ['success'=>true,'response'=>$update];
-		// echo CJSON::encode(['success'=>true],true);
 	}
 
 	/**
@@ -157,7 +160,7 @@ class BackendController extends Controller
 							   .'</div>
 		   	 				 </div>
 		   	 				 <div class="notify-readAll">
-		   	 				   <a href="#"><small class="text-muted d-block">'. Yii::t('lang','Mark all as read') .'</small></a>
+		   	 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('lang','Mark all as read') .'</small></a>
 		   	 				 </div>
 		   	 			   </div>
 		   	 		 </li>';
@@ -247,7 +250,7 @@ class BackendController extends Controller
 
 
 		   $x++;
-		   if ($x>5)
+		   if ($x>4)
 			   break;
 	   }
 	   if ($response['countedRead'] == 0 && $response['countedUnread'] == 0){

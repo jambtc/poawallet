@@ -58,6 +58,9 @@ aside .nav-pills .nav-link.active {
 * WALLET DASHBOARD
 *
 */
+.dash-balance {
+    padding-top: 60px;
+}
 
 /* PULSANTI send e receive*/
 .serv-item {

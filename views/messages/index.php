@@ -16,7 +16,7 @@ $this->title = Yii::t('lang', 'Messages');
 <!-- <div class="form-divider"></div> -->
 <div class="dash-balance ">
     <div class="dash-content relative">
-		<h3 class="w-text"><?= Yii::t('lang','Transaction list');?></h3>
+		<h3 class="w-text"><?= Yii::t('lang','Notifications list');?></h3>
 	</div>
 
     <section class="mb-2">
@@ -27,28 +27,18 @@ $this->title = Yii::t('lang', 'Messages');
 
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            // 'filterModel' => $searchModel,
             'showHeader'=> false,
             'tableOptions' => ['class' => 'table-96 table table-sm mb-3 ml-1 mr-1'],
             'columns' => [
-                // [
-                //    'attribute'=>'',
-                //    'format' => 'raw',
-                //    'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
-                //    'value' => function ($data)  {
-                //       return $data->description;
-                //    },
-                // ],
-                // ['class' => 'yii\grid\SerialColumn'],
-                //
-                'id_notification',
-                // 'id_user',
-                'type',
-                // 'status',
-                'price',
-                'description'
-                //
-                // ['class' => 'yii\grid\ActionColumn'],
+                [
+                   'attribute'=>'',
+                   'format' => 'raw',
+                   'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
+                   'value' => function ($data) {
+                      return \webapp::showMessagesRow($data);
+                   },
+                ],
             ],
         ]); ?>
 
