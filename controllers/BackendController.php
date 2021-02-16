@@ -176,10 +176,10 @@ class BackendController extends Controller
 			   $response['playAlarm'] = true;
 
 
-
+			$parsedurl = parse_url($notify->url);
 
 			$response['htmlContent'] .= '<li>
-			<a href="'.htmlentities($notify->url).'" id="news_'.$notify->id_notification.'">
+			<a href="'.htmlentities('index.php?'.$parsedurl['query']).'" id="news_'.$notify->id_notification.'">
 	   			<div class="d-flex align-items-center justify-content-between">
 	                   <div class="d-flex align-items-center">
 	                       <div class="notice-icon available">
@@ -268,6 +268,9 @@ class BackendController extends Controller
                </div>
    		</li>';
 	   }
+
+	   // $response['url'] = parse_url($notify->url);
+
 
 	   Yii::$app->response->format = Response::FORMAT_JSON;
 	   return $response;

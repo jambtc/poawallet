@@ -14,7 +14,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
 use app\models\BoltTokens;
-use app\models\BoltTokensSearch;
+use app\models\search\BoltTokensSearch;
 use app\models\BoltWallets;
 use app\models\BoltSocialusers;
 use app\models\SendTokenForm;
