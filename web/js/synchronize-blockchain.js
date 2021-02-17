@@ -24,17 +24,17 @@ $(function () {
                         $('.pulse-button').removeClass('pulse-button-offline');
                         if (data.diff > 0){
                             if (data.diff < 2)
-                            $('.sync-star').addClass('text-success fa-spin');
+                                $('.sync-star').addClass('text-success fa-spin');
 
                             if (data.diff >=2 && data.diff < 240){
-                                $('.sync-difference').html('');
-                                $('.blockchain-pairing__loading').remove();
+                                // $('.sync-difference').html('');
+                                // $('.blockchain-pairing__loading').remove();
                                 $('.sync-star').removeClass('text-success fa-spin');
                             }
 
                             if (data.diff > 240){ // 1 ora
-                                $('.sync-blockchain').html(spinner);
-                                $('.sync-difference').html('<small>Synchronizing the blockchain: '+data.diff+' blocks left.</small>');
+                                //$('.sync-blockchain').html(spinner);
+                                $('.header-message').html('<small>Sync blockchain: '+data.diff+' blocks left.</small>');
                             }
         					var post = {
         						id: new Date().toISOString(), // id of indexedDB
@@ -46,9 +46,9 @@ $(function () {
                                 blockchain.callRegisterSyncBlockchain(data.my_address);
                             });
                         } else {
-                            $('.sync-difference').html('');
-                            $('.blockchain-pairing__loading').remove();
-                            $('.sync-star').removeClass('text-success fa-spin');
+                            $('.header-message').html('');
+                            // $('.blockchain-pairing__loading').remove();
+                            // $('.sync-star').removeClass('text-success fa-spin');
                         }
                     } else {
                         $('.pulse-button').addClass('pulse-button-offline');
@@ -72,6 +72,15 @@ $(function () {
                 }
             });
         },
+        callRegisterSyncBlockchain: function (){
+            readAllData('sync-blockchain').then(function(data) {
+                navigator.serviceWorker.ready.then(function(sw) {
+                    console.log('[blockchain: sync] event register:', data);
+                    return sw.sync.register('sync-blockchain');
+                });
+            })
+        },
+
     };
 
     console.log('[blockchain: sync] Avvio...');

@@ -14,9 +14,18 @@
 		</span>
 	</div>
 
-	<div id='poa-pulse'>
-	  <button class="pulse-button" ></button>
-	</div>
+	<div class="page-title">
+		<div class="row">
+			<div class="col-2">
+			  <button class="pulse-button"></button>
+		  	</div>
+    		<div class="col-10">
+        		<p class="header-message text-break"></p>
+    		</div>
+		</div>
+    </div>
+
+
 
 	<div class="navi-menu-button">
 		<em></em>

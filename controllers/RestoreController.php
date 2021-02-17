@@ -33,7 +33,7 @@ class RestoreController extends Controller
     	$this->enableCsrfValidation = false;
 		$session = Yii::$app->session;
 		$token = $session->get('token-restore');
-		if ($token === null || $token != $_GET['token']) {
+		if ($token === null || $token != $_GET['token'] ) {
 			Yii::$app->response->statusCode = 403;
 			return false;
 		}

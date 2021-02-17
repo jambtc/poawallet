@@ -3,6 +3,10 @@
 use yii\helpers\Url;
 use yii\web\View;
 
+$session = Yii::$app->session;
+$string = $_GET['token'];
+$session->set('token-restore', $string );
+
 $options = [
     'invalidSeedMEssage' => Yii::t('lang','Invalid seed!'),
     'baseUrl' => Yii::$app->request->baseUrl,
