@@ -17,9 +17,9 @@ use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
 use app\models\BoltWallets;
 use app\models\BoltSocialusers;
-use app\models\SendTokenForm;
-use app\models\WizardWalletForm;
-use app\models\PushSubscriptions;
+// use app\models\SendTokenForm;
+// use app\models\WizardWalletForm;
+// use app\models\PushSubscriptions;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -27,8 +27,8 @@ use yii\helpers\Url;
 
 use Web3\Web3;
 use Web3\Contract;
-use Web3p\EthereumTx\Transaction;
-use Nullix\CryptoJsAes\CryptoJsAes;
+// use Web3p\EthereumTx\Transaction;
+// use Nullix\CryptoJsAes\CryptoJsAes;
 
 
 
@@ -98,21 +98,14 @@ class WalletController extends Controller
 			'access' => [
 				'class' => AccessControl::className(),
 				'only' => [
-					'saveSubscription','index','wizard',
-					'restore',
+					'index',
 				],
 				'rules' => [
-					[
-						'allow' => true,
-						'actions' => ['saveSubscription'],
-						'roles' => ['?'],
-					],
+					
 					[
 						'allow' => true,
 						'actions' => [
 							'index',
-							'wizard',
-							'restore',
 						],
 						'roles' => ['@'],
 					],
@@ -137,53 +130,7 @@ class WalletController extends Controller
 		];
 	}
 
-	/**
-	 * Saves the Subscription for push messages.
-	 * @param POST VAPID KEYS
-	 * this function NOT REQUIRE user to login
-	 */
-	public function actionSaveSubscription()
-	{
-		// print_r($_POST)
-		// ini_set("allow_url_fopen", true);
-		// //
- 		// $raw_post_data = file_get_contents('php://input');
- 		// if (false === $raw_post_data) {
- 		// 	throw new \Exception('Could not read from the php://input stream or invalid Subscription object received.');
- 		// }
- 		$raw = json_decode($_POST['subscription']);
-		$browser = $_SERVER['HTTP_USER_AGENT'];
 
-		$vapid = PushSubscriptions::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->identity->id])
-				->andWhere(['browser'=>$browser])
-				->andWhere(['type'=>'wallet'])
- 	    		->one();
-
-		if (null === $vapid){
-			//save
-			$vapid = new PushSubscriptions;
-			$vapid->id_user = Yii::$app->user->identity->id;
-			$vapid->browser = $browser;
-			$vapid->endpoint = $raw->endpoint;
-			$vapid->auth = $raw->keys->auth;
-			$vapid->p256dh = $raw->keys->p256dh;
-			$vapid->type = 'wallet';
-
-			if (!$vapid->save()){
-				$data = ['response' => '[WalletController] SaveSubscription: Cannot save subscription on server!'];
-			} else {
-				$data = ['response' => '[WalletController] SaveSubscription: Subscription saved on server.'];
-			}
-		}else{
-			if (!$vapid->delete()){
-				$data = ['response' => '[WalletController] SaveSubscription: Cannot delete subscription on server!'];
-			} else {
-				$data = ['response' => '[WalletController] SaveSubscription: Subscription deleted on server.'];
-			}
-		}
-		return $this->json($data);
-	}
 
 	/**
 	 * This function return the user wallet address
@@ -194,7 +141,7 @@ class WalletController extends Controller
  	    		->one();
 
 		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
+			$this->redirect(['wizard/index']);
 		} else {
 			return $wallet->wallet_address;
 		}
@@ -237,7 +184,7 @@ class WalletController extends Controller
 
 
 
-	
+
 
 	/*
 	* This function retrieve the token balance of an address
@@ -312,49 +259,7 @@ class WalletController extends Controller
 	}
 
 
-	/**
-	 * Show wizard generation first wallet address page
-	 */
-	public function actionWizard()
- 	{
-		$this->layout = 'wizard';
- 		return $this->render('wizard');
- 	}
 
-	/**
-	 * Show Restore old wallet page
-	 */
-	public function actionRestore()
- 	{
-		$this->layout = 'wizard';
-
-		$formModel = new WizardWalletForm; //form di input dei dati
-
-		if (Yii::$app->request->isAjax && $formModel->load(Yii::$app->request->post())) {
-		    Yii::$app->response->format = Response::FORMAT_JSON;
-			// echo '<pre>'.print_r(ActiveForm::validate($sendTokenForm),true).'</pre>';
-		    return ActiveForm::validate($formModel);
-		}
-
-		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
-			// salvo l'indirizzo in tabella
-			$boltWallet = new BoltWallets;
-			$boltWallet->id_user = Yii::$app->user->identity->id;
-			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
-			$boltWallet->blocknumber = '0x0';
-
-			if ($boltWallet->save())
-        		return $this->redirect(['/wallet/index']);
-			else
-				var_dump( $boltWallet->getErrors());
-
-			exit;
-    	}
-
- 		return $this->render('restore', [
-			'formModel' => $formModel,
-		]);
- 	}
 
 	private static function json ($data)
 	{

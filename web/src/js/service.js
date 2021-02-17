@@ -8,7 +8,7 @@ if (!window.Promise){
 if ('serviceWorker' in navigator){
 	navigator.serviceWorker
 		//.register('sw.js')
-		.register('sw.js').then(reg => {
+		.register('service-worker.js').then(reg => {
 		  reg.installing; // the installing worker, or undefined
 		  reg.waiting; // the waiting worker, or undefined
 		  reg.active; // the active worker, or undefined

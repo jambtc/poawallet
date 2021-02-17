@@ -25,7 +25,7 @@ $(function () {
 
     if ('serviceWorker' in navigator && 'PushManager' in window) {
         console.log('[push] Push is supported');
-        navigator.serviceWorker.register('sw.js')
+        navigator.serviceWorker.register('service-worker.js')
             .then(function(swReg) {
                 console.log('[push] Service Worker is registered again');
 

@@ -10,28 +10,27 @@ namespace app\assets;
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
+ * Service Worker application asset bundle.
  *
- * @author Qiang Xue <qiang.xue@gmail.com>
+ * @author Sergio Casizzone <jambtc@gmail.com>
  * @since 2.0
  */
-class AppAsset extends AssetBundle
+class ServiceWorkerAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/global.style.css',
-        'css/site.css',
-        'css/yiipager.css'
+        // 'css/pincode.css',
     ];
     public $js = [
-        'js/global.script.js',
-        // 'js/pincode-global.js',
-        // 'js/pincode-settings.js',
-        // 'js/notifications.js'
+        'src/js/promise.js',
+        'src/js/fetch.js',
+        'src/js/idb.js',
+        'src/js/idb-utility.js',
+        'src/js/service.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap4\BootstrapAsset',
+        'yii\web\JqueryAsset'
     ];
 }

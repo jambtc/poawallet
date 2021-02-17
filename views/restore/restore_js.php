@@ -64,6 +64,9 @@ $wallet_restore = <<<JS
     			'seed': seed
     		},
     		dataType: "json",
+            beforeSend: function() {
+                $('.seed-submit').html(spinner);
+            },
     		success:function(data){
     			var pwd_crypted  = data.cryptedpass;
     			var seed_crypted  = data.cryptedseed;

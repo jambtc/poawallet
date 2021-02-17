@@ -1,5 +1,8 @@
 "use strict";
 
+var spinner = '<div class="button-spinner spinner-border text-primary" role="status">'
+                 +'<span class="sr-only">Loading...</span></div>';
+
 $(document).ready(function(){
 
 	$('.navi-menu-button').on('click', function(e){

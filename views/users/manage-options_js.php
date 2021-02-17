@@ -1,7 +1,7 @@
 <?php
 
 $vapidPublicKey = \settings::load()->VapidPublic;
-$urlSavesubscription = \yii\helpers\Url::to(['wallet/save-subscription']);//save subscription for push messages
+$urlSavesubscription = \yii\helpers\Url::to(['users/save-subscription']);//save subscription for push messages
 
 $options = [
     'cryptURL' => \yii\helpers\Url::to(['/wallet/crypt']),

@@ -10,6 +10,14 @@ use app\models\BoltTokens;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use yii\web\HttpException;
+
+use app\models\PushSubscriptions;
+
+use yii\helpers\Json;
+use yii\helpers\Url;
+
 
 Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
@@ -34,6 +42,12 @@ class UsersController extends Controller
         ];
     }
 
+    private static function json ($data)
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		return $data;
+	}
+
 
     /**
      * Displays a single BoltSocialusers model.
@@ -55,18 +69,60 @@ class UsersController extends Controller
             ->where(['to_address'=>$wallet->wallet_address])
             ->sum('token_price'), \settings::load()->poa_decimals);
 
-        $transactions = BoltTokens::find()
-            ->orwhere(['=','to_address', $wallet->wallet_address])
-            ->orwhere(['=','from_address', $wallet->wallet_address])->count();
+        // $transactions = BoltTokens::find()
+        //     ->orwhere(['=','to_address', $wallet->wallet_address])
+        //     ->orwhere(['=','from_address', $wallet->wallet_address])->count();
 
 
         return $this->render('view', [
             'model' => $this->findModel(\webapp::decrypt($id)),
             'sent' => $sent,
             'received' => $received,
-            'transactions' => $transactions,
+            // 'transactions' => $transactions,
         ]);
     }
+
+    /**
+	 * Saves the Subscription for push messages.
+	 * @param POST VAPID KEYS
+	 * this function NOT REQUIRE user to login
+	 */
+	public function actionSaveSubscription()
+	{
+ 		$raw = json_decode($_POST['subscription']);
+        // echo var_dump ($raw);
+		$browser = $_SERVER['HTTP_USER_AGENT'];
+
+		$vapid = PushSubscriptions::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->identity->id])
+				->andWhere(['browser'=>$browser])
+				->andWhere(['type'=>'wallet'])
+ 	    		->one();
+
+		if (null === $vapid){
+			//save
+			$vapid = new PushSubscriptions;
+			$vapid->id_user = Yii::$app->user->identity->id;
+			$vapid->browser = $browser;
+			$vapid->endpoint = $raw->endpoint;
+			$vapid->auth = $raw->keys->auth;
+			$vapid->p256dh = $raw->keys->p256dh;
+			$vapid->type = 'wallet';
+
+			if (!$vapid->save()){
+				$data = ['response' => '[WalletController] SaveSubscription: Cannot save subscription on server!'];
+			} else {
+				$data = ['response' => '[WalletController] SaveSubscription: Subscription saved on server.'];
+			}
+		}else{
+			if (!$vapid->delete()){
+				$data = ['response' => '[WalletController] SaveSubscription: Cannot delete subscription on server!'];
+			} else {
+				$data = ['response' => '[WalletController] SaveSubscription: Subscription deleted on server.'];
+			}
+		}
+		return $this->json($data);
+	}
 
 
 

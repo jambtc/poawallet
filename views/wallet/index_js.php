@@ -4,11 +4,14 @@ use yii\helpers\Url;
 use yii\web\View;
 Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
-
+// make restore session id
+$session = Yii::$app->session;
+$string = Yii::$app->security->generateRandomString(32);
+$session->set('token-wizard', $string );
 
 $options = [
     'language' => Yii::$app->language,
-    'initURL' => Url::to(['/wallet/wizard']),
+    'initURL' => Url::to(['/wizard/index','token' => $string]),
     'fromAddress' => $fromAddress,
     'cryptedIdUser' => \webapp::encrypt(Yii::$app->user->identity->id),
     // ...

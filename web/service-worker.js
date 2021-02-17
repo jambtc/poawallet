@@ -1,6 +1,6 @@
 // import IndexedDB
 importScripts('src/js/idb.js');
-importScripts('src/js/utility.js');
+importScripts('src/js/idb-utility.js');
 
 // quando cambi questi valori modificali anche in view/layouts/js_sw.php
 var CACHE_STATIC_NAME = 'megapay-static-003';
@@ -29,13 +29,12 @@ var STATIC_FILES = [
 	'src/js/promise.js',
 	'src/js/fetch.js',
 	'src/js/idb.js',
-	'src/js/utility.js',
+	'src/js/idb-utility.js',
 	'src/js/service.js',
-	'src/js/easy-numpad.js',
-	'src/js/pinutility.js',
-	'src/ethjs/lightwallet.min.js',
-	'src/ethjs/aes.js',
-	'src/ethjs/aes-json-format.js',
+
+	// 'src/ethjs/lightwallet.min.js',
+	// 'src/ethjs/aes.js',
+	// 'src/ethjs/aes-json-format.js',
 
 	// images
 	// // 'css/images/bolt-logo.png',

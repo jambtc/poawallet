@@ -9,11 +9,18 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\assets\PincodeAsset;
+use app\assets\NotificationsAsset;
+use app\assets\ServiceWorkerAsset;
 
 Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
+
+PincodeAsset::register($this);
+NotificationsAsset::register($this);
+ServiceWorkerAsset::register($this);
 
 
 ?>
@@ -41,10 +48,10 @@ AppAsset::register($this);
     <?php $this->head() ?>
 
     <!-- Template global css file. Requared all pages -->
-  	<link rel="stylesheet" type="text/css" href="css/global.style.css">
-    <link rel="stylesheet" type="text/css" href="css/site.css">
-    <link rel="stylesheet" type="text/css" href="css/numpad.css">
-    <link rel="stylesheet" type="text/css" href="css/yiipager.css">
+  	<!-- <link rel="stylesheet" type="text/css" href="css/global.style.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/site.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/numpad.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/yiipager.css"> -->
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -87,18 +94,18 @@ if (Yii::$app->controller->id == 'users'){
 
 <?php $this->endBody() ?>
 <!-- Template global script file. requared all pages -->
-<script src="js/global.script.js"></script>
+<!-- <script src="js/global.script.js"></script> -->
 
 <!-- Call Service Worker-->
-<script src="src/js/promise.js"></script>
+<!-- <script src="src/js/promise.js"></script>
 <script src="src/js/fetch.js"></script>
-<script src="src/js/idb.js"></script>
+<script src="src/js/idb.js"></script> -->
 
 <!-- my utility js -->
 <!-- <script src="src/js/global.variables.js"></script> -->
-<script src="src/js/utility.js"></script>
-<script src="src/js/service.js"></script>
-<script src="src/js/pinutility.js"></script>
+<!-- <script src="src/js/utility.js"></script> -->
+<!-- <script src="src/js/service.js"></script> -->
+<!-- <script src="src/js/pinutility.js"></script> -->
 
 <?php //include ('pin_js.php'); ?>
 

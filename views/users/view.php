@@ -31,36 +31,11 @@ include ('manage-push_js.php');
 	<div class="trader-info">
 		<h3><?= $model->first_name ?> <?= $model->last_name ?></h3>
 		<p><?= $model->email ?></p>
-		<ul class="trader-info-list list-unstyled">
-            <li>
-				<div class="profile3"><canvas width="59" height="50" style="display: inline-block; width: 59px; height: 50px; vertical-align: top;"></canvas></div>
-				<h2><?= $transactions ?></h2>
-				<small class="txt-muted"><?= Yii::t('lang','Transactions') ?></small>
-			</li>
-			<li>
-				<div class="profile1"><canvas width="59" height="50" style="display: inline-block; width: 59px; height: 50px; vertical-align: top;"></canvas></div>
-				<h2><?= $sent ?></h2>
-				<small class="txt-muted"><?= Yii::t('lang','Sent') ?></small>
-			</li>
-			<li>
-				<div class="profile2"><canvas width="59" height="50" style="display: inline-block; width: 59px; height: 50px; vertical-align: top;"></canvas></div>
-				<h2><?= $received ?></h2>
-				<small class="txt-muted"><?= Yii::t('lang','Received') ?></small>
-			</li>
-
-		</ul>
+		
 	</div>
 </section>
 <section class="bal-section container mt-30">
-	<h4 class="title-main mt-0">
-		<ul class="trader-info-list list-unstyled">
-		<div class="profile3">
-			<canvas width="59" height="50" style="display: inline-block; width: 59px; height: 50px; vertical-align: top;"></canvas>
-		</div>
-		<h2><?= $transactions ?></h2>
-		<small class="txt-muted"><?= Yii::t('lang','Transactions') ?></small>
-		</ul>
-	</h4>
+
 	<div class="resources-card-wrapper">
 		<div class="resources-card mr-10">
             <div class="d-flex flex-column flex-md-row">

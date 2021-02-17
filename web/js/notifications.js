@@ -2,8 +2,7 @@
  * Created by jambtc
  */
 
-var spinner = '<div class="button-spinner spinner-border text-primary" role="status">'
-                 +'<span class="sr-only">Loading...</span></div>';
+
 
 var notify;
 
