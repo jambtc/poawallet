@@ -12,6 +12,7 @@ use app\assets\AppAsset;
 use app\assets\PincodeAsset;
 use app\assets\NotificationsAsset;
 use app\assets\ServiceWorkerAsset;
+use app\assets\SynchronizeBlockchainAsset;
 
 Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
@@ -21,6 +22,7 @@ AppAsset::register($this);
 PincodeAsset::register($this);
 NotificationsAsset::register($this);
 ServiceWorkerAsset::register($this);
+SynchronizeBlockchainAsset::register($this);
 
 
 ?>

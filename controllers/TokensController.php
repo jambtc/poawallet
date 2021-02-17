@@ -32,20 +32,7 @@ class TokensController extends Controller
         ];
     }
 
-    /**
-	 * This function return the user wallet address
-	 */
-	 private function userAddress() {
- 		$wallet = BoltWallets::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
- 	    		->one();
 
-		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
-		} else {
-			return $wallet->wallet_address;
-		}
-	}
 
     /**
      * Lists all BoltTokens models.
@@ -53,7 +40,7 @@ class TokensController extends Controller
      */
     public function actionIndex()
     {
-        $fromAddress = $this->userAddress();
+        $fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
 
         $searchModel = new BoltTokensSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

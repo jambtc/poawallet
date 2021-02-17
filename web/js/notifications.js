@@ -2,8 +2,6 @@
  * Created by jambtc
  */
 
-
-
 var notify;
 
 

@@ -280,32 +280,8 @@ class BackendController extends Controller
 
 	}
 
-	/**
-	 * This function return the user wallet address
-	 */
-	 private function userAddress() {
- 		$wallet = BoltWallets::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
- 	    		->one();
 
-		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
-		} else {
-			return $wallet->wallet_address;
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 	private static function json ($data)
 	{

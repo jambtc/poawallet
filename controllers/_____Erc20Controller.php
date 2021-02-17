@@ -67,21 +67,7 @@ class Erc20Controller extends Controller
     }
 
 
-    /**
-	 * This function return the user wallet address
-	 */
-	 public function userAddress() {
- 		$wallet = BoltWallets::find()
- 	     		->userWalletAddress(Yii::$app->user->id)
- 	    		->one();
-
-		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
-		} else {
-			return $wallet->wallet_address;
-		}
-	}
-
+    
     /*
 	* This function retrieve the token balance of an address
 	*/

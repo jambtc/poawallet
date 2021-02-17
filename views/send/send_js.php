@@ -115,9 +115,9 @@ $wallet_restore = <<<JS
                                 $('.generating').html(data.row);
                                 $('.pay-close').show();
 
-                                writeData('sync-blockchain', data).then(function() {
-        							console.log('[Send]: Registered sync-blockchain request in indexedDB', data);
-        							return serWork.sync.register('sync-blockchain');
+                                writeData('sync-send-erc20', data).then(function() {
+        							console.log('[Send]: Registered sync-send-erc20 request in indexedDB', data);
+        							return serWork.sync.register('sync-send-erc20');
         						})
                                 .then(function() {
         							erc20.isReadySent(data.id);
@@ -139,9 +139,9 @@ $wallet_restore = <<<JS
 
     var erc20 = {
         isReadySent: function(id){
-            readFromId('sync-blockchain',id)
+            readFromId('sync-send-erc20',id)
             .then(function(data) {
-                console.log('[isReadySent]: checking data from sync-blockchain indexedDB', data);
+                console.log('[isReadySent]: checking data from sync-send-erc20 indexedDB', data);
                 if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
                 {
                     console.log('id token è:', id);
@@ -151,16 +151,13 @@ $wallet_restore = <<<JS
                     $('.star-total-balance').addClass('animationStar');
                     $('#total-balance').text(data[0].balance);
 
-                    clearAllData('sync-blockchain');
+                    clearAllData('sync-send-erc20');
                 } else {
                     setTimeout(function(){ erc20.isReadySent(id) }, 1000);
                 }
             });
         },
-
     }
-
-
 
 JS;
 

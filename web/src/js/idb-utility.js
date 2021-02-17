@@ -20,8 +20,8 @@ var dbPromise = idb.open('megapay', 1, function(db) {
 	// STORE PER SINCRONIZZAZIONE INVIO ETH E TOKEN
 	// if (!db.objectStoreNames.contains('sync-send-eth'))
 	//  	db.createObjectStore('sync-send-eth', {keyPath: 'id'});
-	// if (!db.objectStoreNames.contains('sync-send-erc20'))
-	//  	db.createObjectStore('sync-send-erc20', {keyPath: 'id'});
+	if (!db.objectStoreNames.contains('sync-send-erc20'))
+	 	db.createObjectStore('sync-send-erc20', {keyPath: 'id'});
 	// if (!db.objectStoreNames.contains('np-send-eth'))
 	//  	db.createObjectStore('np-send-eth', {keyPath: 'id'});
 	// if (!db.objectStoreNames.contains('np-send-erc20'))
@@ -44,8 +44,8 @@ var dbPromise = idb.open('megapay', 1, function(db) {
 	if (!db.objectStoreNames.contains('sync-blockchain'))
 		db.createObjectStore('sync-blockchain', {keyPath: 'id'});
 
-	// if (!db.objectStoreNames.contains('np-transactions'))
-	// 	db.createObjectStore('np-transactions', {keyPath: 'id'});
+	if (!db.objectStoreNames.contains('np-transactions'))
+		db.createObjectStore('np-transactions', {keyPath: 'id'});
 
 	//store per il salvataggio della sottoscrizione push
 	// if (!db.objectStoreNames.contains('subscriptions')) {

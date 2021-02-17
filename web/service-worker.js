@@ -333,170 +333,55 @@ self.addEventListener('fetch', function (event) {
 self.addEventListener('sync', function(event) {
 	console.log('[Service Worker] Background syncing: '+event.tag, event);
 
-	// SINCRONIZZAZIONE INVIO
-	if (event.tag === 'sync-send-eth' || event.tag === 'sync-send-erc20') {
-		suffix = 'erc20';
-		if (event.tag === 'sync-send-eth')
-			suffix = 'eth';
 
-		console.log('[Service Worker] Evento sincronizzazione di invio trovato!');
-		event.waitUntil(
-			//readAllData('wallet')
-			//.then (function(){
-				readAllData(event.tag)
-				.then(function(data) {
-					for (var dt of data) {
-						console.log('[Service Worker] ciclo for: ', dt);
-						var postData = new FormData();
-	 						postData.append('from', dt.from);
-							postData.append('to', dt.to);
-							postData.append('gas', dt.gas);
-							postData.append('amount', dt.amount);
-							postData.append('memo', dt.memo);
-							postData.append('prv_key', dt.prv_key);
-							postData.append('prv_pas', dt.prv_pas);
-
-						fetch(dt.url, {
-							method: 'POST',
-							body: postData,
-						})
-						.then(function(response) {
-							return response.json();
-						})
-						.then(function(json) {
-							console.log('[sw test]',json);
-							writeData('np-send-'+suffix, json);
-					 	})
-						.catch(function(err){
-							console.log('[Service worker] Error while sending data', err);
-						})
-					}
-					//per sicurezza cancello tutto da indexedDB
-					clearAllData(event.tag);
-				 })
-			//})
-
-		 );
-	 }
-
-	// SINCRONIZZAZIONE RICEZIONE
- 	if (event.tag === 'sync-txPool') {
- 		console.log('Evento sincronizzazione di ricerca tx in pool trovato!');
+	// SINCRONIZZAZIONE INVIO ERC20
+	if (event.tag === 'sync-send-erc20') {
+		console.log('[Service worker] Evento sincronizzazione invio token trovato!');
  		event.waitUntil(
  			readAllData(event.tag)
  			.then(function(data) {
  				for (var dt of data) {
-					console.log('[Service worker] fetching txPool',dt);
- 					var postData = new FormData();
-  						postData.append('id_token', dt.id_token);
+					console.log('[Service worker] fetching sync-send-erc20',dt);
+					var postData = new FormData();
+	  					postData.append('id', dt.id);
+						//postData.append('chainBlock', dt.chainBlock);
 
- 					fetch(dt.url, {
- 						method: 'POST',
- 						body: postData,
- 					})
- 					.then(function(response) {
- 						return response.json();
- 					})
- 					.then(function(json) {
- 						writeData('np-txPool', json);
+	 				fetch(dt.url, {
+	 					method: 'POST',
+	 					body: postData,
+	 				})
+	 				.then(function(response) {
+	 					return response.json();
+	 				})
+	 				.then(function(json) {
+						if (json.success){
+							console.log('[Service worker] Risposta di send/validateTransaction',json);
+							// const title = json.transactions[0].title;
+							// const options = {
+							// 	body: json.transactions[0].message,
+							// 	icon: 'src/images/icons/app-icon-96x96.png',
+							// 	vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
+							// 	badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
+							// 	tag: 'confirm-notification', //tag univoco per le notifiche.
+							// 	renotify: true, //connseeo a tag. se è true notifica di nuovo
+							// 	data: {
+							// 	   openUrl: json.transactions[0].url,
+							// 	},
+							// 	actions: [
+							// 		{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
+							// 		{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
+							// 	],
+							// };
+						  	// self.registration.showNotification(title, options);
+							writeData('sync-send-erc20', json);
+						}
  				 	})
  					.catch(function(err){
- 						console.log('[Service worker] Error while checking pool data', err);
+ 						console.log('[Service worker] Error while checking send-erc20 data', err);
  					})
  				}
  				//per sicurezza cancello tutto da indexedDB
  				clearAllData(event.tag);
- 			 })
- 		 );
- 	}
-
-	// ALLARME COVID
- 	if (event.tag === 'sync-alarm') {
- 		console.log('[Service Worker] Evento sincronizzazione ricerca allarme covid partito!');
- 		event.waitUntil(
- 			readAllData(event.tag)
- 			.then(function(data) {
- 				for (var dt of data) {
-					console.log('[Service worker] fetching data alarm',dt);
- 					var postData = new FormData();
-  						postData.append('transactions', dt.transactions);
-
- 					fetch(dt.url, {
- 						method: 'POST',
- 						body: postData,
- 					})
- 					.then(function(response) {
- 						return response.json();
- 					})
- 					.then(function(json) {
-						// se esce negativo non fa nulla. se esce positivo invia allarme
-						if (json.success){
-							console.log('[Service worker] sync-countdown: ',json.data);
-							writeData('sync-countdown', json.data)
-								.then(function() {
-									return self.registration.sync.register('sync-countdown');
-								})
-						}
- 				 	})
- 					.catch(function(err){
- 						console.log('[Service worker] Error while checking alarm data', err);
- 					})
- 				}
- 				//per sicurezza cancello tutto da indexedDB
- 				clearAllData(event.tag);
- 			 })
- 		 );
- 	}
-
-	// ALLARME COVID PARTE IL COUNTDOWN
- 	if (event.tag === 'sync-countdown') {
-		console.log('[Service Worker] Evento sincronizzazione Countdown covid partito!');
- 		event.waitUntil(
- 			readAllData(event.tag)
- 			.then(function(data) {
- 				for (var dt of data) {
-					console.log('[Service worker] fetching data countdown',dt);
- 					var postData = new FormData();
-  						postData.append('finish_time', dt.finish_time);
-						postData.append('message', dt.message);
-
- 					fetch(dt.url, {
- 						method: 'POST',
- 						body: postData,
- 					})
- 					.then(function(response) {
- 						return response.json();
- 					})
- 					.then(function(json) {
-						// se esce negativo non fa nulla. se esce positivo invia allarme
-						if (json.success){
-							console.log('[Service worker] Risposta di covid Countdown',json);
-							const title = '[fidelize] - Alert';
-							const options = {
-								body: dt.message,
-								icon: 'src/images/icons/app-icon-96x96.png',
-								vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-								badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-								tag: 'alarm-notification', //tag univoco per le notifiche.
-								renotify: true, //connseeo a tag. se è true notifica di nuovo
-								data: {
-								   openUrl: json.openUrl,
-								},
-								actions: [
-									{action: 'openUrl', title: 'OK', icon: 'css/images/chk_on.png'},
-								],
-							};
-							self.registration.showNotification(title, options);
-							//per sicurezza cancello tutto da indexedDB
-							clearAllData(event.tag);
-						}else{
-							return self.registration.sync.register('sync-countdown');
-						}
- 				 	})
- 					.catch(function(err){
- 						console.log('[Service worker] Error while checking Countdown data', err);
- 					})
- 				}
  			 })
  		 );
  	}
@@ -523,23 +408,23 @@ self.addEventListener('sync', function(event) {
 	 				.then(function(json) {
 						if (json.success){
 							console.log('[Service worker] Risposta di blockchain/index',json);
-							// const title = json.transactions[0].title;
-							// const options = {
-							// 	body: json.transactions[0].message,
-							// 	icon: 'src/images/icons/app-icon-96x96.png',
-							// 	vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-							// 	badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-							// 	tag: 'confirm-notification', //tag univoco per le notifiche.
-							// 	renotify: true, //connseeo a tag. se è true notifica di nuovo
-							// 	data: {
-							// 	   openUrl: json.transactions[0].url,
-							// 	},
-							// 	actions: [
-							// 		{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
-							// 		{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
-							// 	],
-							// };
-						  	// self.registration.showNotification(title, options);
+							const title = json.transactions[0].title;
+							const options = {
+								body: json.transactions[0].message,
+								icon: 'src/images/icons/app-icon-96x96.png',
+								vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
+								badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
+								tag: 'confirm-notification', //tag univoco per le notifiche.
+								renotify: true, //connseeo a tag. se è true notifica di nuovo
+								data: {
+								   openUrl: json.transactions[0].url,
+								},
+								actions: [
+									{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
+									{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
+								],
+							};
+						  	self.registration.showNotification(title, options);
 							writeData('sync-blockchain', json);
 						}
  				 	})

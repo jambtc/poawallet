@@ -33,7 +33,24 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
     }
 
 
-    public function userWalletAddress($id){
-        return $this->andWhere(['id_user'=>$id]);
-    }
+    // public function userWalletAddress($id){
+    //     return $this->andWhere(['id_user'=>$id]);
+    // }
+
+    /**
+	 * This function return the user wallet address
+	 */
+	 public function userAddress($id) {
+ 		$wallet = $this->andWhere(['id_user'=>$id])->one();
+
+		if (null === $wallet){
+			$session = Yii::$app->session;
+			$string = Yii::$app->security->generateRandomString(32);
+			$session->set('token-wizard', $string );
+
+			$this->redirect(['wallet/wizard','token' => $string]);
+		} else {
+			return $wallet->wallet_address;
+		}
+	}
 }

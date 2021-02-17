@@ -144,20 +144,7 @@ class SendController extends Controller
 
 
 
-	/**
-	 * This function return the user wallet address
-	 */
-	 private function userAddress() {
- 		$wallet = BoltWallets::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
- 	    		->one();
 
-		if (null === $wallet){
-			$this->redirect(['wallet/wizard']);
-		} else {
-			return $wallet->wallet_address;
-		}
-	}
 
 
 
@@ -170,7 +157,7 @@ class SendController extends Controller
  	{
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
- 		$fromAddress = $this->userAddress();
+ 		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
 
 		$formModel = new SendTokenForm; //form di input dei dati
 
