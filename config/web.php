@@ -4,8 +4,8 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'MegaPay Wallet',
-    'name' => 'MegaPay',
+    'id' => 'FidPay Wallet',
+    'name' => 'FidPay',
     'language' => 'it-IT', // Specifies which language the application is targeted to
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -15,6 +15,12 @@ $config = [
         '@packages' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yii2-packages',
     ],
     'components' => [
+        'Erc20' => [
+            'class' => 'app\components\Erc20',
+        ],
+        'WebApp' => [
+            'class' => 'app\components\WebApp',
+        ],
         'i18n' => [
             'translations' => [
                 'lang*' => [

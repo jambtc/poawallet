@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'Wallet');
 
 $receiveUrl = Url::to(['/receive/index']);
 $sendUrl = Url::to(['/send/index']);
-$userUrl = Url::to(['users/view','id'=>\webapp::encrypt(Yii::$app->user->identity->id)]);
+$userUrl = Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]);
 $tokensUrl = Url::to(['tokens/index']);
 
 include ('index_js.php');
@@ -74,7 +74,7 @@ include ('index_js.php');
                'format' => 'raw',
                'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                'value' => function ($data) use ($fromAddress) {
-                  return \webapp::showTransactionRow($data,$fromAddress);
+                  return app\components\WebApp::showTransactionRow($data,$fromAddress);
 
                },
             ],

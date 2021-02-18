@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
@@ -36,7 +36,7 @@ $this->title = Yii::t('lang', 'Transactions');
                    'format' => 'raw',
                    'class' => 'yii\grid\DataColumn', // can be omitted, as it is the default
                    'value' => function ($data) use ($fromAddress) {
-                      return \webapp::showTransactionRow($data,$fromAddress);
+                      return app\components\WebApp::showTransactionRow($data,$fromAddress);
                    },
                 ],
                 // ['class' => 'yii\grid\SerialColumn'],

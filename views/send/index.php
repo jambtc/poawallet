@@ -25,7 +25,7 @@ $form = ActiveForm::begin([
 
 ]);
 
-$userUrl = Url::to(['users/view','id'=>\webapp::encrypt(Yii::$app->user->identity->id)]);
+$userUrl = Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]);
 
 include ('send_js.php');
 

@@ -3,8 +3,8 @@ importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
 // quando cambi questi valori modificali anche in view/layouts/js_sw.php
-var CACHE_STATIC_NAME = 'megapay-static-003';
-var CACHE_DYNAMIC_NAME = 'megapay-dynamic-003';
+var CACHE_STATIC_NAME = 'fidpay-static-003';
+var CACHE_DYNAMIC_NAME = 'fidpay-dynamic-003';
 var STATIC_FILES = [
 	'/',
 	// 'offline.php',
@@ -395,9 +395,9 @@ self.addEventListener('sync', function(event) {
  				for (var dt of data) {
 					console.log('[Service worker] fetching sync-blockchain',dt);
 					var postData = new FormData();
-	  					postData.append('id', dt.id);
-						//postData.append('chainBlock', dt.chainBlock);
-
+						postData.append('chainBlocknumber', dt.chainBlocknumber);
+						postData.append('walletBlocknumber', dt.walletBlocknumber);
+						postData.append('search_address', dt.search_address);
 	 				fetch(dt.url, {
 	 					method: 'POST',
 	 					body: postData,
@@ -407,7 +407,7 @@ self.addEventListener('sync', function(event) {
 	 				})
 	 				.then(function(json) {
 						if (json.success){
-							console.log('[Service worker] Risposta di blockchain/index',json);
+							console.log('[Service worker] Risposta da url: '+dt.url,json);
 							const title = json.transactions[0].title;
 							const options = {
 								body: json.transactions[0].message,

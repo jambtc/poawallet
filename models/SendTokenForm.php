@@ -8,7 +8,9 @@ use Web3\Web3;
 use yii\web\Controller;
 use yii\validators\Validator;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+use app\components\WebApp;
+
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 
@@ -83,8 +85,8 @@ class SendTokenForm extends Model
 	 */
 	public function isValidAddress($attribute, $params)
     {
-        $webapp = new \webapp;
-		$poaNode = $webapp->getPoaNode();
+        $WebApp = new WebApp;
+		$poaNode = $WebApp->getPoaNode();
 		if (!$poaNode)
             $this->addError($attribute, 'All Nodes are down...');
 

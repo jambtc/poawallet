@@ -22,7 +22,9 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+use app\components\WebApp;
+
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 
 
@@ -171,8 +173,8 @@ class BackendController extends Controller
  		  			->one();
 
 		   //$notify = Notifications::model()->findByPk($item->id_notification);
-		   $notifi__icon = \webapp::Icon($notify->type_notification);
-		   $notifi__color = \webapp::Color($notify->status);
+		   $notifi__icon = WebApp::Icon($notify->type_notification);
+		   $notifi__color = WebApp::Color($notify->status);
 
 		   // verifico che sia un allarme
 		   if ($notify->type_notification == 'alarm' && $item->alreadyread == 0)
@@ -281,7 +283,7 @@ class BackendController extends Controller
 	}
 
 
-	
+
 
 	private static function json ($data)
 	{

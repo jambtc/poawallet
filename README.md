@@ -2,15 +2,15 @@
     <a href="web/css/images.logo.png" target="_blank">
         <img src="web/css/images/logo.png" height="100px">
     </a>
-    <h1 align="center">MegaPay Wallet</h1>
+    <h1 align="center">FidPay Wallet</h1>
     <br>
 </p>
 
 
-MegaPay is a new wallet for goods and services in your smartphone and on your website. You can use the MegaPay app for fast, simple, and secure online payments.
+FidPay is a new wallet for goods and services in your smartphone and on your website. You can use the FidPay app for fast, simple, and secure online payments.
 
 
-### MegaPay is based on Yii2 framework
+### FidPay is based on Yii2 framework
 
 
 Yii 2 Basic Project Template is a skeleton [Yii 2](http://www.yiiframework.com/) application best for

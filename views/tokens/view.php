@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 /* @var $this yii\web\View */
 /* @var $model app\models\BoltTokens */
@@ -37,7 +37,7 @@ $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('model','id_token'),
-                                'value'=>\webapp::encrypt($model->id_token),
+                                'value'=>app\components\WebApp::encrypt($model->id_token),
                                 'contentOptions' => ['class' => 'text-break']
 
                             ],

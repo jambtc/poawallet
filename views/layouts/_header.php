@@ -19,7 +19,7 @@
 			<div class="col-2">
 			  <button class="pulse-button"></button>
 		  	</div>
-    		<div class="col-10">
+    		<div class="col-10 text-left">
         		<p class="header-message text-break"></p>
     		</div>
 		</div>

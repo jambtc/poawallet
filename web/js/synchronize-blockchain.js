@@ -10,7 +10,7 @@ $(function () {
 
     blockchain = {
         sync: function(){
-            console.log('[blockchain: sync]');
+            console.log('[blockchain: sync] Start process');
 
             $.ajax({
                 url : 'index.php?r=blockchain/get-blocknumber',
@@ -34,13 +34,14 @@ $(function () {
 
                             if (data.diff > 240){ // 1 ora
                                 //$('.sync-blockchain').html(spinner);
-                                $('.header-message').html('<small>Sync blockchain: '+data.diff+' blocks left.</small>');
+                                $('.header-message').html('<small>Sync: '+data.diff+' blocks left.</small>');
                             }
         					var post = {
         						id: new Date().toISOString(), // id of indexedDB
         						url		: 'index.php?r=blockchain/check-transactions', // url checkTransactions
                                 search_address: data.my_address, // indirizzo da controllare
-                                chainBlock: data.chainBlocknumber,
+                                chainBlocknumber: data.chainBlocknumber,
+                                walletBlocknumber: data.walletBlocknumber,
         					};
                             writeData('sync-blockchain', post).then(function() {
                                 blockchain.callRegisterSyncBlockchain(data.my_address);
@@ -61,14 +62,15 @@ $(function () {
                         if (typeof data[0] !== 'undefined') {
                             blockchain.readTransactions(data.my_address);
                         }else{
-                            setTimeout(function(){ blockchain.sync() }, 5000);
+                            setTimeout(function(){ blockchain.sync() }, 1500);
                         }
                     });
                 },
                 error: function(j){
-                    console.log('[blockchain: sync] ERROR!');
+                    var seconds = 10;
+                    console.log('[blockchain: sync] ERROR! Restart in '+seconds+' seconds.');
                     $('.pulse-button').addClass('pulse-button-offline');
-                    setTimeout(function(){ blockchain.sync(my_address) }, 7000);
+                    setTimeout(function(){ blockchain.sync() }, seconds*1000);
                 }
             });
         },

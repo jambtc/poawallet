@@ -5,7 +5,7 @@ use yii\bootstrap4\NavBar;
 
 use yii\helpers\Url;
 use yii\helpers\Html;
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 // mi serve per far caricare bootstrap4
 NavBar::begin();
@@ -33,7 +33,7 @@ NavBar::end();
 					<a href="<?= Url::to(['/tokens/index']) ?>"><img src="css/img/content/icons/3.png" alt=""><strong class="special"><?= Yii::t('lang','Transactions') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['users/view','id'=>\webapp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('lang','Profile') ?></strong> </a>
+					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('lang','Profile') ?></strong> </a>
 				</li>
 				<li><i class="fa fa-logout"></i><?php
 			             echo Html::beginForm(['/site/logout'], 'post')

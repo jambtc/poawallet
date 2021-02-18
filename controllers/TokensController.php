@@ -10,7 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 /**
  * BoltTokensController implements the CRUD actions for BoltTokens model.

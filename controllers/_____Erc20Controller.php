@@ -17,9 +17,9 @@ use Web3p\EthereumTx\Transaction;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
-class Erc20Controller extends Controller
+class Erc20 extends Controller
 {
     public $balance = 0; // token balance
     public $decimals = 0; // decimals into smart contract
@@ -67,7 +67,7 @@ class Erc20Controller extends Controller
     }
 
 
-    
+
     /*
 	* This function retrieve the token balance of an address
 	*/
@@ -110,5 +110,27 @@ class Erc20Controller extends Controller
 		return $this->getBalance();
 
 	}
+
+    public function getBlock()
+    {
+        $settings = \settings::load();
+		$webapp = new \webapp;
+
+		$poaNode = $webapp->getPoaNode();
+		if (!$poaNode)
+			return $this->json($return);
+
+		$web3 = new Web3($poaNode);
+
+		// blocco in cui presumibilmente avviene la transazione
+		$response = null;
+		$web3->eth->getBlockByNumber('latest',false, function ($err, $block) use (&$response){
+			if ($err !== null) {
+				return $this->json($return);
+			}
+			$response = $block;
+		});
+        return $response;
+    }
 
 }

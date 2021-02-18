@@ -19,7 +19,7 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 
 
-Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 /**
