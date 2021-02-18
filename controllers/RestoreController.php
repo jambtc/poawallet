@@ -22,7 +22,7 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 class RestoreController extends Controller

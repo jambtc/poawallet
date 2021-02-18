@@ -14,8 +14,10 @@ use app\assets\NotificationsAsset;
 use app\assets\ServiceWorkerAsset;
 use app\assets\SynchronizeBlockchainAsset;
 
-Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+use app\components\Settings;
+
+// Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 AppAsset::register($this);
 
@@ -36,7 +38,7 @@ SynchronizeBlockchainAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
 
-    <meta name="google-signin-client_id" content="<?php echo \settings::load()->GoogleOauthClientId; ?>">
+    <meta name="google-signin-client_id" content="<?php echo Settings::load()->GoogleOauthClientId; ?>">
 
     <!-- Manifest Progressive Web App -->
     <link rel="manifest" href="manifest.json">

@@ -9,7 +9,9 @@ use yii\helpers\Url;
   <div class="card-body">
       <!-- amount to send -->
       <div class="form-group">
-          <p class="alert alert-info amount-to-send"></p>
+          <p class="alert alert-info"><?= Yii::t('lang','Amount that will be sent:') ?>
+              <span class="ml-1 amount-to-send"></span>
+          </p>
       </div>
 
       <!-- MESSAGGIO -->

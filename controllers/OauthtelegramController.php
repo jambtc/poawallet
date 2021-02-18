@@ -12,8 +12,10 @@ use yii\helpers\Json;
 
 use jambtc\oauthtelegram;
 
+use app\components\Settings;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['telegram'] = Yii::getAlias('@packages').'/OAuth/oauth-telegram/telegram.php';
 
 class OauthtelegramController extends Controller
@@ -23,8 +25,8 @@ class OauthtelegramController extends Controller
 
 	public function actionCheckAuthorization()
   {
-		$bot_token = \settings::load()->telegramToken; // place bot token of your bot here
-		$bot_username = \settings::load()->telegramBotName; // place username of your bot here
+		$bot_token = Settings::load()->telegramToken; // place bot token of your bot here
+		$bot_username = Settings::load()->telegramBotName; // place username of your bot here
 
 		$login = new \jambtc\oauthtelegram\telegram($bot_username,$bot_token);
 		$auth_data = $login->checkTelegramAuthorization($_GET);
@@ -96,8 +98,8 @@ class OauthtelegramController extends Controller
 		}else{
 			// $social = Socialusers::model()->findByAttributes(['id_user'=>$model->id_user]);
 			$social = BoltSocialusers::find()
-	    ->where(['id_user'=>$model->id])
-	    ->one();
+			    ->where(['id_user'=>$model->id])
+			    ->one();
 			// $social = new Socialusers;
 			// $social->load(['id_user'=>$model->id_user]);
 			if (null === $social){

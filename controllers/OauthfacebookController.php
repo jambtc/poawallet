@@ -13,7 +13,7 @@ use yii\helpers\Url;
 
 use jambtc\oauthfacebook;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 class OauthfacebookController extends Controller
 {
@@ -84,8 +84,8 @@ class OauthfacebookController extends Controller
 		}else{
 			// $social = Socialusers::model()->findByAttributes(['id_user'=>$model->id_user]);
 			$social = BoltSocialusers::find()
-	    ->where(['id_user'=>$model->id])
-	    ->one();
+			    ->where(['id_user'=>$model->id])
+			    ->one();
 			// $social = new Socialusers;
 			// $social->load(['id_user'=>$model->id_user]);
 			if (null === $social){

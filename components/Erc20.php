@@ -15,7 +15,9 @@ use Web3\Contract;
 use Web3p\EthereumTx\Transaction;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+use app\components\Settings;
+
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 
@@ -159,7 +161,7 @@ class Erc20 extends Component
 	*/
 	public function Balance($fromAddress)
 	{
-		$settings = \settings::load();
+		$settings = Settings::load();
 		$this->setDecimals($settings->poa_decimals);
 
 		// echo '<pre>'.print_r($settings,true).'</pre>';
@@ -219,7 +221,7 @@ class Erc20 extends Component
 
     public function getReceipt($hash)
     {
-        $settings = \settings::load();
+        $settings = Settings::load();
 		$WebApp = new WebApp;
 
 		$poaNode = $WebApp->getPoaNode();
@@ -241,7 +243,7 @@ class Erc20 extends Component
 
     public function getBlockByHash($hash)
     {
-        $settings = \settings::load();
+        $settings = Settings::load();
 		$WebApp = new WebApp;
 
 		$poaNode = $WebApp->getPoaNode();

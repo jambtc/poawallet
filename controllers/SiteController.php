@@ -12,7 +12,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 // Yii::$classMap['@packages\logo'] = dirname(__FILE__).'/../../yii2-packages/Logo.php';
 // use packages\logo;
@@ -72,7 +72,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $this->layout = 'auth';
-        
+
         if (!Yii::$app->user->isGuest) {
             return $this->redirect(['wallet/index']);
         }

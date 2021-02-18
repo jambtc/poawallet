@@ -14,8 +14,6 @@ use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
 use app\models\Notifications;
-use app\models\NotificationsReaders;
-use app\models\query\NotificationsReadersQuery;
 use app\models\BoltWallets;
 use app\models\BoltTokens;
 
@@ -24,17 +22,19 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
+use app\components\Settings;
+
 // use Web3\Web3;
 // use Web3\Contract;
 
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 
 class BlockchainController extends Controller
 {
-	public $maxBlocksToScan = 10; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
+	public $maxBlocksToScan = 25; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
 	public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
@@ -127,7 +127,7 @@ class BlockchainController extends Controller
 		$SEARCH_ADDRESS = strtoupper($_POST['search_address']);
 
 		//Carico i parametri della webapp
-		$settings = \settings::load();
+		$settings = Settings::load();
 
 		// numero massimo di blocchi da scansionare
 		// if (isset($settings->maxBlocksToScan))
@@ -191,7 +191,7 @@ class BlockchainController extends Controller
 
 							   // verifica se nella transazione ricevi o hai inviato
 							   if (strtoupper($receivingAccount) == $SEARCH_ADDRESS || strtoupper($transactionContract->from) == $SEARCH_ADDRESS){
-								   $save = new Save;
+								   // $save = new Save;
 
 								   // carica da db tramite hash (che è univoco)
 								   $tokens = BoltTokens::find()->findByHash($transactionContract->transactionHash);
@@ -311,7 +311,7 @@ class BlockchainController extends Controller
 											   $tokens->status = 'complete';
 											   $tokens->token_ricevuti = $tokens->token_price;
 											   $tokens->update();
-											   $save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction ".crypt::Encrypt($tokens->id_token)." updated.");
+											   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction ".crypt::Encrypt($tokens->id_token)." updated.");
 
 											   //salva la notifica
 											   $notification = array(
@@ -325,7 +325,7 @@ class BlockchainController extends Controller
 												   'price' => $tokens->token_price,
 												   'deleted' => 0,
 											   );
-											   $save->Notification($notification);
+											   // $save->Notification($notification);
 										   }
 									   }
 								   }
@@ -387,17 +387,22 @@ class BlockchainController extends Controller
 			 "success"=>false,
 		];
 
-		$block = Yii::$app->Erc20->getBlockInfo();
+		$blockLatest = Yii::$app->Erc20->getBlockInfo();
+		$blockWallet = Yii::$app->Erc20->getBlockInfo($wallet->blocknumber);
+		// print_r($block);
+		// exit;
 
 		//calcolo la differenza tra i blocchi
-		$difference = hexdec($block->number) - hexdec($wallet->blocknumber);
+		$difference = hexdec($blockLatest->number) - hexdec($wallet->blocknumber);
 
 		$return = [
 			 'id'=>time(),
 			 "walletBlocknumber"=>$wallet->blocknumber,
-			 "chainBlocknumber"=>$block->number,
-			 "diff"=>$difference,
+			 "chainBlocknumber"=>$blockLatest->number,
+			 "diff"=> Yii::t('lang', "Sync: {n} blocks left.", ['n' => $difference]),
+			 "difference"=> $difference,
 			 "my_address"=>$wallet->wallet_address,
+			 "relativeTime" => Yii::$app->formatter->asDuration($difference),
 			 "success"=>true,
 		];
 

@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+use app\components\WebApp;
 
 /**
  * BoltTokensController implements the CRUD actions for BoltTokens model.
@@ -66,7 +67,7 @@ class TokensController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel(\webapp::decrypt($id)),
+            'model' => $this->findModel(WebApp::decrypt($id)),
         ]);
     }
 

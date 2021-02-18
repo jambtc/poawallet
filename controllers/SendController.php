@@ -28,14 +28,14 @@ use yii\helpers\Url;
 use app\components\WebApp;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
+use app\components\Settings;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 class SendController extends Controller
 {
-
-
 	public function beforeAction($action)
 	{
     	$this->enableCsrfValidation = false;
@@ -146,7 +146,7 @@ class SendController extends Controller
 			throw new HttpException(404,'Cannot decrypt private key.');
 		}
 
-		$settings = \settings::load();
+		$settings = Settings::load();
 		$amountForContract = $amount * pow(10, $settings->poa_decimals);
 
 		//CREO la transazione
@@ -319,7 +319,7 @@ class SendController extends Controller
 		$requests = 1;
 
 		$WebApp = new WebApp;
-		$settings = \settings::load();
+		$settings = Settings::load();
 
 		$transaction = BoltTokens::find()
  	     		->andWhere(['id_token'=>$WebApp->decrypt($_POST['id'])])

@@ -18,9 +18,12 @@ use app\models\PushSubscriptions;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
+use app\components\WebApp;
+use app\components\Settings;
+
 
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 /**
  * BoltSocialusersController implements the CRUD actions for BoltSocialusers model.
@@ -63,11 +66,11 @@ class UsersController extends Controller
 
         $sent = round(BoltTokens::find()
             ->where(['from_address'=>$wallet->wallet_address])
-            ->sum('token_price'), \settings::load()->poa_decimals);
+            ->sum('token_price'), Settings::load()->poa_decimals);
 
         $received = round(BoltTokens::find()
             ->where(['to_address'=>$wallet->wallet_address])
-            ->sum('token_price'), \settings::load()->poa_decimals);
+            ->sum('token_price'), Settings::load()->poa_decimals);
 
         // $transactions = BoltTokens::find()
         //     ->orwhere(['=','to_address', $wallet->wallet_address])
@@ -75,7 +78,7 @@ class UsersController extends Controller
 
 
         return $this->render('view', [
-            'model' => $this->findModel(\webapp::decrypt($id)),
+            'model' => $this->findModel(WebApp::decrypt($id)),
             'sent' => $sent,
             'received' => $received,
             // 'transactions' => $transactions,
@@ -135,7 +138,7 @@ class UsersController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel(\webapp::decrypt($id));
+        $model = $this->findModel(WebApp::decrypt($id));
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id_social]);

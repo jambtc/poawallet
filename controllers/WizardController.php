@@ -21,8 +21,9 @@ use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
+use app\components\WebApp;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 class WizardController extends Controller
@@ -147,9 +148,9 @@ class WizardController extends Controller
 	public function actionCrypt()
 	{
 		$data = [
-			'cryptedpass' => isset($_POST['pass']) ? \webapp::encrypt($_POST['pass']) : '',
-			'cryptedseed' => isset($_POST['seed']) ? \webapp::encrypt($_POST['seed']) : '',
-			'cryptediduser' => \webapp::encrypt(Yii::$app->user->id),
+			'cryptedpass' => isset($_POST['pass']) ? WebApp::encrypt($_POST['pass']) : '',
+			'cryptedseed' => isset($_POST['seed']) ? WebApp::encrypt($_POST['seed']) : '',
+			'cryptediduser' => WebApp::encrypt(Yii::$app->user->id),
 		];
 
 		return $this->json($data);
@@ -158,9 +159,9 @@ class WizardController extends Controller
 	public function actionDecrypt()
 	{
 		$data = [
-			'decrypted' => isset($_POST['pass']) ? \webapp::decrypt($_POST['pass']) : '',
-			'decryptedseed' => isset($_POST['cryptedseed']) ? \webapp::decrypt($_POST['cryptedseed']) : '',
-			'decryptediduser' => isset($_POST['cryptediduser']) ? \webapp::decrypt($_POST['cryptediduser']) : '',
+			'decrypted' => isset($_POST['pass']) ? WebApp::decrypt($_POST['pass']) : '',
+			'decryptedseed' => isset($_POST['cryptedseed']) ? WebApp::decrypt($_POST['cryptedseed']) : '',
+			'decryptediduser' => isset($_POST['cryptediduser']) ? WebApp::decrypt($_POST['cryptediduser']) : '',
 
 		];
 		return $this->json($data);

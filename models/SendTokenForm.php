@@ -9,9 +9,10 @@ use yii\web\Controller;
 use yii\validators\Validator;
 
 use app\components\WebApp;
+use app\components\Settings;
 
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 
 // echo "<pre>".print_r(Yii::$classMap,true)."</pre>";
@@ -70,7 +71,7 @@ class SendTokenForm extends Model
 	 */
     public function validateAmount($attribute, $params)
     {
-        $settings = \settings::load();
+        $settings = Settings::load();
         if ($this->amount == 0)
             $this->addError($attribute, 'There are too decimals.');
 

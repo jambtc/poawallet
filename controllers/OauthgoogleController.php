@@ -13,7 +13,7 @@ use yii\helpers\Url;
 
 use jambtc\oauthgoogle;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
 
 class OauthgoogleController extends Controller

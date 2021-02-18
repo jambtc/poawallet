@@ -4,11 +4,13 @@ use jambtc\oauthgoogle;
 use jambtc\oauthtelegram;
 use jambtc\oauthfacebook;
 
+use app\components\Settings;
+
 $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
 $checkFacebookAuthorization = Url::to(['oauthfacebook/check-authorization']);
 $checkGoogleAuthorization = Url::to(['oauthgoogle/check-authorization']);
 
-$settings = settings::load();
+$settings = Settings::load();
 ?>
 <!-- Facebook access -->
 <div class="modal fade" id="modal-facebook" tabindex="-1" role="dialog" aria-labelledby="FacebookModalLabel" aria-hidden="true" style="display: none;">

@@ -3,13 +3,15 @@
 use yii\helpers\Url;
 use yii\web\View;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+use app\components\Settings;
+
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 $options = [
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
-    'poaDecimals' => \settings::load()->poa_decimals,
+    'poaDecimals' => Settings::load()->poa_decimals,
     'invalidAmountError' => Yii::t('lang', 'Invalid amount!'),
     'decimalError' => Yii::t('lang','Use a maximum of 2 decimal places.'),
     'higherError' => Yii::t('lang','Amount is higher than Balance.'),

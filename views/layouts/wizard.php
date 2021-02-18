@@ -12,8 +12,11 @@ use app\assets\AppAsset;
 use app\assets\LightWalletAsset;
 use app\assets\ServiceWorkerAsset;
 
-Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+
+use app\components\Settings;
+use app\components\Logo;
 
 AppAsset::register($this);
 LightWalletAsset::register($this);
@@ -30,7 +33,7 @@ ServiceWorkerAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
 
-    <meta name="google-signin-client_id" content="<?php echo \settings::load()->GoogleOauthClientId; ?>">
+    <meta name="google-signin-client_id" content="<?php echo Settings::load()->GoogleOauthClientId; ?>">
 
     <!-- Manifest Progressive Web App -->
     <link rel="manifest" href="manifest.json">
@@ -67,7 +70,7 @@ ServiceWorkerAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-      <?= logo::footer(); ?>
+      <?= Logo::footer(); ?>
     </div>
 </footer>
 

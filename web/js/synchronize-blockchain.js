@@ -20,21 +20,21 @@ $(function () {
                 {
                     if (data.success)
                     {
-                        console.log('[blockchain: sync] difference from blocks:',data.diff);
+                        console.log('[blockchain: sync] difference from blocks:',data.difference);
                         $('.pulse-button').removeClass('pulse-button-offline');
-                        if (data.diff > 0){
-                            if (data.diff < 2)
+                        if (data.difference > 0){
+                            if (data.difference < 2)
                                 $('.sync-star').addClass('text-success fa-spin');
 
-                            if (data.diff >=2 && data.diff < 240){
+                            if (data.difference >=2 && data.difference < 240){
                                 // $('.sync-difference').html('');
                                 // $('.blockchain-pairing__loading').remove();
                                 $('.sync-star').removeClass('text-success fa-spin');
                             }
 
-                            if (data.diff > 240){ // 1 ora
+                            if (data.difference > 240){ // 1 ora
                                 //$('.sync-blockchain').html(spinner);
-                                $('.header-message').html('<small>Sync: '+data.diff+' blocks left.</small>');
+                                $('.header-message').html('<small title="'+data.relativeTime+'">'+data.diff+'</small>');
                             }
         					var post = {
         						id: new Date().toISOString(), // id of indexedDB

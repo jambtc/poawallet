@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 \yii\web\YiiAsset::register($this);
 
@@ -31,7 +31,7 @@ include ('manage-push_js.php');
 	<div class="trader-info">
 		<h3><?= $model->first_name ?> <?= $model->last_name ?></h3>
 		<p><?= $model->email ?></p>
-		
+
 	</div>
 </section>
 <section class="bal-section container mt-30">

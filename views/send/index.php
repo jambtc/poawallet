@@ -5,11 +5,6 @@ use yii\bootstrap4\ActiveForm;
 use drsdre\wizardwidget;
 
 $this->title = Yii::$app->id;
-?>
-
-
-
-<?php
 
 
 

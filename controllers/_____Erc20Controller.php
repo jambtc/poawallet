@@ -16,7 +16,7 @@ use Web3\Contract;
 use Web3p\EthereumTx\Transaction;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
-Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 class Erc20 extends Controller
