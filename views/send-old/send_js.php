@@ -40,7 +40,7 @@ $wallet_restore = <<<JS
     }
 
     var sendForm = document.querySelector('#send-form');
-    var stepButton = document.querySelector('#getCheckedButton1');
+    var stepButton = document.querySelector('#stepwizard_step1_save');
     var submitButton = document.querySelector('.pay-submit');
 
     stepButton.addEventListener('click', function(event){
@@ -106,10 +106,10 @@ $wallet_restore = <<<JS
             				data: sendPost,
             				dataType: "json",
                             beforeSend: function() {
+        						$('.card-body').hide();
+                                $('.wizard-inner').html('');
                                 $('.pay-submit').hide();
-                                $('.hide-text').hide();
-                                $('.transaction-details').show();
-        						$('.transaction-details').after(yiiOptions.htmlTransactionBody);
+        						$('.card-body').after(yiiOptions.htmlTransactionBody);
         					},
             				success:function(data){
             					console.log('[send]: data from generate-transaction controller',data);

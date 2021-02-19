@@ -358,6 +358,7 @@ class SendController extends Controller
 				'success' => true,
 				'row' => $WebApp->showTransactionRow($transaction,$transaction->from_address),
 				'balance' => Yii::$app->Erc20->Balance($transaction->from_address),
+				
 			];
 
 		}

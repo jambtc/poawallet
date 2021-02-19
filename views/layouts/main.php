@@ -80,41 +80,27 @@ SynchronizeBlockchainAsset::register($this);
 
 </div>
 
+
+
+<?php $this->endBody() ?>
+
+</body>
+
 <?php
-echo $this->render('_pin-request');
+// modal PAGE
 
 if (Yii::$app->controller->id == 'users'){
     echo $this->render('_pin-manage');
     echo $this->render('_push-manage');
 }
 
+// if (Yii::$app->controller->id == 'send'){
+//     //echo $this->render('_camera-request');
+// }
+
+echo $this->render('_pin-request');
 
 ?>
 
-
-
-
-
-
-<?php $this->endBody() ?>
-<!-- Template global script file. requared all pages -->
-<!-- <script src="js/global.script.js"></script> -->
-
-<!-- Call Service Worker-->
-<!-- <script src="src/js/promise.js"></script>
-<script src="src/js/fetch.js"></script>
-<script src="src/js/idb.js"></script> -->
-
-<!-- my utility js -->
-<!-- <script src="src/js/global.variables.js"></script> -->
-<!-- <script src="src/js/utility.js"></script> -->
-<!-- <script src="src/js/service.js"></script> -->
-<!-- <script src="src/js/pinutility.js"></script> -->
-
-<?php //include ('pin_js.php'); ?>
-
-
-
-</body>
 </html>
 <?php $this->endPage() ?>

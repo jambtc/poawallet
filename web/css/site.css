@@ -8,6 +8,11 @@ main {
     /* flex: 1; */
     margin-top: 0px;
 }
+
+#content-body {
+    min-height: 0px;
+}
+
 .content-wrapper {
     flex: 1;
 }
