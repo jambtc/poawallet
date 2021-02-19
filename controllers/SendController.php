@@ -325,36 +325,16 @@ class SendController extends Controller
  	     		->andWhere(['id_token'=>$WebApp->decrypt($_POST['id'])])
  	    		->one();
 
-		// $poaNode = $WebApp->getPoaNode();
-		// if (!$poaNode)
-		// 	throw new HttpException(404,'All Nodes are down...');
-		//
-		// // cerco il nonce
-		// $web3 = new Web3($poaNode);
-		// $contract = new Contract($web3->provider, $settings->poa_abi);
-
 		while ($requests < $maxrequests)
 		{
 			$receipt = Yii::$app->Erc20->getReceipt($transaction->txhash);
-			// $contract->eth->getTransactionReceipt($transaction->txhash, function ($err, $tx) {
-			// 	if ($err !== null) {
-			// 		throw $err;
-			// 	}
-			// 	if ($tx) {
-			// 		$this->setTransaction($tx);
-			// 		// echo "\nTransaction has mind:) block number: " . $tx->blockNumber . "\nTransaction dump:\n";
-			// 		// var_dump($tx);
-			// 		// exit;
-			// 	}
-			// });
-			// $tx = $this->getTransaction();
 
 			if ($receipt !== null){
+				// ok, the transaction has mind in a new block
 				break;
 			}
 			$requests ++;
 			sleep(1);
-
 		}
 		if ($receipt === null){
 			$data = [
@@ -362,8 +342,6 @@ class SendController extends Controller
 				'status' => $transaction->status,
 				'success' => false,
 			];
-
-			// throw new HttpException(404,'Transaction is null after '.$requests.' requests.');
 		} else {
 			$transaction->status = 'complete';
 			$transaction->token_ricevuti = $transaction->token_price;
@@ -387,10 +365,6 @@ class SendController extends Controller
 		return $this->json($data);
 
 	}
-
-
-
-
 
 
 	private static function json ($data)

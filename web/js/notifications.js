@@ -9,23 +9,27 @@ $(function () {
     'use strict';
 
     notify = {
-        check: function()
+        check: async function()
         {
-            $.ajax({
-                url: "index.php?r=backend/notify",
-                type: "POST",
-                //data: { 'countedNews' : $('#countedNews').val() },
-                dataType: 'json',
-                success: function(response) {
-                    // console.log('[Backend] notify response:',response);
-                    notify.handleResponse(response);
-                    setTimeout(function(){ notify.check() }, 5000);
-                },
-                error: function(data) {
-                    console.log('errore notifica. da mettere 60000');
-                    setTimeout(function(){ notify.check() }, 5000);
-                }
-            });
+            try {
+                let response = await $.ajax({
+                    url: "index.php?r=backend/notify",
+                    type: "POST",
+                    //data: { 'countedNews' : $('#countedNews').val() },
+                    dataType: 'json',
+                    success: function(response) {
+                        // console.log('[Backend] notify response:',response);
+                        notify.handleResponse(response);
+                        setTimeout(function(){ notify.check() }, 5000);
+                    },
+                    error: function(data) {
+                        console.log('errore notifica. da mettere 60000');
+                        setTimeout(function(){ notify.check() }, 5000);
+                    }
+                });
+            }catch (e) {
+                console.log("[Backend: notify] ERRORE in async function. Si è verificato un errore!");
+            }
         },
         handleResponse: function(response)
         {

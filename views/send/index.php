@@ -91,6 +91,11 @@ $wizard_config = [
         <!-- </div>
     </section> -->
 	</div>
+	<section >
+		<?php
+		
+		?>
+	</section>
     <section class="trans-sec container mb-2 dash-balance relative">
 
 		<?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>

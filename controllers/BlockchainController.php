@@ -46,7 +46,7 @@ class BlockchainController extends Controller
 	private function setTransactionsFound($transaction){
 		$this->transactionsFound["id"] = time();
 		$this->transactionsFound["success"] = true;
-		$this->transactionsFound["openUrl"] = "index.php?r=tokens/index";
+		$this->transactionsFound["openUrl"] = Url::to(['/tokens/view','id'=>$transaction->id_token]);
 		$this->transactionsFound["transactions"][] = $transaction;
 	}
 	private function getTransactionsFound(){
@@ -112,11 +112,10 @@ class BlockchainController extends Controller
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
 		// set_time_limit(0); //imposto il time limit unlimited
-
 		$chainBlock = $_POST['chainBlocknumber'];
 
-		// $filename = Yii::app()->basePath."/log/blockchain-search.log";
-		// $myfile = fopen($filename, "a");
+		$filename = Yii::$app->basePath."/web/assets/blockchain-search.log";
+		$myfile = fopen($filename, "a");
 
 		//carico info del wallet
 		$wallets = BoltWallets::find()
@@ -140,57 +139,39 @@ class BlockchainController extends Controller
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 
-			   // $eth->getBlockByNumber($searchBlock,true, function ($err, $block){
-				//    if ($err !== null) {
-				// 	   $save = new Save;
-				// 	   $save->WriteLog('bolt','blockchain','SyncBlockchain',"Error while searching blocks.");
-				// 	   echo CJSON::encode(array(
-				// 		   'success'=>false,
-				// 		   'error'=>$err->getMessage()
-				// 	   ));
-				// 	   exit;
-				//    }
-				//    self::setTransactions($block->transactions);
-			   // });
+			   	// ricerco le informazioni del blocco tramite il suo numero
 				$block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
 				$transactions = $block->transactions;
+				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
 				// echo '<pre>'.print_r($transactions,true).'</pre>';
 				// exit;
 
 				if (!empty($transactions))
 				{
+					fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
 						if (strtoupper($transaction->to) <> strtoupper($settings->poa_contractAddress) ){
+							fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
 							$ReceivingType = 'ether';
-					   }else{
+					    }else{
+						   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token...\n");
 						   //smart contract
 						   $ReceivingType = 'token';
 						   // $transactionId = $transaction->hash;
+						   // recupero la ricevuta della transazione tramite hash
 						   $transactionContract = Yii::$app->Erc20->getReceipt($transaction->hash);
 
-						   // $contract->eth->getTransactionReceipt($transactionId, function ($err, $receipt) use (&$transactionContract)
-						   // {
-							//  if ($err !== null) {
-							// 	   $save = new Save;
-							// 	   $save->WriteLog('bolt','blockchain','SyncBlockchain',"Error while getting transaction receipt.");
-							// 	   echo CJSON::encode(array(
-							// 		   'success'=>false,
-							// 		   'error'=>$err->getMessage()
-							// 	   ));
-							// 	   exit;
-							//    }
-				 		   // 		if ($receipt)
-							// 	   $transactionContract = $receipt;
-						   // });
 						   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
 						   {
+							   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token non vuota...\n");
 							   $receivingAccount = $transactionContract->logs[0]->topics[2];
 							   $receivingAccount = str_replace('000000000000000000000000','',$receivingAccount);
 
 							   // verifica se nella transazione ricevi o hai inviato
 							   if (strtoupper($receivingAccount) == $SEARCH_ADDRESS || strtoupper($transactionContract->from) == $SEARCH_ADDRESS){
+								   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token che appartiene all'utente...\n");
 								   // $save = new Save;
 
 								   // carica da db tramite hash (che è univoco)
@@ -199,6 +180,7 @@ class BlockchainController extends Controller
 								   // SE da DB è null, è NECESSARIA LA NOTIFICA per chi invia e riceve
 								   if (null===$tokens){
 									   //$save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction found but it isn\'t in DB. I\'ll save it in DB.");
+									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found but it isn\'t in DB. I\'ll save it in DB....\n");
 
 									   //salva la transazione
 									   $timestamp = 0;
@@ -208,27 +190,16 @@ class BlockchainController extends Controller
 									   ); // decimali del token
 									   $rate = 1; //eth::getFiatRate('token');
 
-									   // con questa funzione recupero il timestamp della transazione
+									   // con questa funzione recupero il timestamp in cui è stata minata
+									   // la  transazione
 									   // NB: il timestamp è quello sul server POA.
-									   // $eth->getBlockByHash($transaction->blockHash,true, function ($err, $block) use (&$timestamp){
-										//    if ($err !== null) {
-										// 	   $save->WriteLog('bolt','blockchain','SyncBlockchain',"Error while getting block by hash.");
-										// 	   echo CJSON::encode(array(
-										// 		   'success'=>false,
-										// 		   'error'=>$err->getMessage()
-										// 	   ));
-										// 	   exit;
-										//    }
-										//    $timestamp = hexdec($block->timestamp);
-									   // });
+
 									   $blockByHash = Yii::$app->Erc20->getBlockByHash($transaction->blockHash);
-
-
 
 									   // salvo la transazione NULL in db. Restituisce object
 									   $tokens = new BoltTokens;
 
-									   $attributes = array(
+									   $attributes = [
 										   'id_user' => $wallets->id_user,
 										   'status'	=> 'complete',
 										   'type'	=> 'token',
@@ -245,58 +216,64 @@ class BlockchainController extends Controller
 										   'to_address' => $receivingAccount,
 										   'blocknumber' => hexdec($transactionContract->blockNumber),
 										   'txhash'	=> $transactionContract->transactionHash,
-									   );
+									   ];
 									   $tokens->load($attributes);
+
+
 									   $tokens->save();
 
-									   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Saving transaction: <pre>".print_r($attributes,true)."</pre>\n");
+									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Saving transaction: <pre>".print_r($attributes,true)."</pre>\n");
+
 
 									   // imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
-									   // $this->setTransactionFound(array(
-										//    'id_token' => crypt::Encrypt($tokens->id_token),
-										//    'data' => WebApp::dateLN($tokens->invoice_timestamp,$tokens->id_token),
-										//    'status' => WebApp::walletIconStatus($tokens->status),
-										//    'token_price' => WebApp::typePrice($transactionValue,(strtoupper($transactionContract->from) == $SEARCH_ADDRESS ? 'sent' : 'received')),
-										//    'from_address' => $tokens->from_address,
-										//    'to_address' => $tokens->to_address,
-										//    'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
-										//    'title' => Yii::t('notify','New transaction'),
-										//    'message' => Yii::t('notify','A transaction you received has been completed.'),
-									   // ));
+									   $this->setTransactionsFound(array(
+										   'id_token' => crypt::Encrypt($tokens->id_token),
+										   'data' => WebApp::dateLN($tokens->invoice_timestamp,$tokens->id_token),
+										   'status' => WebApp::walletIconStatus($tokens->status),
+										   'token_price' => WebApp::typePrice($transactionValue,(strtoupper($transactionContract->from) == $SEARCH_ADDRESS ? 'sent' : 'received')),
+										   'from_address' => $tokens->from_address,
+										   'to_address' => $tokens->to_address,
+										   'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
+										   'title' => Yii::t('notify','New transaction'),
+										   'message' => Yii::t('notify','A transaction you received has been completed.'),
+									   ));
 
 									   // notifica per chi ha inviato (from_address)
-									   // $notification = array(
-										//    'type_notification' => 'token',
-										//    'id_user' => Wallets::model()->findByAttributes(['wallet_address'=>$tokens->from_address]) === null ? 1 : Wallets::model()->findByAttributes(['wallet_address'=>$tokens->from_address])->id_user,
-										//    'id_tocheck' => $tokens->id_token,
-										//    'status' => 'complete',
-										//    'description' => 'A transaction has been completed.',
-										//    'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
-										//    'timestamp' => time(),
-										//    'price' => $tokens->token_price,
-										//    'deleted' => 0,
-									   // );
-									   // $save->Notification($notification);
+									   $notification = array(
+										   'type_notification' => 'token',
+										   'id_user' => Wallets::model()->findByAttributes(['wallet_address'=>$tokens->from_address]) === null ? 1 : Wallets::model()->findByAttributes(['wallet_address'=>$tokens->from_address])->id_user,
+										   'id_tocheck' => $tokens->id_token,
+										   'status' => 'complete',
+										   'description' => 'A transaction has been completed.',
+										   'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
+										   'timestamp' => time(),
+										   'price' => $tokens->token_price,
+										   'deleted' => 0,
+									   );
+									   $save->Notification($notification);
 
 									   // notifica per chi riceve (to_address)
-									   // $notification = array(
-										//    'type_notification' => 'token',
-										//    // 'id_user' => Wallets::model()->findByAttributes(['wallet_address'=>$tokens->to_address])->id_user,
-										//    'id_user' => Yii::app()->user->objUser['id_user'],
-										//    'id_tocheck' => $tokens->id_token,
-										//    'status' => 'complete',
-										//    'description' => 'A transaction you received has been completed.',
-										//    'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
-										//    'timestamp' => time(),
-										//    'price' => $tokens->token_price,
-										//    'deleted' => 0,
-									   // );
-									   // $save->Notification($notification);
+									   $notification = array(
+										   'type_notification' => 'token',
+										   // 'id_user' => Wallets::model()->findByAttributes(['wallet_address'=>$tokens->to_address])->id_user,
+										   'id_user' => Yii::app()->user->objUser['id_user'],
+										   'id_tocheck' => $tokens->id_token,
+										   'status' => 'complete',
+										   'description' => 'A transaction you received has been completed.',
+										   'url' => Yii::app()->createUrl("tokens/view",['id'=>crypt::Encrypt($tokens->id_token)]),
+										   'timestamp' => time(),
+										   'price' => $tokens->token_price,
+										   'deleted' => 0,
+									   );
+									   $save->Notification($notification);
 									   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Notification saved.");
 								   }else{
+									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found and it is found also on DB....\n");
 									   // se NON è NULL notifico solo il ricevente
 									   if (strtoupper($tokens->to_address) == $SEARCH_ADDRESS){
+										   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address is to_address....\n");
 										   if ($tokens->token_ricevuti == 0 ){ //&& $tokens->status <> 'complete'){
+											   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Ricevuto è 0....\n");
 											   $this->setTransactionsFound(array(
 												   'id_token' => crypt::Encrypt($tokens->id_token),
 												   'data' => WebApp::dateLN($tokens->invoice_timestamp,$tokens->id_token),
@@ -311,6 +288,7 @@ class BlockchainController extends Controller
 											   $tokens->status = 'complete';
 											   $tokens->token_ricevuti = $tokens->token_price;
 											   $tokens->update();
+											   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Aggiornato taella tokens....\n");
 											   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction ".crypt::Encrypt($tokens->id_token)." updated.");
 
 											   //salva la notifica
@@ -325,20 +303,13 @@ class BlockchainController extends Controller
 												   'price' => $tokens->token_price,
 												   'deleted' => 0,
 											   );
-											   // $save->Notification($notification);
+											   $save->Notification($notification);
 										   }
+									   }else{
+										   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address non è to_address e quindi non faccio nulla....\n");
 									   }
 								   }
-								   // in entrambi i casi controllo che il wallet di chi invia sia
-								   // di un Istituto, nel qual caso Faccio partire il timer
-								   // per il messaggio di alert
-								   // $institute = Institutes::model()->findByAttributes(['wallet_address'=>$tokens->from_address]);
-								   // if ($institute !== null){
-								   // 	// eseguo lo script che si occuperà in background di
-								   // 	// inviare il messaggio di alert all'utente
-								   // 	$cmd = Yii::app()->basePath.DIRECTORY_SEPARATOR.'yiic alert --iduser='.crypt::Encrypt(Wallets::model()->findByAttributes(['wallet_address'=>$tokens->to_address])->id_user). ' --idInstitute='.crypt::Encrypt($institute->id_institute);
-								   // 	Utils::execInBackground($cmd);
-								   // }
+
 							   }
 						   }
 					   } //endif 'ethereum or token'
@@ -352,6 +323,7 @@ class BlockchainController extends Controller
 			   break;
 		   }
 	   }
+	   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
 
 	   if (!(empty($this->getTransactionsFound()))){
 		   // restituisco le transazioni
@@ -382,8 +354,10 @@ class BlockchainController extends Controller
 			 'id'=>time(),
 			 "walletBlocknumber"=>0,
 			 "chainBlocknumber"=>0,
-			 "diff"=>0,
+			 "difference"=>0,
+			 "headerMessage"=>'',
 			 "my_address"=>$wallet->wallet_address,
+			 "relativeTime" =>'',
 			 "success"=>false,
 		];
 
@@ -399,7 +373,7 @@ class BlockchainController extends Controller
 			 'id'=>time(),
 			 "walletBlocknumber"=>$wallet->blocknumber,
 			 "chainBlocknumber"=>$blockLatest->number,
-			 "diff"=> Yii::t('lang', "Sync: {n} blocks left.", ['n' => $difference]),
+			 "headerMessage"=> '<small>'.Yii::t('lang', "{n} blocks left.", ['n' => $difference]).'</small>',
 			 "difference"=> $difference,
 			 "my_address"=>$wallet->wallet_address,
 			 "relativeTime" => Yii::$app->formatter->asDuration($difference),
