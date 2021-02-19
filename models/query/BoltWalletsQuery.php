@@ -38,7 +38,7 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
     // }
 
     /**
-	 * This function return the user wallet address
+	 * This function return the wallet address from user id
 	 */
 	 public function userAddress($id) {
  		$wallet = $this->andWhere(['id_user'=>$id])->one();
@@ -52,5 +52,18 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
 		} else {
 			return $wallet->wallet_address;
 		}
+	}
+
+    /**
+	 * This function return the user id from wallet address
+	 */
+	 public function userIdFromAddress($address) {
+ 		$wallet = $this->andWhere(['wallet_address'=>$address])->one();
+        if ($wallet !== null) {
+            return $wallet->id_user;
+        } else {
+            return 1;
+        }
+
 	}
 }

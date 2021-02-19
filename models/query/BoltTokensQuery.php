@@ -35,4 +35,6 @@ class BoltTokensQuery extends \yii\db\ActiveQuery
     public function findByHash($hash){
         return $this->andWhere(['txhash'=>$hash])->one();
     }
+
+    
 }

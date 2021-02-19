@@ -129,7 +129,7 @@ class WebApp extends Component
                                   <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
                               </div>
                               <div class="transaction-card-body ml-1">
-                                  <h6 class="card-title pt-2">'.substr($data->to_address,0,21).'...</h6>
+                                  <h6 class="card-title pt-2">'.$data->id_token." ".substr($data->to_address,0,21).'...</h6>
                                   <p class="card-text">
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
@@ -262,6 +262,13 @@ class WebApp extends Component
         }
         return $color;
     }
+
+    /**
+	* Questa funziona mostra a video il tipo di transazione e se è stata inviata o ricevuta
+	*/
+	public function typePrice($price,$sent){
+		return ($sent == 'sent' ? '<h5 class="text-warning">-' : '<h5 class="text-success">+') . $price . '</h5>';
+	}
 
     public static function showMessagesRow($data){
         $dateLN = date("d M `y",$data->timestamp);

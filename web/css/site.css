@@ -205,6 +205,10 @@ label {
 }
 
 /* notifications */
+.bg-secondary-light {
+    background-color: #6c757d4d !important;
+}
+
 .notify-quantity {
     position: absolute;
     display: inline-block;
@@ -235,7 +239,7 @@ label {
 header .page-title {
     font-size: 14px;
     letter-spacing: 0px;
-    
+
 }
 .pulse-button{
   margin-top: 5px;

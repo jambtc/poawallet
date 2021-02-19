@@ -60,19 +60,47 @@ $(function () {
                  $('.notify-readAll').hide();
             }
         },
-        openAllEnvelopes: function(){
-            $.ajax({
-                url:'index.php?r=backend/update-all-news',
-                type: "POST",
-                data: {},
-                dataType: 'json',
-                success: function(response) {
-                    console.log('[notify] All notifications updated.',response);
-                },
-                error: function(data) {
-                    console.log(data);
-                },
-            });
+        openAllEnvelopes: async function(){
+            try {
+                let response = await $.ajax({
+                    url:'index.php?r=backend/update-all-news',
+                    type: "POST",
+                    data: {},
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('[notify] All notifications updated.',response);
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    },
+                });
+            } catch (e) {
+                console.log("[Backend: open all envelopes] ERRORE in async function. Si è verificato un errore!");
+            }
+        },
+        openEnvelope: async function(id_notification){
+            event.preventDefault();
+            event.stopPropagation();
+            var submitUrl = $('#news_'+id_notification).attr('href');
+
+            // metto a read il valore del messaggio
+            try {
+                let response = await $.ajax({
+                    url:'index.php?r=backend/update-single-news',
+                    type: "POST",
+                    data: { 'id_notification' : id_notification },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success)
+                            location.href = submitUrl;
+                        },
+                    error: function(data) {
+                        console.log(data);
+                    },
+                });
+            } catch (e) {
+                console.log("[Backend: open single envelope] ERRORE in async function. Si è verificato un errore!");
+            }
         },
 
     };

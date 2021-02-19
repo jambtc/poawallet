@@ -82,6 +82,23 @@ class BackendController extends Controller
 		];
 	}
 
+	// aggiorna solo la notifica in "letta"
+	// update one row
+	public function actionUpdateSingleNews(){
+		// UPDATE `customer` SET `status` = 1 WHERE `email` LIKE `%@example.com%`
+		$update = NotificationsReaders::updateAll(
+			[
+				'alreadyread' => NotificationsReaders::STATUS_READ
+			],
+			[
+				'like', 'id_notification', $_POST['id_notification'],
+			]
+		);
+
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		return ['success'=>true,'response'=>$update];
+	}
+
 	// aggiorna tutte le notifiche in "letta"
 	// update all rows
 	public function actionUpdateAllNews(){
@@ -152,20 +169,20 @@ class BackendController extends Controller
 
 		   if ($x == 1){
 
-					   $response['htmlTitle'] .= '<li>
-		   	 			 <div class="d-flex align-items-center justify-content-between">
-		   	 				 <div class="d-flex align-items-center">
-		   	 				   <div class="coin-name notify-htmlTitle">'
-							   . Html::encode(\Yii::t('lang',
-								   'You have {n,plural,=0{read all messages.} =1{one unread message.} other{# unread messages.}}', ['n' => $response['countedUnread']]
-							   ))
-							   .'</div>
-		   	 				 </div>
-		   	 				 <div class="notify-readAll">
-		   	 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('lang','Mark all as read') .'</small></a>
-		   	 				 </div>
-		   	 			   </div>
-		   	 		 </li>';
+			   $response['htmlTitle'] .= '<li>
+		 			 <div class="d-flex align-items-center justify-content-between">
+		 				 <div class="d-flex align-items-center">
+		 				   <div class="coin-name notify-htmlTitle">'
+					   . Html::encode(\Yii::t('lang',
+						   'You have {n,plural,=0{read all messages.} =1{one unread message.} other{# unread messages.}}', ['n' => $response['countedUnread']]
+					   ))
+					   .'</div>
+		 				 </div>
+		 				 <div class="notify-readAll">
+		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('lang','Mark all as read') .'</small></a>
+		 				 </div>
+		 			   </div>
+		 		 </li>';
 		   }
 		   // Leggo la notifica tramite key
 		   $notify = Notifications::find()
@@ -183,8 +200,15 @@ class BackendController extends Controller
 
 			$parsedurl = parse_url($notify->url);
 
-			$response['htmlContent'] .= '<li>
-			<a href="'.htmlentities('index.php?'.$parsedurl['query']).'" id="news_'.$notify->id_notification.'">
+			$classUnread = '';
+			if ($item->alreadyread == 0) {
+				$classUnread = 'bg-secondary-light';
+			}
+
+			$response['htmlContent'] .= '<li class='.$classUnread.'>
+			<a onclick="notify.openEnvelope('.$notify->id_notification.');"
+				href="'.htmlentities('index.php?'.$parsedurl['query']).'"
+				id="news_'.$notify->id_notification.'">
 	   			<div class="d-flex align-items-center justify-content-between">
 	                   <div class="d-flex align-items-center">
 	                       <div class="notice-icon available">

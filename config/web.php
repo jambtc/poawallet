@@ -19,6 +19,7 @@ $config = [
         'WebApp' => ['class' => 'app\components\WebApp'],
         'Logo' => ['class' => 'app\components\Logo'],
         'Settings' => ['class' => 'app\components\Settings'],
+        'Messages' => ['class' => 'app\components\Messages'],
         'i18n' => [
             'translations' => [
                 'lang*' => [
