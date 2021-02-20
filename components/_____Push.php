@@ -10,80 +10,31 @@ use yii\helpers\Json;
 use Minishlink\WebPush\WebPush;
 use Minishlink\WebPush\Subscription;
 
-use yii\base\Model;
-use app\models\Notifications;
-use app\models\NotificationsReaders;
-
 use app\components\Settings;
 use yii\data\ActiveDataProvider;
 use app\models\PushSubscriptions;
 
-/*
-* With this class I intend manage all notifications of app.
-* Whether the user has to receive a push message, and store it in DB
-*/
 
-
-class Messages extends Component
+class Push extends Component
 {
-    public static function save($attributes){
-        $model = new Notifications;
-
-        $model->attributes = $attributes;
-        $model->id_user = $attributes['id_user'];
-        $model->insert();
-
-        // Aggiorna le notifiche da leggere per l'utente
-        self::saveReader($model->id_user,$model->id_notification);
-        return (object) $model->attributes;
-    }
-
-    private function saveReader($id_user,$id_notification){
-        $readers = new NotificationsReaders;
-        $readers->id_user = $id_user;
-        $readers->id_notification = $id_notification;
-        $readers->alreadyread = NotificationsReaders::STATUS_UNREAD;
-        $readers->insert();
-
-        return true;
-    }
-
     /**
     * FUNZIONE CHE INVIA UN MESSAGGIO PUSH
     *
     * @param $notification (array contenente la notifica)
     * @param $app (applicazione che riceverà la notifica) di default è Napay
     */
-    public function push($attributes, $app='wallet')
+    public function send($notification, $app='dashboard')
     {
-
-        $filename = Yii::$app->basePath."/web/assets/push-message.log";
-		$myfile = fopen($filename, "a");
-
-        fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Salvo il messaggio\n");
-        $notification = self::save($attributes);
-
         //Carico i parametri della webapp
         $settings = Settings::load();
 
         // $subscriptions = array();
-        fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Carico il dataProvider\n");
-
         $dataProvider = new ActiveDataProvider([
-            'query' => PushSubscriptions::find()->
-                where([
-                    'id_user'=>$notification->id_user,
-                    'type' => $app
-                    ]),
+            'query' => PushSubscriptions::find()
+                            ->andWhere('id_user' => $notification->id_user)
+                            ->andWhere('type' => $app),
             'pagination' => false // !!! IMPORTANT TO GET ALL MODELS
         ]);
-
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => PushSubscriptions::find()
-        //                     ->andWhere('id_user' => $notification->id_user)
-        //                     ->andWhere('type' => $app),
-        //     'pagination' => false // !!! IMPORTANT TO GET ALL MODELS
-        // ]);
 
 
 
@@ -110,8 +61,6 @@ class Messages extends Component
 
         if ($dataProvider->getTotalCount() >0 )
         {
-            fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : dataprovider > 0\n");
-
 
         // if (isset($subscribe_array)){
             // Crea autorizzazioni VAPID
@@ -152,9 +101,6 @@ class Messages extends Component
                 ],
 
             );
-
-            fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
-
             #echo '<pre>'.print_r($content,true).'</pre>';
             // trasformo il payload in json
             $payload = Json::encode($content);
@@ -164,7 +110,7 @@ class Messages extends Component
 
             foreach ($dataProvider->getModels() as $item)
             {
-                $subscriptions = Subscription::create([
+                $subscription = Subscription::create([
                     "endpoint" => $item->endpoint,
                     "keys" => [
                         "p256dh" => $item->p256dh,
@@ -173,30 +119,17 @@ class Messages extends Component
                 ]);
                 #echo '<pre>'.print_r($array,true).'</pre>';
                 #echo '<pre>'.print_r($subscription,true).'</pre>';
-                fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id_subscription\n");
-
 
                 // inizializzo la classe
                 $webPush = new WebPush($auth, $defaultOptions);
                 $webPush->setDefaultOptions($defaultOptions);
 
-                /**
-                 * send one notification and flush directly
-                 * @var MessageSentReport $report
-                 */
-                foreach ($subscriptions as $subscription) {
-                    $webPush->sendOneNotification(
-                        $subscription,
-                        $payload // optional (defaults null)
-                    );
-                }
-
-                // // invio il messaggio push
-                // $result = $webPush->sendNotification(
-                //                 $subscription,
-                //                 $payload,
-                //                 true
-                // );
+                // invio il messaggio push
+                $result = $webPush->sendNotification(
+                                $subscription,
+                                $payload,
+                                true
+                );
             }
 
             /**
@@ -215,10 +148,8 @@ class Messages extends Component
               //         }
               //     }
               // }
-          } else {
-              fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : dataprovider = 0\n");
           }
-    }
+        }
     /**
     * Funzione che restituisce il titolo del messaggio push in base al type_notification
     **/
@@ -233,7 +164,7 @@ class Messages extends Component
             case 'token':
             case 'contact':
                 if ($app == 'wallet')
-                    $return = 'FidPay';
+                    $return = 'Wallet';
                 else
                     $return = 'FidPay';
 
@@ -245,7 +176,4 @@ class Messages extends Component
         }
         return $return;
     }
-
-
-
 }

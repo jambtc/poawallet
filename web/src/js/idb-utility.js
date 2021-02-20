@@ -20,12 +20,18 @@ var dbPromise = idb.open('fidpay', 1, function(db) {
 	// STORE PER SINCRONIZZAZIONE INVIO ETH E TOKEN
 	// if (!db.objectStoreNames.contains('sync-send-eth'))
 	//  	db.createObjectStore('sync-send-eth', {keyPath: 'id'});
+
+	// in questo db memorizzo la richiesta per il sw che deve convalidare
+	// la transazione, cioè verificare che sia stata minata
 	if (!db.objectStoreNames.contains('sync-send-erc20'))
 	 	db.createObjectStore('sync-send-erc20', {keyPath: 'id'});
 	// if (!db.objectStoreNames.contains('np-send-eth'))
 	//  	db.createObjectStore('np-send-eth', {keyPath: 'id'});
-	// if (!db.objectStoreNames.contains('np-send-erc20'))
-	//  	db.createObjectStore('np-send-erc20', {keyPath: 'id'});
+
+	// in questo db memorizzo la ripsosta dopo che è stata verificata
+	// la transazione
+	if (!db.objectStoreNames.contains('np-send-erc20'))
+	 	db.createObjectStore('np-send-erc20', {keyPath: 'id'});
 
 	//store per sincronizzazzione check txFound
 	// if (!db.objectStoreNames.contains('sync-txPool'))
@@ -55,8 +61,6 @@ var dbPromise = idb.open('fidpay', 1, function(db) {
 	if (!db.objectStoreNames.contains('wallet')) {
 	 	db.createObjectStore('wallet', {keyPath: 'id'});
 	}
-
-	console.log('ma sono arrivato wui??');
 
 	//store per il salvataggio dei dati del pin
 	if (!db.objectStoreNames.contains('pin')) {
@@ -180,7 +184,7 @@ function WordCount(str) {
 }
 
 
-function displayNotification(options){
+function displayPushNotification(options){
 	if ('serviceWorker' in navigator) {
 		navigator.serviceWorker.ready
 			.then(function(swreg) {

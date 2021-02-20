@@ -354,28 +354,10 @@ self.addEventListener('sync', function(event) {
 	 					return response.json();
 	 				})
 	 				.then(function(json) {
-						if (json.success){
-							console.log('[Service worker] Risposta di send/validateTransaction',json);
-							// const title = json.transactions[0].title;
-							// const options = {
-							// 	body: json.transactions[0].message,
-							// 	icon: 'src/images/icons/app-icon-96x96.png',
-							// 	vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-							// 	badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-							// 	tag: 'confirm-notification', //tag univoco per le notifiche.
-							// 	renotify: true, //connseeo a tag. se è true notifica di nuovo
-							// 	data: {
-							// 	   openUrl: json.transactions[0].url,
-							// 	},
-							// 	actions: [
-							// 		{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
-							// 		{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
-							// 	],
-							// };
-						  	// self.registration.showNotification(title, options);
-							writeData('sync-send-erc20', json);
-						}
- 				 	})
+						console.log('[Service worker] Risposta di send/validateTransaction',json);
+						writeData('np-send-erc20', json);
+						
+				 	})
  					.catch(function(err){
  						console.log('[Service worker] Error while checking send-erc20 data', err);
  					})

@@ -141,9 +141,9 @@ $wallet_restore = <<<JS
 
     var erc20 = {
         isReadySent: function(id){
-            readFromId('sync-send-erc20',id)
+            readFromId('np-send-erc20',id)
             .then(function(data) {
-                console.log('[isReadySent]: checking data from sync-send-erc20 indexedDB', data);
+                console.log('[isReadySent]: checking data from np-send-erc20 salvato dal SW', data);
                 if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
                 {
                     console.log('id token è:', id);
@@ -152,8 +152,9 @@ $wallet_restore = <<<JS
                     $('#total-balance').addClass('animationBalanceIn');
                     $('.star-total-balance').addClass('animationStar');
                     $('#total-balance').text(data[0].balance);
+                    displayPushNotification(data[0].pushoptions);
 
-                    clearAllData('sync-send-erc20');
+                    clearAllData('np-send-erc20');
                 } else {
                     setTimeout(function(){ erc20.isReadySent(id) }, 1000);
                 }

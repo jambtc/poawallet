@@ -26,7 +26,8 @@
         "yiisoft/yii2-httpclient": "^2.0",
         "drsdre/yii2-wizardwidget": "*",
         "brainfoolong/cryptojs-aes-php": "^2.1",
-        "web3p/ethereum-tx": "^0.4.1"
+        "web3p/ethereum-tx": "^0.4.1",
+        "minishlink/web-push": "^6.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
