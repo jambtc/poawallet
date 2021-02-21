@@ -38,7 +38,7 @@ use app\components\Messages;
 
 class BlockchainController extends Controller
 {
-	public $maxBlocksToScan = 25; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
+	public $maxBlocksToScan = 51; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
 	public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
@@ -115,11 +115,11 @@ class BlockchainController extends Controller
 	{
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
-		// set_time_limit(0); //imposto il time limit unlimited
+		set_time_limit(30); //imposto il time limit unlimited
 		$chainBlock = $_POST['chainBlocknumber'];
 
-		$filename = Yii::$app->basePath."/web/assets/blockchain-search.log";
-		$myfile = fopen($filename, "a");
+		// $filename = Yii::$app->basePath."/web/assets/blockchain-search.log";
+		// $myfile = fopen($filename, "a");
 
 		//carico info del wallet
 		$wallets = BoltWallets::find()
@@ -152,15 +152,15 @@ class BlockchainController extends Controller
 
 				if (!empty($transactions))
 				{
-					fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
+					// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
 						if (strtoupper($transaction->to) <> strtoupper($settings->poa_contractAddress) ){
-							fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
+							// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
-						   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token...\n");
+						   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token...\n");
 						   //smart contract
 						   $ReceivingType = 'token';
 						   // $transactionId = $transaction->hash;
@@ -169,13 +169,13 @@ class BlockchainController extends Controller
 
 						   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
 						   {
-							   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token non vuota...\n");
+							   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token non vuota...\n");
 							   $receivingAccount = $transactionContract->logs[0]->topics[2];
 							   $receivingAccount = str_replace('000000000000000000000000','',$receivingAccount);
 
 							   // verifica se nella transazione ricevi o hai inviato
 							   if (strtoupper($receivingAccount) == $SEARCH_ADDRESS || strtoupper($transactionContract->from) == $SEARCH_ADDRESS){
-								   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token che appartiene all'utente...\n");
+								   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token che appartiene all'utente...\n");
 								   // $save = new Save;
 
 								   // carica da db tramite hash (che è univoco)
@@ -184,7 +184,7 @@ class BlockchainController extends Controller
 								   // SE da DB è null, è NECESSARIA LA NOTIFICA per chi invia e riceve
 								   if (null===$tokens){
 									   //$save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction found but it isn\'t in DB. I\'ll save it in DB.");
-									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found but it isn\'t in DB. I\'ll save it in DB....\n");
+									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found but it isn\'t in DB. I\'ll save it in DB....\n");
 
 									   //salva la transazione
 									   $timestamp = 0;
@@ -221,8 +221,8 @@ class BlockchainController extends Controller
 									   $tokens->memo = '';
 									   $tokens->save();
 
-									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Saving transaction: <pre>".print_r($tokens->attributes,true)."</pre>\n");
-									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction errors: <pre>".print_r($tokens->errors,true)."</pre>\n");
+									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Saving transaction: <pre>".print_r($tokens->attributes,true)."</pre>\n");
+									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction errors: <pre>".print_r($tokens->errors,true)."</pre>\n");
 
 									   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 							           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
@@ -267,13 +267,13 @@ class BlockchainController extends Controller
 									   // $save->Notification($notification);
 									   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Notification saved.");
 								   }else{
-									   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found and it is found also on DB....\n");
+									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found and it is found also on DB....\n");
 									   // se NON è NULL notifico solo il ricevente
 									   if (strtoupper($tokens->to_address) == $SEARCH_ADDRESS){
-										   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address is to_address....\n");
+										   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address is to_address....\n");
 
 										   if ($tokens->token_ricevuti == 0 ){ //&& $tokens->status <> 'complete'){
-											   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Ricevuto è 0....\n");
+											   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Ricevuto è 0....\n");
 
 											   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 											   $timeLN = date("H:i:s",$tokens->invoice_timestamp);
@@ -292,7 +292,7 @@ class BlockchainController extends Controller
 											   $tokens->status = 'complete';
 											   $tokens->token_ricevuti = $tokens->token_price;
 											   $tokens->update();
-											   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Aggiornato tabella tokens....\n");
+											   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Aggiornato tabella tokens....\n");
 											   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction ".crypt::Encrypt($tokens->id_token)." updated.");
 
 											   //salva la notifica
@@ -323,7 +323,7 @@ class BlockchainController extends Controller
 											   // $save->Notification($notification);
 										   }
 									   }else{
-										   fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address non è to_address e quindi non faccio nulla....\n");
+										   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address non è to_address e quindi non faccio nulla....\n");
 									   } // notifica al ricevente
 								   } // tabella tokens found
 
@@ -341,7 +341,7 @@ class BlockchainController extends Controller
 			   break;
 		   }
 	   }
-	   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
+	   // // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
 
 	   if (!(empty($this->getTransactionsFound()))){
 		   // restituisco le transazioni

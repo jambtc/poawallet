@@ -356,7 +356,7 @@ self.addEventListener('sync', function(event) {
 	 				.then(function(json) {
 						console.log('[Service worker] Risposta di send/validateTransaction',json);
 						writeData('np-send-erc20', json);
-						
+
 				 	})
  					.catch(function(err){
  						console.log('[Service worker] Error while checking send-erc20 data', err);
@@ -369,56 +369,56 @@ self.addEventListener('sync', function(event) {
  	}
 
 	// SINCRONIZZAZIONE BLOCKCHAIN
-	if (event.tag === 'sync-blockchain') {
-		console.log('[Service worker] Evento sincronizzazione della blockchain trovato!');
- 		event.waitUntil(
- 			readAllData(event.tag)
- 			.then(function(data) {
- 				for (var dt of data) {
-					console.log('[Service worker] fetching sync-blockchain',dt);
-					var postData = new FormData();
-						postData.append('chainBlocknumber', dt.chainBlocknumber);
-						postData.append('walletBlocknumber', dt.walletBlocknumber);
-						postData.append('search_address', dt.search_address);
-	 				fetch(dt.url, {
-	 					method: 'POST',
-	 					body: postData,
-	 				})
-	 				.then(function(response) {
-	 					return response.json();
-	 				})
-	 				.then(function(json) {
-						if (json.success){
-							console.log('[Service worker] Risposta da url: '+dt.url,json);
-							const title = json.transactions[0].title;
-							const options = {
-								body: json.transactions[0].message,
-								icon: 'src/images/icons/app-icon-96x96.png',
-								vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-								badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-								tag: 'confirm-notification', //tag univoco per le notifiche.
-								renotify: true, //connseeo a tag. se è true notifica di nuovo
-								data: {
-								   openUrl: json.transactions[0].url,
-								},
-								actions: [
-									{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
-									{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
-								],
-							};
-						  	self.registration.showNotification(title, options);
-							writeData('sync-blockchain', json);
-						}
- 				 	})
- 					.catch(function(err){
- 						console.log('[Service worker] Error while checking blockchain data', err);
- 					})
- 				}
- 				//per sicurezza cancello tutto da indexedDB
- 				clearAllData(event.tag);
- 			 })
- 		 );
- 	}
+	// if (event.tag === 'sync-blockchain') {
+	// 	console.log('[Service worker] Evento sincronizzazione della blockchain trovato!');
+ 	// 	event.waitUntil(
+ 	// 		readAllData(event.tag)
+ 	// 		.then(function(data) {
+ 	// 			for (var dt of data) {
+	// 				console.log('[Service worker] fetching sync-blockchain',dt);
+	// 				var postData = new FormData();
+	// 					postData.append('chainBlocknumber', dt.chainBlocknumber);
+	// 					postData.append('walletBlocknumber', dt.walletBlocknumber);
+	// 					postData.append('search_address', dt.search_address);
+	//  				fetch(dt.url, {
+	//  					method: 'POST',
+	//  					body: postData,
+	//  				})
+	//  				.then(function(response) {
+	//  					return response.json();
+	//  				})
+	//  				.then(function(json) {
+	// 					if (json.success){
+	// 						console.log('[Service worker] Risposta da url: '+dt.url,json);
+	// 						const title = json.transactions[0].title;
+	// 						const options = {
+	// 							body: json.transactions[0].message,
+	// 							icon: 'src/images/icons/app-icon-96x96.png',
+	// 							vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
+	// 							badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
+	// 							tag: 'confirm-notification', //tag univoco per le notifiche.
+	// 							renotify: true, //connseeo a tag. se è true notifica di nuovo
+	// 							data: {
+	// 							   openUrl: json.transactions[0].url,
+	// 							},
+	// 							actions: [
+	// 								{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
+	// 								{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
+	// 							],
+	// 						};
+	// 					  	self.registration.showNotification(title, options);
+	// 						writeData('sync-blockchain', json);
+	// 					}
+ 	// 			 	})
+ 	// 				.catch(function(err){
+ 	// 					console.log('[Service worker] Error while checking blockchain data', err);
+ 	// 				})
+ 	// 			}
+ 	// 			//per sicurezza cancello tutto da indexedDB
+ 	// 			clearAllData(event.tag);
+ 	// 		 })
+ 	// 	 );
+ 	// }
 
 });
 
