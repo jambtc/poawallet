@@ -47,11 +47,11 @@ var dbPromise = idb.open('fidpay', 1, function(db) {
 
 
 	//store per sincronizzazzione blockchain
-	if (!db.objectStoreNames.contains('sync-blockchain'))
-		db.createObjectStore('sync-blockchain', {keyPath: 'id'});
-
-	if (!db.objectStoreNames.contains('np-transactions'))
-		db.createObjectStore('np-transactions', {keyPath: 'id'});
+	// if (!db.objectStoreNames.contains('sync-blockchain'))
+	// 	db.createObjectStore('sync-blockchain', {keyPath: 'id'});
+	//
+	// if (!db.objectStoreNames.contains('np-transactions'))
+	// 	db.createObjectStore('np-transactions', {keyPath: 'id'});
 
 	//store per il salvataggio della sottoscrizione push
 	// if (!db.objectStoreNames.contains('subscriptions')) {

@@ -89,27 +89,6 @@ $(function () {
 
 
 
-                // }else{
-                //     // if (!ret[0].value){
-                //         setTimeout(function(){
-                //             console.log('[Pin] ricarica...');
-                //             pincode.check(data);
-                //         }, 5000);
-                    // } else {
-                        // console.log('[Pin] in attesa di evento su numpad');
-                        // if (differenza <= 0 && ret[0].value != true){
-                        //     console.log('[Pin] Se nel frattempo il tempo scade, allora lock richiesta');
-                        //     writeData('isPinRequest', {'id':1,'value': true, 'locked': true} )
-                        // }
-                        // setTimeout(function(){
-                        //     console.log('[Pin] ricarica 2...');
-                        //     pincode.check(data);
-                        // }, 5000);
-
-                    // }
-                // }
-
-
             })
 
     	},

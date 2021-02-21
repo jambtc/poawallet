@@ -23,7 +23,7 @@ class NotificationsAsset extends AssetBundle
         // 'css/site.css',
     ];
     public $js = [
-        'js/notifications.js'
+        'js/notifications-MainWorker.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

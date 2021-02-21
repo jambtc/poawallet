@@ -109,11 +109,11 @@ $wallet_restore = <<<JS
                                 $('.pay-submit').hide();
                                 $('.hide-text').hide();
                                 $('.transaction-details').show();
-        						$('.transaction-details').after(yiiOptions.htmlTransactionBody);
+        						$('.transaction-details').html(yiiOptions.htmlTransactionBody);
         					},
             				success:function(data){
             					console.log('[send]: data from generate-transaction controller',data);
-                                $('.generating').parent().removeClass('alert-warning');
+                                $('.generating').parent().removeClass('alert alert-warning');
                                 $('.generating').html(data.row);
                                 $('.pay-close').show();
 

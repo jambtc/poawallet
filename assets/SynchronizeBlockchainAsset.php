@@ -26,7 +26,7 @@ class SynchronizeBlockchainAsset extends AssetBundle
         // 'css/site.css',
     ];
     public $js = [
-        'js/synchronize-blockchain.js'
+        'js/synchBC-MainWorker.js'
     ];
 
     // public $jsOptions = [

@@ -32,7 +32,7 @@ $sendTokenForm->from = $fromAddress;
 
 <div class="dash-balance">
 	<div class="dash-content relative">
-		<h3 class="w-text"><?= Yii::t('lang','Sell') ?></h3>
+		<h3 class="w-text"><?= Yii::t('lang','Send token') ?></h3>
 
 	</div>
 </div>
@@ -171,16 +171,9 @@ $sendTokenForm->from = $fromAddress;
                         </div>
 
     				<div class="transaction-details list-unstyled " style="display: none;">
-
-
-
-
-
-
-
     				</div>
     				<div><a href="#" class="more-btn mb-10 pay-submit"><?= Yii::t('lang','Confirm') ?></a></div>
-                    <div style="display: none;" class="pay-close float-right"><a  href="<?= Url::to(['/wallet/index'])?> " />
+                    <div style="display: none;" class="mt-3 pay-close float-right"><a  href="<?= Url::to(['/wallet/index'])?> " />
                         <button type="button" class="btn button circle block green"><?= Yii::t('lang','Close') ?></button>
                         </a>
                     </div>
