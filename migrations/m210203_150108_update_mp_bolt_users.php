@@ -12,12 +12,25 @@ class m210203_150108_update_mp_bolt_users extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('mp_users', 'first_name', $this->string(255)->after('accessToken'));
-        $this->addColumn('mp_users', 'last_name', $this->string(255)->after('accessToken'));
-        $this->addColumn('mp_users', 'email', $this->string(255)->after('accessToken'));
-        $this->addColumn('mp_users', 'picture', $this->string(255)->after('accessToken'));
-        $this->addColumn('mp_users', 'provider', $this->string(20)->after('accessToken'));
-        $this->addColumn('mp_users', 'facade', $this->string(20)->after('accessToken'));
+        $this->createTable('mp_users', [
+            'id' => $this->primaryKey(),
+            'username' => $this->string(255)->notNull(),
+            'password' => $this->string(255)->notNull(),
+            'ga_secret_key' => $this->string(16)->defaultValue(NULL),
+            'activation_code' => $this->string(50)->defaultValue(NULL),
+            'status_activation_code' => $this->integer(11)->defaultValue(0),
+            'oauth_provider' => $this->string(8),
+            'oauth_uid' => $this->string(100),
+            'authKey' => $this->string(255)->defaultValue(NULL),
+            'accessToken' => $this->string(255)->defaultValue(NULL),
+            'first_name' => $this->string(255)->defaultValue(NULL),
+            'last_name' => $this->string(255)->defaultValue(NULL),
+            'email' => $this->string(255)->defaultValue(NULL),
+            'picture' => $this->string(255)->defaultValue(NULL),
+            'provider' => $this->string(20)->defaultValue(NULL),
+            'facade' => $this->string(20)->defaultValue(NULL),
+
+        ]);
 
     }
 
@@ -26,9 +39,9 @@ class m210203_150108_update_mp_bolt_users extends Migration
      */
     public function safeDown()
     {
-        echo "m210203_150108_update_mp_bolt_users cannot be reverted.\n";
+        $this->dropTable('mp_users');
 
-        return false;
+        // return false;
     }
 
     /*
