@@ -2,6 +2,8 @@
 
 namespace app\models\query;
 
+use Yii;
+
 /**
  * This is the ActiveQuery class for [[BoltWallets]].
  *
