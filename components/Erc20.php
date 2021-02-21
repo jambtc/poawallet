@@ -185,7 +185,7 @@ class Erc20 extends Component
 			// exit;
 			if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-				$value = $utils->fromWei($result[0]->value, 'ether');
+				$value = $utils->fromWei((string)$result[0]->value, 'ether');
 				$Value0 = (string) $value[0]->value;
 				$Value1 = (float) $value[1]->value / pow(10, $this->getDecimals());
 
