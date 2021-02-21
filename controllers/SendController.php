@@ -106,6 +106,12 @@ class SendController extends Controller
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
  		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+		if (null === $fromAddress){
+			$session = Yii::$app->session;
+			$string = Yii::$app->security->generateRandomString(32);
+			$session->set('token-wizard', $string );
+			$this->redirect(['wallet/wizard','token' => $string]);
+		}
 
 		$formModel = new SendTokenForm; //form di input dei dati
 

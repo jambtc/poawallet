@@ -46,11 +46,11 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
  		$wallet = $this->andWhere(['id_user'=>$id])->one();
 
 		if (null === $wallet){
-			$session = Yii::$app->session;
-			$string = Yii::$app->security->generateRandomString(32);
-			$session->set('token-wizard', $string );
+			// $session = Yii::$app->session;
+			// $string = Yii::$app->security->generateRandomString(32);
+			// $session->set('token-wizard', $string );
 
-			$this->redirect(['wallet/wizard','token' => $string]);
+			return null; //$this->redirect(['wallet/wizard','token' => $string]);
 		} else {
 			return $wallet->wallet_address;
 		}

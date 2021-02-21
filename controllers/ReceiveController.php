@@ -78,6 +78,12 @@ class ReceiveController extends Controller
 	public function actionIndex()
  	{
 		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+		if (null === $fromAddress){
+			$session = Yii::$app->session;
+			$string = Yii::$app->security->generateRandomString(32);
+			$session->set('token-wizard', $string );
+			$this->redirect(['wallet/wizard','token' => $string]);
+		}
 
  		return $this->render('index', [
  			'fromAddress' => $fromAddress,
