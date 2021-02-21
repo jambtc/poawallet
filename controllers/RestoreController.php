@@ -31,13 +31,13 @@ class RestoreController extends Controller
 	public function beforeAction($action)
 	{
     	$this->enableCsrfValidation = false;
-		$session = Yii::$app->session;
-		$token = $session->get('token-restore');
-		if ($token === null || $token != $_GET['token'] ) {
-			Yii::$app->response->statusCode = 403;
-			return false;
-		}
-		$session->remove('token-restore');
+		// $session = Yii::$app->session;
+		// $token = $session->get('token-restore');
+		// if ($token === null || $token != $_GET['token'] ) {
+		// 	Yii::$app->response->statusCode = 403;
+		// 	return false;
+		// }
+		// $session->remove('token-restore');
 
     	return parent::beforeAction($action);
 	}
