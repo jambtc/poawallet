@@ -1,3 +1,10 @@
+/* ::-webkit-scrollbar {
+    width: 0px;
+}
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+} */
+
 html,
 body {
     height: 100%;

@@ -75,7 +75,7 @@ $(document).ready(function(){
 
 
 $(".wrapper-inline").on("scroll", function(e) {
-	if (this.scrollTop > 150) {
+	if (this.scrollTop > 50) {
 		$('header.no-background').addClass("set-bg");
 	} else {
 		$('header.no-background').removeClass("set-bg");
