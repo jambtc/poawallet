@@ -110,9 +110,11 @@ class WebApp extends Component
         if ($data->from_address == $fromAddress){
           $price = '- '.$data->token_price;
           $color = 'red';
+          $addressToShow = $data->to_address;
         } else {
           $price = $data->token_price;
           $color = 'green';
+          $addressToShow = $data->from_address;
         }
         $coinImg = ($data->type == 'token') ? 'coin5' : 'coin2';
 
@@ -129,7 +131,7 @@ class WebApp extends Component
                                   <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
                               </div>
                               <div class="transaction-card-body ml-1">
-                                  <h6 class="card-title pt-2">'.$data->id_token." ".substr($data->to_address,0,21).'...</h6>
+                                  <h6 class="card-title pt-2"><small>'.$data->id_token."</small> ".substr($addressToShow,0,21).'...</h6>
                                   <p class="card-text">
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
