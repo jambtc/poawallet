@@ -110,7 +110,7 @@ class SendController extends Controller
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
-			$this->redirect(['wizard/index','token' => $string]);
+			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
 		$formModel = new SendTokenForm; //form di input dei dati
@@ -253,7 +253,7 @@ class SendController extends Controller
 	// funzione invocata dal sw
 
 	// testing::
-	// curl -X POST -d 'id=S2hNeTVGQTkzWis0ekN3RDV3RVRmdz09' http://localhost/fidpay/web/index.php?r=wallet%2Fvalidate-transaction
+	// curl -X POST -d 'id=S2hNeTVGQTkzWis0ekN3RDV3RVRmdz09' http://localhost/megapay/web/index.php?r=wallet%2Fvalidate-transaction
 	public function actionValidateTransaction()
 	{
 		set_time_limit(0); //imposto il time limit unlimited

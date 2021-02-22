@@ -15,10 +15,16 @@ use yii\helpers\Url;
     <p class="lead">
         <?php echo Yii::t('lang','Remember to make a backup of your digital wallet. This is an important step in securing your asset.');?>
     </p>
-
-    <button type="button" id="stepwizard_step2_prev" class="btn btn-warning btn-lg prev-step">Previous</button>
-
-    <button type="button" id="stepwizard_step2_next" class="btn btn-primary btn-lg next-step float-right">Next</button>
-
-
+    <div class="form-divider"></div>
+    <div class="container">
+      <div class="float-left">
+        <button type="button" id="stepwizard_step2_prev" class="btn btn-warning btn-md prev-step">
+          <i class="fa fa-backward"></i> <?php echo Yii::t('lang','Previous');?></button>
+      </div>
+      <div class="float-right">
+        <button type="button" id="stepwizard_step2_next" class="btn btn-primary btn-md next-step">
+          <i class="fa fa-forward"></i><?php echo Yii::t('lang','Next');?>
+        </button>
+      </div>
+    </div>
 </div>

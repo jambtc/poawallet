@@ -1,6 +1,6 @@
 {
-  "name": "FidPay Wallet",
-  "short_name": "FidPay",
+  "name": "MegaPay Wallet",
+  "short_name": "MegaPay",
   "icons": [
     {
       "src": "src/images/icons/app-icon-48x48.png",

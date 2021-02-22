@@ -166,7 +166,7 @@ class Push extends Component
                 if ($app == 'wallet')
                     $return = 'Wallet';
                 else
-                    $return = 'FidPay';
+                    $return = 'MegaPay';
 
                 break;
 

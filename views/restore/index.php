@@ -25,40 +25,44 @@ include ('restore_js.php');
 
 <div class="wallet-generate">
 	<div class="body-content">
-		<div class="card bg-transparent no-border">
+		<div class="card bg-primary no-b order">
 			<div class="card-header">
-				<h2><?php echo Yii::t('lang','Setup');?></h2>
+				<h3 class="text-warning"><?php echo Yii::t('lang','Restore your seed');?></h3>
 			</div>
 		  <div class="card-body bg-primary">
 		      <div class="form-group">
-				  <h3 class="text-light"><?php echo Yii::t('lang','Restore');?></h3>
-  					<p class="text-light"><?php echo Yii::t('lang','Insert your seed to restore the wallet.');?></p>
+
+  				<p class="text-light"><?php echo Yii::t('lang','Insert your seed to restore the wallet.');?></p>
 		      </div>
 
 		      <div class="form-group">
 		          <?= $form->field($formModel, 'seed')->textarea([
-		              'rows' => 6, 'cols' => 50]) ?>
+		              'rows' => 6, 'cols' => 50,
+									'style'=>"font-weight:bold; font-size:larger;"]) ?>
 				  <div class="invalid-feedback alert-danger" id="seed-error" ></div>
 		      </div>
 
 			  <?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
 
 		  </div>
-		  <div class="card-footer">
-  				<button type="button" class="btn btn-secondary btn-lg" >
+
+	    <div class="container">
+	      <div class="float-left">
+					<button type="button" class="btn btn-secondary btn-md" >
   					<i class="fa fa-backward"></i> <?php echo Yii::t('lang','back');?>
   				</button>
-
-		      <?= Html::Button('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','confirm'), [
-		            'class' => 'btn btn-primary btn-lg float-right seed-submit',
+	      </div>
+	      <div class="float-right">
+					<?= Html::Button('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','Confirm'), [
+		            'class' => 'btn btn-success btn-md seed-submit',
 		            //'data-method' => 'post',
 		            // 'data-pjax' => 1
 		            // 'data-confirm' => 'Are you sure?'
 		        ]);
 		      ?>
-		  </div>
-
-
+	      </div>
+	    </div>
+			<div class="form-divider"></div>
 		</div>
 	</div>
 </div>

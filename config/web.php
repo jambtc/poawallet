@@ -4,8 +4,8 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
-    'id' => 'FidPay Wallet',
-    'name' => 'FidPay',
+    'id' => 'MegaPay Wallet',
+    'name' => 'MegaPay',
     'language' => 'it-IT', // Specifies which language the application is targeted to
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -51,7 +51,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\BoltLogin',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => false, // non si logga in automatico?
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -74,12 +74,14 @@ $config = [
         ],
         'db' => $db,
 
-        // this component manage the url creation
+        //this component manage the url creation
         // 'urlManager' => [
         //     'enablePrettyUrl' => true,
         //     'showScriptName' => false,
-        //     'rules' => [
-        //     ],
+        //     // 'rules' => [
+        //     //
+        //     //
+        //     // ],
         // ],
 
         // this component add timestamp to downloaded css or javascript

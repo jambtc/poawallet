@@ -46,7 +46,7 @@ class TokensController extends Controller
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
-			$this->redirect(['wizard/index','token' => $string]);
+			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
         $searchModel = new BoltTokensSearch();

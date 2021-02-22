@@ -7,6 +7,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
+use \yii\web\Cookie;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
@@ -64,6 +65,17 @@ class SiteController extends Controller
         ];
     }
 
+    private static function setCookieForGoogleLogout()
+    {
+      // $cookie = new Cookie([
+      //     'name' => 'G_AUTHUSER_LOGOUT',
+      //     'value' => 'AVOID',
+      //     'expire' => time() + 86400 * 365,
+      // ]);
+      // \Yii::$app->getResponse()->getCookies()->add($cookie);
+      setcookie('G_AUTHUSER_LOGOUT','AVOID');
+    }
+
     /**
      * Displays homepage.
      *
@@ -76,6 +88,10 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->redirect(['wallet/index']);
         }
+
+        $this->setCookieForGoogleLogout();
+
+
         return $this->render('index');
     }
 
@@ -98,6 +114,8 @@ class SiteController extends Controller
             return $this->goBack();
         }
 
+        $this->setCookieForGoogleLogout();
+
         $model->password = '';
         return $this->render('login', [
             'model' => $model,
@@ -111,8 +129,13 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        Yii::$app->user->logout();
+        // setcookie('tg_user', '');
+        // setcookie('stel_ssid', '');
+        // setcookie('stel_token', '');
+        // setcookie('G_AUTHUSER_LOGOUT','TRUE');
+        $this->setCookieForGoogleLogout();
 
+        Yii::$app->user->logout();
         return $this->goHome();
     }
 

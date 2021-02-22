@@ -15,15 +15,21 @@ use yii\helpers\Url;
         echo Yii::t('lang','So, 12 words will be chosen that uniquely identify your wallet. The merit is of cryptography, in particular of the hierarchical deterministic concept, which, thanks to the use of some mathematical functions, allows users, starting from the seed, to recover everything.');
         ?>
     </p>
-    <a href="<?php echo Url::to(['/site/logout']); ?>" data-method="post">
-        <button class="btn btn-warning btn-lg">
-            <i class="fas fa-sign-out-alt"></i> <?php echo Yii::t('lang','Logout');?></button>
-    </a>
 
-    <div class="float-right">
-        <button type="button" id="stepwizard_step1_next" class="btn btn-primary btn-lg mt-2 next-step" style="font-size: initial;">
-            <i class="fa fa-forward"></i> <?php echo Yii::t('lang','Start');?>
+    <div class="form-divider"></div>
+    <div class="container">
+      <div class="float-left">
+        <a href="<?php echo Url::to(['/site/logout']); ?>" data-method="post">
+            <button class="btn btn-warning btn-md">
+                <i class="fas fa-sign-out-alt"></i> <?php echo Yii::t('lang','Logout');?></button>
+        </a>
+      </div>
+      <div class="float-right">
+        <button type="button" id="stepwizard_step1_next" class="btn btn-primary btn-md next-step" >
+          <i class="fa fa-forward"></i> <?php echo Yii::t('lang','Start');?>
         </button>
+      </div>
     </div>
+
 
 </div>

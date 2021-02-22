@@ -53,7 +53,7 @@ $settings = Settings::load();
                 <div class="form-group">
                     <center>
                         <?php
-                      $loginGoogle = new jambtc\oauthgoogle\google($checkGoogleAuthorization);
+                      	$loginGoogle = new jambtc\oauthgoogle\google($checkGoogleAuthorization);
                         echo $loginGoogle->loginButton();
                         ?>
                     </center>

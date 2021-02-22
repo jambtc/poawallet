@@ -46,7 +46,7 @@ class SendTokenForm extends Model
             // to is validated by isValidAddress()
             [['to'], 'isValidAddress'],
 
-            // to is validated by isValidAddress()
+            // to is validated by validateAmount()
             [['amount'], 'validateAmount'],
 
         ];

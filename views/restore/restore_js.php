@@ -34,7 +34,7 @@ $wallet_restore = <<<JS
 		event.preventDefault();
 		event.stopPropagation();
 
-		seed = $('#wizardwalletform-seed').val();
+		seed = $.trim($('#wizardwalletform-seed').val());
 		if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
 			console.log('[Restore]: seed non valido', seed);
 			$('#seed-error').show().text(yiiOptions.invalidSeedMEssage);

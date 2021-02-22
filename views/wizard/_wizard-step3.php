@@ -16,17 +16,20 @@ $session->set('token-restore', $string );
     <p class="lead">
         <?php echo Yii::t('lang','If you want to generate a new digital wallet, click on the <i><b>"New"</b> </i> button and follow the recommended instructions.');?>
     </p>
+    <div class="form-divider"></div>
 
-    <button type="button" id="stepwizard_step3_prev" class="btn btn-warning btn-lg prev-step">Previous</button>
+    <button type="button" id="stepwizard_step3_prev" class="btn btn-warning btn-md prev-step">
+    <i class="fa fa-backward"></i> <?php echo Yii::t('lang','Previous');?>
+    </button>
 
     <div class="float-right">
         <a href="<?php echo Url::to(['/restore/index','token' => $string]) ?>" />
-            <button type="button"  class="btn btn-primary btn-lg " >
-                <i class="fas fa-repeat"></i> <?php echo Yii::t('lang','Restore');?>
+            <button type="button"  class="btn btn-primary btn-md " >
+                <i class="glyphicon glyphicon-repeat"></i> <?php echo Yii::t('lang','Restore');?>
             </button>
         </a>
         <a href="<?php echo Url::to(['/new/index']) ?>" />
-            <button type="button"  class="btn btn-primary btn-lg" >
+            <button type="button"  class="btn btn-primary btn-md" >
                 <i class="fas fa-key"></i> <?php echo Yii::t('lang','New');?>
             </button>
         </a>

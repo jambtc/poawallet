@@ -233,9 +233,9 @@ class Messages extends Component
             case 'token':
             case 'contact':
                 if ($app == 'wallet')
-                    $return = 'FidPay';
+                    $return = 'MegaPay';
                 else
-                    $return = 'FidPay';
+                    $return = 'MegaPay';
 
                 break;
 

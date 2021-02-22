@@ -30,7 +30,7 @@ class RestoreController extends Controller
 
 	public function beforeAction($action)
 	{
-    	$this->enableCsrfValidation = false;
+    $this->enableCsrfValidation = false;
 		// $session = Yii::$app->session;
 		// $token = $session->get('token-restore');
 		// if ($token === null || $token != $_GET['token'] ) {
@@ -39,7 +39,7 @@ class RestoreController extends Controller
 		// }
 		// $session->remove('token-restore');
 
-    	return parent::beforeAction($action);
+    return parent::beforeAction($action);
 	}
 
 
@@ -107,9 +107,12 @@ class RestoreController extends Controller
 		}
 
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella.
+			// quindi ne salvo uno nuovo...
+
 			// salvo l'indirizzo in tabella
 			$boltWallet = new BoltWallets;
-			$boltWallet->id_user = Yii::$app->user->identity->id;
+			$boltWallet->id_user = Yii::$app->user->id;
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 			$boltWallet->blocknumber = '0x0';
 
@@ -125,16 +128,6 @@ class RestoreController extends Controller
 			'formModel' => $formModel,
 		]);
  	}
-
-	private static function json ($data)
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
-		return $data;
-	}
-
-
-
-
 
 
 

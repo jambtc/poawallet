@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\base\Model;
 use yii\db\ActiveRecord;
 use app\models\BoltUsers;
@@ -18,18 +19,27 @@ use jambtc\oauthgoogle;
 
 class OauthgoogleController extends Controller
 {
-	public function actionResetCookies()
+	public function actionResetCookie()
 	{
 		setcookie('G_AUTHUSER_LOGOUT','');
 	}
 
 	public function actionCheckAuthorization()
   {
-		if (isset($_COOKIE['G_AUTHUSER_LOGOUT']) && $_COOKIE['G_AUTHUSER_LOGOUT'] == 'TRUE'){
-			setcookie('G_AUTHUSER_LOGOUT','');
+		if (isset($_COOKIE['G_AUTHUSER_LOGOUT']) && $_COOKIE['G_AUTHUSER_LOGOUT'] == 'AVOID'){
 			$auth_data['success'] = false;
-			echo Json::encode($auth_data);
-			exit(1);
+			$auth_data['message'] = 'Google authorization blocked from cookies';
+
+			// $cookie = new Cookie([
+			//     'name' => 'G_AUTHUSER_LOGOUT',
+			//     'value' => '',
+			//     'expire' => time(),
+			// ]);
+			// \Yii::$app->getResponse()->getCookies()->add($cookie);
+
+			setcookie('G_AUTHUSER_LOGOUT','');
+			return Json::encode($auth_data);
+			// exit(1);
 		}
 
 		$login = new \jambtc\oauthgoogle\google(false);
