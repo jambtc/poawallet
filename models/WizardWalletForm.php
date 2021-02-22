@@ -8,16 +8,6 @@ use Web3\Web3;
 use yii\web\Controller;
 use yii\validators\Validator;
 
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-
-
-// echo "<pre>".print_r(Yii::$classMap,true)."</pre>";
-// exit;
-//
-// use external\webapp;
-
-
-
 
 /**
  * SendTokenForm is the model behind the send token form.

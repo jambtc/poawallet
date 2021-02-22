@@ -13,7 +13,6 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-// use app\models\Notifications;
 use app\models\BoltWallets;
 use app\models\BoltTokens;
 
@@ -25,16 +24,6 @@ use yii\helpers\Html;
 use app\components\Settings;
 use app\components\WebApp;
 use app\components\Messages;
-
-
-
-// use Web3\Web3;
-// use Web3\Contract;
-
-
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-
 
 class BlockchainController extends Controller
 {

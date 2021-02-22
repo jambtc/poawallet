@@ -11,17 +11,6 @@ use yii\validators\Validator;
 use app\components\WebApp;
 use app\components\Settings;
 
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-
-
-// echo "<pre>".print_r(Yii::$classMap,true)."</pre>";
-// exit;
-//
-// use external\webapp;
-
-
-
 
 /**
  * SendTokenForm is the model behind the send token form.

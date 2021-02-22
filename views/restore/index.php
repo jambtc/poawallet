@@ -22,7 +22,7 @@ $form = ActiveForm::begin([
 
 ]);
 
-include ('restore_js.php');
+include ('_js.php');
 
 
 ?>

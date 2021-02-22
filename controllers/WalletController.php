@@ -17,21 +17,11 @@ use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
 use app\models\BoltWallets;
 use app\models\BoltSocialusers;
-// use app\models\SendTokenForm;
-// use app\models\WizardWalletForm;
-// use app\models\PushSubscriptions;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
-// use Web3\Web3;
-// use Web3\Contract;
-// use Web3p\EthereumTx\Transaction;
-// use Nullix\CryptoJsAes\CryptoJsAes;
-
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 use app\components\WebApp;
 
 class WalletController extends Controller
