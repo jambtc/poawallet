@@ -112,6 +112,7 @@ class RestoreController extends Controller
 
 			$boltWallet = BoltWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
 
+
 			if(null === $boltWallet) {
 			  //doesn't exist so create record
 				$boltWallet = new BoltWallets;
