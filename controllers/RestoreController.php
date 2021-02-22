@@ -110,9 +110,9 @@ class RestoreController extends Controller
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella.
 			// quindi ne salvo uno nuovo...
 
-			$exists = BoltWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
+			$boltWallet = BoltWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
 
-			if(!$exists) {
+			if(!$boltWallet) {
 			  //doesn't exist so create record
 				$boltWallet = new BoltWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
