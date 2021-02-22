@@ -133,11 +133,13 @@ class BlockchainController extends Controller
 		$settings = Settings::load();
 
 		// numero massimo di blocchi da scansionare
-		// if (isset($settings->maxBlocksToScan))
-		// 	$this->setMaxBlocksToScan($settings->maxBlocksToScan);
+		if (isset($settings->maxBlocksToScan))
+			$this->setMaxBlocksToScan($settings->maxBlocksToScan);
 
+
+		$maxBlockToScan = $this->getMaxBlocksToScan();
 		// Inizio il ciclo sui blocchi
-		for ($x=0; $x<$this->getMaxBlocksToScan();$x++)
+		for ($x=0; $x < $maxBlockToScan;$x++)
 		{
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
 				//somma del valore del blocco in decimali
