@@ -3,6 +3,10 @@ use yii\helpers\Url;
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Html;
 
+$session = Yii::$app->session;
+$string = Yii::$app->security->generateRandomString(32);
+$session->set('token-wizard', $string );
+
 
 $this->title = Yii::$app->id;
 
@@ -48,9 +52,11 @@ include ('restore_js.php');
 
 	    <div class="container">
 	      <div class="float-left">
+					<a href="<?php echo Url::to(['/wizard/index','token' => $string]) ?>" />
 					<button type="button" class="btn btn-secondary btn-md" >
   					<i class="fa fa-backward"></i> <?php echo Yii::t('lang','back');?>
   				</button>
+				</a>
 	      </div>
 	      <div class="float-right">
 					<?= Html::Button('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','Confirm'), [
