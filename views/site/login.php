@@ -64,13 +64,18 @@ $this->registerJs(
             'id' => 'login-form',
             'layout' => 'horizontal',
             'fieldConfig' => [
-                'template' => "{label}\n<div class=\"col-lg-12\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
+                'template' => "{label}\n<div class=\"col-lg-12\">{input}</div>\n<div class=\"col-lg-12\">{error}</div>",
                 'labelOptions' => ['class' => 'col-lg-1 control-label'],
             ],
         ]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'username')->textInput(['autofocus' => false, 'autocomplete'=>"off"]) ?>
+        <?= $form->field($model, 'password')->passwordInput(['autocomplete'=>"new-password"]) ?>
+
+        <div class="form-mini-divider"></div>
+        <div class="txt-left">
+            <?= $form->errorSummary($model, ['id' => 'error-summary','class'=>'col-lg-12']) ?>
+        </div>
 
         <div class="form-group row">
             <div class="col-lg-offset-1 col-lg-11">
