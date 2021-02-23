@@ -4,7 +4,9 @@ use yii\helpers\Url;
 use yii\web\View;
 
 $options = [
-    'invalidSeedMEssage' => Yii::t('lang','Invalid seed!'),
+    'invalidSeedMessage' => Yii::t('lang','Invalid seed!'),
+    'invalidSeed12Word' => Yii::t('lang','Seed hasn\'t 12 words! Words inserted are: '),
+    'validSeedMessage' => Yii::t('lang','Seed is correct!'),
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'cryptURL' => Url::to(['/wallet/crypt']),
@@ -25,10 +27,30 @@ $wallet_restore = <<<JS
 
     var wizardForm = document.querySelector('#wizard-form');
     var submitButton = document.querySelector('.seed-submit');
+    var seedField = document.querySelector('#wizardwalletform-seed');
 
     // evita di copiare e incollare il seed
     $('.no-copypaste').bind('copy paste cut drag drop', function (e) {
       e.preventDefault();
+    });
+
+    seedField.addEventListener('input', function(e) {
+        var insertedSeed = $.trim(e.target.value);
+        console.log('[verify]:', insertedSeed);
+        if (WordCount(insertedSeed) != 12 ){
+          $('#seed-error').show().text(yiiOptions.invalidSeed12Word+WordCount(insertedSeed) );
+          return;
+        }
+
+        if (!(isSeedValid(insertedSeed)) ){
+          $('#seed-error').show().text(yiiOptions.invalidSeedMessage);
+          return;
+        }
+        $('#seed-error').removeClass('alert-danger');
+        $('#seed-error').addClass('alert-success');
+        $('#seed-error').show().text(yiiOptions.validSeedMessage);
+        $('#seed-submit').prop('disabled', false);
+        $('#seed-submit').removeClass('disabled');
     });
 
     submitButton.addEventListener('click', function(event){

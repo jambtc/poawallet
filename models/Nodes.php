@@ -51,6 +51,6 @@ class Nodes extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new NodesQuery(get_called_class());
+        return new \app\models\query\NodesQuery(get_called_class());
     }
 }

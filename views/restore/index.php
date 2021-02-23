@@ -44,7 +44,7 @@ include ('_js.php');
 		              'rows' => 6, 'cols' => 50,
 									'class' => 'no-copypaste form-control',
 									'style'=>"font-weight:bold; font-size:larger;"]) ?>
-				  <div class="invalid-feedback alert-danger" id="seed-error" ></div>
+				  <div class="invalid-feedback alert alert-danger" id="seed-error" ></div>
 		      </div>
 
 			  <?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
