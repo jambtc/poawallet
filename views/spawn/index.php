@@ -39,7 +39,7 @@ include ('_js.php');
 		      </div>
 
 		      <div class="form-group alert alert-light">
-				  <p id='seedText' style="font-weight: bold;  font-size:larger;"></p>
+				  <p class="no-copypaste" id='seedText' style="font-weight: bold;  font-size:larger;"></p>
 		      </div>
 			   <div class="form-group alert alert-warning">
 				  <?php
@@ -83,6 +83,7 @@ include ('_js.php');
 					      <div class="form-group">
 					          <?= $form->field($formModel, 'seed')->textarea([
 					              'rows' => 6, 'cols' => 50,
+												'class' => 'no-copypaste form-control',
 												'style'=>"font-weight:bold; font-size:larger;"]) ?>
 							  <div class="invalid-feedback alert alert-danger" id="seed-error" ></div>
 					      </div>

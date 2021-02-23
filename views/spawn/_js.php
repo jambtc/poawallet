@@ -27,13 +27,20 @@ $(function () {
     'use strict';
 
     var seed = null;
-	var lw = lightwallet;
+    var lw = lightwallet;
 
     var wizardForm = document.querySelector('#wizard-form');
     var submitButton = document.querySelector('.seed-submit');
     var backButton = document.querySelector('.btn-back');
-
     var seedField = document.querySelector('#wizardwalletform-seed');
+
+
+    // evita di copiare e incollare il seed
+    $('.no-copypaste').bind('copy paste cut drag drop', function (e) {
+      e.preventDefault();
+    });
+
+
     seedField.addEventListener('input', function(e) {
         var insertedSeed = $.trim(e.target.value);
         console.log('[verify]:', insertedSeed);

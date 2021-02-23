@@ -26,24 +26,29 @@ $wallet_restore = <<<JS
     var wizardForm = document.querySelector('#wizard-form');
     var submitButton = document.querySelector('.seed-submit');
 
+    // evita di copiare e incollare il seed
+    $('.no-copypaste').bind('copy paste cut drag drop', function (e) {
+      e.preventDefault();
+    });
+
     submitButton.addEventListener('click', function(event){
-		event.preventDefault();
-		event.stopPropagation();
+  		event.preventDefault();
+  		event.stopPropagation();
 
-		seed = $.trim($('#wizardwalletform-seed').val());
-		if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
-			console.log('[Restore]: seed non valido', seed);
-			$('#seed-error').show().text(yiiOptions.invalidSeedMEssage);
-			return;
-		}
-		$('#seed-error').hide().text('');
+  		seed = $.trim($('#wizardwalletform-seed').val());
+  		if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
+  			console.log('[Restore]: seed non valido', seed);
+  			$('#seed-error').show().text(yiiOptions.invalidSeedMEssage);
+  			return;
+  		}
+  		$('#seed-error').hide().text('');
 
-		// la password viene generata in automatico dal sistema di 32 caratteri
-		var password = generateEntropy(64);
+  		// la password viene generata in automatico dal sistema di 32 caratteri
+  		var password = generateEntropy(64);
 
-		console.log('[Restore]: seed valido', seed);
-		initializeVault(password,seed);
-	});
+  		console.log('[Restore]: seed valido', seed);
+  		initializeVault(password,seed);
+  	});
 
 	// verifica la validità di un seed
 	function isSeedValid(seed){

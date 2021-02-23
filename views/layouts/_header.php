@@ -1,7 +1,7 @@
 <header class="no-background">
 	<?php if (Yii::$app->controller->id != 'wallet'): ?>
 	<!-- extra class no-background -->
-	<a class="go-back-link" href="javascript:history.back();">
+	<a class="go-back-link mr-2" href="javascript:history.back();">
 		<i class="fa fa-arrow-left"></i>
 	</a>
 	<?php endif ?>
@@ -16,11 +16,11 @@
 
 	<div class="page-title">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-2 pl-4">
 			  <button class="pulse-button"></button>
 		  	</div>
     		<div class="col-10 text-left">
-        		<p class="header-message text-break"></p>
+        		<small class="header-message text-break"></small>
     		</div>
 		</div>
     </div>
