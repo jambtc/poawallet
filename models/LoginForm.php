@@ -12,6 +12,8 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
+	const TIMEOUT = 7776000; // This number is 60sec * 60min * 24h * 90days
+
 	public $username;
 	public $password;
 	public $rememberMe = true;
@@ -78,7 +80,7 @@ class LoginForm extends Model
 	public function login()
 	{
 			if ($this->validate()) {
-					return Yii::$app->user->login($this->getUser(), 3600*24*30);
+				return Yii::$app->user->login($this->getUser(), self::TIMEOUT);
 			}
 			return false;
 	}

@@ -51,7 +51,9 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\BoltLogin',
-            'enableAutoLogin' => false, // non si logga in automatico?
+            'enableAutoLogin' => false, //
+            // 'authTimeout' => ,
+
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

@@ -13,14 +13,6 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-
-// Yii::$classMap['@packages\logo'] = dirname(__FILE__).'/../../yii2-packages/Logo.php';
-// use packages\logo;
-
-// Yii::$classMap['Settings'] = dirname(__FILE__).'/../../yii2-packages/Settings.php';
-// require_once Yii::$app->params['libsPath'] . '/Settings.php';
-
 class SiteController extends Controller
 {
     /**
@@ -111,7 +103,8 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            // return $this->goBack();
+            return $this->redirect(['wallet/index']);
         }
 
         $this->setCookieForGoogleLogout();
