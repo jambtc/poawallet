@@ -4,6 +4,7 @@ use yii\helpers\Url;
 $session = Yii::$app->session;
 $string = Yii::$app->security->generateRandomString(32);
 $session->set('token-restore', $string );
+$session->set('token-spawn', $string );
 
 ?>
 <div class="jumbotron jumbotron-fluid">
@@ -28,7 +29,7 @@ $session->set('token-restore', $string );
                 <i class="glyphicon glyphicon-repeat"></i> <?php echo Yii::t('lang','Restore');?>
             </button>
         </a>
-        <a href="<?php echo Url::to(['/new/index']) ?>" />
+        <a href="<?php echo Url::to(['/spawn/index','token' => $string]) ?>" />
             <button type="button"  class="btn btn-primary btn-md" >
                 <i class="fas fa-key"></i> <?php echo Yii::t('lang','New');?>
             </button>

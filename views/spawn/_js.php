@@ -3,12 +3,11 @@
 use yii\helpers\Url;
 use yii\web\View;
 
-$session = Yii::$app->session;
-$string = $_GET['token'];
-$session->set('token-restore', $string );
 
 $options = [
-    'invalidSeedMEssage' => Yii::t('lang','Invalid seed!'),
+    'invalidSeedMessage' => Yii::t('lang','Invalid seed!'),
+    'invalidSeed12Word' => Yii::t('lang','Seed hasn\'t 12 words! Words inserted are: '),
+    'validSeedMessage' => Yii::t('lang','Seed is correct!'),
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'cryptURL' => Url::to(['/wallet/crypt']),
@@ -22,32 +21,63 @@ $this->registerJs(
 
 
 
-$wallet_restore = <<<JS
+$wallet_spawn = <<<JS
 
-	var seed = null;
+$(function () {
+    'use strict';
+
+    var seed = null;
 	var lw = lightwallet;
 
     var wizardForm = document.querySelector('#wizard-form');
     var submitButton = document.querySelector('.seed-submit');
+    var backButton = document.querySelector('.btn-back');
+
+    var seedField = document.querySelector('#wizardwalletform-seed');
+    seedField.addEventListener('input', function(e) {
+        var insertedSeed = $.trim(e.target.value);
+        console.log('[verify]:', insertedSeed);
+        if (WordCount(insertedSeed) != 12 ){
+          $('#seed-error').show().text(yiiOptions.invalidSeed12Word+WordCount(insertedSeed) );
+          return;
+        }
+
+        if (!(isSeedValid(insertedSeed)) ){
+          $('#seed-error').show().text(yiiOptions.invalidSeedMessage);
+          return;
+        }
+        $('#seed-error').removeClass('alert-danger');
+        $('#seed-error').addClass('alert-success');
+        $('#seed-error').show().text(yiiOptions.validSeedMessage);
+        $('#seed-submit').prop('disabled', false);
+        $('#seed-submit').removeClass('disabled');
+    });
+
+
+
+    backButton.addEventListener('click', function(event){
+        $('#seedConfirm').fadeOut('fast');
+    });
 
     submitButton.addEventListener('click', function(event){
-		event.preventDefault();
-		event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
-		seed = $.trim($('#wizardwalletform-seed').val());
-		if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
-			console.log('[Restore]: seed non valido', seed);
-			$('#seed-error').show().text(yiiOptions.invalidSeedMEssage);
-			return;
-		}
-		$('#seed-error').hide().text('');
+        seed = $.trim($('#wizardwalletform-seed').val());
+        if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
+            console.log('[Restore]: seed non valido', seed);
+            $('#seed-error').show().text(yiiOptions.invalidSeedMEssage);
+            return;
+        }
+        $('#seed-error').hide().text('');
 
-		// la password viene generata in automatico dal sistema di 32 caratteri
-		var password = generateEntropy(64);
+        // la password viene generata in automatico dal sistema di 32 caratteri
+        var password = generateEntropy(64);
 
-		console.log('[Restore]: seed valido', seed);
-		initializeVault(password,seed);
-	});
+        console.log('[Restore]: seed valido', seed);
+        initializeVault(password,seed);
+    });
+
 
 	// verifica la validità di un seed
 	function isSeedValid(seed){
@@ -56,6 +86,18 @@ $wallet_restore = <<<JS
 	 	else
 			return true;
 	}
+
+    /*
+     * questa funzione genera il nuovo seed del wallet
+     */
+    function newWallet() {
+        $('#seedText').html(spinner);
+        var password = generateEntropy(64);
+    	seed = lw.keystore.generateRandomSeed(password);
+
+    	$('#seedText').html(seed);
+    	$('#seedInput').val(seed);
+    }
 
     // adesso salviamo in local storage il seed e la password
     function initializeVault(password, seed) {
@@ -157,10 +199,16 @@ $wallet_restore = <<<JS
     	}
     }
 
+
+    newWallet();
+
+
+});
+
 JS;
 
 $this->registerJs(
-    $wallet_restore,
+    $wallet_spawn,
     View::POS_READY, //POS_END
-    'wallet_restore'
+    'wallet_spawn'
 );

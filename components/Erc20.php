@@ -17,9 +17,6 @@ use Nullix\CryptoJsAes\CryptoJsAes;
 
 use app\components\Settings;
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-
 
 class Erc20 extends Component
 {
