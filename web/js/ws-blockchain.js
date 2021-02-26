@@ -7,7 +7,7 @@ $(function () {
     console.log ( '[ws] datakey', $('tr[data-key="' + 105 + '"]').length          );
 
     function startWebSocket(){
-        var webSocket = new WebSocket('ws://localhost:8081');
+        var webSocket = new WebSocket('ws://localhost:7502');
 
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
