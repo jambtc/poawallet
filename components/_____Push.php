@@ -79,7 +79,7 @@ class Push extends Component
 
             // il contenuto del messaggio
             $content = array(
-                'title' => '['.self::appTitle($notification->type_notification,$app).'] - '. Yii::t('lang','New message'), //'$array->type_notification,
+                'title' => '['.self::appTitle($notification->type_notification,$app).'] - '. Yii::t('app','New message'), //'$array->type_notification,
                 'body' => $notification->description,
                 'icon' => 'src/images/icons/app-icon-96x96.png',
                 'badge' => 'src/images/icons/app-icon-96x96.png',
@@ -93,8 +93,8 @@ class Push extends Component
                     'openUrl' => $notification->url,
                 ],
                 'actions' => [
-                  ['action'=> 'openUrl', 'title'=> Yii::t('lang','Yes'), 'icon'=> 'css/images/chk_on.png'],
-                  ['action'=> 'close', 'title'=> Yii::t('lang','No'), 'icon'=> 'css/images/chk_off.png'],
+                  ['action'=> 'openUrl', 'title'=> Yii::t('app','Yes'), 'icon'=> 'css/images/chk_on.png'],
+                  ['action'=> 'close', 'title'=> Yii::t('app','No'), 'icon'=> 'css/images/chk_off.png'],
                     // ['action' => ['action'=>'open_url', 'action_url' => $array->url],
                     // 'title' => 'Apri link',
                     // ]

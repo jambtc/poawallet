@@ -48,6 +48,20 @@ class Messages extends Component
         return true;
     }
 
+    //scrive a video e nel file log le informazioni richieste
+    private function log($text){
+        // $save = new Save;
+        // $save->WriteLog('napay','commands','wt', $text);
+
+        $filename = Yii::$app->basePath."/logs/messages-push.log";
+        $myfile = fopen($filename, "a");
+        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
+
+        // echo  $time.$text;
+        fwrite($myfile, $time.$text);
+
+    }
+
     /**
     * FUNZIONE CHE INVIA UN MESSAGGIO PUSH
     *
@@ -57,17 +71,15 @@ class Messages extends Component
     public function push($attributes, $app='wallet')
     {
 
-        $filename = Yii::$app->basePath."/web/assets/push-message.log";
-		$myfile = fopen($filename, "a");
 
-        fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Salvo il messaggio\n");
+        // self::log("Salvo il messaggio\n");
         $notification = self::save($attributes);
 
         //Carico i parametri della webapp
         $settings = Settings::load();
 
         // $subscriptions = array();
-        fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Carico il dataProvider\n");
+        // self::log("Carico il dataProvider\n");
 
         $dataProvider = new ActiveDataProvider([
             'query' => PushSubscriptions::find()->
@@ -78,43 +90,15 @@ class Messages extends Component
             'pagination' => false // !!! IMPORTANT TO GET ALL MODELS
         ]);
 
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => PushSubscriptions::find()
-        //                     ->andWhere('id_user' => $notification->id_user)
-        //                     ->andWhere('type' => $app),
-        //     'pagination' => false // !!! IMPORTANT TO GET ALL MODELS
-        // ]);
+        $content = [];
 
 
-
-        //
-        // ) {
-        //     $object['endpoint'] =  $item->endpoint;
-        //     $object['auth'] =  $tabella->auth;
-        //     $object['p256dh'] =  $tabella->p256dh;
-        //   $subscriptions[$item->setting_name] = $item->setting_value;
-        // }
-
-        // $criteria=new CDbCriteria();
-        // $criteria->compare('id_user',$array->id_user,false);
-        // $criteria->compare('type',$app,false);
-
-        #echo '<pre>'.print_r($criteria,true).'</pre>';
-
-        // $subscribe_array = CHtml::listData(PushSubscriptions::model()->findAll($criteria), 'id_subscription', function($tabella) {
-        //     $object['endpoint'] =  $tabella->endpoint;
-        //     $object['auth'] =  $tabella->auth;
-        //     $object['p256dh'] =  $tabella->p256dh;
-        //     return $object;
-        // });
 
         if ($dataProvider->getTotalCount() >0 )
         {
-            fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : dataprovider > 0\n");
+            // self::log("Dataprovider > 0\n");
 
 
-        // if (isset($subscribe_array)){
-            // Crea autorizzazioni VAPID
             $auth = array(
                 'VAPID' => array(
                     'subject' => $notification->description,
@@ -130,7 +114,7 @@ class Messages extends Component
 
             // il contenuto del messaggio
             $content = array(
-                'title' => '['.self::appTitle($notification->type_notification,$app).'] - '. Yii::t('lang','New message'), //'$array->type_notification,
+                'title' => '['.self::appTitle($notification->type_notification,$app).'] - '. Yii::t('app','New message'), //'$array->type_notification,
                 'body' => $notification->description,
                 'icon' => 'src/images/icons/app-icon-96x96.png',
                 'badge' => 'src/images/icons/app-icon-96x96.png',
@@ -144,8 +128,8 @@ class Messages extends Component
                     'openUrl' => $notification->url,
                 ],
                 'actions' => [
-                  ['action'=> 'openUrl', 'title'=> Yii::t('lang','Yes'), 'icon'=> 'css/images/chk_on.png'],
-                  ['action'=> 'close', 'title'=> Yii::t('lang','No'), 'icon'=> 'css/images/chk_off.png'],
+                  ['action'=> 'openUrl', 'title'=> Yii::t('app','Yes'), 'icon'=> 'css/images/chk_on.png'],
+                  ['action'=> 'close', 'title'=> Yii::t('app','No'), 'icon'=> 'css/images/chk_off.png'],
                     // ['action' => ['action'=>'open_url', 'action_url' => $array->url],
                     // 'title' => 'Apri link',
                     // ]
@@ -153,7 +137,7 @@ class Messages extends Component
 
             );
 
-            fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
+            // self::log("Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
 
             #echo '<pre>'.print_r($content,true).'</pre>';
             // trasformo il payload in json
@@ -173,7 +157,7 @@ class Messages extends Component
                 ]);
                 #echo '<pre>'.print_r($array,true).'</pre>';
                 #echo '<pre>'.print_r($subscription,true).'</pre>';
-                fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id_subscription\n");
+                // self::log("Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id_subscription\n");
 
 
                 // inizializzo la classe
@@ -216,8 +200,14 @@ class Messages extends Component
               //     }
               // }
           } else {
-              fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : dataprovider = 0\n");
+              // self::log(" : dataprovider = 0\n");
           }
+
+          return $content;
+
+
+
+
     }
     /**
     * Funzione che restituisce il titolo del messaggio push in base al type_notification

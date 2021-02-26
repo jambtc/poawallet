@@ -9,7 +9,7 @@ use yii\helpers\Url;
   <div class="card-body">
       <!-- amount to send -->
       <div class="form-group">
-          <p class="alert alert-info"><?= Yii::t('lang','Amount that will be sent:') ?>
+          <p class="alert alert-info"><?= Yii::t('app','Amount that will be sent:') ?>
               <span class="ml-1 amount-to-send"></span>
           </p>
       </div>
@@ -22,12 +22,12 @@ use yii\helpers\Url;
 
   </div>
   <div class="card-footer">
-      <?= Html::submitButton('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','send'), [
+      <?= Html::submitButton('<i class="fa fa-thumbs-up"></i> '.Yii::t('app','send'), [
             'class' => 'btn button circle block blue pay-submit',
         ]);
       ?>
       <a class="pay-close float-right" href="<?= Url::to(['/wallet/index'])?> " style="display: none;"/>
-          <button type="button" class="btn button circle block green"><?= Yii::t('lang','Close') ?></button>
+          <button type="button" class="btn button circle block green"><?= Yii::t('app','Close') ?></button>
       </a>
   </div>
 

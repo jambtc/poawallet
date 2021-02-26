@@ -121,7 +121,7 @@ class WebApp extends Component
         $classStatus = ($data->status == 'complete') ? 'bg-success' : 'bg-secondary';
 
         $line = '
-        <a href="'.Url::to(['tokens/view', 'id' => self::encrypt($data->id_token)]).'" />
+        <a href="index.php?r=tokens/view&id='. self::encrypt($data->id_token) . '" />
         <div class="container-fluid m-0 p-0">
               <div class="row">
                   <div class="col-12 m-0 p-0">

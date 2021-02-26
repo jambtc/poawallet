@@ -21,19 +21,19 @@ NavBar::end();
 		<div class="nav-container">
 			<ul class="main-menu">
 				<li class="">
-					<a href="<?= Url::to(['/wallet/index']) ?>"><img src="css/img/content/icons/2.png" alt=""><strong class="special"><?= Yii::t('lang','My Wallet') ?></strong> </a>
+					<a href="<?= Url::to(['/wallet/index']) ?>"><img src="css/img/content/icons/2.png" alt=""><strong class="special"><?= Yii::t('app','My Wallet') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/send/index']) ?>"><img src="css/img/content/icon1.png" alt=""><strong class="special"><?= Yii::t('lang','Send') ?></strong> </a>
+					<a href="<?= Url::to(['/send/index']) ?>"><img src="css/img/content/icon1.png" alt=""><strong class="special"><?= Yii::t('app','Send') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/receive/index']) ?>"><img src="css/img/content/icon2.png" alt=""><strong class="special"><?= Yii::t('lang','Receive') ?></strong> </a>
+					<a href="<?= Url::to(['/receive/index']) ?>"><img src="css/img/content/icon2.png" alt=""><strong class="special"><?= Yii::t('app','Receive') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/tokens/index']) ?>"><img src="css/img/content/icons/3.png" alt=""><strong class="special"><?= Yii::t('lang','Transactions') ?></strong> </a>
+					<a href="<?= Url::to(['/tokens/index']) ?>"><img src="css/img/content/icons/3.png" alt=""><strong class="special"><?= Yii::t('app','Transactions') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('lang','Profile') ?></strong> </a>
+					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('app','Profile') ?></strong> </a>
 				</li>
 				<li><i class="fa fa-logout"></i><?php
 			             echo Html::beginForm(['/site/logout'], 'post')

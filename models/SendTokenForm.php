@@ -47,10 +47,10 @@ class SendTokenForm extends Model
 	public function attributeLabels()
 	{
 		return [
-			'from'=>Yii::t('model','from'),
-			'to'=>Yii::t('model','to'),
-			'amount'=>Yii::t('model','Amount'),
-			'memo' => Yii::t('model','Message'),
+			'from'=>Yii::t('app','from'),
+			'to'=>Yii::t('app','to'),
+			'amount'=>Yii::t('app','Amount'),
+			'memo' => Yii::t('app','Message'),
 		];
 	}
 

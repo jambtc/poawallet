@@ -36,7 +36,7 @@ class WizardWalletForm extends Model
 	public function attributeLabels()
 	{
 		return [
-			'seed'=>Yii::t('model','Seed'),
+			'seed'=>Yii::t('app','Seed'),
 		];
 	}
 

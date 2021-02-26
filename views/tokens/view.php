@@ -8,13 +8,13 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\BoltTokens */
 
-$this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
+$this->title = Yii::t('app','Transaction details') .' - '. $model->id_token;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="dash-balance">
     <div class="ref-card c2 mb-3">
 		<div class="dash-content relative">
-			<h3 class="w-text"><?= Yii::t('lang','Transaction details');?></h3>
+			<h3 class="w-text"><?= Yii::t('app','Transaction details');?></h3>
 			<!-- <div class="notification">
 				<a href="#"><i class="fa fa-plus"></i></a>
 			</div> -->
@@ -36,14 +36,14 @@ $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
                             // 'id_token',
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('model','id_token'),
+                                'attribute'=>Yii::t('app','id_token'),
                                 'value'=>app\components\WebApp::encrypt($model->id_token),
                                 'contentOptions' => ['class' => 'text-break']
 
                             ],
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('model','status'),
+                                'attribute'=>Yii::t('app','status'),
                                 'value'=>$model->status,
                                 'contentOptions' => ['class' => ($model->status == 'complete') ? 'badge badge-pill green text-capitalize' : 'badge badge-pill yellow text-capitalize']
                             ],
@@ -51,19 +51,19 @@ $this->title = Yii::t('lang','Transaction details') .' - '. $model->id_token;
                             'token_price',
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('model','from_address'),
+                                'attribute'=>Yii::t('app','from_address'),
                                 'value'=>$model->from_address,
                                 'contentOptions' => ['class' => 'text-break']
                             ],
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('model','to_address'),
+                                'attribute'=>Yii::t('app','to_address'),
                                 'value'=>$model->to_address,
                                 'contentOptions' => ['class' => 'text-break']
                             ],
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('model','txhash'),
+                                'attribute'=>Yii::t('app','txhash'),
                                 'value'=>$model->txhash,
                                 'contentOptions' => ['class' => 'text-break']
                             ],

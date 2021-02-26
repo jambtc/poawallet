@@ -14,7 +14,7 @@ include ('manage-push_js.php');
 ?>
 <div class="dash-balance">
 	<div class="dash-content relative">
-		<h3 class="w-text"><?= Yii::t('lang','User Profile') ?></h3>
+		<h3 class="w-text"><?= Yii::t('app','User Profile') ?></h3>
 		<!-- <div class="notification">
 			<a href="#"><i class="fa fa-plus"></i></a>
 		</div> -->
@@ -41,7 +41,7 @@ include ('manage-push_js.php');
             <div class="d-flex flex-column flex-md-row">
               <img src="css/img/content/ex2.png" class="max-w mb-10" alt="">
               <div class="d-flex flex-column ml-md-2">
-                <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('lang','Total Income') ?></p>
+                <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('app','Total Income') ?></p>
                 <div class="progress">
                     <div class="progress-bar bg-primary" role="progressbar" style="width: 57%"></div>
                   </div>
@@ -53,7 +53,7 @@ include ('manage-push_js.php');
             <div class="d-flex flex-column flex-md-row">
               <img src="css/img/content/ex1.png" class="max-w mb-10" alt="">
               <div class="d-flex flex-column ml-md-2">
-                <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('lang','Expenses') ?></p>
+                <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('app','Expenses') ?></p>
                 <div class="progress">
                     <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
                   </div>
@@ -67,12 +67,12 @@ include ('manage-push_js.php');
 <form id="settingsForm bg-primary">
 
 	<div class="form-divider"></div>
-	<div class="form-label-divider"><span><?= Yii::t('lang','Edit settings');?></span></div>
+	<div class="form-label-divider"><span><?= Yii::t('app','Edit settings');?></span></div>
 	<div class="form-divider"></div>
 
 	<div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?= Yii::t('lang','PIN');?><small class="text-muted"></small></span>
+			<span class="list-item-title"><?= Yii::t('app','PIN');?><small class="text-muted"></small></span>
 			<div class="pincodeslider sweet-check" >
 				<!-- <input type="checkbox" name="pincodeslider" value="1"> -->
 				<div class="outline">
@@ -90,7 +90,7 @@ include ('manage-push_js.php');
 
 	<!-- <div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?= Yii::t('lang','Two factors authentication');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?= Yii::t('app','Two factors authentication');?> <small class="text-muted"></small></span>
 
 			<div class="sweet-check checked">
 				<input type="checkbox" name="2fa" value="1" checked="">
@@ -103,7 +103,7 @@ include ('manage-push_js.php');
 
 	<!-- <div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?= Yii::t('lang','Backup Master Seed');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?= Yii::t('app','Backup Master Seed');?> <small class="text-muted"></small></span>
 
 			<div class="sweet-check checked">
 				<input type="checkbox" name="masterseed" value="1" checked="">
@@ -116,7 +116,7 @@ include ('manage-push_js.php');
 
 	<!-- <div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('lang','Scan the blockchain');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?php echo Yii::t('app','Scan the blockchain');?> <small class="text-muted"></small></span>
 
 			<div class="sweet-check">
 				<input type="checkbox" name="documents" value="1">
@@ -129,7 +129,7 @@ include ('manage-push_js.php');
 
 	<!-- <div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('lang','Save application on Homepage');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?php echo Yii::t('app','Save application on Homepage');?> <small class="text-muted"></small></span>
 
 			<div class="sweet-check">
 				<input type="checkbox" name="sourcecode" value="1">
@@ -142,7 +142,7 @@ include ('manage-push_js.php');
 
 	<div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('lang','PUSH notifications');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?php echo Yii::t('app','PUSH notifications');?> <small class="text-muted"></small></span>
 
 			<div class="js-push-btn-modal sweet-check "
 					data-toggle="modal"
@@ -156,7 +156,7 @@ include ('manage-push_js.php');
 
 	<!-- <div class="list-box">
 		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('lang','Select language');?>
+			<span class="list-item-title"><?php echo Yii::t('app','Select language');?>
 	            <small class="text-muted">
 
 	            </small>

@@ -16,8 +16,18 @@ use app\assets\SynchronizeBlockchainAsset;
 
 use app\components\Settings;
 
-// Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+
+// impostazioni variabili globali per tutti i js
+$options = [
+    'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
+    // ...
+];
+$this->registerJs(
+    "var yiiGlobalOptions = ".\yii\helpers\Json::htmlEncode($options).";",
+    yii\web\View::POS_HEAD,
+    'yiiGlobalOptions'
+);
+
 
 AppAsset::register($this);
 

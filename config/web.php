@@ -22,16 +22,7 @@ $config = [
         'Messages' => ['class' => 'app\components\Messages'],
         'i18n' => [
             'translations' => [
-                'lang*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@app/messages',
-                    'sourceLanguage' => 'en-US',
-                    'fileMap' => [
-                        'app' => 'app.php',
-                        'app/error' => 'error.php',
-                    ],
-                ],
-                'model*' => [
+                'app*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
                     'sourceLanguage' => 'en-US',
@@ -51,8 +42,8 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\BoltLogin',
-            'enableAutoLogin' => false, //
-            // 'authTimeout' => ,
+            'enableAutoLogin' => true, //
+            'authTimeout' => 7776000,
 
         ],
         'errorHandler' => [

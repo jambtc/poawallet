@@ -5,9 +5,9 @@ use yii\web\View;
 
 
 $options = [
-    'invalidSeedMessage' => Yii::t('lang','Invalid seed!'),
-    'invalidSeed12Word' => Yii::t('lang','Seed hasn\'t 12 words! Words inserted are: '),
-    'validSeedMessage' => Yii::t('lang','Seed is correct!'),
+    'invalidSeedMessage' => Yii::t('app','Invalid seed!'),
+    'invalidSeed12Word' => Yii::t('app','Seed hasn\'t 12 words! Words inserted are: '),
+    'validSeedMessage' => Yii::t('app','Seed is correct!'),
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'cryptURL' => Url::to(['/wallet/crypt']),

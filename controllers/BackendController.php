@@ -173,13 +173,13 @@ class BackendController extends Controller
 		 			 <div class="d-flex align-items-center justify-content-between">
 		 				 <div class="d-flex align-items-center">
 		 				   <div class="coin-name notify-htmlTitle">'
-					   . Html::encode(\Yii::t('lang',
+					   . Html::encode(\Yii::t('app',
 						   'You have {n,plural,=0{read all messages.} =1{one unread message.} other{# unread messages.}}', ['n' => $response['countedUnread']]
 					   ))
 					   .'</div>
 		 				 </div>
 		 				 <div class="notify-readAll">
-		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('lang','Mark all as read') .'</small></a>
+		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('app','Mark all as read') .'</small></a>
 		 				 </div>
 		 			   </div>
 		 		 </li>';
@@ -215,7 +215,7 @@ class BackendController extends Controller
 	                           <i class="'.$notifi__icon.'"></i>
 	                       </div>
 	                       <div class="ml-10">
-	                         <p class="coin-name">'.Yii::t('lang',$notify->description).'</p>
+	                         <p class="coin-name">'.Yii::t('app',$notify->description).'</p>
 
 							 <div class="text-right">';
 							 // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
@@ -252,7 +252,7 @@ class BackendController extends Controller
 			// 					   $response['htmlContent'] .= '<p>';
 			// 				   }
 		   //
-			// 				   $response['htmlContent'] .= Yii::t('lang',$notify->description);
+			// 				   $response['htmlContent'] .= Yii::t('app',$notify->description);
 			// 				    // $response['htmlContent'] .= WebApp::translateMsg($notify->description);
 			// 				   $response['htmlContent'] .= '</p>';
 		   //
@@ -276,23 +276,23 @@ class BackendController extends Controller
 
 
 		   $x++;
-		   if ($x>4)
+		   if ($x>5)
 			   break;
 	   }
 	   if ($response['countedRead'] == 0 && $response['countedUnread'] == 0){
 		   $response['htmlContent'] .= '<div class="notifi__title">';
-		   $response['htmlContent'] .= '<p>' . Yii::t('lang','You have no messages to read.') . '</p>';
+		   $response['htmlContent'] .= '<p>' . Yii::t('app','You have no messages to read.') . '</p>';
 		   $response['htmlContent'] .= '</div>';
 	   }else{
 		   // $response['htmlContent'] .= '
 			//    <div class="notifi__footer">
-			// 	   <a id="seeAllMessages" onclick="backend.openAllEnvelopes();" href="'.htmlentities(Url::to(['messages/index'])).'">'.Yii::t('lang','See all messages').'</a>
+			// 	   <a id="seeAllMessages" onclick="backend.openAllEnvelopes();" href="'.htmlentities(Url::to(['messages/index'])).'">'.Yii::t('app','See all messages').'</a>
 			//    </div>
 		   // ';
 		   $response['htmlContent'] .= '<li>
    			<div class="d-flex align-items-center justify-content-between">
                    <div class="d-flex align-items-center">
-                       <a href="'.htmlentities(Url::to(['messages/index'])).'" class="text-muted">'.Yii::t('lang','Manage notifications').'</a>
+                       <a href="'.htmlentities(Url::to(['messages/index'])).'" class="text-muted">'.Yii::t('app','Manage notifications').'</a>
                    </div>
                </div>
    		</li>';

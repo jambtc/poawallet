@@ -12,14 +12,14 @@ $options = [
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
     'poaDecimals' => Settings::load()->poa_decimals,
-    'invalidAmountError' => Yii::t('lang', 'Invalid amount!'),
-    'decimalError' => Yii::t('lang','Use a maximum of 2 decimal places.'),
-    'higherError' => Yii::t('lang','Amount is higher than Balance.'),
-    'recipientError' => Yii::t('lang','Recipient address not entered.'),
+    'invalidAmountError' => Yii::t('app', 'Invalid amount!'),
+    'decimalError' => Yii::t('app','Use a maximum of 2 decimal places.'),
+    'higherError' => Yii::t('app','Amount is higher than Balance.'),
+    'recipientError' => Yii::t('app','Recipient address not entered.'),
     'htmlTransactionBody' => '<div class="alert alert-warning">
-                                <p class="generating">'.Yii::t('lang','Generating transaction...').'</p>
+                                <p class="generating">'.Yii::t('app','Generating transaction...').'</p>
                                 </div>',
-    //'textClose' => Yii::t('lang','Close'),
+    //'textClose' => Yii::t('app','Close'),
     // ...
 ];
 $this->registerJs(

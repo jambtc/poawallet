@@ -32,7 +32,7 @@ $sendTokenForm->from = $fromAddress;
 
 <div class="dash-balance">
 	<div class="dash-content relative">
-		<h3 class="w-text"><?= Yii::t('lang','Send token') ?></h3>
+		<h3 class="w-text"><?= Yii::t('app','Send token') ?></h3>
 
 	</div>
 </div>
@@ -45,7 +45,7 @@ $sendTokenForm->from = $fromAddress;
 				<div class="d-flex align-items-center">
 				    <div class="d-flex flex-grow">
 				        <div class="mr-auto">
-				            <p class="mb-0"><?= Yii::t('lang','Total Balance');?></p>
+				            <p class="mb-0"><?= Yii::t('app','Total Balance');?></p>
 				        </div>
 				        <div class="ml-auto align-self-end">
 				            <h3 class="text-muted mt-0 mb-0"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h3>
@@ -99,7 +99,7 @@ $sendTokenForm->from = $fromAddress;
             <div class="form-group">
                 <?= $form->field($sendTokenForm, 'to', $fieldOptions2)
                     ->textInput(['autofocus' => true, 'validate' ])
-                    ->hint(Yii::t('lang','Insert address or press camera to scan')) ?>
+                    ->hint(Yii::t('app','Insert address or press camera to scan')) ?>
             </div>
     	</div>
 
@@ -138,7 +138,7 @@ $sendTokenForm->from = $fromAddress;
     	<div class="form-mini-divider"></div>
 
 
-    	<div><a href="#" class="button circle block yellow" data-popup="sellOrder" id="getCheckedButton1"><?= Yii::t('lang','Send token') ?></a></div>
+    	<div><a href="#" class="button circle block yellow" data-popup="sellOrder" id="getCheckedButton1"><?= Yii::t('app','Send token') ?></a></div>
 
 
 
@@ -149,7 +149,7 @@ $sendTokenForm->from = $fromAddress;
 
     				<img src="css/img/content/crypto-buy.png" class="img-buy" alt="">
 
-    				<h5 class="txt-blue mb-0"><?= Yii::t('lang','Amount that will be sent:') ?></h5>
+    				<h5 class="txt-blue mb-0"><?= Yii::t('app','Amount that will be sent:') ?></h5>
     				<h3 class="mt-10 mb-10 text-primary"><span class="ml-1 amount-to-send"></span> </h3>
 
                         <!-- MESSAGGIO -->
@@ -172,9 +172,9 @@ $sendTokenForm->from = $fromAddress;
 
     				<div class="transaction-details list-unstyled " style="display: none;">
     				</div>
-    				<div><a href="#" class="more-btn mb-10 pay-submit"><?= Yii::t('lang','Confirm') ?></a></div>
+    				<div><a href="#" class="more-btn mb-10 pay-submit"><?= Yii::t('app','Confirm') ?></a></div>
                     <div style="display: none;" class="mt-3 pay-close float-right"><a  href="<?= Url::to(['/wallet/index'])?> " />
-                        <button type="button" class="btn button circle block green"><?= Yii::t('lang','Close') ?></button>
+                        <button type="button" class="btn button circle block green"><?= Yii::t('app','Close') ?></button>
                         </a>
                     </div>
     			</div>
