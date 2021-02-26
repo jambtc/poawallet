@@ -9,6 +9,6 @@ echo Versioning...
 git rev-parse HEAD>version.txt
 
 echo Calling webservice...
-./webservice.sh
+./wsservice.sh
 
 echo Done!
