@@ -7,6 +7,7 @@
 
 namespace app\assets;
 
+use Yii;
 use yii\web\AssetBundle;
 use yii\helpers\Url;
 use yii\helpers\Json;
@@ -23,15 +24,10 @@ class SynchronizeBlockchainAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        // 'css/site.css',
     ];
     public $js = [
-        'js/synchBC-MainWorker.js'
+        'js/ws-blockchain.js'
     ];
-
-    // public $jsOptions = [
-    //     'getBlocknumberUrl' => 'index.php?r=blockchain/get-blocknumber',
-    // ];
 
 
     public $depends = [

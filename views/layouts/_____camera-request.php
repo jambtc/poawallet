@@ -12,7 +12,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" id='camera-close' data-dismiss="modal">
-					<i class="fa fa-reply"></i> <?php echo Yii::t('lang','close');?>
+					<i class="fa fa-reply"></i> <?php echo Yii::t('app','close');?>
 				</button>
 			</div>
 		</div>

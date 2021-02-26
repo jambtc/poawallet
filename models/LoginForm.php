@@ -39,7 +39,7 @@ class LoginForm extends Model
 					['password', 'authenticate'],
 
 					// username has to be a valid email address
-					['username', 'email', 'message'=>Yii::t('lang','Email hasn\'t right format.')],
+					['username', 'email', 'message'=>Yii::t('app','Email hasn\'t right format.')],
 			];
 	}
 
@@ -50,9 +50,9 @@ class LoginForm extends Model
 	public function attributeLabels()
 	{
 		return array(
-			'username'=>Yii::t('model','Email'),
-			'password'=>Yii::t('model','Password'),
-			// 'ga_cod'=>Yii::t('model','Google 2FA'),
+			'username'=>Yii::t('app','Email'),
+			'password'=>Yii::t('app','Password'),
+			// 'ga_cod'=>Yii::t('app','Google 2FA'),
 		);
 	}
 
@@ -80,7 +80,7 @@ class LoginForm extends Model
 	public function login()
 	{
 			if ($this->validate()) {
-				return Yii::$app->user->login($this->getUser(), self::TIMEOUT);
+				return Yii::$app->user->login($this->_user, self::TIMEOUT);
 			}
 			return false;
 	}

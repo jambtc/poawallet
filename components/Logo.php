@@ -62,7 +62,7 @@ class Logo extends Component
 
     </a>
     ';
-    // <h1 class="logo-name">'.Yii::t('lang','BOLT').' <small class="logo-descri">'.Yii::t('lang','TTS wallet').'</small></h1>
+    // <h1 class="logo-name">'.Yii::t('app','BOLT').' <small class="logo-descri">'.Yii::t('app','TTS wallet').'</small></h1>
     echo $logo;
 }
 }

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content" style="min-width:360px;">
             <div class="modal-header">
-                <h5 class="modal-title" id="pinRequestModalLabel"><?php echo Yii::t('lang','PIN Request');?></h5>
+                <h5 class="modal-title" id="pinRequestModalLabel"><?php echo Yii::t('app','PIN Request');?></h5>
             </div>
             <div class="modal-body ">
                 <center>
@@ -15,7 +15,7 @@
             <div class="modal-footer">
                 <div class="form-group">
                     <button type="button" disabled="disabled" class="btn btn-primary disabled " id="pinRequestButton">
-                        <i class="fa fa-thumbs-up"></i> <span id="#pinRequestButtonText"><?php echo Yii::t('lang','Confirm');?></span>
+                        <i class="fa fa-thumbs-up"></i> <span id="#pinRequestButtonText"><?php echo Yii::t('app','Confirm');?></span>
                     </button>
                 </div>
             </div>

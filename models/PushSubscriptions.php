@@ -22,7 +22,7 @@ class PushSubscriptions extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bolt_vapid_subscription';
+        return 'mp_subscriptions';
     }
 
     /**

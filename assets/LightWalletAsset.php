@@ -20,7 +20,6 @@ class LightWalletAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        // 'css/pincode.css',
     ];
     public $js = [
         'src/ethjs/lightwallet.min.js',

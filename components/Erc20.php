@@ -16,6 +16,7 @@ use Web3p\EthereumTx\Transaction;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
 use app\components\Settings;
+use app\components\WebApp;
 
 
 class Erc20 extends Component

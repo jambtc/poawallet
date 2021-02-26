@@ -37,7 +37,7 @@ class LoginForm extends Model
             ['password', 'validatePassword'],
 
             // username has to be a valid email address
-      			['username', 'email', 'message'=>Yii::t('lang','Email hasn\'t right format.')],
+      			['username', 'email', 'message'=>Yii::t('app','Email hasn\'t right format.')],
         ];
     }
 

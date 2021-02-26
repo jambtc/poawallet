@@ -227,8 +227,8 @@ class BlockchainController extends Controller
 										   'from_address' => $tokens->from_address,
 										   'to_address' => $tokens->to_address,
 										   'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-										   'title' => Yii::t('lang','New transaction'),
-										   'message' => Yii::t('lang','A transaction you received has been completed.'),
+										   'title' => Yii::t('app','New transaction'),
+										   'message' => Yii::t('app','A transaction you received has been completed.'),
 									   ]);
 
 									   $id_user_from = BoltWallets::find()->userIdFromAddress($tokens->from_address);
@@ -239,7 +239,7 @@ class BlockchainController extends Controller
 										   'id_user' => $id_user_from,
 										   'id_tocheck' => $tokens->id_token,
 										   'status' => 'complete',
-										   'description' => Yii::t('lang','A transaction you sent has been completed.'),
+										   'description' => Yii::t('app','A transaction you sent has been completed.'),
 										   'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
 										   'timestamp' => time(),
 										   'price' => $tokens->token_price,
@@ -252,7 +252,7 @@ class BlockchainController extends Controller
 									   // notifica per chi riceve (to_address)
 									   $id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
 									   $notification['id_user'] = $id_user_to === null ? 1 : $id_user_to;
-									   $notification['description'] = Yii::t('lang','A transaction you received has been completed.');
+									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
 									   Messages::push($notification);
 									   // $save->Notification($notification);
@@ -277,8 +277,8 @@ class BlockchainController extends Controller
 												  'from_address' => $tokens->from_address,
 												  'to_address' => $tokens->to_address,
 												  'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-												  'title' => Yii::t('lang','New transaction'),
-												  'message' => Yii::t('lang','A transaction you received has been completed.'),
+												  'title' => Yii::t('app','New transaction'),
+												  'message' => Yii::t('app','A transaction you received has been completed.'),
 											   ]);
 											   $tokens->status = 'complete';
 											   $tokens->token_ricevuti = $tokens->token_price;
@@ -292,7 +292,7 @@ class BlockchainController extends Controller
 												  'id_user' => Yii::$app->user->id,
 												  'id_tocheck' => $tokens->id_token,
 												  'status' => 'complete',
-												  'description' => Yii::t('lang','You received a new transaction.'),
+												  'description' => Yii::t('app','You received a new transaction.'),
 												  'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
 												  'timestamp' => time(),
 												  'price' => $tokens->token_price,
@@ -322,7 +322,7 @@ class BlockchainController extends Controller
 						   }// se transaction contract != ''
 					   } //endif 'ethereum or token'
 				   } // per ogni transazione trovata
-			   }//for loop
+			   }// if not empty transaction
 
 			   //aggiorno il numero dei blocchi sul wallet
 			   // print_r($searchBlock);
@@ -331,7 +331,7 @@ class BlockchainController extends Controller
 		   }else{
 			   break;
 		   }
-	   }
+	   } // ciclo for
 	   // // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
 
 	   if (!(empty($this->getTransactionsFound()))){
@@ -371,7 +371,7 @@ class BlockchainController extends Controller
 		];
 
 		$blockLatest = Yii::$app->Erc20->getBlockInfo();
-		$blockWallet = Yii::$app->Erc20->getBlockInfo($wallet->blocknumber);
+		// $blockWallet = Yii::$app->Erc20->getBlockInfo($wallet->blocknumber);
 		// print_r($block);
 		// exit;
 
@@ -382,7 +382,7 @@ class BlockchainController extends Controller
 			 'id'=>time(),
 			 "walletBlocknumber"=>$wallet->blocknumber,
 			 "chainBlocknumber"=>$blockLatest->number,
-			 "headerMessage"=> '<small>'.Yii::t('lang', "{n} blocks left.", ['n' => $difference]).'</small>',
+			 "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
 			 "difference"=> $difference,
 			 "my_address"=>$wallet->wallet_address,
 			 "relativeTime" => Yii::$app->formatter->asDuration($difference),

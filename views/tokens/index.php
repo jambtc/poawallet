@@ -10,13 +10,13 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\BoltTokensSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('lang', 'Transactions');
+$this->title = Yii::t('app', 'Transactions');
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- <div class="form-divider"></div> -->
 <div class="dash-balance ">
     <div class="dash-content relative">
-		<h3 class="w-text"><?= Yii::t('lang','Transaction list');?></h3>
+		<h3 class="w-text"><?= Yii::t('app','Transaction list');?></h3>
 	</div>
 
     <section class="mb-2">

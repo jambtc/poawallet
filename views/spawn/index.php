@@ -31,11 +31,11 @@ include ('_js.php');
 	<div class="body-content">
 		<div class="card bg-primary">
 			<div class="card-header">
-				<h3 class="text-warning"><?php echo Yii::t('lang','Spawn a new seed');?></h3>
+				<h3 class="text-warning"><?php echo Yii::t('app','Spawn a new seed');?></h3>
 			</div>
 		  <div class="card-body bg-primary">
 		      <div class="form-group">
-  				<h3 class="text-light"><?php echo Yii::t('lang','This is your new seed.');?></h3>
+  				<h3 class="text-light"><?php echo Yii::t('app','This is your new seed.');?></h3>
 		      </div>
 
 		      <div class="form-group alert alert-light">
@@ -43,7 +43,7 @@ include ('_js.php');
 		      </div>
 			   <div class="form-group alert alert-warning">
 				  <?php
-				  echo Yii::t('lang',"Write the seed and keep it in a safe place; if you lose it you will not be able to restore your wallet and you will lose all the funds.");
+				  echo Yii::t('app',"Write the seed and keep it in a safe place; if you lose it you will not be able to restore your wallet and you will lose all the funds.");
 				  ?>
 			  </div>
 			  <input type='hidden' id='seedInput' />
@@ -54,13 +54,13 @@ include ('_js.php');
 	      <div class="float-left">
 			<a href="<?php echo Url::to(['/wizard/index','token' => $string]) ?>" />
 				<button type="button" class="btn btn-secondary btn-md" >
-  					<i class="fa fa-backward"></i> <?php echo Yii::t('lang','Back');?>
+  					<i class="fa fa-backward"></i> <?php echo Yii::t('app','Back');?>
   				</button>
 			</a>
 	      </div>
 		  <div class="float-right">
 			<a href="#" class="btn btn-success btn-md" data-popup="seedConfirm">
-				<i class="fa fa-forward"></i> <?php echo Yii::t('lang','Next');?></a>
+				<i class="fa fa-forward"></i> <?php echo Yii::t('app','Next');?></a>
 	      </div>
 	    </div>
 			<div class="form-divider"></div>
@@ -72,12 +72,12 @@ include ('_js.php');
     			<div class="popup-content">
 					<div class="card bg-primary">
 						<div class="card-header">
-							<h3 class="text-warning"><?php echo Yii::t('lang','Verify your seed');?></h3>
+							<h3 class="text-warning"><?php echo Yii::t('app','Verify your seed');?></h3>
 						</div>
 					  <div class="card-body bg-primary">
 						  <div class="form-group">
 
-			  				<p class="text-light"><?php echo Yii::t('lang','Please, insert your new seed to verify it is correct.');?></p>
+			  				<p class="text-light"><?php echo Yii::t('app','Please, insert your new seed to verify it is correct.');?></p>
 					      </div>
 
 					      <div class="form-group">
@@ -95,12 +95,12 @@ include ('_js.php');
 				    <div class="container">
 				      <div class="float-left">
 						<button type="button" class="btn btn-secondary btn-md btn-back" >
-			  				<i class="fa fa-backward"></i> <?php echo Yii::t('lang','Back');?>
+			  				<i class="fa fa-backward"></i> <?php echo Yii::t('app','Back');?>
 			  			</button>
 
 				      </div>
 					  <div class="float-right">
-								<?= Html::Button('<i class="fa fa-thumbs-up"></i> '.Yii::t('lang','Confirm'), [
+								<?= Html::Button('<i class="fa fa-thumbs-up"></i> '.Yii::t('app','Confirm'), [
 					            'class' => 'btn btn-success btn-md seed-submit disabled',
 								'id' => 'seed-submit',
 					            'data-method' => 'post',

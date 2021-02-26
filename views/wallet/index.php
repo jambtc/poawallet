@@ -29,7 +29,7 @@ include ('index_js.php');
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
                       <h1 class="b-val"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h1>
-                      <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
+                      <p class="g-text mb-0"><?= Yii::t('app','Total Balance');?></p>
                   </div>
                   <div class="ml-auto align-self-end">
                       <a href="<?= $userUrl ?>" class="profile-av"><img src="<?= $userImage ?>"></a>
@@ -41,15 +41,15 @@ include ('index_js.php');
              <div class="content-row">
                 <div class="serv-item">
                    <a href="<?= $sendUrl ?>" class="serv-icon"><img src="css/img/content/icon1.png" class="mb-5" alt=""></a>
-                   <span><?= Yii::t('lang','Send');?> </span>
+                   <span><?= Yii::t('app','Send');?> </span>
                 </div>
                 <div class="serv-item">
                   <a href="<?= $receiveUrl ?>" class="serv-icon"><img src="css/img/content/icon2.png" class="mb-5" alt=""></a>
-                   <span><?= Yii::t('lang','Receive');?> </span>
+                   <span><?= Yii::t('app','Receive');?> </span>
                 </div>
                 <div class="serv-item">
 	                <a href="<?= $tokensUrl ?>" class="serv-icon"><img src="css/img/content/p2.png" class="mb-5" alt=""></a>
-	                <span><?= Yii::t('lang','Transactions');?></span>
+	                <span><?= Yii::t('app','Transactions');?></span>
 	            </div>
             </div>
            </div>
@@ -58,7 +58,7 @@ include ('index_js.php');
 </div>
 
     <section class="trans-sec container mb-2">
-      <h4 class="title-main mt-0 text-light"><?= Yii::t('lang','Recent Transactions');?></h4>
+      <h4 class="title-main mt-0 text-light"><?= Yii::t('app','Recent Transactions');?></h4>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

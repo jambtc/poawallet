@@ -42,7 +42,7 @@ include ('qrcodescanner_js.php');
 // 						]),
 // 			'buttons' => [
 // 				'save' => [
-// 					'title' => Yii::t('lang','Continue'),
+// 					'title' => Yii::t('app','Continue'),
 // 					'options' => [
 // 						'class' => 'btn btn-primary mt-2',
 // 						'style' => 'font-size: initial;'
@@ -83,7 +83,7 @@ include ('qrcodescanner_js.php');
               <div class="d-flex flex-grow">
                   <div class="mr-auto">
 					  <h1 class="b-val"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h1>
- 					 <p class="g-text mb-0"><?= Yii::t('lang','Total Balance');?></p>
+ 					 <p class="g-text mb-0"><?= Yii::t('app','Total Balance');?></p>
                   </div>
 				  <div class="ml-auto align-self-end">
 					  <a href="<?= $userUrl ?>" class="profile-av"><img src="<?= $userImage ?>"></a>

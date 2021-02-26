@@ -57,22 +57,22 @@ class Users extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_user' => Yii::t('model', 'Id User'),
-            'id_users_type' => Yii::t('model', 'Id Users Type'),
-            'email' => Yii::t('model', 'Email'),
-            'password' => Yii::t('model', 'Password'),
-            'ga_secret_key' => Yii::t('model', 'Ga Secret Key'),
-            'name' => Yii::t('model', 'Name'),
-            'surname' => Yii::t('model', 'Surname'),
-            'corporate' => Yii::t('model', 'Corporate'),
-            'denomination' => Yii::t('model', 'Denomination'),
-            'vat' => Yii::t('model', 'Vat'),
-            'address' => Yii::t('model', 'Address'),
-            'cap' => Yii::t('model', 'Cap'),
-            'city' => Yii::t('model', 'City'),
-            'country' => Yii::t('model', 'Country'),
-            'activation_code' => Yii::t('model', 'Activation Code'),
-            'status_activation_code' => Yii::t('model', 'Status Activation Code'),
+            'id_user' => Yii::t('app', 'Id User'),
+            'id_users_type' => Yii::t('app', 'Id Users Type'),
+            'email' => Yii::t('app', 'Email'),
+            'password' => Yii::t('app', 'Password'),
+            'ga_secret_key' => Yii::t('app', 'Ga Secret Key'),
+            'name' => Yii::t('app', 'Name'),
+            'surname' => Yii::t('app', 'Surname'),
+            'corporate' => Yii::t('app', 'Corporate'),
+            'denomination' => Yii::t('app', 'Denomination'),
+            'vat' => Yii::t('app', 'Vat'),
+            'address' => Yii::t('app', 'Address'),
+            'cap' => Yii::t('app', 'Cap'),
+            'city' => Yii::t('app', 'City'),
+            'country' => Yii::t('app', 'Country'),
+            'activation_code' => Yii::t('app', 'Activation Code'),
+            'status_activation_code' => Yii::t('app', 'Status Activation Code'),
         ];
     }
 

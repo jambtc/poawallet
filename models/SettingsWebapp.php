@@ -39,9 +39,9 @@ class SettingsWebapp extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_setting' => Yii::t('model', 'Id Setting'),
-            'setting_name' => Yii::t('model', 'Setting Name'),
-            'setting_value' => Yii::t('model', 'Setting Value'),
+            'id_setting' => Yii::t('app', 'Id Setting'),
+            'setting_name' => Yii::t('app', 'Setting Name'),
+            'setting_value' => Yii::t('app', 'Setting Value'),
         ];
     }
 }

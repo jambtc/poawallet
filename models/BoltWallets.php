@@ -19,7 +19,7 @@ class BoltWallets extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'bolt_wallets';
+        return 'mp_wallet';
     }
 
     /**

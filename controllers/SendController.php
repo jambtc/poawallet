@@ -230,7 +230,7 @@ class SendController extends Controller
 			'id_user' => Yii::$app->user->id,
 			'id_tocheck' => $tokens->id_token,
 			'status' => 'new',
-			'description' => Yii::t('lang','You sent a new transaction.'),
+			'description' => Yii::t('app','You sent a new transaction.'),
 			'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
 			'timestamp' => time(),
 			'price' => $tokens->token_price,
@@ -300,45 +300,19 @@ class SendController extends Controller
 				'id_user' => $id_user_from,
 				'id_tocheck' => $tokens->id_token,
 				'status' => 'complete',
-				'description' => Yii::t('lang','A transaction you sent has been completed.'),
+				'description' => Yii::t('app','A transaction you sent has been completed.'),
 				'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
 				'timestamp' => time(),
 				'price' => $tokens->token_price,
 				'deleted' => 0,
 			];
-			Messages::push($notification);
+			$pushOptions = Messages::push($notification);
 
 			// notifica per chi riceve (to_address)
 			$id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
 			$notification['id_user'] = $id_user_to === null ? 1 : $id_user_to;
-			$notification['description'] = Yii::t('lang','A transaction you received has been completed.');
+			$notification['description'] = Yii::t('app','A transaction you received has been completed.');
 			Messages::push($notification);
-
-			$pushOptions = [
-				'title' => '['.Yii::$app->name.'] - '.Yii::t('lang','New message.'),
-				'body' => Yii::t('lang','Transaction has been updated. Do you want to see it?'),
-				'icon' => 'src/images/icons/app-icon-96x96.png',
-				'vibrate' => [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-				'badge' => 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-				'tag' => 'confirm-notification', //tag univoco per le notifiche.
-				'renotify' => true, //connseeo a tag. se è true notifica di nuovo
-				'data' => [
-					'openUrl' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-				],
-				'actions' => [
-					[
-						'action' => 'openUrl',
-						'title' => Yii::t('lang','Yes'),
-						'icon' => 'css/images/chk_on.png'
-					],
-					[
-						'action' => 'close',
-						'title' => Yii::t('lang','No'),
-						'icon' => 'css/images/chk_off.png'
-					],
-				]
-			];
-
 
 			//adesso posso uscire CON IL JSON DA REGISTRARE NEL SW.
 			$data = [

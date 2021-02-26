@@ -40,10 +40,10 @@ class UsersType extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_users_type' => Yii::t('model', 'Id Users Type'),
-            'desc' => Yii::t('model', 'Desc'),
-            'status' => Yii::t('model', 'Status'),
-            'note' => Yii::t('model', 'Note'),
+            'id_users_type' => Yii::t('app', 'Id Users Type'),
+            'desc' => Yii::t('app', 'Desc'),
+            'status' => Yii::t('app', 'Status'),
+            'note' => Yii::t('app', 'Note'),
         ];
     }
 
