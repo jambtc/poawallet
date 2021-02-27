@@ -4,10 +4,8 @@ $(function () {
 
     startWebSocket();
 
-    console.log ( '[ws] datakey', $('tr[data-key="' + 105 + '"]').length          );
-
     function startWebSocket(){
-        var webSocket = new WebSocket('ws://localhost:8081');
+        var webSocket = new WebSocket(yiiGlobalOptions.WebSocketServerAddress);
 
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {

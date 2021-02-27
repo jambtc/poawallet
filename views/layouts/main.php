@@ -16,10 +16,14 @@ use app\assets\SynchronizeBlockchainAsset;
 
 use app\components\Settings;
 
+function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
+    return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
+}
 
 // impostazioni variabili globali per tutti i js
 $options = [
     'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
+    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:8080' : 'wss://wss.megawallet.tk/wss',
     // ...
 ];
 $this->registerJs(
