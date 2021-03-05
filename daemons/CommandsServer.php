@@ -23,7 +23,7 @@ use Web3\Web3;
 
 class CommandsServer extends WebSocketServer
 {
-    public $maxBlocksToScan = 11; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
+    public $maxBlocksToScan = 17; // 200 IS FOR TESTING AT HOME 1500; //don't touch it (1500)
 	public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
@@ -73,21 +73,14 @@ class CommandsServer extends WebSocketServer
     public function commandSetUserId(ConnectionInterface $client, $msg)
    {
        $request = json_decode($msg, true);
-       // $result['success'] = true;
-       // $result['command'] = 'setUserId';
 
        if (!empty($request['user_id']) && $user_id = trim($request['user_id'])) {
            $client->user_id = WebApp::decrypt($user_id);
-           // $result['message'] = 'user id set to:' . $client->user_id;
-       } else {
-           // $result['success'] = false;
        }
 
        // ricerca il blocknumber adesso e restituisci il valore
        $result = $this->getBlockNumber($client->user_id);
-
        $this->log("Subscription with user_id: $client->user_id");
-
 
        $client->send(json_encode($result));
    }
@@ -102,8 +95,6 @@ class CommandsServer extends WebSocketServer
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
 
        echo  $time.$text;
-       // fwrite($myfile, $time.$text);
-
    }
 
    /**
@@ -119,8 +110,7 @@ class CommandsServer extends WebSocketServer
    {
    		$wallet = BoltWallets::find()
             ->andWhere(['id_user'=>$user_id])
-        // ->andWhere(['id_user'=>$client->user_id])
-   				->one();
+			->one();
 
    		$return = [
    			 'id'=>time(),
@@ -131,7 +121,6 @@ class CommandsServer extends WebSocketServer
    			 "my_address"=>$wallet->wallet_address,
    			 "relativeTime" =>'',
    			 "success"=>false,
-             // "command" => 'getBlockNumber'
    		];
         $blockLatest = Yii::$app->Erc20->getBlockInfo();
 
@@ -148,19 +137,19 @@ class CommandsServer extends WebSocketServer
    			 "relativeTime" => Yii::$app->formatter->asDuration($difference),
    			 "success"=>true,
              'message'=>'',
-             // "command" => 'getBlockNumber'
    		];
 
         return $return;
-        // $client->send(json_encode($return));
    	}
 
 
     // verifica eventuali transazioni dell'utente a partire dal getBlockNumber
 	// dell'utente fino ad arrivare all'ultimo blocco della blockchain
-
     function commandCheckTransactions(ConnectionInterface $client, $msg)
 	{
+        // inizializza il transactionsFound
+        $this->transactionsFound = [];
+
         $request = json_decode($msg, true);
 		// echo '<pre>'.print_r($request,true).'</pre>';
         $postData = $request['postData'];
@@ -193,7 +182,7 @@ class CommandsServer extends WebSocketServer
 		// Inizio il ciclo sui blocchi
         for ($x=1; $x < $maxBlockToScan;$x++)
 		{
-            $this->log('inizio il ciclo: '.$x);
+            $this->log('Inizio il ciclo: '.$x);
 
             if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock))
             {
@@ -203,7 +192,11 @@ class CommandsServer extends WebSocketServer
 
 			   	// ricerco le informazioni del blocco tramite il suo numero
 				$block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
-				$transactions = $block->transactions;
+
+                // $this->log("Informazioni sul blocco: <pre>".print_r($block,true)."</pre>\n");
+
+
+                $transactions = $block->transactions;
 
 
 
@@ -309,44 +302,38 @@ class CommandsServer extends WebSocketServer
 										   'deleted' => 0,
 									   ];
 
-
-                                       $this->log("salvo il primo messaggio\n");
-
-									   $messages = Messages::save($notification);
-
-                                       $this->log("messages: <pre>".print_r($messages,true)."</pre>\n");
+                                       $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+                                       $messages= Messages::push($notification);
+                                       $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
 									   // $save->Notification($notification);
 
 									   // notifica per chi riceve (to_address)
 									   $id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
-									   $notification['id_user'] = $id_user_to === null ? 1 : $id_user_to;
-									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
-                                       $this->log("salvo il secondo messaggio\n");
+                                       // perchè id_user_to === null  ???
+                                       // potrebbe accadere che la trtansazione viene inviata da
+                                       // METAMASK o da altra applicazione quindi non trovo
+                                       // l'indirizzo di quel particolare user nella tabella
+                                       // quindi NON INVIO il messaggio
+                                       if ($id_user_to !== null){
+                                           $notification['id_user'] = $id_user_to;;
+    									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
-                                       $messages = Messages::push($notification);
-                                       $this->log("messages 2: <pre>".print_r($messages,true)."</pre>\n");
+                                           $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+                                           $messages= Messages::push($notification);
+                                           $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                       } else {
+                                           $this->log("quindi NON invio il messaggio al DESTINATARIO, in quanto non trovato in tabella wallet");
+                                       }
 
 
 
                                        // imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
                                       $this->setTransactionsFound([
-                                          // 'id_token' => $tokens->id_token,
-                                          // 'data' => '<small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>',
-                                          // 'status' => WebApp::Icon($tokens->status),
-                                          // 'token_price' => WebApp::typePrice($transactionValue,(strtoupper($transactionContract->from) == $SEARCH_ADDRESS ? 'sent' : 'received')),
-                                          // 'from_address' => $tokens->from_address,
-                                          // 'to_address' => $tokens->to_address,
-                                           // // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                           // 'pushoptions' => [
-                                           //     'url' => 'index.php?r=tokens%2view&id='.WebApp::encrypt($tokens->id_token),
-                                           //    'title' => Yii::t('app','New transaction'),
-                                           //    'message' => Yii::t('app','A transaction you received has been completed.'),
-                                           // ],
+                                          'id_token' => $tokens->id_token,
                                            'pushoptions' => $messages,
-
-                                           'row' => WebApp::showTransactionRow($tokens,$tokens->to_address),
+                                           'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                       ]);
 
 
@@ -385,30 +372,15 @@ class CommandsServer extends WebSocketServer
 												  'deleted' => 0,
 											  ];
 
-                                              $this->log("quindi salvo messaggio 3\n");
+                                              $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
 
                                               $messages= Messages::push($notification);
                                               $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
-
-
-
                                               $this->setTransactionsFound([
-                                                 // 'id_token' => $tokens->id_token,
-                                                 // 'data' => '<small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>',
-                                                 // 'status' => WebApp::Icon($tokens->status),
-                                                 // 'token_price' => WebApp::typePrice($tokens->token_price,(strtoupper($transaction->from) == $SEARCH_ADDRESS ? 'sent' : 'received')),
-                                                 // 'from_address' => $tokens->from_address,
-                                                 // 'to_address' => $tokens->to_address,
-                                                 // // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                                 // 'pushoptions' => [
-                                                 //     'url' => 'index.php?r=tokens%2view&id='.WebApp::encrypt($tokens->id_token),
-                                                   //   'title' => Yii::t('app','New transaction'),
-                                                   //   'message' => Yii::t('app','A transaction you received has been completed.'),
-                                                 // ],
+                                                  'id_token' => $tokens->id_token,
                                                  'pushoptions' => $messages,
-
-                                                 'row' => WebApp::showTransactionRow($tokens,$tokens->to_address),
+                                                 'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                               ]);
                                           }else {
                                               $this->log("la tabella token è già aggiornata e i token sono già stati ricevuti e quindi non faccio nulla: $tokens->token_price\n");
@@ -438,62 +410,46 @@ class CommandsServer extends WebSocketServer
 
 
 
-		   }else{
-               // savedBlock +x > chainBlock
-               // echo "\r\n<pre>blocchi wallet in pari</pre>";
-			   break;
-		   }
+            }else{
+                // savedBlock +x > chainBlock
+                $this->log(">blocchi wallet in pari");
+    			break;
+            }
 
 
        } // ciclo for
-
-
-           // echo "\r\n<pre>fine ciclo</pre>";
-
+       // echo "\r\n<pre>fine ciclo</pre>";
 	   // }
 	   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
 
        // echo "\r\n<pre>fine funzione</pre>";
        $difference = hexdec($chainBlock) - hexdec($searchBlock);
-
        // echo "\r\n<pre>differenza è: $difference</pre>";
-
        // echo "\r\n<pre>txfound è : ".$this->getTransactionsFound() ."</pre>";
-
-
-
        // echo '\r\n<pre>il transactiopn found finale è'.print_r($this->getTransactionsFound(),true).'</pre>';
-       $test = $this->getTransactionsFound();
-       if (!(empty($test)))
-            $this->log("getTransaction: <pre>".print_r($test,true)."</pre>\n");
+       $timeToComplete = time() - hexdec($block->timestamp);
+
+       $txFound = $this->getTransactionsFound();
+        // if (!(empty($txFound)))
+        //     $this->log("getTransaction: <pre>".print_r($txFound,true)."</pre>\n");
 
 
-       //if (empty($test)){
-           // restituisco le transazioni
-           //return $this->json($this->getTransactionsFound());
-           // non ho trovato nulla
-           $return = [
-               // 'id'=>time(),
-               'success'=>true,
-               'message'=>'response from check-transactions',
-               // 'difference' => $difference,
-               // 'command' => 'getBlockNumber',
-               // "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
-               "transactions"=>$test,
+       $return = [
+           // 'id'=>time(),
+           'success'=>true,
+           'message'=>'response from check-transactions',
+           // 'difference' => $difference,
+           // 'command' => 'getBlockNumber',
+           // "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
+           "transactions"=>$txFound,
+            "walletBlocknumber"=>$searchBlock,
+            "chainBlocknumber"=>$chainBlock,
+            "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
+            "difference"=> $difference,
+            "user_address"=>$postData['search_address'],
+            "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
+       ];
 
-                "walletBlocknumber"=>$searchBlock,
-                "chainBlocknumber"=>$chainBlock,
-                "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
-                "difference"=> $difference,
-                "user_address"=>$postData['search_address'],
-                "relativeTime" => Yii::$app->formatter->asDuration($difference),
-               //calcolo la differenza tra i blocchi
-
-           ];
-
-       // } else {
-       //     $return = $test;
-       // }
 
        $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
 

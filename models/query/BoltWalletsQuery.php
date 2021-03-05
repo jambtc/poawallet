@@ -64,7 +64,7 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
         if ($wallet !== null) {
             return $wallet->id_user;
         } else {
-            return 1;
+            return null;
         }
 
 	}

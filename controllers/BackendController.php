@@ -211,7 +211,7 @@ class BackendController extends Controller
 				id="news_'.$notify->id_notification.'">
 	   			<div class="d-flex align-items-center justify-content-between">
 	                   <div class="d-flex align-items-center">
-	                       <div class="notice-icon available">
+	                       <div class="notice-icon available" style="min-width:30px;">
 	                           <i class="'.$notifi__icon.'"></i>
 	                       </div>
 	                       <div class="ml-10">

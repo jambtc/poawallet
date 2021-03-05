@@ -7,6 +7,10 @@ $(function () {
     function startWebSocket(){
         var webSocket = new WebSocket(yiiGlobalOptions.WebSocketServerAddress);
 
+        // console.log('[ws] readyState:', readyState);
+        //
+        getWsState(webSocket);
+
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
             console.log('[ws] onopen user_id:', yiiGlobalOptions.cryptedIdUser);
@@ -46,37 +50,48 @@ $(function () {
                         console.log('[ws] single transaction data:', tx);
                         showTransactionRow(tx);
                     }
-                    // chiamapippo();
                 }
+                var postData = {
+                    search_address: response.user_address, // indirizzo da controllare
+                    chainBlocknumber: response.chainBlocknumber,
+                    walletBlocknumber: response.walletBlocknumber,
+                };
+                var timeOut = 0;
 
                 if (response.difference > 0){
                     $('.header-message').html(response.headerMessage);
-                    var postData = {
-                        search_address: response.user_address, // indirizzo da controllare
-                        chainBlocknumber: response.chainBlocknumber,
-                        walletBlocknumber: response.walletBlocknumber,
-                    };
-                    // console.log('[ws: getBlockNumber] postData:',postData);
+                } else {
+                    $('.header-message').html('');
+                    postData.chainBlocknumber += 10;
+                    timeout = 10000;
+                }
+                setTimeout(function(){
                     webSocket.send( JSON.stringify({
                         'action' : 'checkTransactions',
                         'postData' : postData,
                     }));
-                } else {
-                    $('.header-message').html('');
-                    postData.chainBlocknumber += 10;
-                    setTimeout(function(){
-                        webSocket.send( JSON.stringify({
-                            'action' : 'checkTransactions',
-                            'postData' : postData,
-                        }));
-                    }, 10000);
-                }
+                }, timeOut);
             }
         };
     }
 
-    function showTransactionRow(tx){
+    function getWsState(ws){
+        var readyState = ws.readyState;
+        console.log('[ws] readyState:', readyState);
+        if (readyState == 3){
+            startWebSocket();
+        }else{
+            setTimeout(function(){
+                getWsState(ws);
+            }, 10000);
 
+        }
+
+
+
+    }
+
+    function showTransactionRow(tx){
         if ($('tr[data-key="' + tx.id_token + '"]').length){
             $('tr[data-key="' + tx.id_token + '"]').html(tx.row);
         } else {

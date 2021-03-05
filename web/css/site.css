@@ -156,6 +156,10 @@ aside .nav-pills .nav-link.active {
     color: white;
 }
 
+.bg-newtransaction {
+    background-color: rgb(0 123 255 / 25%) !important;
+}
+
 
 
 /* INPUT FORM */

@@ -10,6 +10,8 @@ use yii\widgets\DetailView;
 
 $this->title = Yii::t('app','Transaction details') .' - '. $model->id_token;
 \yii\web\YiiAsset::register($this);
+
+include ('view_js.php');
 ?>
 <div class="dash-balance">
     <div class="ref-card c2 mb-3">
@@ -39,13 +41,17 @@ $this->title = Yii::t('app','Transaction details') .' - '. $model->id_token;
                                 'attribute'=>Yii::t('app','id_token'),
                                 'value'=>app\components\WebApp::encrypt($model->id_token),
                                 'contentOptions' => ['class' => 'text-break']
-
                             ],
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('app','status'),
                                 'value'=>$model->status,
-                                'contentOptions' => ['class' => ($model->status == 'complete') ? 'badge badge-pill green text-capitalize' : 'badge badge-pill yellow text-capitalize']
+                                'contentOptions' => [
+                                    'class' => ($model->status == 'complete') ?
+                                        'trans-get button circle block green text-capitalize'
+                                        : 'trans-get button circle block gray text-capitalize',
+                                    'id' => 'trans-get-'.$model->id_token
+                                ]
                             ],
                             'invoice_timestamp:datetime',
                             'token_price',
@@ -67,7 +73,13 @@ $this->title = Yii::t('app','Transaction details') .' - '. $model->id_token;
                                 'value'=>$model->txhash,
                                 'contentOptions' => ['class' => 'text-break']
                             ],
-                            'blocknumber',
+                            [
+                                'type'=>'raw',
+                                'attribute'=>Yii::t('app','blocknumber'),
+                                'value'=>'0x'.dechex($model->blocknumber),
+                                'contentOptions' => ['class' => 'text-break']
+                            ],
+                            // '',
 
                         ],
                     ]) ?>

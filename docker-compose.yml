@@ -1,9 +1,25 @@
-version: '2'
+version: '3'
 services:
-  php:
-    image: yiisoftware/yii2-php:7.4-apache
+  wss:
+    hostname: wss
+    build:
+       dockerfile: Dockerfile-wss
+       context: .
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
     ports:
-      - '8000:80'
+      - '7502:7502'
+
+  php:
+    hostname: wallet
+    depends_on:
+      - wss
+    build:
+      dockerfile: Dockerfile
+      context: .
+    volumes:
+      - ~/.composer-docker/cache:/root/.composer/cache:delegated
+      - ./:/app:delegated
+    ports:
+      - '9001:80'

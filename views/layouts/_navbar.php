@@ -24,13 +24,25 @@ NavBar::end();
 					<a href="<?= Url::to(['/wallet/index']) ?>"><img src="css/img/content/icons/2.png" alt=""><strong class="special"><?= Yii::t('app','My Wallet') ?></strong> </a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/send/index']) ?>"><img src="css/img/content/icon1.png" alt=""><strong class="special"><?= Yii::t('app','Send') ?></strong> </a>
+					<a href="<?= Url::to(['/send/index']) ?>">
+						<!-- <img src="css/img/content/icon1.png" alt=""> -->
+						<i class="far fa-paper-plane fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','Send') ?></strong>
+					</a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/receive/index']) ?>"><img src="css/img/content/icon2.png" alt=""><strong class="special"><?= Yii::t('app','Receive') ?></strong> </a>
+					<a href="<?= Url::to(['/receive/index']) ?>">
+						<!-- <img src="css/img/content/icon2.png" alt=""> -->
+						<i class="fas fa-wallet fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','Receive') ?></strong>
+					</a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/tokens/index']) ?>"><img src="css/img/content/icons/3.png" alt=""><strong class="special"><?= Yii::t('app','Transactions') ?></strong> </a>
+					<a href="<?= Url::to(['/tokens/index']) ?>">
+						<!-- <img src="css/img/content/icons/3.png" alt=""> -->
+						<i class="fa fa-list fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','Transactions') ?></strong>
+					</a>
 				</li>
 				<li class="">
 					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('app','Profile') ?></strong> </a>

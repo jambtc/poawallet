@@ -72,6 +72,8 @@ include ('manage-push_js.php');
 
 	<div class="list-box">
 		<div class="list-item">
+			<i class="far fa-keyboard text-primary"></i>
+			<em class="seperate"></em>
 			<span class="list-item-title"><?= Yii::t('app','PIN');?><small class="text-muted"></small></span>
 			<div class="pincodeslider sweet-check" >
 				<!-- <input type="checkbox" name="pincodeslider" value="1"> -->
@@ -142,6 +144,8 @@ include ('manage-push_js.php');
 
 	<div class="list-box">
 		<div class="list-item">
+			<i class="far fa-comment text-primary"></i>
+			<em class="seperate"></em>
 			<span class="list-item-title"><?php echo Yii::t('app','PUSH notifications');?> <small class="text-muted"></small></span>
 
 			<div class="js-push-btn-modal sweet-check "

@@ -8,6 +8,7 @@ use app\models\search\BoltTokensSearch;
 use app\models\BoltWallets;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\filters\VerbFilter;
 
 // Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
@@ -75,6 +76,31 @@ class TokensController extends Controller
         return $this->render('view', [
             'model' => $this->findModel(WebApp::decrypt($id)),
         ]);
+    }
+
+    /**
+     * Displays a single BoltTokens model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionGetTransactionDetails($txhash)
+    {
+        $receipt = '';
+        $success = false;
+
+        if ($txhash != '0x0'){
+            $success = true;
+            $receipt = Yii::$app->Erc20->getReceipt($txhash);
+        }
+        $return = [
+            'success' => $success,
+            'receipt' => $receipt,
+        ];
+        // echo "<pre>".print_r($return,true)."</pre>";
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $return;
     }
 
 

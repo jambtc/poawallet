@@ -103,7 +103,7 @@ class WebApp extends Component
         return isset($contents[$key]) ? $contents[$key] : "";
     }
 
-    public static function showTransactionRow($data, $fromAddress){
+    public static function showTransactionRow($data, $fromAddress,$newTransaction=false){
         $dateLN = date("d M `y",$data->invoice_timestamp);
         $timeLN = date("H:i:s",$data->invoice_timestamp);
 
@@ -117,8 +117,8 @@ class WebApp extends Component
           $addressToShow = $data->from_address;
         }
         $coinImg = ($data->type == 'token') ? 'coin5' : 'coin2';
-
         $classStatus = ($data->status == 'complete') ? 'bg-success' : 'bg-secondary';
+        $newTxClass = ($newTransaction == true) ? 'bg-newtransaction' : '';
 
         $line = '
         <a href="index.php?r=tokens/view&id='. self::encrypt($data->id_token) . '" />
@@ -126,7 +126,7 @@ class WebApp extends Component
               <div class="row">
                   <div class="col-12 m-0 p-0">
                       <div class="card shadow">
-                          <div class="transaction-card-horizontal">
+                          <div class="transaction-card-horizontal '.$newTxClass.'">
                               <div class="img-square-wrapper">
                                   <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
                               </div>
