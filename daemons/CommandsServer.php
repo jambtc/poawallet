@@ -33,14 +33,6 @@ class CommandsServer extends WebSocketServer
 		return $this->maxBlocksToScan;
 	}
 	private function setTransactionsFound($transaction){
-        // echo "\r\nsto nella fuznione";
-		// $this->transactionsFound["id"] = time();
-		// $this->transactionsFound["success"] = true;
-        // $this->transactionsFound["command"] = 'checkTransactions';
-        // $this->transactionsFound["headerMessage"] = '';
-        //
-		// $this->transactionsFound["openUrl"] = Url::to(['/tokens/view','id'=>WebApp::encrypt($transaction['id_token'])]);
-		// $this->transactionsFound["transactions"][] = $transaction;
         $this->transactionsFound[] = $transaction;
 	}
 	private function getTransactionsFound(){
@@ -188,18 +180,10 @@ class CommandsServer extends WebSocketServer
             {
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
-
-
 			   	// ricerco le informazioni del blocco tramite il suo numero
 				$block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
-
                 // $this->log("Informazioni sul blocco: <pre>".print_r($block,true)."</pre>\n");
-
-
                 $transactions = $block->transactions;
-
-
-
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
 				// $this->log('<pre>'.print_r($transactions,true).'</pre>');
 				// exit;
@@ -213,16 +197,15 @@ class CommandsServer extends WebSocketServer
 					{
 						//controlla transazioni ethereum
 						if (strtoupper($transaction->to) <> strtoupper($settings->poa_contractAddress) ){
-							 $this->log(" : è una transazione ether...\n");
-
+							$this->log(" : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
 						    $this->log(" : è una transazione token...\n");
-						   //smart contract
-						   $ReceivingType = 'token';
-						   // $transactionId = $transaction->hash;
-						   // recupero la ricevuta della transazione tramite hash
-						   $transactionContract = Yii::$app->Erc20->getReceipt($transaction->hash);
+						    //smart contract
+						    $ReceivingType = 'token';
+						    // $transactionId = $transaction->hash;
+						    // recupero la ricevuta della transazione tramite hash
+						    $transactionContract = Yii::$app->Erc20->getReceipt($transaction->hash);
 
 						   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
 						   {
@@ -333,6 +316,7 @@ class CommandsServer extends WebSocketServer
                                       $this->setTransactionsFound([
                                           'id_token' => $tokens->id_token,
                                            'pushoptions' => $messages,
+                                           'balance' => Yii::$app->Erc20->Balance($postData['search_address']),
                                            'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                       ]);
 
@@ -380,6 +364,7 @@ class CommandsServer extends WebSocketServer
                                               $this->setTransactionsFound([
                                                   'id_token' => $tokens->id_token,
                                                  'pushoptions' => $messages,
+                                                 'balance' => Yii::$app->Erc20->Balance($postData['search_address']),
                                                  'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                               ]);
                                           }else {
