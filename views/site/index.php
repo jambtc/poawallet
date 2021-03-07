@@ -18,14 +18,13 @@ $this->title = Yii::$app->id;
         </h5>
 
         <div class="form-divider"></div>
-        <section class="trans-sec container">
+
           <div class="form-row">
             <a href="<?php echo Url::to(['site/login']); ?>" class="button circle block orange">Login</a>
           </div>
-          <div class="form-row txt-center mt-15">
-            Don't you have an account yet? <a href="<?php echo Url::to(['site/register']); ?>" data-loader="show">Sign Up</a>
-          </div>
-        </section>
+          <div class="form-divider"></div>
+          <div class="form-divider"></div>
+
       </div>
     </div>
   </div>

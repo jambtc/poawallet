@@ -49,12 +49,24 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
+        // 'mailer' => [
+        //     'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure a transport
             // for the mailer to send real emails.
-            'useFileTransport' => true,
+        //     'useFileTransport' => false,
+        // ],
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@app/mail',
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.mailtrap.io',
+                'username' => 'c98eded3f83a47',
+                'password' => '7838a4cce6636a',
+                'port' => '2525',
+                'encryption' => 'tls',
+            ],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -80,9 +92,9 @@ $config = [
         // this component add timestamp to downloaded css or javascript
         // to avoid forced refresh during develop
 
-        // 'assetManager' => [
-        //     'appendTimestamp' => true
-        // ],
+        'assetManager' => [
+            'appendTimestamp' => true
+        ],
 
     ],
     'params' => $params,

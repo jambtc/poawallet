@@ -5,26 +5,26 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "np_users".
+ * This is the model class for table "mp_users".
  *
- * @property int $id_user
- * @property int $id_users_type
- * @property string $email
+ * @property int $id
+ * @property string $username
  * @property string $password
  * @property string|null $ga_secret_key
- * @property string $name
- * @property string $surname
- * @property string|null $corporate
- * @property string|null $denomination
- * @property string $vat
- * @property string $address
- * @property string $cap
- * @property string $city
- * @property string $country
  * @property string $activation_code
  * @property int $status_activation_code
+ * @property string $oauth_provider
+ * @property string $oauth_uid
+ * @property string|null $authKey
+ * @property string|null $accessToken
+ * @property string|null $facade
+ * @property string|null $provider
+ * @property string|null $picture
+ * @property string|null $email
+ * @property string|null $last_name
+ * @property string|null $first_name
  *
- * @property NpApi[] $npApis
+ * @property MpWallet[] $mpWallets
  */
 class Users extends \yii\db\ActiveRecord
 {
@@ -33,7 +33,7 @@ class Users extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'np_users';
+        return 'mp_users';
     }
 
     /**
@@ -42,12 +42,14 @@ class Users extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_users_type', 'email', 'password', 'name', 'surname', 'vat', 'address', 'cap', 'city', 'country', 'activation_code', 'status_activation_code'], 'required'],
-            [['id_users_type', 'status_activation_code'], 'integer'],
-            [['email', 'password', 'name', 'surname'], 'string', 'max' => 255],
-            [['ga_secret_key', 'corporate'], 'string', 'max' => 16],
-            [['denomination', 'vat', 'address', 'cap', 'city', 'country'], 'string', 'max' => 250],
+            [['username', 'password', 'activation_code', 'status_activation_code', 'oauth_provider', 'oauth_uid'], 'required'],
+            [['status_activation_code'], 'integer'],
+            [['username', 'password', 'authKey', 'accessToken', 'picture', 'email', 'last_name', 'first_name'], 'string', 'max' => 255],
+            [['ga_secret_key'], 'string', 'max' => 16],
             [['activation_code'], 'string', 'max' => 50],
+            [['oauth_provider'], 'string', 'max' => 8],
+            [['oauth_uid'], 'string', 'max' => 100],
+            [['facade', 'provider'], 'string', 'max' => 20],
         ];
     }
 
@@ -57,41 +59,41 @@ class Users extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_user' => Yii::t('app', 'Id User'),
-            'id_users_type' => Yii::t('app', 'Id Users Type'),
-            'email' => Yii::t('app', 'Email'),
+            'id' => Yii::t('app', 'ID'),
+            'username' => Yii::t('app', 'Username'),
             'password' => Yii::t('app', 'Password'),
             'ga_secret_key' => Yii::t('app', 'Ga Secret Key'),
-            'name' => Yii::t('app', 'Name'),
-            'surname' => Yii::t('app', 'Surname'),
-            'corporate' => Yii::t('app', 'Corporate'),
-            'denomination' => Yii::t('app', 'Denomination'),
-            'vat' => Yii::t('app', 'Vat'),
-            'address' => Yii::t('app', 'Address'),
-            'cap' => Yii::t('app', 'Cap'),
-            'city' => Yii::t('app', 'City'),
-            'country' => Yii::t('app', 'Country'),
             'activation_code' => Yii::t('app', 'Activation Code'),
             'status_activation_code' => Yii::t('app', 'Status Activation Code'),
+            'oauth_provider' => Yii::t('app', 'Oauth Provider'),
+            'oauth_uid' => Yii::t('app', 'Oauth Uid'),
+            'authKey' => Yii::t('app', 'Auth Key'),
+            'accessToken' => Yii::t('app', 'Access Token'),
+            'facade' => Yii::t('app', 'Facade'),
+            'provider' => Yii::t('app', 'Provider'),
+            'picture' => Yii::t('app', 'Picture'),
+            'email' => Yii::t('app', 'Email'),
+            'last_name' => Yii::t('app', 'Last Name'),
+            'first_name' => Yii::t('app', 'First Name'),
         ];
     }
 
     /**
-     * Gets query for [[NpApis]].
+     * Gets query for [[MpWallets]].
      *
-     * @return \yii\db\ActiveQuery|NpApiQuery
+     * @return \yii\db\ActiveQuery|\app\models\query\MpWalletQuery
      */
-    public function getNpApis()
+    public function getMpWallets()
     {
-        return $this->hasMany(NpApi::className(), ['id_user' => 'id_user']);
+        return $this->hasMany(MpWallet::className(), ['id_user' => 'id']);
     }
 
     /**
      * {@inheritdoc}
-     * @return UsersQuery the active query used by this AR class.
+     * @return \app\models\query\UsersQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new UsersQuery(get_called_class());
+        return new \app\models\query\UsersQuery(get_called_class());
     }
 }
