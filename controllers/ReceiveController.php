@@ -90,6 +90,12 @@ class ReceiveController extends Controller
  		]);
  	}
 
+	public function actionGetAddress(){
+		return yii\helpers\Json::encode([
+			'wallet_address' => BoltWallets::find()->userAddress(Yii::$app->user->id)
+		]);
+	}
+
 
 
 
