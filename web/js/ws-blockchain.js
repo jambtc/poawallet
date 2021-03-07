@@ -8,9 +8,6 @@ $(function () {
         var webSocket = new WebSocket(yiiGlobalOptions.WebSocketServerAddress);
 
         // console.log('[ws] readyState:', readyState);
-        //
-        getWsState(webSocket);
-
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
             console.log('[ws] onopen user_id:', yiiGlobalOptions.cryptedIdUser);
@@ -18,6 +15,7 @@ $(function () {
                 'action' : 'setUserId',
                 'user_id' : yiiGlobalOptions.cryptedIdUser
             }));
+            getWsState(webSocket);
         };
 
         // in caso di errore di connessione o server down riavvio

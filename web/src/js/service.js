@@ -5,17 +5,27 @@ if (!window.Promise){
 	window.Promise = Promise;
 }
 
-if ('serviceWorker' in navigator){
-	navigator.serviceWorker
-		//.register('sw.js')
-		.register('service-worker.js').then(reg => {
-		  reg.installing; // the installing worker, or undefined
-		  reg.waiting; // the waiting worker, or undefined
-		  reg.active; // the active worker, or undefined
+let newWorker;
 
-		  reg.addEventListener('updatefound', () => {
+function showUpdateBar() {
+    let snackbar = document.getElementById('snackbar');
+    snackbar.className = 'show';
+}
+
+// The click event on the pop up notification
+document.getElementById('reload').addEventListener('click', function(){
+    newWorker.postMessage({ action: 'skipWaiting' });
+});
+
+if ('serviceWorker' in navigator){
+	navigator.serviceWorker.register('service-worker.js').then(reg => {
+		reg.installing; // the installing worker, or undefined
+		reg.waiting; // the waiting worker, or undefined
+		reg.active; // the active worker, or undefined
+
+		reg.addEventListener('updatefound', () => {
 		    // A wild service worker has appeared in reg.installing!
-		    const newWorker = reg.installing;
+		    newWorker = reg.installing;
 
 		    newWorker.state;
 		    // "installing" - the install event has fired, but not yet complete
@@ -28,15 +38,32 @@ if ('serviceWorker' in navigator){
 		    newWorker.addEventListener('statechange', () => {
 		    	// newWorker.state has changed
 			  	console.log('[Service worker] ... new state',newWorker.state);
+				// Has network.state changed?
+				switch (newWorker.state) {
+					case 'installed':
+			  			if (navigator.serviceWorker.controller) {
+			    			// new update available
+			    			showUpdateBar();
+			  			}
+			  			// No update available
+			  			break;
+				}
 		    });
-		  });
-		})
-		.then(function (){
-			console.log('[Service worker] ... from service registered.');
-		})
-		.catch(function(err) {
-	   		console.log("Service Worker Failed to Register", err);
-   		});
+		});
+	})
+	.then(function (){
+		console.log('[Service worker] ... from service registered.');
+	})
+	.catch(function(err) {
+   		console.log("Service Worker Failed to Register", err);
+	});
+
+	let refreshing;
+	navigator.serviceWorker.addEventListener('controllerchange', function () {
+		if (refreshing) return;
+		window.location.reload();
+		refreshing = true;
+	});
 }
 
 

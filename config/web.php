@@ -79,9 +79,10 @@ $config = [
 
         // this component add timestamp to downloaded css or javascript
         // to avoid forced refresh during develop
-        'assetManager' => [
-            'appendTimestamp' => true
-        ],
+
+        // 'assetManager' => [
+        //     'appendTimestamp' => true
+        // ],
 
     ],
     'params' => $params,

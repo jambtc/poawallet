@@ -73,6 +73,7 @@ SynchronizeLatestBlocksAsset::register($this);
     <!-- <link rel="stylesheet" type="text/css" href="css/yiipager.css"> -->
 </head>
 <body>
+
 <?php $this->beginBody() ?>
 
 
@@ -84,6 +85,7 @@ SynchronizeLatestBlocksAsset::register($this);
         <?php $this->beginContent('@app/views/layouts/base.php') ?>
 
         <?php echo $this->render('_searchform'); ?>
+        <div id="snackbar">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
 
         <main class="margin mt-0">
 

@@ -2,29 +2,33 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-// quando cambi questi valori modificali anche in view/layouts/js_sw.php
-var CACHE_STATIC_NAME = 'megapay-static-003';
-var CACHE_DYNAMIC_NAME = 'megapay-dynamic-003';
+var CACHE_STATIC_NAME = 'megapay-static-006';
+var CACHE_DYNAMIC_NAME = 'megapay-dynamic-004';
 var STATIC_FILES = [
 	'/',
-	// 'offline.php',
+	'offline.html',
 	'manifest.json',
 
-	// js
-	// 'themes/cool/vendor/jquery-3.2.1.min.js',
-	// 'themes/cool/vendor/chartjs/Chart.bundle.min.js',
-	// 'themes/cool/vendor/bootstrap-4.1/popper.min.js',
-	// 'themes/cool/vendor/bootstrap-4.3/js/bootstrap.min.js',
-	// 'themes/cool/vendor/slick/slick.min.js',
-	// 'themes/cool/vendor/wow/wow.min.js',
-	// 'themes/cool/vendor/animsition/animsition.min.js',
-	// 'themes/cool/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js',
-	// 'themes/cool/vendor/counter-up/jquery.waypoints.min.js',
-	// 'themes/cool/vendor/counter-up/jquery.counterup.min.js',
-	// 'themes/cool/vendor/circle-progress/circle-progress.min.js',
-	// 'themes/cool/vendor/perfect-scrollbar/perfect-scrollbar.js',
-	// 'themes/cool/vendor/select2/select2.min.js',
-	// 'themes/cool/js/main.js',
+	'favicon.ico',
+	'css/global.style.css',
+	'css/img/content/coin5.png',
+	'css/img/content/dash-bg.png',
+	'css/img/content/icons/2.png',
+	'css/img/content/icons/5.png',
+	'css/pincode.css',
+	'css/site.css',
+	'css/yiipager.css',
+
+	'js/global.script.js',
+	'js/notifications-MainWorker.js',
+	'js/pincode/pincode-global.js',
+	'js/pincode/pincode-settings.js',
+	'js/pincode/pincode-utility.js',
+	'js/web-workers/bcWorker.js',
+	'js/web-workers/notificationsWorker.js',
+	'js/ws-blockchain.js',
+	'js/ws-latest.js',
+	'src/images/icons/app-icon-144x144.png',
 
 	'src/js/promise.js',
 	'src/js/fetch.js',
@@ -32,41 +36,7 @@ var STATIC_FILES = [
 	'src/js/idb-utility.js',
 	'src/js/service.js',
 
-	// 'src/ethjs/lightwallet.min.js',
-	// 'src/ethjs/aes.js',
-	// 'src/ethjs/aes-json-format.js',
-
-	// images
-	// // 'css/images/bolt-logo.png',
-	// // 'css/images/ic_account_circle.svg',
-	// // 'css/images/ic_vpn_key.svg',
-	// // 'css/images/facebook.svg',
-	// // 'css/images/telegram.svg',
-	// // 'css/images/google.svg',
-	// // 'css/images/ic_account_google2fa.png',
-	// // 'css/favicon.ico',
-	// // 'css/images/loading.gif',
-	//
-	// // css
-	// 'themes/cool/css/font-face.css',
-	// 'themes/cool/vendor/font-awesome-4.7/css/font-awesome.min.css',
-	// 'themes/cool/vendor/font-awesome-5/css/fontawesome-all.min.css',
-	// 'themes/cool/vendor/mdi-font/css/material-design-iconic-font.min.css',
-	// 'themes/cool/vendor/bootstrap-4.3/css/bootstrap.min.css',
-	// 'themes/cool/vendor/animsition/animsition.min.css',
-	// 'themes/cool/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css',
-	// 'themes/cool/vendor/wow/animate.css',
-	// 'themes/cool/vendor/css-hamburgers/hamburgers.min.css',
-	// 'themes/cool/vendor/slick/slick.css',
-	// 'themes/cool/vendor/select2/select2.min.css',
-	// 'themes/cool/vendor/perfect-scrollbar/perfect-scrollbar.css',
-	//
-	// 'themes/cool/css/theme.css',
-	// // 'themes/cool/css/sandstone.css',
-	// 'css/wallet.css',
-	// 'css/fixlogin.css',
-	// 'css/yiipager.css',
-	// 'css/numpad.css',
+	
 
 
 ];
@@ -103,6 +73,12 @@ function trimCache(cacheName, maxItems) {
 				});
 		});
 }
+
+self.addEventListener('message', function (event) {
+	if (event.data.action === 'skipWaiting') {
+    	self.skipWaiting();
+	}
+});
 
 
 self.addEventListener('install', function (event) {
@@ -147,19 +123,42 @@ function getFileExtension(filename) {
   return filename.split('.').pop();
 }
 
+// this.addEventListener('fetch', event => {
+//   // request.mode = navigate isn't supported in all browsers
+//   // so include a check for Accept: text/html header.
+//   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
+//         event.respondWith(
+//           fetch(event.request.url).catch(error => {
+//               // Return the offline page
+//               return caches.match('offline.html');
+//           })
+//     );
+//   }
+//   else{
+//         // Respond with everything else if we can
+//         event.respondWith(caches.match(event.request)
+//                         .then(function (response) {
+//                         return response || fetch(event.request);
+//                     })
+//             );
+//       }
+// });
+
+
 // restituisco sempre l'originale e non carico da cache
 self.addEventListener('fetch', function (event) {
 	var parser = new URL(event.request.url);
 
 
-	if (getFileExtension(parser.pathname) == 'php'
-		//|| getFileExtension(parser.pathname) == 'css'
-	){
-		console.log('[SW Parser] web ',parser.pathname);
-		event.respondWith(
-		 	fetch(event.request)
-		);
-	} else if (isInArray(event.request.url, STATIC_FILES)) {
+	// if (getFileExtension(parser.pathname) == 'php'
+	// 	//|| getFileExtension(parser.pathname) == 'css'
+	// ){
+	// 	console.log('[SW Parser] web ',parser.pathname);
+	// 	event.respondWith(
+	// 	 	return fetch(event.request)
+	// 	);
+	// } else
+	if (isInArray(event.request.url, STATIC_FILES)) {
 		console.log('[SW Parser] static cache ',parser.pathname);
 		event.respondWith(
 			fetch(event.request).catch(function(){
@@ -193,9 +192,17 @@ self.addEventListener('fetch', function (event) {
 							catch(function(err) {
 								return caches.open(CACHE_STATIC_NAME)
 									.then(function(cache) {
-										if (event.request.headers.get('accept').includes('text/html')){
-											return cache.match('offline.php');
-										}
+										if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
+										// if (event.request.headers.get('accept').includes('text/html')){
+											return cache.match('offline.html');
+										}else{
+									        // Respond with everything else if we can
+									        event.respondWith(caches.match(event.request)
+									            .then(function (response) {
+									                return response || fetch(event.request);
+									            })
+									        );
+									     }
 									})
 							});
 					}
@@ -205,128 +212,6 @@ self.addEventListener('fetch', function (event) {
 
 
 });
-
-//listener per i file caricati
-// self.addEventListener('fetch', function (event) {
-// 	var url1 = '?r=tokens/index';
-// 	//var url2 = '?r=wallet/index';
-// 	var url3 = '?r=wallet/checkAddress';
-// 	var url4 = '?r=wallet/gasPrice';
-// 	var url5 = '?r=settings/user';
-// 	var url6 = '?r=tokens/view';
-// 	var url7 = '?r=site/logout';
-// 	var url8 = '?r=blockchain/index';
-// 	var url9 = '?r=blockchain/blocknumber';
-// 	var parser = new URL(event.request.url);
-//
-// 	//console.log('[Service Worker] parser',parser.search.substr(0,17));
-// 	// parser.protocol; // => "http:"
-// 	// parser.host;     // => "example.com:3000"
-// 	// parser.hostname; // => "example.com"
-// 	// parser.port;     // => "3000"
-// 	// parser.pathname; // => "/pathname/"
-// 	// parser.hash;     // => "#hash"
-// 	// parser.search;   // => "?search=test"
-// 	// parser.origin;   // => "http://example.com:3000"
-//
-// 	if (	parser.search == url1
-// 		 //|| parser.search == url2
-// 		 || parser.search.substr(0,17) == url5
-// 		 || parser.search.substr(0,17) == url6
-// 		 || parser.search == url7
-// 		 || parser.search == url8
-// 		 || parser.search == url9
-// 	){
-// 		console.log('[Service Worker] intercettato url da caricare solo via web: ', parser.search);
-// 		event.respondWith(
-// 			fetch(event.request)
-// 		);
-// 	}
-// 	else if (
-// 		parser.search == url3 ||
-// 		parser.search == url4
-// 	) {
-// 		switch (parser.search) {
-// 			case url3:
-// 				var table = 'np_checkaddress';
-// 				break;
-// 			case url4:
-// 				var table = 'np_gasPrice';
-// 				break;
-// 		}
-//
-// 		//console.log('intercettato richiesta di ...',table,'...');
-// 		event.respondWith(fetch(event.request)
-// 			.then(function(res) {
-// 				var clonedRes = res.clone();
-//
-// 				if (table != 'np_checkaddress'){
-// 					clearAllData(table)
-// 						.then(function(res){
-// 							return clonedRes.json();
-// 						})
-// 						.then(function(data) {
-// 							//console.log('[Service Worker] scrivo i dati in IndexedDB in tabella:'+table, data);
-// 	   						for (var key in data) {
-// 								//TODO: se il gas rioprta errore, non salvare!!!
-// 								writeData(table, data);
-// 							}
-// 						});
-// 				}else{
-// 					// se è checkaddress non svuoto il db così ottengo uno storico degli indirizzi
-// 					// e sono più veloce a dare una risposta per indirizzi già utilizzati
-// 					readAllData(table)
-// 						.then(function(res){
-// 							return clonedRes.json();
-// 						})
-// 						.then(function(data) {
-// 							//console.log('[Service Worker] scrivo i dati in IndexedDB in tabella:'+table, data);
-// 	   						for (var key in data) {
-// 								writeData(table, data);
-// 							}
-// 						});
-// 				}
-//
-// 				return res;
-// 			})
-//
-// 		);
-// 	} else if (isInArray(event.request.url, STATIC_FILES)) {
-// 		event.respondWith(
-// 			fetch(event.request).catch(function(){
-// 				return	caches.match(event.request);
-// 			})
-//
-// 		);
-// 	} else {
-// 		event.respondWith(
-// 			caches.match(event.request)
-// 				.then(function(response) {
-// 					if (response) {
-// 						return response;
-// 					} else {
-// 						return fetch(event.request)
-// 							.then(function(res) {
-// 								return caches.open(CACHE_DYNAMIC_NAME)
-// 									.then(function(cache) {
-// 										//trimCache(CACHE_DYNAMIC_NAME, 20);
-// 										cache.put(event.request.url, res.clone());
-// 										return res;
-// 									})
-// 							}).
-// 							catch(function(err) {
-// 								return caches.open(CACHE_STATIC_NAME)
-// 									.then(function(cache) {
-// 										if (event.request.headers.get('accept').includes('text/html')){
-// 											return cache.match('offline.php');
-// 										}
-// 									})
-// 							});
-// 					}
-// 				})
-// 		);
-// 	}
-// });
 
 
 //listener per la sincronizzazione in background
