@@ -13,9 +13,11 @@ function showUpdateBar() {
 }
 
 // The click event on the pop up notification
-document.getElementById('reload').addEventListener('click', function(){
-    newWorker.postMessage({ action: 'skipWaiting' });
-});
+if($('#reload').length){
+	document.getElementById('reload').addEventListener('click', function(){
+		newWorker.postMessage({ action: 'skipWaiting' });
+	});
+}
 
 if ('serviceWorker' in navigator){
 	navigator.serviceWorker.register('service-worker.js').then(reg => {

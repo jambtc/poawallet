@@ -85,7 +85,9 @@ SynchronizeLatestBlocksAsset::register($this);
         <?php $this->beginContent('@app/views/layouts/base.php') ?>
 
         <?php echo $this->render('_searchform'); ?>
-        <div id="snackbar">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
+        <div id="snackbar">
+            <?= Yii::t('app','A new version of this app is available. Click '); ?><a id="reload"><?= Yii::t('app','here') ?></a><?= Yii::t('app',' to update.') ?>
+        </div>
 
         <main class="margin mt-0">
 
