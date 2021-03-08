@@ -17,7 +17,7 @@ use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
 use app\models\MPWallets;
 use app\models\Users;
-use app\models\SendTokenForm;
+use app\models\SendForm;
 use app\models\WizardWalletForm;
 use app\models\PushSubscriptions;
 
@@ -113,7 +113,7 @@ class SendController extends Controller
 			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
-		$formModel = new SendTokenForm; //form di input dei dati
+		$formModel = new SendForm; //form di input dei dati
 
 		if (Yii::$app->request->isAjax && $formModel->load(Yii::$app->request->post())) {
 		    Yii::$app->response->format = Response::FORMAT_JSON;
@@ -129,7 +129,7 @@ class SendController extends Controller
  			'fromAddress' => $fromAddress,
 			'sendTokenForm' => $formModel,
 			'balance' => Yii::$app->Erc20->Balance($fromAddress),
-			'userImage' => $this->loadSocialUser()->picture,
+			// 'userImage' => $this->loadSocialUser()->picture,
  		]);
  	}
 

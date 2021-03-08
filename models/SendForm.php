@@ -15,7 +15,7 @@ use app\components\Settings;
 /**
  * SendTokenForm is the model behind the send token form.
  */
-class SendTokenForm extends Model
+class SendForm extends Model
 {
     public $from;
 	public $to;

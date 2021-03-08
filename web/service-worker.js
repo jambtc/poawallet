@@ -175,15 +175,14 @@ self.addEventListener('fetch', function (event) {
 	var parser = new URL(event.request.url);
 
 
-	// if (getFileExtension(parser.pathname) == 'php'
-	// 	//|| getFileExtension(parser.pathname) == 'css'
-	// ){
-	// 	console.log('[SW Parser] web ',parser.pathname);
-	// 	event.respondWith(
-	// 	 	return fetch(event.request)
-	// 	);
-	// } else
-	if (isInArray(event.request.url, STATIC_FILES)) {
+	if (getFileExtension(parser.search) == '?r=send%2findex'
+		//|| getFileExtension(parser.pathname) == 'css'
+	){
+		console.log('[SW Parser] web ',parser.pathname);
+		event.respondWith(
+		 	fetch(event.request)
+		);
+	} else if (isInArray(event.request.url, STATIC_FILES)) {
 		console.log('[SW Parser] static cache ',parser.pathname);
 		event.respondWith(
 			fetch(event.request).catch(function(){
