@@ -13,7 +13,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 
 
@@ -92,7 +92,7 @@ class ReceiveController extends Controller
 
 	public function actionGetAddress(){
 		return yii\helpers\Json::encode([
-			'wallet_address' => BoltWallets::find()->userAddress(Yii::$app->user->id)
+			'wallet_address' => MPWallets::find()->userAddress(Yii::$app->user->id)
 		]);
 	}
 
