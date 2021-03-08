@@ -89,43 +89,48 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
             'oauth_provider'=>$oauth_provider,
         ]);
 
-        if($record===null){
-        	return null;
-        } else {
-            $social = BoltSocialUsers::find()
-              ->where([
-          			'oauth_uid'=>$record->oauth_uid,
-          			'oauth_provider'=>$oauth_provider,
-          		])->one();
+        return $record;
 
-        	// fix per salvare un social user nel caso non fosse stato salvato
-        	if (null === $social){
-        		$explodemail = explode('@',$username);
-        		$explodename = explode('.',$explodemail[0]);
+        // if($record===null){
+        // 	return null;
+        // } else {
+            // $social = BoltSocialUsers::find()
+            //   ->where([
+          	// 		'oauth_uid'=>$record->oauth_uid,
+          	// 		'oauth_provider'=>$oauth_provider,
+          	// 	])->one();
+            //
+        	// // fix per salvare un social user nel caso non fosse stato salvato
+        	// if (null === $social){
+        	// 	$explodemail = explode('@',$username);
+        	// 	$explodename = explode('.',$explodemail[0]);
+            //
+        	// 	$social = new BoltSocialUsers();
+        	// 	$social->oauth_provider = $oauth_provider;
+        	// 	$social->oauth_uid = $record->oauth_uid;
+        	// 	$social->id_user = $record->id_user;
+        	// 	$social->first_name = $explodename[0];
+        	// 	$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
+        	// 	$social->username = $explodemail[0];
+        	// 	$social->email = $username;
+        	// 	$social->picture = 'css/images/anonymous.png';
+            //
+        	// 	$social->save();
+        	// }
 
-        		$social = new BoltSocialUsers();
-        		$social->oauth_provider = $oauth_provider;
-        		$social->oauth_uid = $record->oauth_uid;
-        		$social->id_user = $record->id_user;
-        		$social->first_name = $explodename[0];
-        		$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
-        		$social->username = $explodemail[0];
-        		$social->email = $username;
-        		$social->picture = 'css/images/anonymous.png';
+        	// $explodemail = explode('@',$username);
+    		// $explodename = explode('.',$explodemail[0]);
+            //
+            // $record->first_name = $explodename[0];
+            // $record->last_name = isset($explodename[1]) ? $explodename[1] : '';
+            // $record->email = $username;
+            // $record->picture = 'css/images/anonymous.png';
+            // $record->provider = $oauth_provider;
+            // $record->facade = 'dashboard';
+            // $record->save();
 
-        		$social->save();
-        	}
-
-            $record->first_name = $social->first_name;
-            $record->last_name = $social->last_name;
-            $record->email = $username;
-            $record->picture = $social->picture;
-            $record->provider = $social->oauth_provider;
-            $record->facade = 'dashboard';
-            $record->save();
-
-            return $record;
-      	}
+            // return $record;
+      	// }
     }
 
     /**

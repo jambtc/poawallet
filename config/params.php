@@ -7,5 +7,17 @@ return [
     'logoApplicazione' => '/css/images/logo.png',
     'website' => 'www.txlab.it',
     'adminName' => 'txLab',
-    'encryptionFile' => dirname(__FILE__).'/encrypt.json'
+    'supportEmail' => 'info@txLab.it',
+    'encryptionFile' => dirname(__FILE__).'/encrypt.json',
+
+    /**
+     * Set the password reset token expiration time.
+     */
+    'user.passwordResetTokenExpire' => 3600,
+
+    /**
+     * Set the list of usernames that we do not want to allow to users to take upon registration or profile change.
+     */
+    'user.spamNames' => 'admin|superadmin|creator|thecreator|username|administrator|root',
+
 ];

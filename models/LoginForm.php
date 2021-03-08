@@ -79,10 +79,10 @@ class LoginForm extends Model
 	 */
 	public function login()
 	{
-			if ($this->validate()) {
-				return Yii::$app->user->login($this->_user, self::TIMEOUT);
-			}
-			return false;
+		if ($this->validate()) {
+			return Yii::$app->user->login($this->_user, self::TIMEOUT);
+		}
+		return false;
 	}
 
 	/**
@@ -92,11 +92,11 @@ class LoginForm extends Model
 	 */
 	public function getUser()
 	{
-			if ($this->_user === false) {
-					$this->_user = BoltLogin::findUserByProvider($this->username,$this->oauth_provider);
-			}
+		if ($this->_user === false) {
+			$this->_user = BoltLogin::findUserByProvider($this->username,$this->oauth_provider);
+		}
 
-			return $this->_user;
+		return $this->_user;
 	}
 
 }
