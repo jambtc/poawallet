@@ -13,9 +13,6 @@ use yii\helpers\Url;
 
 use jambtc\oauthgoogle;
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// Yii::$classMap['google'] = Yii::getAlias('@packages').'/OAuth/oauth-google/google.php';
-
 class OauthgoogleController extends Controller
 {
 	public function actionResetCookie()
@@ -61,7 +58,7 @@ class OauthgoogleController extends Controller
 		// echo Json::encode($auth_data);
 
 		if ($model->validate() && $model->login()) {
-				return $this->redirect(['wallet/index']);
+			return $this->redirect(['wallet/index']);
 		}
 		return $this->goHome();
   }
@@ -92,6 +89,11 @@ class OauthgoogleController extends Controller
 			$model->email = $auth_data['email'];
             $model->facade = 'dashboard';
 			$model->provider = $auth_data['oauth_provider'];
+			$model->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
+			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
+			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
+			$model->save();
+		}else{
 			$model->picture = (isset($auth_data['picture']) ? $auth_data['picture'] : 'css/images/anonymous.png');
 			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
 			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');

@@ -67,6 +67,11 @@ class OauthfacebookController extends Controller
 			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
 			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
 			$model->save();
+		}else{
+			$model->picture = 'https://graph.facebook.com/'. $auth_data['id'] .'/picture';
+			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
+			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
+			$model->save();
 		}
 		// FIX CAMBIO mail IN FB
 		$auth_data['email'] = $auth_data['id'] .'@facebook.com'; //$auth_data['email'];
