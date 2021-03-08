@@ -24,10 +24,14 @@ var STATIC_FILES = [
 	'js/pincode/pincode-global.js',
 	'js/pincode/pincode-settings.js',
 	'js/pincode/pincode-utility.js',
-	'js/web-workers/bcWorker.js',
-	'js/web-workers/notificationsWorker.js',
+
 	'js/ws-blockchain.js',
 	'js/ws-latest.js',
+	'js/nfc-write.js',
+
+	'js/web-workers/bcWorker.js',
+	'js/web-workers/notificationsWorker.js',
+
 	'src/images/icons/app-icon-144x144.png',
 
 	'src/js/promise.js',

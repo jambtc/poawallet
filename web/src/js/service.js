@@ -57,7 +57,7 @@ if ('serviceWorker' in navigator){
 		console.log('[Service worker] ... from service registered.');
 	})
 	.catch(function(err) {
-   		console.log("Service Worker Failed to Register", err);
+   		console.log("[Service worker] Service Worker Failed to Register", err);
 	});
 
 	let refreshing;
@@ -71,7 +71,7 @@ if ('serviceWorker' in navigator){
 
 
 window.addEventListener('beforeinstallprompt', function(event){
-	console.log('[service] beforeinstallprompt fired!');
+	console.log('[Service worker] beforeinstallprompt fired!');
 	event.preventDefault();
 	deferredPrompt = event;
 	return false;
