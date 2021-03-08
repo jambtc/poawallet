@@ -7,6 +7,7 @@ $options = [
     'invalidSeedMessage' => Yii::t('app','Invalid seed!'),
     'invalidSeed12Word' => Yii::t('app','Seed hasn\'t 12 words! Words inserted are: '),
     'validSeedMessage' => Yii::t('app','Seed is correct!'),
+    'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'cryptURL' => Url::to(['/wallet/crypt']),
@@ -92,7 +93,7 @@ $wallet_restore = <<<JS
     		},
     		dataType: "json",
             beforeSend: function() {
-                $('.seed-submit').html(spinner);
+                $('.seed-submit').html(yiiOptions.spinner);
             },
     		success:function(data){
     			var pwd_crypted  = data.cryptedpass;

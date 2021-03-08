@@ -2,8 +2,8 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'megapay-static-006';
-var CACHE_DYNAMIC_NAME = 'megapay-dynamic-005';
+var CACHE_STATIC_NAME = 'megapay-static-007';
+var CACHE_DYNAMIC_NAME = 'megapay-dynamic-006';
 var STATIC_FILES = [
 	'/',
 	'offline.html',
@@ -44,6 +44,27 @@ var STATIC_FILES = [
 
 
 ];
+
+function trimCache(maxItems) {
+	caches.open(CACHE_STATIC_NAME)
+	.then(function(cache) {
+		return cache.keys()
+		.then(function(keys) {
+			if (keys.lenght > maxItems) {
+				cache.delete(keys[0]).then(trimCache(CACHE_STATIC_NAME, maxItems));
+			}
+		});
+	});
+	caches.open(CACHE_DYNAMIC_NAME)
+	.then(function(cache) {
+		return cache.keys()
+		.then(function(keys) {
+			if (keys.lenght > maxItems) {
+				cache.delete(keys[0]).then(trimCache(CACHE_STATIC_NAME, maxItems));
+			}
+		});
+	});
+}
 
 // Funzione Fix per apache
 function cleanResponse(response) {

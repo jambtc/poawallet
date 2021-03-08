@@ -16,6 +16,7 @@ function showUpdateBar() {
 if($('#reload').length){
 	document.getElementById('reload').addEventListener('click', function(){
 		newWorker.postMessage({ action: 'skipWaiting' });
+		trimCache(0);
 	});
 }
 

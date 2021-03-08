@@ -13,6 +13,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
+use yii\helpers\Json;
+
 use app\models\MPWallets;
 
 
@@ -91,9 +93,15 @@ class ReceiveController extends Controller
  	}
 
 	public function actionGetAddress(){
-		return yii\helpers\Json::encode([
+		return $this->json([
 			'wallet_address' => MPWallets::find()->userAddress(Yii::$app->user->id)
 		]);
+	}
+
+	private static function json ($data)
+	{
+		Yii::$app->response->format = Response::FORMAT_JSON;
+		return $data;
 	}
 
 

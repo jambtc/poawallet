@@ -23,10 +23,9 @@ $form = ActiveForm::begin([
 
 include ('send_js.php');
 include ('qrcodescanner_js.php');
+include ('nfc-reader_js.php');
 
 $sendTokenForm->from = $fromAddress;
-
-
 ?>
 
 
@@ -65,12 +64,12 @@ $sendTokenForm->from = $fromAddress;
             <?php
             $fieldOptions1 = [
                 'inputTemplate' => '
-                                    <div class="form-row-group with-icons">
-                        				<div class="form-row no-padding">
-                        					<img src="css/img/content/2.png" class="icon" alt="">
-                                            {input}
-                                        </div>
-                        			</div>',
+                    <div class="form-row-group with-icons">
+        				<div class="form-row no-padding">
+        					<i class="fas fa-wallet text-primary"></i>
+                            {input}
+                        </div>
+        			</div>',
                 'inputOptions' => ['class' => ['widget' => 'form-element']]
 
             ];
@@ -89,7 +88,8 @@ $sendTokenForm->from = $fromAddress;
                 'inputTemplate' => '
                 <div class="form-row-group with-icons">
                     <div class="form-row no-padding" >
-                        <img src="css/img/content/p3.png" class="icon" alt="" id="activate-camera-btn">
+						<i id="activate-camera-btn" class="fa fa-camera text-primary"></i>
+						<i id="activate-nfc-reader" class="ml-4 fa fa-wifi text-success"></i>
                         {input}
                     </div>
                 </div>',
@@ -112,9 +112,8 @@ $sendTokenForm->from = $fromAddress;
                 'inputTemplate' => '
                 <div class="form-row-group with-icons">
                     <div class="form-row no-padding" >
-                    <a href="#" data-popup="cameraPopup" id="buttonCamera-popup">
-                        <img  src="css/img/content/2.png" class="icon" alt="" id="activate-camera-btn">
-                    </a>
+						<i class="fas fa-star text-primary"></i>
+
                     {input}
                     </div>
                 </div>',

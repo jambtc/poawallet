@@ -30,7 +30,7 @@ $this->registerJs(
 
 
 
-$wallet_restore = <<<JS
+$wallet_send = <<<JS
 
     var countDecimals = function(value) {
         // console.log('[countDecimals]',Math.floor(value),value);
@@ -165,7 +165,7 @@ $wallet_restore = <<<JS
 JS;
 
 $this->registerJs(
-    $wallet_restore,
+    $wallet_send,
     View::POS_READY, //POS_END
-    'wallet_restore'
+    'wallet_send'
 );
