@@ -106,7 +106,7 @@ class SignupForm extends Model
             $user->username = $this->username;
             $user->email = $this->username;
             $user->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
-            $user->ga_secret_key = '';
+            $user->ga_secret_key = null;
             $user->activation_code = $nonce;
             $user->status_activation_code = 0;
             $user->oauth_provider = 'mail';

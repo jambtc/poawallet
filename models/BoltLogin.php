@@ -84,6 +84,10 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
      */
     public static function findUserByProvider($username,$oauth_provider)
     {
+
+        echo "<pre>".print_r($username,true)."</pre>";
+        echo "<pre>".print_r($oauth_provider,true)."</pre>";
+		// exit;
         $record = self::findOne([
             'username'=>$username,
             'oauth_provider'=>$oauth_provider,

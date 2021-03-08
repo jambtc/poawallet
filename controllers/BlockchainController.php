@@ -13,7 +13,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-use app\models\BoltWallets;
+use app\models\MPWallets;
 use app\models\BoltTokens;
 
 
@@ -97,7 +97,7 @@ class BlockchainController extends Controller
 		set_time_limit(30); //imposto il time limit unlimited
 
 		//carico info del wallet
-		$wallets = BoltWallets::find()
+		$wallets = MPWallets::find()
 		   ->andWhere(['id_user'=>Yii::$app->user->id])
 		   ->one();
 
@@ -201,7 +201,7 @@ class BlockchainController extends Controller
 									   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 							           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
 
-									   $id_user_from = BoltWallets::find()->userIdFromAddress($tokens->from_address);
+									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 
 
 									   // notifica per chi ha inviato (from_address)
@@ -225,7 +225,7 @@ class BlockchainController extends Controller
 									   // $save->Notification($notification);
 
 									   // notifica per chi riceve (to_address)
-									   $id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
+									   $id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
 
                                        // perchè id_user_to === null  ???
                                        // potrebbe accadere che la trtansazione viene inviata da
@@ -364,7 +364,7 @@ class BlockchainController extends Controller
 	// recupera il blocknumber del wallet utente
 	// mostra la differenza dei blocchi
 	public function actionGetBlocknumber(){
-		$wallet = BoltWallets::find()
+		$wallet = MPWallets::find()
 				->andWhere(['id_user'=>Yii::$app->user->id])
 				->one();
 

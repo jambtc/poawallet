@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
 
 
 use app\models\WizardWalletForm;
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -110,10 +110,10 @@ class RestoreController extends Controller
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
-			$boltWallet = BoltWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
+			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
 			if(null === $boltWallet) {
 			  //doesn't exist so create record
-				$boltWallet = new BoltWallets;
+				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
 				$block = Yii::$app->Erc20->getBlockInfo();
 				$boltWallet->blocknumber = $block->number;

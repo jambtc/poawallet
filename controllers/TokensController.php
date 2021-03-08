@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
-use app\models\BoltWallets;
+use app\models\MPWallets;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -42,7 +42,7 @@ class TokensController extends Controller
      */
     public function actionIndex()
     {
-        $fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+        $fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
         if (null === $fromAddress){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);

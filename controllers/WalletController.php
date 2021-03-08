@@ -15,8 +15,8 @@ use yii\db\ActiveRecord;
 
 use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
-use app\models\BoltWallets;
-use app\models\BoltSocialusers;
+use app\models\MPWallets;
+use app\models\Users;
 use app\models\LoginForm;
 
 use yii\bootstrap4\ActiveForm;
@@ -81,8 +81,8 @@ class WalletController extends Controller
 
 	private function loadSocialUser()
 	{
-		$user = BoltSocialusers::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+		$user = Users::find()
+ 	     		->andWhere(['id'=>Yii::$app->user->id])
  	    		->one();
 
 		return $user;
@@ -95,7 +95,7 @@ class WalletController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
 
 		if (NULL === $fromAddress){
 			$session = Yii::$app->session;

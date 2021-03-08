@@ -13,7 +13,7 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 
 
@@ -77,7 +77,7 @@ class ReceiveController extends Controller
 	 */
 	public function actionIndex()
  	{
-		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
 		if (null === $fromAddress){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);

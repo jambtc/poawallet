@@ -8,7 +8,7 @@ use yii\base\InvalidConfigException;
 use yii\web\Response;
 use yii\web\HttpException;
 
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 use Web3\Web3;
 use Web3\Contract;

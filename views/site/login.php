@@ -96,6 +96,7 @@ $this->registerJs(
 
         <?= $form->field($model, 'username', $fieldOptions1)->textInput(['autofocus' => false, 'autocomplete'=>"off"]) ?>
         <?= $form->field($model, 'password', $fieldOptions2)->passwordInput(['autocomplete'=>"new-password"]) ?>
+        <?= $form->field($model, 'oauth_provider')->hiddenInput(['value'=>'mail'])->label(false) ?>
 
         <div class="txt-left">
             <?= $form->errorSummary($model, ['id' => 'error-summary','class'=>'col-lg-12']) ?>

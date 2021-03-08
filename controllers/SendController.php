@@ -15,8 +15,8 @@ use yii\db\ActiveRecord;
 
 use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
-use app\models\BoltWallets;
-use app\models\BoltSocialusers;
+use app\models\MPWallets;
+use app\models\Users;
 use app\models\SendTokenForm;
 use app\models\WizardWalletForm;
 use app\models\PushSubscriptions;
@@ -90,8 +90,8 @@ class SendController extends Controller
 
 	private function loadSocialUser()
 	{
-		$user = BoltSocialusers::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+		$user = Users::find()
+ 	     		->andWhere(['id'=>Yii::$app->user->id])
  	    		->one();
 
 		return $user;
@@ -105,7 +105,7 @@ class SendController extends Controller
  	{
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
- 		$fromAddress = BoltWallets::find()->userAddress(Yii::$app->user->id);
+ 		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
 		if (null === $fromAddress){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
@@ -294,7 +294,7 @@ class SendController extends Controller
 			}
 
 			// notifica per chi ha inviato (from_address)
-			$id_user_from = BoltWallets::find()->userIdFromAddress($tokens->from_address);
+			$id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 			$notification = [
 				'type_notification' => 'token',
 				'id_user' => $id_user_from,
@@ -309,7 +309,7 @@ class SendController extends Controller
 			$pushOptions = Messages::push($notification);
 
 			// notifica per chi riceve (to_address)
-			$id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
+			$id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
 			$notification['id_user'] = $id_user_to === null ? 1 : $id_user_to;
 			$notification['description'] = Yii::t('app','A transaction you received has been completed.');
 			Messages::push($notification);

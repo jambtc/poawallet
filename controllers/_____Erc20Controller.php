@@ -9,7 +9,7 @@ use yii\web\Response;
 use yii\web\HttpException;
 use yii\filters\VerbFilter;
 
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 use Web3\Web3;
 use Web3\Contract;

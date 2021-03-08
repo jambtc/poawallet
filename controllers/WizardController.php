@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
 
 
 use app\models\WizardWalletForm;
-use app\models\BoltWallets;
+use app\models\MPWallets;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -121,7 +121,7 @@ class WizardController extends Controller
 
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
 			// salvo l'indirizzo in tabella
-			$boltWallet = new BoltWallets;
+			$boltWallet = new MPWallets;
 			$boltWallet->id_user = Yii::$app->user->identity->id;
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 			$boltWallet->blocknumber = '0x0';

@@ -3,9 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BoltSocialusers;
-use app\models\BoltSocialusersSearch;
-use app\models\BoltWallets;
+use app\models\Users;
+use app\models\MPWallets;
 use app\models\BoltTokens;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,7 +25,7 @@ use app\components\Settings;
 // Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 /**
- * BoltSocialusersController implements the CRUD actions for BoltSocialusers model.
+ * UsersController implements the CRUD actions for Users model.
  */
 class UsersController extends Controller
 {
@@ -60,7 +59,7 @@ class UsersController extends Controller
      */
     public function actionView($id)
     {
-        $wallet = BoltWallets::find()
+        $wallet = MPWallets::find()
  	     		->andWhere(['id_user'=>Yii::$app->user->id])
  	    		->one();
 
@@ -154,12 +153,12 @@ class UsersController extends Controller
      * Finds the BoltSocialusers model based on its user_id value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BoltSocialusers the loaded model
+     * @return Users the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        $model = BoltSocialusers::find()->andWhere(['id_user'=>$id])->one();
+        $model = Users::find()->andWhere(['id'=>$id])->one();
         if ( $model !== null) {
             return $model;
         }

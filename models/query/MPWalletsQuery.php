@@ -5,9 +5,9 @@ namespace app\models\query;
 use Yii;
 
 /**
- * This is the ActiveQuery class for [[BoltWallets]].
+ * This is the ActiveQuery class for [[MPWallets]].
  *
- * @see BoltWallets
+ * @see MPWallets
  */
 class MPWalletsQuery extends \yii\db\ActiveQuery
 {

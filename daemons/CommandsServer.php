@@ -7,7 +7,7 @@ use consik\yii2websocket\WebSocketServer;
 use Ratchet\ConnectionInterface;
 
 use yii\base\Model;
-use app\models\BoltWallets;
+use app\models\MPWallets;
 use app\models\BoltTokens;
 
 use yii\web\Response;
@@ -100,7 +100,7 @@ class CommandsServer extends WebSocketServer
    // function commandGetBlockNumber(ConnectionInterface $client, $msg)
    private function getBlockNumber($user_id)
    {
-   		$wallet = BoltWallets::find()
+   		$wallet = MPWallets::find()
             ->andWhere(['id_user'=>$user_id])
 			->one();
 
@@ -149,7 +149,7 @@ class CommandsServer extends WebSocketServer
         // $filename = Yii::$app->basePath."/web/assets/blockchain-command.log";
 		// $myfile = fopen($filename, "a");
 
-        $wallets = BoltWallets::find()
+        $wallets = MPWallets::find()
 		   ->andWhere(['id_user'=>$client->user_id])
 		   ->one();
 
@@ -269,7 +269,7 @@ class CommandsServer extends WebSocketServer
 
 
 
-									   $id_user_from = BoltWallets::find()->userIdFromAddress($tokens->from_address);
+									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 
 									   // notifica per chi ha inviato (from_address)
 									   $notification = [
@@ -292,7 +292,7 @@ class CommandsServer extends WebSocketServer
 									   // $save->Notification($notification);
 
 									   // notifica per chi riceve (to_address)
-									   $id_user_to = BoltWallets::find()->userIdFromAddress($tokens->to_address);
+									   $id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
 
                                        // perchè id_user_to === null  ???
                                        // potrebbe accadere che la trtansazione viene inviata da

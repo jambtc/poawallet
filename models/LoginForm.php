@@ -38,6 +38,9 @@ class LoginForm extends Model
 					// password is validated by authenticate()
 					['password', 'authenticate'],
 
+					[['oauth_provider'], 'string', 'max' => 100],
+
+
 					// username has to be a valid email address
 					['username', 'email', 'message'=>Yii::t('app','Email hasn\'t right format.')],
 			];
@@ -65,11 +68,11 @@ class LoginForm extends Model
 	public function authenticate($attribute,$params)
 	{
 		if (!$this->hasErrors()) {
-				$user = $this->getUser();
+			$user = $this->getUser();
 
-				if (!$user || !$user->validatePassword($this->password)) {
-						$this->addError($attribute, 'Incorrect username or password.');
-				}
+			if (!$user || !$user->validatePassword($this->password)) {
+				$this->addError($attribute, 'Incorrect username or password.');
+			}
 		}
 	}
 
@@ -92,6 +95,10 @@ class LoginForm extends Model
 	 */
 	public function getUser()
 	{
+		// echo "<pre>".print_r($this->username,true)."</pre>";
+		// echo "<pre>".print_r($this->oauth_provider,true)."</pre>";
+		// // echo "<pre>".print_r($this->username,true)."</pre>";
+		// exit;
 		if ($this->_user === false) {
 			$this->_user = BoltLogin::findUserByProvider($this->username,$this->oauth_provider);
 		}
