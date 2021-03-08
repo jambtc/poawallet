@@ -110,7 +110,7 @@ $this->registerJs(
 
         <div class="form-group row">
             <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'button circle block orange', 'name' => 'login-button']) ?>
+                <?= Html::submitButton(Yii::t('app','Login with email'), ['class' => 'button circle block orange', 'name' => 'login-button']) ?>
             </div>
         </div>
 

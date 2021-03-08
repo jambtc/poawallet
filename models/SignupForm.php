@@ -95,27 +95,39 @@ class SignupForm extends Model
             $explodemail = explode('@',$this->username);
     		$explodename = explode('.',$explodemail[0]);
 
+            // set the nonce (it will last 24 h)
+            $microtime = explode(' ', microtime());
+            $nonce = $microtime[1] . str_pad(substr($microtime[0], 2, 6), 6, '0');
+
+            $randomkey = \Yii::$app->security->generateRandomString();
+            $secretkey = \Yii::$app->security->generateRandomString();
+
             $user = new Users();
             $user->username = $this->username;
             $user->email = $this->username;
             $user->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
             $user->ga_secret_key = '';
-            $user->activation_code = \Yii::$app->security->generateRandomString();
+            $user->activation_code = $nonce;
             $user->status_activation_code = 0;
             $user->oauth_provider = 'mail';
             $user->oauth_uid = \Yii::$app->security->generateRandomString(16);
-            $user->authKey = \Yii::$app->security->generateRandomString();
-            $user->accessToken = '';
+            $user->authKey = $secretkey;
+            $user->accessToken = $randomkey;
             $user->facade = 'dashboard';
             $user->provider = 'mail';
             $user->picture = 'css/images/anonymous.png';
             $user->last_name = isset($explodename[1]) ? $explodename[1] : '';
             $user->first_name = $explodename[0];
 
-            $this->sendAccountActivationEmail($user);
+            if ($user->save()){
+                $this->sendAccountActivationEmail($user);
+                return $user;
+            } else {
+                return null;
+            }
 
             // if user is saved and role is assigned return user object
-            return $user->save() ? $user : null;
+            // return $user->save() ? $user : null;
         }
         return false;
 

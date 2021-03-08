@@ -9,7 +9,7 @@ use Yii;
  *
  * @see BoltWallets
  */
-class BoltWalletsQuery extends \yii\db\ActiveQuery
+class MPWalletsQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -18,7 +18,7 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltWallets[]|array
+     * @return MPWallets[]|array
      */
     public function all($db = null)
     {
@@ -27,7 +27,7 @@ class BoltWalletsQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltWallets|array|null
+     * @return MPWallets|array|null
      */
     public function one($db = null)
     {

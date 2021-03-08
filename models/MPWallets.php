@@ -12,7 +12,7 @@ use Yii;
  * @property string $wallet_address
  * @property string $blocknumber
  */
-class BoltWallets extends \yii\db\ActiveRecord
+class MPWallets extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -49,10 +49,10 @@ class BoltWallets extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
-     * @return BoltWalletsQuery the active query used by this AR class.
+     * @return MPWalletsQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \app\models\query\BoltWalletsQuery(get_called_class());
+        return new \app\models\query\MPWalletsQuery(get_called_class());
     }
 }

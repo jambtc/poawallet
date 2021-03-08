@@ -20,7 +20,7 @@ $this->title = 'Register';
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
       <div class="body-content dash-balance jumbotron pb-5">
-          <h1 class="alert alert-info">Registration form</h1>
+          <h1 class="alert alert-info"><?= Yii::t('app','Registration form') ?></h1>
 
           <?php if (Yii::$app->session->hasFlash('registerFormSubmitted')): ?>
 
@@ -28,17 +28,12 @@ $this->title = 'Register';
                   <?php echo Yii::t('app','Your registration request has been registered.');?><br>
                   <?php echo Yii::t('app','You will receive an email to confirm your subscription.');?>
               </div>
+              <div class="form-row txt-center text-light mt-15">
+                  <?php echo Yii::t('app','Back to home!'); ?>
+                 <a style="color:#007bff;" href="<?php echo Url::to(['site/index']); ?>" data-loader="show">Home</a>
+              </div>
 
-              <p>
-                  Note that if you turn on the Yii debugger, you should be able
-                  to view the mail message on the mail panel of the debugger.
-                  <?php if (Yii::$app->mailer->useFileTransport): ?>
-                      Because the application is in development mode, the email is not sent but saved as
-                      a file under <code><?= Yii::getAlias(Yii::$app->mailer->fileTransportPath) ?></code>.
-                      Please configure the <code>useFileTransport</code> property of the <code>mail</code>
-                      application component to be false to enable email sending.
-                  <?php endif; ?>
-              </p>
+
 
           <?php else: ?>
 
