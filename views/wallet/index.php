@@ -12,8 +12,8 @@ use yii\grid\GridView;
 
 $this->title = Yii::t('app', 'Wallet');
 
-$receiveUrl = Url::to(['/receive/index']);
-$sendUrl = Url::to(['/send/index']);
+$receiveUrl = Url::to(['receive/index']);
+$sendUrl = Url::to(['send/index','v'=>time()]);
 $userUrl = Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]);
 $tokensUrl = Url::to(['tokens/index']);
 
