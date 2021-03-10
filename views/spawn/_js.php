@@ -71,7 +71,7 @@ $(function () {
         event.preventDefault();
         event.stopPropagation();
 
-        seed = $.trim($('#wizardwalletform-seed').val());
+        seed = $.trim($('#wizardwalletform-seed').val()).toLowerCase();
         if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
             console.log('[Restore]: seed non valido', seed);
             $('#seed-error').show().text(yiiOptions.invalidSeedMEssage);

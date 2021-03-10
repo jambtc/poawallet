@@ -5,9 +5,11 @@ importScripts('src/js/idb-utility.js');
 var CACHE_STATIC_NAME = 'megapay-static-001';
 var CACHE_DYNAMIC_NAME = 'megapay-dynamic-001';
 
+var OFFLINE_URL = 'offline.html';
+
 var STATIC_FILES = [
 	'/',
-	'offline.html',
+	OFFLINE_URL,
 	'manifest.json',
 
 	'favicon.ico',
@@ -137,6 +139,13 @@ function getFileExtension(filename) {
 self.addEventListener('fetch', function (event) {
 	var parser = new URL(event.request.url);
 
+	if (event.request.mode === 'navigate' && navigator.onLine === false) {
+	   // Uh-oh, we navigated to a page while offline. Let's show our default page.
+	   event.respondWith(caches.match(OFFLINE_URL));
+	   return;
+	   
+	}
+
 	if (getFileExtension(parser.pathname) == 'php')
 	{
 		console.log('[SW Parser] web no-cache',parser.pathname);
@@ -181,7 +190,7 @@ self.addEventListener('fetch', function (event) {
 								return caches.open(CACHE_STATIC_NAME)
 									.then(function(cache) {
 										if (event.request.headers.get('accept').includes('text/html')){
-											return cache.match('offline.html');
+											return cache.match(OFFLINE_URL);
 										}
 									})
 							});
