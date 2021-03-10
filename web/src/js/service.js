@@ -1,3 +1,4 @@
+// This file install service worker and manage changes
 var deferredPrompt;
 
 //Polyfill: per i browser più vecchi che non hanno window.Promise
@@ -16,7 +17,6 @@ function showUpdateBar() {
 if($('#reload').length){
 	document.getElementById('reload').addEventListener('click', function(){
 		newWorker.postMessage({ action: 'skipWaiting' });
-		// trimCache(0);
 	});
 }
 

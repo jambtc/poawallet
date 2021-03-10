@@ -3,15 +3,15 @@
   QrScanner.WORKER_PATH = './js/qrcodescanner/qr-scanner/qr-scanner-worker.min.js';
 
   const video = document.getElementById('qr-video');
-  const camQrResult = document.getElementById('sendtokenform-to');
+  const camQrResult = document.getElementById('sendform-to');
 
   function setResult(label, result) {
     console.log('[QRCode result]',result);
 
     var res = extractImport(result);
 
-    $('#sendtokenform-to').val(res.address);
-    $('#sendtokenform-amount').val(res.amount);
+    $('#sendform-to').val(res.address);
+    $('#sendform-amount').val(res.amount);
     $('#cameraPopup').hide();
     scanner.stop();
   }

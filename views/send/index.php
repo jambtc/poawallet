@@ -25,7 +25,7 @@ include ('send_js.php');
 include ('qrcodescanner_js.php');
 include ('nfc-reader_js.php');
 
-$sendTokenForm->from = $fromAddress;
+$sendForm->from = $fromAddress;
 ?>
 
 
@@ -76,7 +76,7 @@ $sendTokenForm->from = $fromAddress;
               ?>
             <!-- DA -->
             <div class="form-group">
-              <?= $form->field($sendTokenForm, 'from', $fieldOptions1)->textInput(['readonly'=>true]) ?>
+              <?= $form->field($sendForm, 'from', $fieldOptions1)->textInput(['readonly'=>true]) ?>
             </div>
     	</div>
 
@@ -97,7 +97,7 @@ $sendTokenForm->from = $fromAddress;
             ];
               ?>
             <div class="form-group">
-                <?= $form->field($sendTokenForm, 'to', $fieldOptions2)
+                <?= $form->field($sendForm, 'to', $fieldOptions2)
                     ->textInput(['autofocus' => true, 'validate' ])
                     ->hint(Yii::t('app','Insert address or press camera to scan')) ?>
             </div>
@@ -122,8 +122,8 @@ $sendTokenForm->from = $fromAddress;
               ?>
 
             <div class="form-group">
-                 <?= $form->field($sendTokenForm, 'amount', $fieldOptions3)->textInput(['type' => 'number']) ?>
-                 <?= $form->field($sendTokenForm, 'balance')->hiddenInput(['value' => $balance])->label(false) ?>
+                 <?= $form->field($sendForm, 'amount', $fieldOptions3)->textInput(['type' => 'number']) ?>
+                 <?= $form->field($sendForm, 'balance')->hiddenInput(['value' => $balance])->label(false) ?>
             </div>
 
 
@@ -131,7 +131,7 @@ $sendTokenForm->from = $fromAddress;
         </div>
         <div class="form-mini-divider"></div>
         <div class="txt-left">
-            <?= $form->errorSummary($sendTokenForm, ['id' => 'error-summary','class'=>'col-lg-12']) ?>
+            <?= $form->errorSummary($sendForm, ['id' => 'error-summary','class'=>'col-lg-12']) ?>
         </div>
 
     	<div class="form-mini-divider"></div>
@@ -155,7 +155,7 @@ $sendTokenForm->from = $fromAddress;
                         <?php
                         $fieldOptions4 = [
                             'inputTemplate' => '
-                            <label class="col-lg-1 control-label text-left text-dark" for="sendtokenform-memo">'.$sendTokenForm->getAttributeLabel('memo').'</label>
+                            <label class="col-lg-1 control-label text-left text-dark" for="sendform-memo">'.$sendForm->getAttributeLabel('memo').'</label>
                             <div class="form-row-group with-icons">
                                 <div class="form-row no-padding" >
                                     {input}
@@ -165,7 +165,7 @@ $sendTokenForm->from = $fromAddress;
                         ];
                           ?>
                         <div class="form-group hide-text">
-                            <?= $form->field($sendTokenForm, 'memo', $fieldOptions4)->textarea([
+                            <?= $form->field($sendForm, 'memo', $fieldOptions4)->textarea([
                                 'rows' => 6, 'cols' => 50])->label(false) ?>
                         </div>
 
@@ -185,6 +185,7 @@ $sendTokenForm->from = $fromAddress;
             <div class="popup-container add">
                 <div class="popup-content txt-center">
                     <div class="modal-header">
+						<h3 class="text-secondary"><?php echo Yii::t('app','Camera scan'); ?></h3>
                         <button id='camera-close' type="button" class="close float-right" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>

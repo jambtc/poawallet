@@ -68,13 +68,12 @@ class SiteController extends Controller
 
     private static function setCookieForGoogleLogout()
     {
-      // $cookie = new Cookie([
-      //     'name' => 'G_AUTHUSER_LOGOUT',
-      //     'value' => 'AVOID',
-      //     'expire' => time() + 86400 * 365,
-      // ]);
-      // \Yii::$app->getResponse()->getCookies()->add($cookie);
       setcookie('G_AUTHUSER_LOGOUT','AVOID');
+    }
+
+    public function actionError(){
+        $this->layout = 'auth';
+        return $this->render('error');
     }
 
     /**

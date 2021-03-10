@@ -127,7 +127,7 @@ class SendController extends Controller
 
  		return $this->render('index', [
  			'fromAddress' => $fromAddress,
-			'sendTokenForm' => $formModel,
+			'sendForm' => $formModel,
 			'balance' => Yii::$app->Erc20->Balance($fromAddress),
 			// 'userImage' => $this->loadSocialUser()->picture,
  		]);

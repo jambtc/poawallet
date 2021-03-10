@@ -2,8 +2,9 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'megapay-static-007';
+var CACHE_STATIC_NAME = 'megapay-static-006';
 var CACHE_DYNAMIC_NAME = 'megapay-dynamic-007';
+
 var STATIC_FILES = [
 	'/',
 	'offline.html',
@@ -39,32 +40,9 @@ var STATIC_FILES = [
 	'src/js/idb.js',
 	'src/js/idb-utility.js',
 	'src/js/service.js',
-
-
-
-
 ];
 
-// function trimCache(maxItems) {
-// 	caches.open(CACHE_STATIC_NAME)
-// 	.then(function(cache) {
-// 		return cache.keys()
-// 		.then(function(keys) {
-// 			if (keys.lenght > maxItems) {
-// 				cache.delete(keys[0]).then(trimCache(maxItems));
-// 			}
-// 		});
-// 	});
-// 	caches.open(CACHE_DYNAMIC_NAME)
-// 	.then(function(cache) {
-// 		return cache.keys()
-// 		.then(function(keys) {
-// 			if (keys.lenght > maxItems) {
-// 				cache.delete(keys[0]).then(trimCache(maxItems));
-// 			}
-// 		});
-// 	});
-// }
+
 
 // Funzione Fix per apache
 function cleanResponse(response) {
@@ -87,6 +65,8 @@ function cleanResponse(response) {
 }
 
 function trimCache(cacheName, maxItems) {
+	console.log('[Service Worker] trimming caches...');
+
 	caches.open(cacheName)
 		.then(function(cache) {
 			return cache.keys()
@@ -102,6 +82,8 @@ function trimCache(cacheName, maxItems) {
 self.addEventListener('message', function (event) {
 	if (event.data.action === 'skipWaiting') {
     	self.skipWaiting();
+		trimCache(CACHE_STATIC_NAME,0);
+		trimCache(CACHE_DYNAMIC_NAME,0);
 	}
 });
 
@@ -170,18 +152,90 @@ function getFileExtension(filename) {
 // });
 
 
+// // restituisco sempre l'originale e non carico da cache
+// self.addEventListener('fetch', function (event) {
+// 	var parser = new URL(event.request.url);
+//
+//
+// 	if (getFileExtension(parser.search) == '?r=send%2Findex'
+// 		//|| getFileExtension(parser.pathname) == 'css'
+// 	){
+// 		console.log('[SW Parser] web ',parser.pathname);
+// 		event.respondWith(
+// 		 	fetch(event.request)
+// 		);
+// 	} else if (isInArray(event.request.url, STATIC_FILES)) {
+// 		console.log('[SW Parser] static cache ',parser.pathname);
+// 		event.respondWith(
+// 			fetch(event.request).catch(function(){
+// 				return	caches.match(event.request);
+// 			})
+//
+// 		);
+// 	} else {
+// 		console.log('[SW Parser] dynamic cache ',parser.pathname);
+// 		event.respondWith(
+// 			caches.match(event.request)
+// 				.then(function(response) {
+// 					if (response) {
+// 						// Inizio Fix per apache
+// 						if(response.redirected) {
+// 							return cleanResponse(response);
+// 						} else {
+// 							return response;
+// 						}
+// 						// END Fix per apache
+// 					} else {
+// 						return fetch(event.request)
+// 							.then(function(res) {
+// 								return caches.open(CACHE_DYNAMIC_NAME)
+// 									.then(function(cache) {
+// 										//trimCache(CACHE_DYNAMIC_NAME, 20);
+// 										cache.put(event.request.url, res.clone());
+// 										return res;
+// 									})
+// 							}).
+// 							catch(function(err) {
+// 								return caches.open(CACHE_STATIC_NAME)
+// 									.then(function(cache) {
+// 										if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
+// 										// if (event.request.headers.get('accept').includes('text/html')){
+// 											return cache.match('offline.html');
+// 										}else{
+// 									        // Respond with everything else if we can
+// 									        event.respondWith(caches.match(event.request)
+// 									            .then(function (response) {
+// 									                return response || fetch(event.request);
+// 									            })
+// 									        );
+// 									     }
+// 									})
+// 							});
+// 					}
+// 				})
+// 		);
+// 	}
+//
+//
+// });
+
 // restituisco sempre l'originale e non carico da cache
 self.addEventListener('fetch', function (event) {
 	var parser = new URL(event.request.url);
 
 
-	if (getFileExtension(parser.search) == '?r=send%2findex'
-		//|| getFileExtension(parser.pathname) == 'css'
+	if (getFileExtension(parser.pathname) == 'php'
+		// || getFileExtension(parser.pathname) == 'css'
 	){
 		console.log('[SW Parser] web ',parser.pathname);
-		event.respondWith(
-		 	fetch(event.request)
-		);
+		if (getFileExtension(parser.search) == '?r=wallet/index'){
+			console.log('[SW Parser] SONO QUI. STO CARICANDO IL FILE ??? ',parser.search);
+		} else {
+
+			event.respondWith(
+				fetch(event.request)
+			);
+		}
 	} else if (isInArray(event.request.url, STATIC_FILES)) {
 		console.log('[SW Parser] static cache ',parser.pathname);
 		event.respondWith(
@@ -216,17 +270,9 @@ self.addEventListener('fetch', function (event) {
 							catch(function(err) {
 								return caches.open(CACHE_STATIC_NAME)
 									.then(function(cache) {
-										if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-										// if (event.request.headers.get('accept').includes('text/html')){
+										if (event.request.headers.get('accept').includes('text/html')){
 											return cache.match('offline.html');
-										}else{
-									        // Respond with everything else if we can
-									        event.respondWith(caches.match(event.request)
-									            .then(function (response) {
-									                return response || fetch(event.request);
-									            })
-									        );
-									     }
+										}
 									})
 							});
 					}

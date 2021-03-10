@@ -44,25 +44,25 @@ $wallet_send = <<<JS
     var submitButton = document.querySelector('.pay-submit');
 
     stepButton.addEventListener('click', function(event){
-        $('.amount-to-send').text($('#sendtokenform-amount').val());
+        $('.amount-to-send').text($('#sendform-amount').val());
         $('#error-summary').hide().text('');
 
-        if ($("#sendtokenform-amount").val() <= 0 ){
+        if ($("#sendform-amount").val() <= 0 ){
             $('#error-summary').show().text(yiiOptions.invalidAmountError);
             event.stopPropagation();
 		}
 
-        if (countDecimals($("#sendtokenform-amount").val()) > yiiOptions.poaDecimals){
+        if (countDecimals($("#sendform-amount").val()) > yiiOptions.poaDecimals){
 			$('#error-summary').show().text(yiiOptions.decimalError);
 			event.stopPropagation();
 		}
 
-		if (eval($("#sendtokenform-amount").val()) > eval($("#sendtokenform-balance").val())){
+		if (eval($("#sendform-amount").val()) > eval($("#sendform-balance").val())){
             $('#error-summary').show().text(yiiOptions.higherError);
             event.stopPropagation();
 		}
 
-		if ($("#sendtokenform-to").val() == ''){
+		if ($("#sendform-to").val() == ''){
             $('#error-summary').show().text(yiiOptions.recipientError);
             event.stopPropagation();
 		}
@@ -74,14 +74,14 @@ $wallet_send = <<<JS
 		event.stopPropagation();
         console.log('[Send]: button pressed');
 
-        my_wallet = $('#sendtokenform-from').val();
+        my_wallet = $('#sendform-from').val();
 
 		var sendPost = {
 			id		: new Date().toISOString(), // id of indexedDB
 			from	: my_wallet,
-			to		: $('#sendtokenform-to').val(),
-			amount	: $('#sendtokenform-amount').val(),
-			memo 	: $('#sendtokenform-memo').val(),
+			to		: $('#sendform-to').val(),
+			amount	: $('#sendform-amount').val(),
+			memo 	: $('#sendform-memo').val(),
 			prv_key : null,
 			prv_pas : null,
 		};
