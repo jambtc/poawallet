@@ -22,13 +22,14 @@ var STATIC_FILES = [
 
 	'js/global.script.js',
 	'js/notifications-MainWorker.js',
-	'js/pincode/pincode-global.js',
-	'js/pincode/pincode-settings.js',
-	'js/pincode/pincode-utility.js',
-
+	'js/clipboard-copy.js',
 	'js/ws-blockchain.js',
 	'js/ws-latest.js',
 	'js/nfc-write.js',
+
+	'js/pincode/pincode-global.js',
+	'js/pincode/pincode-settings.js',
+	'js/pincode/pincode-utility.js',
 
 	'js/web-workers/bcWorker.js',
 	'js/web-workers/notificationsWorker.js',
@@ -130,94 +131,7 @@ function getFileExtension(filename) {
   return filename.split('.').pop();
 }
 
-// this.addEventListener('fetch', event => {
-//   // request.mode = navigate isn't supported in all browsers
-//   // so include a check for Accept: text/html header.
-//   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-//         event.respondWith(
-//           fetch(event.request.url).catch(error => {
-//               // Return the offline page
-//               return caches.match('offline.html');
-//           })
-//     );
-//   }
-//   else{
-//         // Respond with everything else if we can
-//         event.respondWith(caches.match(event.request)
-//                         .then(function (response) {
-//                         return response || fetch(event.request);
-//                     })
-//             );
-//       }
-// });
 
-
-// // restituisco sempre l'originale e non carico da cache
-// self.addEventListener('fetch', function (event) {
-// 	var parser = new URL(event.request.url);
-//
-//
-// 	if (getFileExtension(parser.search) == '?r=send%2Findex'
-// 		//|| getFileExtension(parser.pathname) == 'css'
-// 	){
-// 		console.log('[SW Parser] web ',parser.pathname);
-// 		event.respondWith(
-// 		 	fetch(event.request)
-// 		);
-// 	} else if (isInArray(event.request.url, STATIC_FILES)) {
-// 		console.log('[SW Parser] static cache ',parser.pathname);
-// 		event.respondWith(
-// 			fetch(event.request).catch(function(){
-// 				return	caches.match(event.request);
-// 			})
-//
-// 		);
-// 	} else {
-// 		console.log('[SW Parser] dynamic cache ',parser.pathname);
-// 		event.respondWith(
-// 			caches.match(event.request)
-// 				.then(function(response) {
-// 					if (response) {
-// 						// Inizio Fix per apache
-// 						if(response.redirected) {
-// 							return cleanResponse(response);
-// 						} else {
-// 							return response;
-// 						}
-// 						// END Fix per apache
-// 					} else {
-// 						return fetch(event.request)
-// 							.then(function(res) {
-// 								return caches.open(CACHE_DYNAMIC_NAME)
-// 									.then(function(cache) {
-// 										//trimCache(CACHE_DYNAMIC_NAME, 20);
-// 										cache.put(event.request.url, res.clone());
-// 										return res;
-// 									})
-// 							}).
-// 							catch(function(err) {
-// 								return caches.open(CACHE_STATIC_NAME)
-// 									.then(function(cache) {
-// 										if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-// 										// if (event.request.headers.get('accept').includes('text/html')){
-// 											return cache.match('offline.html');
-// 										}else{
-// 									        // Respond with everything else if we can
-// 									        event.respondWith(caches.match(event.request)
-// 									            .then(function (response) {
-// 									                return response || fetch(event.request);
-// 									            })
-// 									        );
-// 									     }
-// 									})
-// 							});
-// 					}
-// 				})
-// 		);
-// 	}
-//
-//
-// });
 
 // restituisco sempre l'originale e non carico da cache
 self.addEventListener('fetch', function (event) {
@@ -284,7 +198,6 @@ self.addEventListener('fetch', function (event) {
 self.addEventListener('sync', function(event) {
 	console.log('[Service Worker] Background syncing: '+event.tag, event);
 
-
 	// SINCRONIZZAZIONE INVIO ERC20
 	if (event.tag === 'sync-send-erc20') {
 		console.log('[Service worker] Evento sincronizzazione invio token trovato!');
@@ -318,58 +231,6 @@ self.addEventListener('sync', function(event) {
  			 })
  		 );
  	}
-
-	// SINCRONIZZAZIONE BLOCKCHAIN
-	// if (event.tag === 'sync-blockchain') {
-	// 	console.log('[Service worker] Evento sincronizzazione della blockchain trovato!');
- 	// 	event.waitUntil(
- 	// 		readAllData(event.tag)
- 	// 		.then(function(data) {
- 	// 			for (var dt of data) {
-	// 				console.log('[Service worker] fetching sync-blockchain',dt);
-	// 				var postData = new FormData();
-	// 					postData.append('chainBlocknumber', dt.chainBlocknumber);
-	// 					postData.append('walletBlocknumber', dt.walletBlocknumber);
-	// 					postData.append('search_address', dt.search_address);
-	//  				fetch(dt.url, {
-	//  					method: 'POST',
-	//  					body: postData,
-	//  				})
-	//  				.then(function(response) {
-	//  					return response.json();
-	//  				})
-	//  				.then(function(json) {
-	// 					if (json.success){
-	// 						console.log('[Service worker] Risposta da url: '+dt.url,json);
-	// 						const title = json.transactions[0].title;
-	// 						const options = {
-	// 							body: json.transactions[0].message,
-	// 							icon: 'src/images/icons/app-icon-96x96.png',
-	// 							vibrate: [100, 50, 100, 50, 100 ], //in milliseconds vibra, pausa, vibra, ecc.ecc.
-	// 							badge: 'src/images/icons/app-icon-96x96.png', //solo per android è l'icona della notifica
-	// 							tag: 'confirm-notification', //tag univoco per le notifiche.
-	// 							renotify: true, //connseeo a tag. se è true notifica di nuovo
-	// 							data: {
-	// 							   openUrl: json.transactions[0].url,
-	// 							},
-	// 							actions: [
-	// 								{action: 'openUrl', title: 'Yes', icon: 'css/images/chk_on.png'},
-	// 								{action: 'close', title: 'No', icon: 'css/images/chk_off.png'},
-	// 							],
-	// 						};
-	// 					  	self.registration.showNotification(title, options);
-	// 						writeData('sync-blockchain', json);
-	// 					}
- 	// 			 	})
- 	// 				.catch(function(err){
- 	// 					console.log('[Service worker] Error while checking blockchain data', err);
- 	// 				})
- 	// 			}
- 	// 			//per sicurezza cancello tutto da indexedDB
- 	// 			clearAllData(event.tag);
- 	// 		 })
- 	// 	 );
- 	// }
 
 });
 
