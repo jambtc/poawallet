@@ -122,9 +122,9 @@ if (Yii::$app->controller->id == 'users'){
     echo $this->render('_push-manage');
 }
 
-// if (Yii::$app->controller->id == 'send'){
-//     //echo $this->render('_camera-request');
-// }
+if (Yii::$app->controller->id == 'receive'){
+    echo $this->render('_clipboard-copy');
+}
 
 echo $this->render('_pin-request');
 

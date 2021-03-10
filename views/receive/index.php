@@ -1,7 +1,8 @@
 <?php
 use yii\helpers\Url;
 use Da\QrCode\QrCode;
-use app\assets\NFCWriteAsset;
+// use app\assets\NFCWriteAsset;
+use app\assets\ClipboardCopyAsset;
 
 $this->title = Yii::$app->id;
 
@@ -12,15 +13,16 @@ $qrCode = (new QrCode($fromAddress))
     ->useForegroundColor(11, 21, 31);
 
 
-NFCWriteAsset::register($this);
+// NFCWriteAsset::register($this);
+ClipboardCopyAsset::register($this);
 ?>
 
     <div class="dash-balance">
 
-        <div class="card text-center">
+        <div class="card text-center ">
             <?php echo '<img class="card-img-top" src="' . $qrCode->writeDataUri() . '">'; ?>
             <div class="card-header">
-                <?= Yii::t('app','Click to copy the address in the clipboard') ?>
+                <?= Yii::t('app','Click on address to copy in the clipboard') ?>
             </div>
           <div class="card-body nfc-write-body" style="display: none;">
             <h5 class="card-title"><?= Yii::t('app','NFC Secure Transactions') ?></h5>
@@ -30,8 +32,10 @@ NFCWriteAsset::register($this);
                 </svg><span id='nfc-write-text'><?php echo Yii::t('app','NFC receive');?></span>
             </button>
           </div>
-          <div class="card-footer text-muted text-break">
+          <div class="card-footer text-muted text-break copyonClickAddress">
             <?php echo $fromAddress; ?>
+            <input type="hidden" readonly="readonly" id="inputcopyWalletAddress" value="<?php echo $fromAddress; ?>" />
+
           </div>
         </div>
 

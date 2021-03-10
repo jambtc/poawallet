@@ -23,7 +23,7 @@ $form = ActiveForm::begin([
 
 include ('send_js.php');
 include ('qrcodescanner_js.php');
-include ('nfc-reader_js.php');
+// include ('nfc-reader_js.php');
 
 $sendForm->from = $fromAddress;
 ?>
@@ -89,12 +89,26 @@ $sendForm->from = $fromAddress;
                 <div class="form-row-group with-icons">
                     <div class="form-row no-padding" >
 						<i id="activate-camera-btn" class="fa fa-camera text-primary"></i>
-						<i id="activate-nfc-reader" class="ml-4 fa fa-wifi text-success"></i>
                         {input}
                     </div>
                 </div>',
                 'inputOptions' => ['class' => ['widget' => 'form-element']]
             ];
+			// $fieldOptions2 = [
+            //     'inputTemplate' => '
+            //     <div class="form-row-group with-icons">
+            //         <div class="form-row no-padding" >
+			// 			<i id="activate-camera-btn" class="fa fa-camera text-primary"></i>
+			// 			// <span id="activate-nfc-reader" class="ml-5">
+			// 			// <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+		    //             //     <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V8h3v8H8V8h2V6H6v12h12V6z"/>
+		    //             // </svg>
+			// 			// </span>
+            //             {input}
+            //         </div>
+            //     </div>',
+            //     'inputOptions' => ['class' => ['widget' => 'form-element']]
+            // ];
               ?>
             <div class="form-group">
                 <?= $form->field($sendForm, 'to', $fieldOptions2)
@@ -203,7 +217,30 @@ $sendForm->from = $fromAddress;
                 </div>
             </div>
         </div>
-        <!--POPUP HTML CONTENT END -->
+        <!--POPUP CAMERA QRCODE END -->
+		<!-- POPUP NFC READER -->
+        <div class="popup-overlay" id="nfcReaderPopup">
+            <div class="popup-container add">
+                <div class="popup-content txt-center">
+                    <div class="modal-header">
+						<h3 class="text-secondary"><?php echo Yii::t('app','NFC scan'); ?></h3>
+                        <button id='nfc-close' type="button" class="close float-right" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                    <div  class="modal-body" id='nfc-body'>
+                        <center>
+							<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+			                    <path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H4V4h16v16zM18 6h-5c-1.1 0-2 .9-2 2v2.28c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V8h3v8H8V8h2V6H6v12h12V6z"/>
+			                </svg>
+                        </center>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--POPUP NFC CONTENT END -->
     </div>
 
 

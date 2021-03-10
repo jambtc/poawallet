@@ -4,29 +4,62 @@ use yii\web\View;
 $wallet_nfc = <<<JS
 
 if (("NDEFReader" in window)){
+
+    // al click del pulsante nfc attivo il popup
     var scanButton = document.querySelector('#activate-nfc-reader');
-
+    
     scanButton.addEventListener("click", async () => {
-      console.log("[nfc] User clicked scan button");
+        console.log('[nfc] Open nfc modal');
+        $('#nfcReaderPopup').show();
 
-      try {
-        const ndef = new NDEFReader();
-        await ndef.scan();
-        console.log("[nfc] > Scan started");
+        try {
+            const ndef = new NDEFReader();
+            await ndef.scan();
+            console.log("[nfc] > Scan started");
 
-        ndef.addEventListener("readingerror", () => {
-          console.log("[nfc] Argh! Cannot read data from the NFC tag. Try another one?");
-        });
+            ndef.addEventListener("readingerror", () => {
+              console.log("[nfc] Argh! Cannot read data from the NFC tag. Try another one?");
+            });
 
-        ndef.addEventListener("reading", ({ message, serialNumber }) => {
-          console.log(`[nfc]> Serial Number: `+ serialNumber);
-          console.log(`[nfc]> Records: (`+message.records.length);
-          $('#sendtokenform-to').val(message.address);
-        });
-      } catch (error) {
-        console.log("[nfc] Argh! " + error);
-      }
+            ndef.addEventListener("reading", ({ message, serialNumber }) => {
+              console.log(`[nfc]> Serial Number: `+ serialNumber);
+              console.log(`[nfc]> Records: (`+message.records.length);
+              $('#sendtokenform-to').val(message.address);
+            });
+          } catch (error) {
+            console.log("[nfc] Argh! " + error);
+        }
+
+	});
+
+	// all'uscita disattiva la cam
+	document.querySelector('#nfc-close').addEventListener('click', function(){
+        console.log('[nfc] close nfc modal');
+        $('#nfcReaderPopup').hide();
+		//scanner.stop();
     });
+
+    // scanButton.addEventListener("click", async () => {
+    //   console.log("[nfc] User clicked scan button");
+    //
+    //   try {
+    //     const ndef = new NDEFReader();
+    //     await ndef.scan();
+    //     console.log("[nfc] > Scan started");
+    //
+    //     ndef.addEventListener("readingerror", () => {
+    //       console.log("[nfc] Argh! Cannot read data from the NFC tag. Try another one?");
+    //     });
+    //
+    //     ndef.addEventListener("reading", ({ message, serialNumber }) => {
+    //       console.log(`[nfc]> Serial Number: `+ serialNumber);
+    //       console.log(`[nfc]> Records: (`+message.records.length);
+    //       $('#sendtokenform-to').val(message.address);
+    //     });
+    //   } catch (error) {
+    //     console.log("[nfc] Argh! " + error);
+    //   }
+    // });
 
     // const ndef = new NDEFReader();
     // ndef.scan().then(() => {
