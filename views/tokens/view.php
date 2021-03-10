@@ -79,6 +79,12 @@ include ('view_js.php');
                                 'value'=>'0x'.dechex($model->blocknumber),
                                 'contentOptions' => ['class' => 'text-break']
                             ],
+                            [
+                                'type'=>'raw',
+                                'attribute'=>Yii::t('app','memo'),
+                                'value'=>$model->memo,
+                                'contentOptions' => ['class' => 'text-break']
+                            ],
                             // '',
 
                         ],

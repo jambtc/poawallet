@@ -129,9 +129,13 @@ class WebApp extends Component
                           <div class="transaction-card-horizontal '.$newTxClass.'">
                               <div class="img-square-wrapper">
                                   <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
+                                  <center><small>'.$data->id_token.'</small></center>
+
                               </div>
                               <div class="transaction-card-body ml-1">
-                                  <h6 class="card-title pt-2"><small>'.$data->id_token."</small> ".substr($addressToShow,0,21).'...</h6>
+                                  <h6 class="card-title pt-2">
+                                    <small class="d-inline-block text-truncate" style="max-width: 190px;">'.$addressToShow.'</small>
+                                  </h6>
                                   <p class="card-text">
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
@@ -141,8 +145,11 @@ class WebApp extends Component
                                   <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
                                   .self::encrypt($data->id_token).'">'.$data->status.'</small>
                               </div>
-                          </div>
-
+                          </div>';
+                          ($data->memo != "")
+                          ?  $line .= '<small class="mx-2 alert alert-info d-inline-block text-truncate" style="max-width: 330px;">'.$data->memo.'</small>'
+                          :  $line .= '';
+                          $line .= '
                       </div>
                   </div>
               </div>
