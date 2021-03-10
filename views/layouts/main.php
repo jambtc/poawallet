@@ -90,7 +90,7 @@ SynchronizeLatestBlocksAsset::register($this);
             <p>
                 <?= Yii::t('app','Click'); ?>
                 <a id="reload">
-                    <button class="btn btn-warning px-5">
+                    <button type="button" class="btn btn-warning px-5">
                         <?= Yii::t('app','here') ?>
                     </button>
                 </a>
