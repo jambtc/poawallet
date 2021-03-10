@@ -36,7 +36,7 @@ $wallet_restore = <<<JS
     });
 
     seedField.addEventListener('input', function(e) {
-        var insertedSeed = $.trim(e.target.value);
+        var insertedSeed = $.trim(e.target.value).toLowerCase();
         console.log('[verify]:', insertedSeed);
         if (WordCount(insertedSeed) != 12 ){
           $('#seed-error').show().text(yiiOptions.invalidSeed12Word+WordCount(insertedSeed) );
