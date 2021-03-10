@@ -28,6 +28,7 @@ use app\components\Messages;
 class BlockchainController extends Controller
 {
 	public $transactionsFound = [];
+	public $logFileName;
 
 	private function setTransactionsFound($transaction){
         $this->transactionsFound[] = $transaction;
@@ -95,6 +96,8 @@ class BlockchainController extends Controller
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
 		set_time_limit(30); //imposto il time limit unlimited
+
+		$this->logFileName = Yii::$app->basePath."/logs/blockchain-latest.log";
 
 		//carico info del wallet
 		$wallets = MPWallets::find()
@@ -236,11 +239,11 @@ class BlockchainController extends Controller
                                            $notification['id_user'] = $id_user_to;;
     									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
-                                           // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+                                            // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
                                            $messages= Messages::push($notification);
-                                           // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                            // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
                                        } else {
-                                           // $this->log("quindi NON invio il messaggio al DESTINATARIO, in quanto non trovato in tabella wallet");
+                                            // $this->log("quindi NON invio il messaggio al DESTINATARIO, in quanto non trovato in tabella wallet");
                                        }
 
 
@@ -252,6 +255,8 @@ class BlockchainController extends Controller
 										   'balance' => Yii::$app->Erc20->Balance($wallets->wallet_address),
                                            'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                       ]);
+
+									  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");
 
 
 
@@ -271,7 +276,7 @@ class BlockchainController extends Controller
                                                $tokens->token_ricevuti = $tokens->token_price;
 
 											   $tokens->update();
-											   // $this->log("allora ho aggiornato tabella tokens....\n");
+											    // $this->log("allora ho aggiornato tabella tokens....\n");
 
                                                //salva la notifica
 											   $notification = [
@@ -287,10 +292,10 @@ class BlockchainController extends Controller
 												  'deleted' => 0,
 											  ];
 
-                                              // $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
+                                               // $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
 
                                               $messages= Messages::push($notification);
-                                              // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                               // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
                                               $this->setTransactionsFound([
                                                   'id_token' => $tokens->id_token,
@@ -298,8 +303,7 @@ class BlockchainController extends Controller
 												 'balance' => Yii::$app->Erc20->Balance($wallets->wallet_address),
                                                  'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                               ]);
-
-
+											  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");
 										   }
 									   }else{
 										   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address non è to_address e quindi non faccio nulla....\n");
@@ -401,6 +405,15 @@ class BlockchainController extends Controller
 		return $this->json($return);
 
 	}
+
+	//scrive nel file log le informazioni richieste
+    private function log($text){
+        //$filename = Yii::$app->basePath."/logs/blockchain-latest.log";
+        $handlefile = fopen($this->logFileName, "a");
+
+		$time = "\r\n" .date('Y/m/d h:i:s a - ', time());
+		fwrite($handlefile, $time.$text);
+    }
 
 
 

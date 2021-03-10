@@ -33,6 +33,9 @@ class Messages extends Component
         $model->id_user = $attributes['id_user'];
         $model->insert();
 
+        // self::log("Salvato in notification ora chiamo readers...");
+
+
         // Aggiorna le notifiche da leggere per l'utente
         self::saveReader($model->id_user,$model->id_notification);
         return (object) $model->attributes;
@@ -45,21 +48,19 @@ class Messages extends Component
         $readers->alreadyread = NotificationsReaders::STATUS_UNREAD;
         $readers->insert();
 
+        // self::log("Salvato in readers db");
+
+
         return true;
     }
 
-    //scrive a video e nel file log le informazioni richieste
+    //scrive nel file log le informazioni richieste
     private function log($text){
-        // $save = new Save;
-        // $save->WriteLog('napay','commands','wt', $text);
+        $logFileName = Yii::$app->basePath."/logs/messages-push.log";
+        $handlefile = fopen($logFileName, "a");
 
-        $filename = Yii::$app->basePath."/logs/messages-push.log";
-        $myfile = fopen($filename, "a");
-        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
-
-        // echo  $time.$text;
-        fwrite($myfile, $time.$text);
-
+		$time = "\r\n" .date('Y/m/d h:i:s a - ', time());
+		fwrite($handlefile, $time.$text);
     }
 
     /**
@@ -71,15 +72,14 @@ class Messages extends Component
     public function push($attributes, $app='wallet')
     {
 
-
-        // self::log("Salvo il messaggio\n");
+        // self::log("Salvo il messaggio in db");
         $notification = self::save($attributes);
 
         //Carico i parametri della webapp
         $settings = Settings::load();
 
         // $subscriptions = array();
-        // self::log("Carico il dataProvider\n");
+        // self::log("settings: <pre>".print_r($settings,true)."</pre>\n");
 
         $dataProvider = new ActiveDataProvider([
             'query' => PushSubscriptions::find()->
@@ -92,6 +92,8 @@ class Messages extends Component
 
         $content = [];
 
+        // self::log("dataprovider: <pre>".print_r($dataProvider,true)."</pre>\n");
+        // self::log("total count: <pre>".print_r($dataProvider->getTotalCount(),true)."</pre>\n");
 
 
         if ($dataProvider->getTotalCount() >0 )
@@ -106,6 +108,9 @@ class Messages extends Component
                     'privateKey' => $settings->VapidSecret, // in the real world, this would be in a secret file
                 ),
             );
+
+            // self::log("auth: <pre>".print_r($auth,true)."</pre>\n");
+
 
             // impostazioni di default
             $defaultOptions = [
@@ -136,6 +141,8 @@ class Messages extends Component
                 ],
 
             );
+            // self::log("content: <pre>".print_r($content,true)."</pre>\n");
+
 
             // self::log("Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
 
@@ -143,6 +150,8 @@ class Messages extends Component
             // trasformo il payload in json
             $payload = Json::encode($content);
             #echo '<pre>'.print_r($pay_load,true).'</pre>';
+            // self::log("payload: <pre>".print_r($payload,true)."</pre>\n");
+
 
             // foreach ($subscribe_array as $id => $array){
 
@@ -155,6 +164,8 @@ class Messages extends Component
                         "auth" => $item->auth
                     ],
                 ]);
+                // self::log("subscriptions: <pre>".print_r($subscriptions,true)."</pre>\n");
+
                 #echo '<pre>'.print_r($array,true).'</pre>';
                 #echo '<pre>'.print_r($subscription,true).'</pre>';
                 // self::log("Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id_subscription\n");
@@ -173,6 +184,8 @@ class Messages extends Component
                         $subscription,
                         $payload // optional (defaults null)
                     );
+                    // self::log("subscription: <pre>".print_r($subscription,true)."</pre>\n");
+
                 }
 
                 // // invio il messaggio push
@@ -200,7 +213,9 @@ class Messages extends Component
               //     }
               // }
           } else {
-              // self::log(" : dataprovider = 0\n");
+              // // self::log(" : dataprovider = 0\n");
+              // self::log("dataprovider = 0");
+
           }
 
           return $content;

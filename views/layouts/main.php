@@ -86,7 +86,16 @@ SynchronizeLatestBlocksAsset::register($this);
 
         <?php echo $this->render('_searchform'); ?>
         <div id="snackbar">
-            <?= Yii::t('app','A new version of this app is available. Click '); ?><a id="reload"><?= Yii::t('app','here') ?></a><?= Yii::t('app',' to update.') ?>
+            <?= Yii::t('app','A new version of this app is available.'); ?>
+            <p>
+                <?= Yii::t('app','Click'); ?>
+                <a id="reload">
+                    <button class="btn btn-warning px-5">
+                        <?= Yii::t('app','here') ?>
+                    </button>
+                </a>
+                <?= Yii::t('app',' to update.') ?>
+            </p>
         </div>
 
         <main class="margin mt-0">

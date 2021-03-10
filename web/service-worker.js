@@ -2,7 +2,7 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'megapay-static-006';
+var CACHE_STATIC_NAME = 'megapay-static-008';
 var CACHE_DYNAMIC_NAME = 'megapay-dynamic-007';
 
 var STATIC_FILES = [
@@ -223,15 +223,12 @@ function getFileExtension(filename) {
 self.addEventListener('fetch', function (event) {
 	var parser = new URL(event.request.url);
 
-
-	if (getFileExtension(parser.pathname) == 'php'
-		// || getFileExtension(parser.pathname) == 'css'
-	){
-		console.log('[SW Parser] web ',parser.pathname);
+	if (getFileExtension(parser.pathname) == 'php')
+	{
+		console.log('[SW Parser] web no-cache',parser.pathname);
 		if (getFileExtension(parser.search) == '?r=wallet/index'){
-			console.log('[SW Parser] SONO QUI. STO CARICANDO IL FILE ??? ',parser.search);
+			console.log('[SW Parser] web no-cache & wallet/index non fa nulla...',parser.search);
 		} else {
-
 			event.respondWith(
 				fetch(event.request)
 			);
@@ -242,7 +239,6 @@ self.addEventListener('fetch', function (event) {
 			fetch(event.request).catch(function(){
 				return	caches.match(event.request);
 			})
-
 		);
 	} else {
 		console.log('[SW Parser] dynamic cache ',parser.pathname);
@@ -419,11 +415,16 @@ self.addEventListener('notificationclick', function(event) {
 		var action = JSON.parse(event.actions);
 	}
 
-	console.log('[SW event on notification click] ACTION', action);
-	console.log('[SW event on notification click] URL', action.openUrl);
+	// console.log('[SW event on notification click] ACTION', action);
+	// console.log('[SW event on notification click] URL', action.openUrl);
 
+	//
 	event.notification.close();
-	event.waitUntil(clients.openWindow(action.openUrl));
+	if (event.action !== 'close') {
+    	console.log('handle go to url with yes button');
+    	event.waitUntil(clients.openWindow(action.openUrl));
+  	}
+
 
 }
 , false);

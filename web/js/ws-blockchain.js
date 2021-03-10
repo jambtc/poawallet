@@ -84,9 +84,6 @@ $(function () {
             }, 10000);
 
         }
-
-
-
     }
 
     function showTransactionRow(tx){
@@ -97,7 +94,11 @@ $(function () {
         }
         $('tr[data-key="' + tx.id_token + '"]').addClass("animationTransaction");
         console.log('[ws] push options',tx.pushoptions)
-        displayPushNotification(tx.pushoptions);
+        if (Object.keys(tx.pushoptions).length === 0){
+            console.log('[ws/bc] push options è vuoto');
+        }else{
+            displayPushNotification(tx.pushoptions);
+        }
         $('#total-balance').addClass('animationBalanceIn');
         $('.star-total-balance').addClass('animationStar');
         $('#total-balance').text(tx.balance);
