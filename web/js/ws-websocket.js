@@ -66,22 +66,22 @@ $(function () {
 
                         if (response.difference > 0){
                             $('.header-message').html(response.headerMessage);
-
+                            setTimeout(function(){
+                                if (webSocket.readyState == 1){
+                                    webSocket.send( JSON.stringify({
+                                        'action' : 'checkTransactions',
+                                        'postData' : postData,
+                                    }));
+                                } else {
+                                    //startWebSocket();
+                                }
+                            }, timeOut);
                         } else {
                             $('.header-message').html('');
-                            postData.chainBlocknumber += 5;
-                            timeout = 10000;
+                            // postData.chainBlocknumber += 5;
+                            // timeout = 10000;
                         }
-                        setTimeout(function(){
-                            if (webSocket.readyState == 1){
-                                webSocket.send( JSON.stringify({
-                                    'action' : 'checkTransactions',
-                                    'postData' : postData,
-                                }));
-                            } else {
-                                //startWebSocket();
-                            }
-                        }, timeOut);
+
 
 
                     }
