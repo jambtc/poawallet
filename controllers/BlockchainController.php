@@ -282,7 +282,7 @@ class BlockchainController extends Controller
                                                //salva la notifica
 											   $notification = [
 												  'type_notification' => 'token',
-												  'id_user' => $client->user_id,
+												  'id_user' => Yii::$app->user->id,
 												  'id_tocheck' => $tokens->id_token,
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
