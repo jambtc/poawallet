@@ -69,8 +69,10 @@ $(function () {
 
                         } else {
                             $('.header-message').html('');
-                            var hexValue = (parseInt(postData.chainBlocknumber, 16) + 0x000005).toString(16);
-                            postData.chainBlocknumber = hexValue;
+                            var hexWallet = (parseInt(postData.walletBlocknumber, 16) - 0x00000a).toString(16);
+                            var hexChain = (parseInt(postData.chainBlocknumber, 16) + 0x00000a).toString(16);
+                            postData.chainBlocknumber = hexChain;
+                            postData.walletBlocknumber = hexWallet;
                             timeout = 2000;
                         }
                         setTimeout(function(){

@@ -2,7 +2,7 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'megapay-static-002';
+var CACHE_STATIC_NAME = 'megapay-static-003';
 var CACHE_DYNAMIC_NAME = 'megapay-dynamic-004';
 
 var OFFLINE_URL = 'offline.html';
@@ -30,7 +30,7 @@ var STATIC_FILES = [
 	'js/ws-latest.js',
 	'js/web-workers/latestWorker.js',
 
-	// manage notifications 
+	// manage notifications
 	'js/notifications-MainWorker.js',
 	'js/web-workers/notificationsWorker.js',
 
