@@ -93,6 +93,7 @@ class BlockchainController extends Controller
 	// dell'utente fino ad arrivare all'ultimo blocco della blockchain
 	public function actionCheckLatest()
 	{
+		// return true;
 		// echo '<pre>'.print_r($_POST,true).'</pre>';
 		// exit;
 		set_time_limit(30); //imposto il time limit unlimited
@@ -109,13 +110,13 @@ class BlockchainController extends Controller
 
    		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 		$chainBlock = $blockLatest->number;
-		$savedBlock = dechex (hexdec($blockLatest->number) -10 );
+		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) -14 );
 
 		//Carico i parametri della webapp
 		$settings = Settings::load();
 
 		// Inizio il ciclo sui blocchi
-		for ($x=0; $x < 10; $x++)
+		for ($x=0; $x <= 15; $x++)
 		{
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
 				//somma del valore del blocco in decimali
@@ -342,7 +343,7 @@ class BlockchainController extends Controller
 	   	'success'=>true,
 	   	'message'=>'response from check-transactions',
 
-	   	// 'command' => 'getBlockNumber',
+	   	'searchFromBlockNumber' => $savedBlock,
 	   	// "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
 	   	"transactions"=>$txFound,
 	   	 "walletBlocknumber"=>$searchBlock,

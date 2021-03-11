@@ -30,7 +30,6 @@ class CommandsServer extends WebSocketServer
 {
     public $maxBlocksToScan = 17;
     public $transactionsFound = [];
-    public $latestTransactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
 		$this->maxBlocksToScan = $maxBlocksToScan;
@@ -44,12 +43,7 @@ class CommandsServer extends WebSocketServer
 	private function getTransactionsFound(){
         return $this->transactionsFound;
 	}
-    private function setLatestTransactionsFound($transaction){
-        $this->latestTransactionsFound[] = $transaction;
-    }
-    private function getLatestTransactionsFound(){
-        return $this->latestTransactionsFound;
-    }
+
 
 
     public function init()
@@ -178,20 +172,23 @@ class CommandsServer extends WebSocketServer
         // echo '\r\n<pre>il maxBlockToScan è'.print_r($maxBlockToScan,true).'</pre>';
 
 		// Inizio il ciclo sui blocchi
-        for ($x=1; $x < $maxBlockToScan;$x++)
+        for ($x=0; $x < $maxBlockToScan;$x++)
 		{
-            // $this->log('Inizio il ciclo: '.$x);
+            $this->log('Inizio il ciclo: '.$x. ' sul blocco n. 0x'.dechex((hexdec($savedBlock)+$x)));
+            $this->log('Il massimo è: 0x'.dechex(hexdec($chainBlock)));
 
             if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock))
             {
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 			   	// ricerco le informazioni del blocco tramite il suo numero
-				$block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
+
+
+                $block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
                 // $this->log("Informazioni sul blocco: <pre>".print_r($block,true)."</pre>\n");
                 $transactions = $block->transactions;
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
-				// $this->log('<pre>'.print_r($transactions,true).'</pre>');
+				$this->log('Transazioni è: <pre>'.print_r($transactions,true).'</pre>');
 				// exit;
 
 				if (!empty($transactions))
@@ -326,6 +323,9 @@ class CommandsServer extends WebSocketServer
                                            'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                       ]);
 
+                                      $this->log("HO salvato il messaggio in memoria");
+
+
 
 									   // $save->Notification($notification);
 									   // $save->WriteLog('bolt','blockchain','SyncBlockchain',"Notification saved.");
@@ -390,16 +390,20 @@ class CommandsServer extends WebSocketServer
                    $this->log("$x Transaction vuota on block n. $searchBlock");
 
                }//if not empty transaction
+               $this->log("Update wallet block number on block n. $searchBlock");
+
 
                // echo "\r\n<pre>Fine ricerca transazioni on block n. $searchBlock</pre>";
                //aggiorno il numero dei blocchi sul wallet
                // print_r($searchBlock);
                $wallets->blocknumber = $searchBlock;
                $wallets->update();
+               $this->log("ho aggiornato la tabella wallet");
+
             }else{
                 // savedBlock +x > chainBlock
-                $this->log(">blocchi wallet in pari saved & chainblock ($savedBlock+$x) & $chainBlock");
-                $this->log(">searchblock $searchBlock");
+                $this->log("blocchi wallet in pari saved & chainblock ($savedBlock+$x) & $chainBlock");
+                $this->log("searchblock $searchBlock");
     			break;
             }
 
@@ -427,6 +431,7 @@ class CommandsServer extends WebSocketServer
             'success'=>true,
             'command'=>'check-transactions',
             "transactions"=>$txFound,
+        	'searchFromBlockNumber' => $savedBlock,
             "walletBlocknumber"=>$searchBlock,
             "chainBlocknumber"=>$chainBlock,
             "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
@@ -458,13 +463,13 @@ class CommandsServer extends WebSocketServer
 
    		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 		$chainBlock = $blockLatest->number;
-		$savedBlock = dechex (hexdec($blockLatest->number) -5 );
+		$savedBlock = dechex (hexdec($blockLatest->number) -15 );
 
 		//Carico i parametri della webapp
 		$settings = Settings::load();
 
         // Inizio il ciclo sui blocchi
-		for ($x=0; $x < 5; $x++)
+		for ($x=0; $x <= 15; $x++)
 		{
             // $this->log('LATEST Inizio il ciclo: '.$x);
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){

@@ -3,7 +3,7 @@ importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
 var CACHE_STATIC_NAME = 'megapay-static-002';
-var CACHE_DYNAMIC_NAME = 'megapay-dynamic-003';
+var CACHE_DYNAMIC_NAME = 'megapay-dynamic-004';
 
 var OFFLINE_URL = 'offline.html';
 
@@ -25,6 +25,14 @@ var STATIC_FILES = [
 	'js/clipboard-copy.js',
 	'js/ws-websocket.js',
 	'js/jquery.sparkline.js',
+
+	// search latest transactions
+	'js/ws-latest.js',
+	'js/web-workers/latestWorker.js',
+
+	// manage notifications 
+	'js/notifications-MainWorker.js',
+	'js/web-workers/notificationsWorker.js',
 
 	'js/pincode/pincode-global.js',
 	'js/pincode/pincode-settings.js',
