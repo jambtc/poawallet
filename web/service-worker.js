@@ -11,7 +11,6 @@ var STATIC_FILES = [
 	'/',
 	OFFLINE_URL,
 	'manifest.json',
-
 	'favicon.ico',
 	'css/global.style.css',
 	'css/img/content/coin5.png',
@@ -23,20 +22,13 @@ var STATIC_FILES = [
 	'css/yiipager.css',
 
 	'js/global.script.js',
-	// 'js/notifications-MainWorker.js',
 	'js/clipboard-copy.js',
 	'js/ws-websocket.js',
-
-
-	'js/ws-latest.js',
-	'js/nfc-write.js',
+	'js/jquery.sparkline.js',
 
 	'js/pincode/pincode-global.js',
 	'js/pincode/pincode-settings.js',
 	'js/pincode/pincode-utility.js',
-
-	'js/web-workers/bcWorker.js',
-	// 'js/web-workers/notificationsWorker.js',
 
 	'src/images/icons/app-icon-144x144.png',
 

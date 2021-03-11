@@ -10,10 +10,8 @@ use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\assets\PincodeAsset;
-// use app\assets\NotificationsAsset;
 use app\assets\ServiceWorkerAsset;
 use app\assets\WebSocketAsset;
-use app\assets\SynchronizeLatestBlocksAsset;
 
 use app\components\Settings;
 
@@ -37,10 +35,8 @@ $this->registerJs(
 AppAsset::register($this);
 
 PincodeAsset::register($this);
-// NotificationsAsset::register($this);
 ServiceWorkerAsset::register($this);
 WebSocketAsset::register($this);
-SynchronizeLatestBlocksAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>

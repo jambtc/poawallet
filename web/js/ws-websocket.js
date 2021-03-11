@@ -16,7 +16,10 @@ $(function () {
             webSocket.send( JSON.stringify({
                 'action' : 'notifications',
             }));
-            getWsState(webSocket);
+            webSocket.send( JSON.stringify({
+                'action' : 'checkLatest',
+            }));
+             getWsState(webSocket);
 
         };
 
@@ -25,7 +28,13 @@ $(function () {
             console.error("[ws] WebSocket error observed:", event);
             $('.pulse-button').addClass('pulse-button-offline');
             // trying to restart
-            setTimeout(function(){ startWebSocket() }, 10000);
+            //setTimeout(function(){ startWebSocket() }, 10000);
+        };
+
+        webSocket.onclose = function(e) {
+            console.log('[ws] Disconnected!');
+            // $('.pulse-button').addClass('pulse-button-offline');
+            //startWebSocket();
         };
 
         // gestico i messaggi di risposta dal server
@@ -39,10 +48,10 @@ $(function () {
 
                         // analizzare la risposta delle transazioni
                         var transactions = response.transactions;
-                        console.log('[ws] Transactions are: ', transactions);
+                        console.log('[ws] Old Transactions are: ', transactions);
                         if (transactions){
                             for (var tx of transactions) {
-                                console.log('[ws] single transaction data:', tx);
+                                console.log('[ws] Old single transaction data:', tx);
                                 showTransactionRow(tx);
                             }
                         }
@@ -53,31 +62,70 @@ $(function () {
                         };
                         var timeOut = 0;
 
+                        console.log('[ws] Old difference:', response.difference);
+
                         if (response.difference > 0){
                             $('.header-message').html(response.headerMessage);
+
                         } else {
                             $('.header-message').html('');
-                            postData.chainBlocknumber += 10;
+                            postData.chainBlocknumber += 5;
                             timeout = 10000;
                         }
                         setTimeout(function(){
-                            webSocket.send( JSON.stringify({
-                                'action' : 'checkTransactions',
-                                'postData' : postData,
-                            }));
+                            if (webSocket.readyState == 1){
+                                webSocket.send( JSON.stringify({
+                                    'action' : 'checkTransactions',
+                                    'postData' : postData,
+                                }));
+                            } else {
+                                //startWebSocket();
+                            }
                         }, timeOut);
-                    }
 
+
+                    }
                     break;
 
                 case 'notifications':
                     notify.handleResponse(response);
 
                     setTimeout(function(){
-                        webSocket.send( JSON.stringify({
-                            'action' : 'notifications',
-                        }));
-                    }, 5000);
+                        if (webSocket.readyState == 1){
+                            webSocket.send( JSON.stringify({
+                                'action' : 'notifications',
+                            }));
+                        } else {
+                            //startWebSocket();
+                        }
+                    }, 2000);
+                    break;
+
+                case 'check-latest':
+                    if (response.success == true){
+                        $('.pulse-button').removeClass('pulse-button-offline');
+                        // analizzare la risposta delle transazioni
+                        var transactions = response.transactions;
+                        console.log('[ws] Latest Transactions are: ', transactions);
+                        if (transactions){
+                            for (var tx of transactions) {
+                                console.log('[ws] latest transaction data:', tx);
+                                showTransactionRow(tx);
+                            }
+                        }
+                        console.log('[ws] Latest difference:', response.difference);
+                        if (response.difference > 1){
+                            setTimeout(function(){
+                                if (webSocket.readyState == 1){
+                                    webSocket.send( JSON.stringify({
+                                        'action' : 'checkLatest',
+                                    }));
+                                } else {
+                                    //startWebSocket();
+                                }
+                            }, 3000);
+                        }
+                    }
                     break;
             }
 
