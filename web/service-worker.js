@@ -23,9 +23,11 @@ var STATIC_FILES = [
 	'css/yiipager.css',
 
 	'js/global.script.js',
-	'js/notifications-MainWorker.js',
+	// 'js/notifications-MainWorker.js',
 	'js/clipboard-copy.js',
-	'js/ws-blockchain.js',
+	'js/ws-websocket.js',
+
+
 	'js/ws-latest.js',
 	'js/nfc-write.js',
 
@@ -34,7 +36,7 @@ var STATIC_FILES = [
 	'js/pincode/pincode-utility.js',
 
 	'js/web-workers/bcWorker.js',
-	'js/web-workers/notificationsWorker.js',
+	// 'js/web-workers/notificationsWorker.js',
 
 	'src/images/icons/app-icon-144x144.png',
 
@@ -143,7 +145,7 @@ self.addEventListener('fetch', function (event) {
 	   // Uh-oh, we navigated to a page while offline. Let's show our default page.
 	   event.respondWith(caches.match(OFFLINE_URL));
 	   return;
-	   
+
 	}
 
 	if (getFileExtension(parser.pathname) == 'php')

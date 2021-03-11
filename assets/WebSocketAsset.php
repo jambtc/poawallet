@@ -19,14 +19,14 @@ use yii\web\View;
  * @author Sergio Casizzone <jambtc@gmail.com>
  * @since 2.0
  */
-class SynchronizeBlockchainAsset extends AssetBundle
+class WebSocketAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
     ];
     public $js = [
-        'js/ws-blockchain.js'
+        'js/ws-websocket.js'
     ];
 
 

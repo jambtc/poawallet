@@ -9,10 +9,15 @@ use Ratchet\ConnectionInterface;
 use yii\base\Model;
 use app\models\MPWallets;
 use app\models\BoltTokens;
+use app\models\NotificationsReaders;
+use app\models\Notifications;
+
 
 use yii\web\Response;
 use yii\helpers\Json;
 use yii\helpers\Url;
+use yii\helpers\Html;
+
 
 use app\components\WebApp;
 use app\components\Settings;
@@ -79,13 +84,7 @@ class CommandsServer extends WebSocketServer
 
    //scrive a video e nel file log le informazioni richieste
    private function log($text){
-       // $save = new Save;
-       // $save->WriteLog('napay','commands','wt', $text);
-
-       // $filename = Yii::$app->basePath."/logs/blockchain-command.log";
-       // $myfile = fopen($filename, "a");
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
-
        echo  $time.$text;
    }
 
@@ -113,6 +112,7 @@ class CommandsServer extends WebSocketServer
    			 "my_address"=>$wallet->wallet_address,
    			 "relativeTime" =>'',
    			 "success"=>false,
+             'command'=>'check-transactions',
    		];
         $blockLatest = Yii::$app->Erc20->getBlockInfo();
 
@@ -129,6 +129,7 @@ class CommandsServer extends WebSocketServer
    			 "relativeTime" => Yii::$app->formatter->asDuration($difference),
    			 "success"=>true,
              'message'=>'',
+             'command'=>'check-transactions',
    		];
 
         return $return;
@@ -419,45 +420,141 @@ class CommandsServer extends WebSocketServer
         //     $this->log("getTransaction: <pre>".print_r($txFound,true)."</pre>\n");
 
 
-       $return = [
-           // 'id'=>time(),
-           'success'=>true,
-           'message'=>'response from check-transactions',
-           // 'difference' => $difference,
-           // 'command' => 'getBlockNumber',
-           // "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
-           "transactions"=>$txFound,
+        $return = [
+            // 'id'=>time(),
+            'success'=>true,
+            'command'=>'check-transactions',
+            "transactions"=>$txFound,
             "walletBlocknumber"=>$searchBlock,
             "chainBlocknumber"=>$chainBlock,
             "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
             "difference"=> $difference,
             "user_address"=>$postData['search_address'],
             "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
-       ];
-
-
-       $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
-
-
-
-
-       $client->send(json_encode($return));
-
-
-
+        ];
+        $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
+        $client->send(json_encode($return));
     }
 
+    /**
+	 * Saves the Subscription for push messages.
+	 * @param POST VAPID KEYS
+	 * this function NOT REQUIRE user to login
+	 */
+    function commandNotifications(ConnectionInterface $client, $msg)
+    {
+        $request = json_decode($msg, true);
+
+        $news = NotificationsReaders::find()
+ 	     		->andWhere(['id_user'=>$client->user_id])
+				->latest()
+ 	    		->all();
+
+        $response['command'] = 'notifications';
+        $response['countedRead'] = 0;
+        $response['countedUnread'] = 0;
+        $response['htmlTitle'] = '';
+        $response['htmlContent'] = ''; // ex content
+        $response['playSound'] = false;
+        $response['playAlarm'] = false;
+
+        foreach ($news as $key => $item) {
+		   ($item->alreadyread == 0 ? $response['countedUnread'] ++ : $response['countedRead'] ++);
+        }
+
+        $x=1;
+        foreach ($news as $key => $item) {
+		    if ($x == 1){
+
+			    $response['htmlTitle'] .= '<li>
+		 			 <div class="d-flex align-items-center justify-content-between">
+		 				 <div class="d-flex align-items-center">
+		 				   <div class="coin-name notify-htmlTitle">'
+					   . Html::encode(\Yii::t('app',
+						   'You have {n,plural,=0{read all messages.} =1{one unread message.} other{# unread messages.}}', ['n' => $response['countedUnread']]
+					   ))
+					   .'</div>
+		 				 </div>
+		 				 <div class="notify-readAll">
+		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('app','Mark all as read') .'</small></a>
+		 				 </div>
+		 			   </div>
+		 		 </li>';
+		    }
+		    // Leggo la notifica tramite key
+		    $notify = Notifications::find()
+ 		  			->andWhere(['id_notification'=>$item->id_notification])
+ 		  			->one();
+
+		    //$notify = Notifications::model()->findByPk($item->id_notification);
+		    $notifi__icon = WebApp::Icon($notify->type_notification);
+		    $notifi__color = WebApp::Color($notify->status);
+
+		    // verifico che sia un allarme
+		    if ($notify->type_notification == 'alarm' && $item->alreadyread == 0)
+			   $response['playAlarm'] = true;
 
 
+			$parsedurl = parse_url($notify->url);
+
+			$classUnread = '';
+			if ($item->alreadyread == 0) {
+				$classUnread = 'bg-secondary-light';
+			}
+
+			$response['htmlContent'] .= '<li class='.$classUnread.'>
+			<a onclick="notify.openEnvelope('.$notify->id_notification.');"
+				href="'.htmlentities('index.php?'.$parsedurl['query']).'"
+				id="news_'.$notify->id_notification.'">
+	   			<div class="d-flex align-items-center justify-content-between">
+	                   <div class="d-flex align-items-center">
+	                       <div class="notice-icon available" style="min-width:30px;">
+	                           <i class="'.$notifi__icon.'"></i>
+	                       </div>
+	                       <div class="ml-10">
+	                         <p class="coin-name">'.Yii::t('app',$notify->description).'</p>
+
+							 <div class="text-right">';
+							 // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
+							 if ($notify->type_notification <> 'help'
+									 && $notify->type_notification <> 'contact'
+									 && $notify->type_notification <> 'alarm'
+							 ){
+								 $response['htmlContent'] .= '<b class="d-block mb-0 float-left txt-dark">'.$notify->price.'</b>';
+								 //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
+								 $response['status'][$notify->id_tocheck] = $notify->status;
+							 }
+							 $response['htmlContent'] .= '
+								 <small class="text-muted">'.Yii::$app->formatter->asRelativeTime($notify->timestamp).'</small>
+							 </div>
 
 
+	                       </div>
+	                   </div>
+	               </div>
+			   </a>
+	   		</li>';
 
+            $x++;
+            if ($x>5)
+                break;
+        }
+        if ($response['countedRead'] == 0 && $response['countedUnread'] == 0){
+            $response['htmlContent'] .= '<div class="notifi__title">';
+            $response['htmlContent'] .= '<p>' . Yii::t('app','You have no messages to read.') . '</p>';
+            $response['htmlContent'] .= '</div>';
+        } else {
+		    $response['htmlContent'] .= '<li>
+   			<div class="d-flex align-items-center justify-content-between">
+                   <div class="d-flex align-items-center">
+                       <a href="'.htmlentities('index.php?r=messages/index').'" class="text-muted">'.Yii::t('app','Manage notifications').'</a>
+                   </div>
+               </div>
+   		</li>';
+	    }
 
-
-
-
-
-
-
-
+        // $this->log("<pre>notifiche è:: ".print_r($response,true)."</pre>");
+        // $this->log("<pre>notifiche completato</pre>");
+        $client->send(json_encode($response));
+	}
 }
