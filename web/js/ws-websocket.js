@@ -19,7 +19,7 @@ $(function () {
             webSocket.send( JSON.stringify({
                 'action' : 'checkLatest',
             }));
-             getWsState(webSocket);
+            getWsState(webSocket);
 
         };
 
@@ -66,21 +66,22 @@ $(function () {
 
                         if (response.difference > 0){
                             $('.header-message').html(response.headerMessage);
-                            setTimeout(function(){
-                                if (webSocket.readyState == 1){
-                                    webSocket.send( JSON.stringify({
-                                        'action' : 'checkTransactions',
-                                        'postData' : postData,
-                                    }));
-                                } else {
-                                    //startWebSocket();
-                                }
-                            }, timeOut);
+
                         } else {
                             $('.header-message').html('');
-                            // postData.chainBlocknumber += 5;
-                            // timeout = 10000;
+                            postData.chainBlocknumber += 5;
+                            timeout = 10000;
                         }
+                        setTimeout(function(){
+                            if (webSocket.readyState == 1){
+                                webSocket.send( JSON.stringify({
+                                    'action' : 'checkTransactions',
+                                    'postData' : postData,
+                                }));
+                            } else {
+                                //startWebSocket();
+                            }
+                        }, timeOut);
 
 
 
@@ -114,7 +115,7 @@ $(function () {
                             }
                         }
                         console.log('[ws] Latest difference:', response.difference);
-                        if (response.difference > 1){
+                        // if (response.difference > 1){
                             setTimeout(function(){
                                 if (webSocket.readyState == 1){
                                     webSocket.send( JSON.stringify({
@@ -123,8 +124,8 @@ $(function () {
                                 } else {
                                     //startWebSocket();
                                 }
-                            }, 3000);
-                        }
+                            }, 5000);
+                        // }
                     }
                     break;
             }
