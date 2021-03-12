@@ -1,4 +1,5 @@
 <?php
+$secrets = require __DIR__ . '/secrets.php';
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
@@ -35,7 +36,7 @@ $config = [
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'KD1pnIAIvZn8d8Px8NbiY9LUCwYYMbFe',
+            'cookieValidationKey' => $secrets['cookieValidationKey'],
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -61,10 +62,10 @@ $config = [
             'viewPath' => '@app/mail',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.mailtrap.io',
-                'username' => 'c98eded3f83a47',
-                'password' => '7838a4cce6636a',
-                'port' => '2525',
+                'host' => $secrets['mail_host'],
+                'username' => $secrets['mail_username'],
+                'password' => $secrets['mail_password'],
+                'port' => $secrets['mail_port'],
                 'encryption' => 'tls',
             ],
         ],

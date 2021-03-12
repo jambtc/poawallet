@@ -1,13 +1,14 @@
 <?php
+$secrets = require __DIR__ . '/secrets.php';
 
 return [
-    'adminEmail' => 'admin@example.com',
-    'senderEmail' => 'noreply@example.com',
-    'senderName' => 'Example.com mailer',
+    'adminEmail' => $secrets['mail_adminusername'],
+    'senderEmail' => $secrets['mail_username'],
+    'senderName' => $secrets['mail_name'],
     'logoApplicazione' => '/css/images/logo.png',
     'website' => 'www.txlab.it',
     'adminName' => 'txLab',
-    'supportEmail' => 'info@txLab.it',
+    'supportEmail' => $secrets['mail_username'],
     'encryptionFile' => dirname(__FILE__).'/encrypt.json',
 
     /**

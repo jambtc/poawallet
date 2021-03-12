@@ -85,8 +85,8 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
     public static function findUserByProvider($username,$oauth_provider)
     {
 
-        echo "<pre>".print_r($username,true)."</pre>";
-        echo "<pre>".print_r($oauth_provider,true)."</pre>";
+        // echo "<pre>".print_r($username,true)."</pre>";
+        // echo "<pre>".print_r($oauth_provider,true)."</pre>";
 		// exit;
         $record = self::findOne([
             'username'=>$username,
@@ -169,6 +169,9 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
      */
     public function validatePassword($password)
     {
+        // echo $password;
+        // echo '<br>'.$this->password;
+        // exit;
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
     }
 

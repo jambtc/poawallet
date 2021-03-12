@@ -96,4 +96,18 @@ class Users extends \yii\db\ActiveRecord
     {
         return new \app\models\query\UsersQuery(get_called_class());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function beforeSave($insert) {
+        if(isset($this->password))
+            $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+    return parent::beforeSave($insert);
+}
 }
