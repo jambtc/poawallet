@@ -2,7 +2,7 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'megapay-static-004';
+var CACHE_STATIC_NAME = 'megapay-static-005';
 var CACHE_DYNAMIC_NAME = 'megapay-dynamic-004';
 
 var OFFLINE_URL = 'offline.html';
