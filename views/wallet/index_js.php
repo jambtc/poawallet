@@ -95,10 +95,6 @@ $(function(){
                 window.location.href = yiiOptions.initURL;
             }
         });
-
-
-
-
 });
 
 

@@ -156,8 +156,13 @@ class SendController extends Controller
 		$settings = Settings::load();
 		$amountForContract = $amount * pow(10, $settings->poa_decimals);
 
-		// imposto il valore del nonce attuale
+		// carico il gas in caso questo sia a 0 per inviare transazioni
+		$gasBalance = Yii::$app->Erc20->loadGas($fromAccount);
+
+		// carico le informazioni relative al blocco attuale
 		$block = Yii::$app->Erc20->getBlockInfo();
+
+		// imposto il valore del nonce attuale
 		$nonce = Yii::$app->Erc20->getNonce($fromAccount);
 
 		// genero la transazione nell'intervallo del nonce
@@ -244,6 +249,7 @@ class SendController extends Controller
 			'status' => $tokens->status,
 			'url' => Url::to(['/send/validate-transaction']),
 			'row' => $WebApp->showTransactionRow($tokens,$fromAccount),
+			'gas' => $gasBalance,
 		];
 
 		return $this->json($data);
@@ -286,7 +292,7 @@ class SendController extends Controller
 			];
 		} else {
 			$tokens->status = 'complete';
-			$tokens->token_ricevuti = 0; // fix la velocità sul server 
+			$tokens->token_ricevuti = 0; // fix la velocità sul server
 			$tokens->blocknumber = hexdec($receipt->blockNumber);
 
 			if (!($tokens->save())){

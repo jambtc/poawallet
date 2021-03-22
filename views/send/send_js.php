@@ -116,6 +116,8 @@ $wallet_send = <<<JS
                                 $('.generating').parent().removeClass('alert alert-warning');
                                 $('.generating').html(data.row);
                                 $('.pay-close').show();
+                                console.log('[Send]: loaded gas is: ', data.gas.balance);
+
 
                                 writeData('sync-send-erc20', data).then(function() {
         							console.log('[Send]: Registered sync-send-erc20 request in indexedDB', data);
