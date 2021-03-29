@@ -12,6 +12,9 @@ $(function () {
         if (typeof pin[0] !== 'undefined') {
             $('.pincodeslider').hide();
             $('.pincodeslider-remove').show();
+            $('.masterSeedMessagePinEnabled').show();
+        }else{
+            $('.masterSeedMessagePinDisabled').show();
         }
     })
 

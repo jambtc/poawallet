@@ -63,25 +63,32 @@ class UsersController extends Controller
  	     		->andWhere(['id_user'=>Yii::$app->user->id])
  	    		->one();
 
-        $sent = round(BoltTokens::find()
-            ->where(['from_address'=>$wallet->wallet_address])
-            ->sum('token_price'), Settings::load()->poa_decimals);
+        $tokens_from = BoltTokens::find()
+                    ->andWhere(['from_address'=>$wallet->wallet_address])
+                    ->andWhere(['status'=>'complete']);
 
-        $received = round(BoltTokens::find()
-            ->where(['to_address'=>$wallet->wallet_address])
-            ->sum('token_price'), Settings::load()->poa_decimals);
+        $tokens_to = BoltTokens::find()
+                    ->where(['to_address'=>$wallet->wallet_address])
+                    ->andWhere(['status'=>'complete']);
 
-        // $transactions = BoltTokens::find()
-        //     ->orwhere(['=','to_address', $wallet->wallet_address])
-        //     ->orwhere(['=','from_address', $wallet->wallet_address])->count();
 
+        $sent['sum'] = round($tokens_from->sum('token_price'), Settings::load()->poa_decimals);
+        $sent['count'] = round($tokens_from->count(), Settings::load()->poa_decimals);
+
+        $received['sum'] = round($tokens_to->sum('token_price'), Settings::load()->poa_decimals);
+        $received['count'] = round($tokens_to->count(), Settings::load()->poa_decimals);
+
+        $total_transactions = $sent['count'] + $received['count'];
 
         return $this->render('view', [
             'model' => $this->findModel(WebApp::decrypt($id)),
             'sent' => $sent,
             'received' => $received,
-            // 'transactions' => $transactions,
+            'transactions' => $total_transactions,
+            'percent_sent' => $sent['count'] / (1+$total_transactions) * 100,
+            'percent_received' => $received['count'] / (1+$total_transactions) * 100,
         ]);
+
     }
 
     /**

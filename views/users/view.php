@@ -10,7 +10,9 @@ use yii\widgets\DetailView;
 // include ('sparkline_js.php');
 include ('manage-options_js.php');
 include ('manage-pin_js.php');
+include ('manage-masterseed_js.php');
 include ('manage-push_js.php');
+
 ?>
 <div class="dash-balance">
 	<div class="dash-content relative">
@@ -43,9 +45,9 @@ include ('manage-push_js.php');
               <div class="d-flex flex-column ml-md-2">
                 <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('app','Total Income') ?></p>
                 <div class="progress">
-                    <div class="progress-bar bg-primary" role="progressbar" style="width: 57%"></div>
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $percent_received ?>%"><?= $received['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= $received ?></h4>
+                <h4 class="mt-10 mb-0"><?= $received['sum'] ?></h4>
               </div>
             </div>
         </div>
@@ -55,9 +57,9 @@ include ('manage-push_js.php');
               <div class="d-flex flex-column ml-md-2">
                 <p class="text-muted mb-10 font-weight-medium"><?= Yii::t('app','Expenses') ?></p>
                 <div class="progress">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 67%"></div>
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $percent_sent ?>%"><?= $sent['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= $sent ?></h4>
+                <h4 class="mt-10 mb-0"><?= $sent['sum'] ?></h4>
               </div>
             </div>
         </div>
@@ -76,13 +78,25 @@ include ('manage-push_js.php');
 			<em class="seperate"></em>
 			<span class="list-item-title"><?= Yii::t('app','PIN');?><small class="text-muted"></small></span>
 			<div class="pincodeslider sweet-check" >
-				<!-- <input type="checkbox" name="pincodeslider" value="1"> -->
 				<div class="outline">
 					<span></span>
 				</div>
 			</div>
 			<div class="pincodeslider-remove sweet-check checked" style="display:none;" >
-				<!-- <input type="checkbox" name="pincodeslider-remove" value="1"> -->
+				<div class="outline">
+					<span></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="list-box masterseed-box">
+		<div class="list-item">
+			<i class="fas fa-key text-primary"></i>
+			<em class="seperate"></em>
+			<span class="list-item-title"><?= Yii::t('app','Show Master Seed');?> <small class="text-muted"></small></span>
+
+			<div class="masterseedSlider sweet-check">
 				<div class="outline">
 					<span></span>
 				</div>
@@ -103,18 +117,7 @@ include ('manage-push_js.php');
 		</div>
 	</div> -->
 
-	<!-- <div class="list-box">
-		<div class="list-item">
-			<span class="list-item-title"><?= Yii::t('app','Backup Master Seed');?> <small class="text-muted"></small></span>
 
-			<div class="sweet-check checked">
-				<input type="checkbox" name="masterseed" value="1" checked="">
-				<div class="outline">
-					<span></span>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 	<!-- <div class="list-box">
 		<div class="list-item">
