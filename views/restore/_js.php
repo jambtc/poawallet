@@ -35,6 +35,7 @@ $wallet_restore = <<<JS
       e.preventDefault();
     });
 
+    // controlla il seed inserito
     seedField.addEventListener('input', function(e) {
         var insertedSeed = $.trim(e.target.value).toLowerCase();
         console.log('[verify]:', insertedSeed);

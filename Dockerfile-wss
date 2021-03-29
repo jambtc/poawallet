@@ -23,7 +23,6 @@ COPY runtime /var/www/runtime
 COPY views /var/www/views
 COPY widgets /var/www/widgets
 COPY vendor /var/www/vendor
-COPY widgets /var/www/widgets
 
 
 #this is the trick

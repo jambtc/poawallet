@@ -112,7 +112,7 @@ class SpawnController extends Controller
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
 				$block = Yii::$app->Erc20->getBlockInfo();
-				$boltWallet->blocknumber = $block->number;
+				$boltWallet->blocknumber = ($block->number === null) ? '0x0' : $block->number;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
