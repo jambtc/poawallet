@@ -16,6 +16,11 @@ $(function () {
 
     });
 
+    // evita di copiare e incollare il seed
+    $('.no-copypaste').bind('copy paste cut drag drop', function (e) {
+      e.preventDefault();
+    });
+
     // INTERCETTA IL PULSANTE indietro SULLA PRIMA SCHERMATA e reset pulsanti
     var masterseedSliderBack1 = document.querySelector('.masterseedSliderBack1');
     masterseedSliderBack1.addEventListener('click', function(){

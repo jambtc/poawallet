@@ -9,7 +9,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<p id='masterSeed' class="alert alert-info shadow txt-bold"></p>
+				<p id='masterSeed' class="alert alert-info shadow txt-bold no-copypaste"></p>
 			</div>
 			<div class="modal-footer">
 				<div class="form-group">
