@@ -12,6 +12,10 @@ function showUpdateBar() {
     let snackbar = document.getElementById('snackbar');
     snackbar.className = 'show';
 }
+function showWssAlert() {
+    let wssalert = document.getElementById('wss_server');
+    wssalert.className = 'show';
+}
 
 // The click event on the pop up notification
 if($('#reload').length){

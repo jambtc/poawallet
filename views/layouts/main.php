@@ -66,11 +66,6 @@ SynchronizeLatestBlocksAsset::register($this);
 
     <?php $this->head() ?>
 
-    <!-- Template global css file. Requared all pages -->
-  	<!-- <link rel="stylesheet" type="text/css" href="css/global.style.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="css/site.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="css/numpad.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="css/yiipager.css"> -->
 </head>
 <body>
 
@@ -85,6 +80,7 @@ SynchronizeLatestBlocksAsset::register($this);
         <?php $this->beginContent('@app/views/layouts/base.php') ?>
 
         <?php echo $this->render('_searchform'); ?>
+
         <div id="snackbar">
             <?= Yii::t('app','A new version of this app is available.'); ?>
             <p>
@@ -98,8 +94,18 @@ SynchronizeLatestBlocksAsset::register($this);
             </p>
         </div>
 
-        <main class="margin mt-0">
+        <div id="wss_server">
+            <p>
+                <?= Yii::t('app','The server synchronization is not working.'); ?>
+            </p>
+            <?= Yii::t('app','Try to refresh the page, otherwise contact support at '); ?>
+            <?php
+            echo '<a href=”mailto:' . Yii::$app->params['senderEmail'] . '?subject=WSS%20Error"><span class="text-danger">'. Yii::t('app','Support') . '</span></a>';
+            ?>
 
+        </div>
+
+        <main class="margin mt-0">
             <?= Alert::widget() ?>
             <?= $content ?>
         </main>

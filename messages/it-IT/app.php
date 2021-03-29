@@ -17,6 +17,9 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
+    'Support' => 'Supporto',
+    'Try to refresh the page, otherwise contact support at ' => 'Prova a ricaricare la pagina, altrimenti contatta il supporto tecnico: ',
+    'The server synchronization is not working.' => 'La sincronizzazione con il web server non sta funzionando.',
     ', with a clean and modern design, and a user friendly layout.' => ', con un design pulito e moderno e un layout facile da usare.',
     'is a mobile-based website ideal to pay for things like, electricity bills, event tickets, charity and more. Built with the' => 'è un sito web mobile-based ideale per pagare bollette, biglietti per eventi e tanto altro. Costruito con ',
     'Click on address to copy in the clipboard' => 'Clicca sull\'indirizzo per copiarlo negli appunti',
