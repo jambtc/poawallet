@@ -1,5 +1,6 @@
 $(function () {
-    var countError = 6;
+    var countError = 0;
+    let wssalert = document.getElementById('wss_server');
     startWebSocket();
 
     function startWebSocket(){
@@ -8,6 +9,7 @@ $(function () {
         // console.log('[ws] readyState:', readyState);
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
+            hideWssAlert();
             console.log('[ws] onopen user_id:', yiiGlobalOptions.cryptedIdUser);
             webSocket.send( JSON.stringify({
                 'action' : 'setUserId',
@@ -90,6 +92,14 @@ $(function () {
                 getWsState(ws);
             }, 5000);
         }
+    }
+
+    function showWssAlert() {
+        wssalert.className = 'show';
+    }
+
+    function hideWssAlert() {
+        wssalert.className = 'hide';
     }
 
 

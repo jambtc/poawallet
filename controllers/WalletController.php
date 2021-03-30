@@ -78,6 +78,11 @@ class WalletController extends Controller
 		];
 	}
 
+	public function actionError(){
+        $this->layout = 'auth';
+        return $this->render('error');
+    }
+
 
 	private function loadSocialUser()
 	{

@@ -45,19 +45,51 @@ class WebApp extends Component
         return $node;
     }
 
-    public static function checkUrl($url) {
-        $client = new Client();
+    /**
+	 * PHP/cURL function to check a web site status. If HTTP status is not 200 or 302, or
+	 * the requests takes longer than 1 seconds, the website is unreachable.
+	 *
+	 * Follow me on Twitter: @sergiocasizzone
+	 *
+	 * @param string $url URL that must be checked
+	 * @param integer $timeout Seconds to timeout
+	 */
+	function checkUrl( $url, $timeout = 1 ) {
+		$ch = curl_init();
 
-        $request = $client->createRequest()
-            ->setMethod('GET')
-            ->setUrl($url)
-            ->setOptions([
-                'timeout' => 1, // set timeout to 1 seconds for the case server is not responding
-            ])
-            ->send();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt ( $ch, CURLOPT_TIMEOUT, $timeout );
+		curl_setopt ( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
-        return $request->getisOk();
-    }
+		$http_respond = curl_exec($ch);
+		$http_respond = trim( strip_tags( $http_respond ) );
+		$http_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+
+		if ( ( $http_code == "200" )
+			|| ( $http_code == "201" )
+			|| ( $http_code == "302" )
+		) {
+			return true;
+		} else {
+			return false;
+		}
+		curl_close( $ch );
+	}
+
+    // public static function checkUrl($url) {
+    //     $client = new Client();
+    //
+    //     $request = $client->createRequest()
+    //         ->setMethod('GET')
+    //         ->setUrl($url)
+    //         ->setOptions([
+    //             'timeout' => 1, // set timeout to 1 seconds for the case server is not responding
+    //         ])
+    //         ->send();
+    //
+    //     return $request->getisOk();
+    // }
 
     /**
      * funzione che crypta un testo
