@@ -1,5 +1,5 @@
 $(function () {
-
+    var countError = 6;
     startWebSocket();
 
     function startWebSocket(){
@@ -20,7 +20,12 @@ $(function () {
         webSocket.onerror = function(event) {
             console.error("[ws] WebSocket error observed:", event);
             $('.pulse-button').addClass('pulse-button-offline');
-            showWssAlert();
+            if (countError >= 6){
+                showWssAlert();
+                countError = 0;
+            }
+            countError ++;
+
             // trying to restart
             setTimeout(function(){ startWebSocket() }, 10000);
         };

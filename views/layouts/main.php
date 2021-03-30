@@ -97,12 +97,24 @@ SynchronizeLatestBlocksAsset::register($this);
         <div id="wss_server">
             <p>
                 <?= Yii::t('app','The server synchronization is not working.'); ?>
+                <?= Yii::t('app','Try reloading the page, otherwise contact support.'); ?>
             </p>
-            <?= Yii::t('app','Try to refresh the page, otherwise contact support at '); ?>
-            <?php
-            echo '<a href=”mailto:' . Yii::$app->params['senderEmail'] . '?subject=WSS%20Error"><span class="text-danger">'. Yii::t('app','Support') . '</span></a>';
-            ?>
-
+            <div class="row">
+                <div class="col-6">
+                    <a href="javascript: window.location.reload();">
+                        <button type="button" class="btn btn-primary px-2">
+                            <?= Yii::t('app','Reload') ?>
+                        </button>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="mailto:<?php echo Yii::$app->params['senderEmail']; ?>?subject=WSS%20Error">
+                        <button type="button" class="btn btn-danger px-2">
+                            <?= Yii::t('app','Support') ?>
+                        </button>
+                    </a>
+                </div>
+            </div>
         </div>
 
         <main class="margin mt-0">
