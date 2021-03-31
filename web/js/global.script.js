@@ -71,7 +71,35 @@ $(document).ready(function(){
 	if ($('.animated-text').length)
 		animateText();
 
+
+    if ('wakeLock' in navigator) {
+      // Screen Wake Lock API supported 🎉
+      console.log('[wakeLock] API supported');
+      // Request a screen wake lock…
+      requestWakeLock();
+    }
+
 });
+
+// The wake lock sentinel.
+let wakeLock = null;
+
+// Function that attempts to request a screen wake lock.
+const requestWakeLock = async () => {
+  try {
+    wakeLock = await navigator.wakeLock.request();
+    console.log('[wakeLock] Screen Wake Lock requested.');
+    wakeLock.addEventListener('release', () => {
+      console.log('[wakeLock] Screen Wake Lock released:', wakeLock.released);
+    });
+    console.log('[wakeLock] Screen Wake Lock released:', wakeLock.released);
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+};
+
+
+
 
 
 $(".wrapper-inline").on("scroll", function(e) {
