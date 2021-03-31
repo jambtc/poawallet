@@ -24,8 +24,8 @@ class OauthtelegramController extends Controller
 
 	public function actionCheckAuthorization()
   {
-		$bot_token = Settings::load()->telegramToken; // place bot token of your bot here
-		$bot_username = Settings::load()->telegramBotName; // place username of your bot here
+		$bot_token = Settings::load()->MegapayTelegramToken; // place bot token of your bot here
+		$bot_username = Settings::load()->MegapayTelegramBotName; // place username of your bot here
 
 		$login = new \jambtc\oauthtelegram\telegram($bot_username,$bot_token);
 		$auth_data = $login->checkTelegramAuthorization($_GET);

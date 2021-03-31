@@ -21,7 +21,7 @@ class OauthgoogleController extends Controller
 	}
 
 	public function actionCheckAuthorization()
-  {
+   {
 		if (isset($_COOKIE['G_AUTHUSER_LOGOUT']) && $_COOKIE['G_AUTHUSER_LOGOUT'] == 'AVOID'){
 			$auth_data['success'] = false;
 			$auth_data['message'] = 'Google authorization blocked from cookies';

@@ -77,7 +77,7 @@ $settings = Settings::load();
         <div class="form-group">
           <center>
             <?php
-            $loginTelegram = new jambtc\oauthtelegram\telegram($settings->telegramBotName,$settings->telegramToken);
+            $loginTelegram = new jambtc\oauthtelegram\telegram($settings->MegapayTelegramBotName,$settings->MegapayTelegramToken);
             echo $loginTelegram->loginButton($checkTelegramAuthorization,'large');
             ?>
           </center>
