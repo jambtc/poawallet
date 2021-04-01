@@ -153,6 +153,9 @@ self.addEventListener('fetch', function (event) {
 		console.log('[SW Parser] web no-cache',parser.pathname);
 		if (getFileExtension(parser.search) == '?r=wallet/index'){
 			console.log('[SW Parser] web no-cache & wallet/index non fa nulla...',parser.search);
+			event.respondWith(
+				fetch(event.request)
+			);
 		} else {
 			event.respondWith(
 				fetch(event.request)
