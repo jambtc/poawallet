@@ -9,8 +9,10 @@ if (!window.Promise){
 let newWorker;
 
 function showUpdateBar() {
-    let snackbar = document.getElementById('snackbar');
-    snackbar.className = 'show';
+	if ($('#snackbar').length){
+		let snackbar = document.getElementById('snackbar');
+		snackbar.className = 'show';		
+	}
 }
 
 
