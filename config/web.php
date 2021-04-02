@@ -67,7 +67,7 @@ $config = [
                 'username' => $secrets['mail_username'],
                 'password' => $secrets['mail_password'],
                 'port' => $secrets['mail_port'],
-                'encryption' => 'tls',
+                'encryption' => $secrets['encryption'],
             ],
         ],
         'log' => [
