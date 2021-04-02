@@ -173,6 +173,9 @@ class SiteController extends Controller
 
     public function actionRegister()
     {
+        if (!Yii::$app->user->isGuest){
+            return $this->goHome();
+        }
         $this->layout = 'auth';
 
         // echo "<pre>".print_r($_POST,true)."</pre>";

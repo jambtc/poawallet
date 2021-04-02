@@ -83,7 +83,7 @@ ServiceWorkerAsset::register($this);
 
 </div>
 
-<?php echo $this->render('_oauth-modal'); ?>
+<?php //echo $this->render('_oauth-modal'); ?>
 
 
 

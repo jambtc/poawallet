@@ -10,10 +10,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 
-$this->title = 'Register';
-
-
-
+$this->title = Yii::t('app','Register');
 
 ?>
 <div class="container h-100">

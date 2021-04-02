@@ -60,6 +60,7 @@ $config = [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@app/mail',
+            'useFileTransport' => $secrets['useFileTransport'],
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => $secrets['mail_host'],

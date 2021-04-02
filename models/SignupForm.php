@@ -99,18 +99,18 @@ class SignupForm extends Model
             $microtime = explode(' ', microtime());
             $nonce = $microtime[1] . str_pad(substr($microtime[0], 2, 6), 6, '0');
 
-            $randomkey = \Yii::$app->security->generateRandomString();
-            $secretkey = \Yii::$app->security->generateRandomString();
+            $randomkey = Yii::$app->security->generateRandomString();
+            $secretkey = Yii::$app->security->generateRandomString();
 
             $user = new Users();
             $user->username = $this->username;
             $user->email = $this->username;
-            $user->password = \Yii::$app->getSecurity()->generatePasswordHash($this->password);
+            $user->password = $this->password;
             $user->ga_secret_key = null;
             $user->activation_code = $nonce;
             $user->status_activation_code = 0;
             $user->oauth_provider = 'mail';
-            $user->oauth_uid = \Yii::$app->security->generateRandomString(16);
+            $user->oauth_uid = Yii::$app->security->generateRandomString(16);
             $user->authKey = $secretkey;
             $user->accessToken = $randomkey;
             $user->facade = 'dashboard';
