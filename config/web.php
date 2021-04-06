@@ -54,17 +54,29 @@ $config = [
            'clients' => [
                'google' => [
                    'class' => 'yii\authclient\clients\Google',
-                   // 'attributeNames' => ['id', 'email', 'first_name', 'last_name'],
                    'clientId' => $secrets['google_client_id'],
                    'clientSecret' => $secrets['google_client_secret'],
                ],
                'facebook' => [
                    'class' => 'yii\authclient\clients\Facebook',
-                   'validateAuthState' => false, //TEMPORARY
+                   // 'validateAuthState' => false, //TEMPORARY
                    'attributeNames' => ['id', 'email', 'first_name', 'last_name'],
                    'clientId' => $secrets['facebook_client_id'],
                    'clientSecret' => $secrets['facebook_client_secret'],
                ],
+               'github' => [
+                   'class' => 'yii\authclient\clients\GitHub',
+                   'clientId' => $secrets['github_client_id'],
+                   'clientSecret' => $secrets['github_client_secret'],
+               ],
+               // 'twitter' => [
+               //      'class' => 'yii\authclient\clients\TwitterOAuth2',
+               //      'attributeParams' => [
+               //          'include_email' => 'true'
+               //      ],
+               //      'consumerKey' => $secrets['twitter_consumer_key'],
+               //      'consumerSecret' => $secrets['twitter_consumer_secret'],
+               //  ],
                // etc.
            ],
         ],

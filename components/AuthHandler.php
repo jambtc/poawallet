@@ -45,6 +45,15 @@ class AuthHandler
                 $pictureAttr = 'picture';
                 break;
 
+            case 'github':
+                $idAttr = 'id';
+                $emailAttr = 'email';
+                $usernameAttr = 'email';
+                $first_nameAttr = 'login';
+                $last_nameAttr = 'name';
+                $pictureAttr = 'avatar_url';
+                break;
+
 
 
         }
@@ -126,7 +135,7 @@ class AuthHandler
                         'activation_code' => Yii::$app->security->generateRandomString(50), // daportare a 60
                         'status_activation_code' => Users::STATUS_ACTIVE,
                         'oauth_provider' => $oauth_provider,
-                        'oauth_uid' => $id,
+                        'oauth_uid' => (string) $id,
                         'facade' => 'wallet',
                         'provider' => $oauth_provider,
                         'picture' => $picture,

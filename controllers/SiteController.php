@@ -76,10 +76,10 @@ class SiteController extends Controller
     	return parent::beforeAction($action);
 	}
 
-    private static function setCookieForGoogleLogout()
-    {
-      setcookie('G_AUTHUSER_LOGOUT','AVOID');
-    }
+    // private static function setCookieForGoogleLogout()
+    // {
+    //   setcookie('G_AUTHUSER_LOGOUT','AVOID');
+    // }
 
     public function actionError(){
         $this->layout = 'auth';
@@ -99,7 +99,7 @@ class SiteController extends Controller
             return $this->redirect(['wallet/index']);
         }
 
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
 
         return $this->render('index');
@@ -128,7 +128,7 @@ class SiteController extends Controller
             return $this->redirect(['wallet/index']);
         }
 
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
         $model->password = '';
         return $this->render('login', [
@@ -147,7 +147,7 @@ class SiteController extends Controller
         // setcookie('stel_ssid', '');
         // setcookie('stel_token', '');
         // setcookie('G_AUTHUSER_LOGOUT','TRUE');
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
         Yii::$app->user->logout();
         return $this->goHome();

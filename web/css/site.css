@@ -364,3 +364,9 @@ header .page-title {
     display: inline-block;
     vertical-align: top;
 }
+
+.auth-icon.telegram {
+    background-image: url(images/telegram.jpg);
+    /* width: 32px;
+    height: 32px; */
+}

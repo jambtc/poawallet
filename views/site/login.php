@@ -9,6 +9,11 @@ use yii\bootstrap4\ActiveForm;
 use yii\helpers\Url;
 use yii\web\View;
 
+use jambtc\oauthtelegram;
+use app\components\Settings;
+$checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
+$settings = Settings::load();
+
 
 $this->title = 'Login';
 ?>
@@ -22,18 +27,18 @@ $this->title = 'Login';
             <div class="btn btn-info circle block  mb-15">
 
           </div> -->
-            <button id='telegram-login-button' type="button" class="button circle block green" data-toggle="modal" data-target="#modal-telegram">
+            <!-- <button id='telegram-login-button' type="button" class="button circle block green" data-toggle="modal" data-target="#modal-telegram">
               <i class="fa fa-telegram"></i> Login with TELEGRAM
-            </button>
+            </button> -->
         <!-- </div> -->
 
         <!-- <div class="form-row">
 
         </div> -->
 
-        <div class="form-divider"></div>
+        <!-- <div class="form-divider"></div>
         <div class="form-label-divider"><span>OR</span></div>
-        <div class="form-divider"></div>
+        <div class="form-divider"></div> -->
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',
@@ -83,6 +88,17 @@ $this->title = 'Login';
         <div class="form-group row">
             <div class="col-lg-offset-1 col-lg-11">
                 <?= Html::submitButton(Yii::t('app','Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+
+            </div>
+
+        </div>
+        <div class="form-row text-center mt-15 mb-5 text-light">
+          <a style="color: #dee2e6;" href="forgot-password.html" data-loader="show">Forgot password?</a>
+        </div>
+        <div class="form-divider"></div>
+        <div class="form-label-divider"><span>OR</span></div>
+        <div class="form-divider"></div>
+        <div class="row">
                 <?= yii\authclient\widgets\AuthChoice::widget([
                      'baseAuthUrl' => ['site/auth'],
                      'popupMode' => false,
@@ -90,13 +106,23 @@ $this->title = 'Login';
                          'class' => 'auth-clients-holder'
                      ]
                 ]) ?>
-            </div>
+                <div id="w1" class="auth-clients-holder">
+                    <ul class="auth-clients">
+                        <li>
+                            <a class="telegram auth-link" href="#" title="Telegram">
+                                <?php
+                                $loginTelegram = new jambtc\oauthtelegram\telegram($settings->MegapayTelegramBotName,$settings->MegapayTelegramToken);
+                                echo $loginTelegram->loginButton($checkTelegramAuthorization,'large');
+                                ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
         </div>
         <div class="form-mini-divider"></div>
 
-        <div class="form-row text-center mt-15 mb-5 text-light">
-          <a style="color: #dee2e6;" href="forgot-password.html" data-loader="show">Forgot password?</a>
-        </div>
+
 
 
         <div class="form-row txt-center text-light mt-15">
