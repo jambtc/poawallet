@@ -12,6 +12,7 @@ use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\Users;
 use app\components\WebApp;
+use app\components\AuthHandler;
 
 define ('NONCE_TIMEOUT', 24 * 60 * 60); // 1 day
 
@@ -57,7 +58,16 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ]
         ];
+    }
+
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client))->handle();
     }
 
     public function beforeAction($action)

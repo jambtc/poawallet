@@ -42,21 +42,32 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\BoltLogin',
+            'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true, //
             'authTimeout' => 7776000,
-
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        // 'mailer' => [
-        //     'class' => 'yii\swiftmailer\Mailer',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-        //     'useFileTransport' => false,
-        // ],
+        'authClientCollection' => [
+           'class' => 'yii\authclient\Collection',
+           'clients' => [
+               'google' => [
+                   'class' => 'yii\authclient\clients\Google',
+                   // 'attributeNames' => ['id', 'email', 'first_name', 'last_name'],
+                   'clientId' => $secrets['google_client_id'],
+                   'clientSecret' => $secrets['google_client_secret'],
+               ],
+               'facebook' => [
+                   'class' => 'yii\authclient\clients\Facebook',
+                   'validateAuthState' => false, //TEMPORARY
+                   'attributeNames' => ['id', 'email', 'first_name', 'last_name'],
+                   'clientId' => $secrets['facebook_client_id'],
+                   'clientSecret' => $secrets['facebook_client_secret'],
+               ],
+               // etc.
+           ],
+        ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@app/mail',

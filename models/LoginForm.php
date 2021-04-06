@@ -12,8 +12,6 @@ use yii\base\Model;
  */
 class LoginForm extends Model
 {
-	const TIMEOUT = 7776000; // This number is 60sec * 60min * 24h * 90days
-
 	public $username;
 	public $password;
 	public $rememberMe = true;
@@ -83,7 +81,7 @@ class LoginForm extends Model
 	public function login()
 	{
 		if ($this->validate()) {
-			return Yii::$app->user->login($this->_user, self::TIMEOUT);
+			return Yii::$app->user->login($this->_user, Yii::$app->params['user.rememberMeDuration']);
 		}
 		return false;
 	}
@@ -100,7 +98,7 @@ class LoginForm extends Model
 		// // echo "<pre>".print_r($this->username,true)."</pre>";
 		// exit;
 		if ($this->_user === false) {
-			$this->_user = BoltLogin::findUserByProvider($this->username,$this->oauth_provider);
+			$this->_user = Users::findUserByProvider($this->username,$this->oauth_provider);
 		}
 
 		return $this->_user;

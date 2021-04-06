@@ -21,4 +21,8 @@ return [
      */
     'user.spamNames' => 'admin|superadmin|creator|thecreator|username|administrator|root',
 
+
+    //
+    'user.rememberMeDuration' => 7776000, // This number is 60sec * 60min * 24h * 90days
+
 ];

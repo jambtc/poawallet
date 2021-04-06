@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Auth;
 
 /**
  * This is the model class for table "mp_users".
@@ -24,10 +25,15 @@ use Yii;
  * @property string|null $last_name
  * @property string|null $first_name
  *
- * @property MpWallet[] $mpWallets
+ * @property MPWallet[] $mpWallets
  */
-class Users extends \yii\db\ActiveRecord
+class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    const STATUS_INSERTED = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_BLOCKED = 2;
+
+
     /**
      * {@inheritdoc}
      */
@@ -100,6 +106,23 @@ class Users extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAuthKey()
     {
         return $this->authKey;
@@ -108,6 +131,91 @@ class Users extends \yii\db\ActiveRecord
     public function beforeSave($insert) {
         if(isset($this->password))
             $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-    return parent::beforeSave($insert);
-}
+
+        return parent::beforeSave($insert);
+    }
+
+    public function getAuths()
+    {
+        return $this->hasMany(Auth::className, ['user_id' => 'id']);
+    }
+
+    private function setAuthKey()
+    {
+        $this->authKey = Yii::$app->security->generateRandomString(60);
+    }
+
+    private function setUid()
+    {
+        $this->oauth_uid = Yii::$app->security->generateRandomString(60);
+    }
+
+    public function activate()
+    {
+        $this->status_activation_code = self::STATUS_ACTIVE;
+        $this->setUid();
+        return $this->save();
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentity($id)
+    {
+        return self::findOne($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+      return self::findOne(['accessToken'=>$token]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findByUsername($username)
+    {
+        return self::findOne(['username'=>$username]);
+    }
+
+    /**
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
+     */
+    public static function findUserByProvider($username,$oauth_provider)
+    {
+
+        // echo "<pre>".print_r($username,true)."</pre>";
+        // echo "<pre>".print_r($oauth_provider,true)."</pre>";
+		// exit;
+        $record = self::findOne([
+            'username'=>$username,
+            'oauth_provider'=>$oauth_provider,
+        ]);
+
+        return $record;
+
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        // echo $password;
+        // echo '<br>'.$this->password;
+        // exit;
+        return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
 }

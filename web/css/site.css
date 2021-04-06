@@ -359,3 +359,8 @@ header .page-title {
     -webkit-animation: snackfadein 0.5s;
     animation: snackfadein 0.5s;
 }
+
+.auth-clients-holder{
+    display: inline-block;
+    vertical-align: top;
+}

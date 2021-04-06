@@ -17,7 +17,7 @@ use app\models\BoltTokens;
 use app\models\search\BoltTokensSearch;
 use app\models\MPWallets;
 use app\models\Users;
-use app\models\LoginForm;
+//use app\models\LoginForm;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -31,9 +31,9 @@ class WalletController extends Controller
 
 	public function beforeAction($action)
 	{
-		Yii::$app->user->authTimeout = LoginForm::TIMEOUT;
-    $this->enableCsrfValidation = false;
-    return parent::beforeAction($action);
+		Yii::$app->user->authTimeout = Yii::$app->params['user.rememberMeDuration'];
+    	$this->enableCsrfValidation = false;
+    	return parent::beforeAction($action);
 	}
 
 
