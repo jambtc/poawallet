@@ -7,6 +7,7 @@ use yii\base\Model;
 use yii\db\ActiveRecord;
 use app\models\Users;
 use app\models\LoginForm;
+use app\models\Auth;
 use yii\helpers\Json;
 
 use jambtc\oauthtelegram;
@@ -37,17 +38,37 @@ class OauthtelegramController extends Controller
 		// echo "<pre>".print_r($auth_data,true)."</pre>";
 		// exit;
 
-		$this->saveUserData($auth_data);
+		// $model = $this->saveUserData($auth_data);
 		//
-		$model=new LoginForm;
-		$model->username = $auth_data['email'];
-		$model->password = $auth_data['id'];
-		$model->oauth_provider = $auth_data['oauth_provider'];
-		//
+		// $model=new Users;
+		// $model->username = $auth_data['email'];
+		// $model->password = $auth_data['id'];
+		// $model->oauth_provider = $auth_data['oauth_provider'];
+		// //
 
-		if ($model->validate() && $model->login()) {
-				return $this->redirect(['wallet/index']);
+		$user = $this->saveUserData($auth_data);
+
+		// echo '<pre>'.print_r($user,true);exit;
+
+
+		$auth = new Auth([
+			'user_id' => $user['model']->id,
+			'source' => 'telegram',
+			'source_id' => (string) $auth_data['id'],
+		]);
+
+		if ($user['response'] && $auth->save()){
+			Yii::$app->user->login($user['model'], Yii::$app->params['user.rememberMeDuration']);
+			return $this->redirect(['wallet/index']);
+		} else {
+			Yii::$app->getSession()->setFlash('error', [
+				Yii::t('app', 'Unable to save {client} account: {errors}', [
+					'client' => $this->client->getTitle(),
+					'errors' => json_encode($auth->getErrors()),
+				]),
+			]);
 		}
+
 		return $this->goHome();
 
   }
@@ -80,15 +101,16 @@ class OauthtelegramController extends Controller
 			$model->picture = (isset($auth_data['photo_url']) ? $auth_data['photo_url'] : 'css/images/anonymous.png');
 			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
 			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
-			$model->save();
+
 		}else{
 			$model->picture = (isset($auth_data['photo_url']) ? $auth_data['photo_url'] : 'css/images/anonymous.png');
 			$model->first_name = (isset($auth_data['first_name']) ? $auth_data['first_name'] : '');
 			$model->last_name = (isset($auth_data['last_name']) ? $auth_data['last_name'] : '');
-			$model->save();
 		}
 
 		$auth_data_json = Json::encode($auth_data);
 		setcookie('tg_user', $auth_data_json);
+
+		return ['response' => $model->save(), 'model' => $model];
 	}
 }

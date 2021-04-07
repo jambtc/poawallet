@@ -12,6 +12,7 @@ use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\Users;
 use app\components\WebApp;
+use app\components\AuthHandler;
 
 define ('NONCE_TIMEOUT', 24 * 60 * 60); // 1 day
 
@@ -57,7 +58,16 @@ class SiteController extends Controller
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
             ],
+            'auth' => [
+                'class' => 'yii\authclient\AuthAction',
+                'successCallback' => [$this, 'onAuthSuccess'],
+            ]
         ];
+    }
+
+    public function onAuthSuccess($client)
+    {
+        (new AuthHandler($client))->handle();
     }
 
     public function beforeAction($action)
@@ -66,10 +76,10 @@ class SiteController extends Controller
     	return parent::beforeAction($action);
 	}
 
-    private static function setCookieForGoogleLogout()
-    {
-      setcookie('G_AUTHUSER_LOGOUT','AVOID');
-    }
+    // private static function setCookieForGoogleLogout()
+    // {
+    //   setcookie('G_AUTHUSER_LOGOUT','AVOID');
+    // }
 
     public function actionError(){
         $this->layout = 'auth';
@@ -89,7 +99,7 @@ class SiteController extends Controller
             return $this->redirect(['wallet/index']);
         }
 
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
 
         return $this->render('index');
@@ -118,7 +128,7 @@ class SiteController extends Controller
             return $this->redirect(['wallet/index']);
         }
 
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
         $model->password = '';
         return $this->render('login', [
@@ -137,7 +147,7 @@ class SiteController extends Controller
         // setcookie('stel_ssid', '');
         // setcookie('stel_token', '');
         // setcookie('G_AUTHUSER_LOGOUT','TRUE');
-        $this->setCookieForGoogleLogout();
+        // $this->setCookieForGoogleLogout();
 
         Yii::$app->user->logout();
         return $this->goHome();

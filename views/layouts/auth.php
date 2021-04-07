@@ -36,7 +36,7 @@ ServiceWorkerAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
 
-    <meta name="google-signin-client_id" content="<?php echo Settings::load()->GoogleOauthClientId; ?>">
+    <!-- <meta name="google-signin-client_id" content="<?php //echo Settings::load()->GoogleOauthClientId; ?>"> -->
 
     <!-- Manifest Progressive Web App -->
     <link rel="manifest" href="manifest.json">
@@ -83,7 +83,7 @@ ServiceWorkerAsset::register($this);
 
 </div>
 
-<?php echo $this->render('_oauth-modal'); ?>
+<?php //echo $this->render('_oauth-modal'); ?>
 
 
 

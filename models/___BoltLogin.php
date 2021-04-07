@@ -19,6 +19,9 @@ use Yii;
 
 class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+    const STATUS_INSERTED = 0;
+    const STATUS_ACTIVE = 1;
+    const STATUS_BLOCKED = 2;
     /**
      * {@inheritdoc}
      */
@@ -95,46 +98,6 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
 
         return $record;
 
-        // if($record===null){
-        // 	return null;
-        // } else {
-            // $social = BoltSocialUsers::find()
-            //   ->where([
-          	// 		'oauth_uid'=>$record->oauth_uid,
-          	// 		'oauth_provider'=>$oauth_provider,
-          	// 	])->one();
-            //
-        	// // fix per salvare un social user nel caso non fosse stato salvato
-        	// if (null === $social){
-        	// 	$explodemail = explode('@',$username);
-        	// 	$explodename = explode('.',$explodemail[0]);
-            //
-        	// 	$social = new BoltSocialUsers();
-        	// 	$social->oauth_provider = $oauth_provider;
-        	// 	$social->oauth_uid = $record->oauth_uid;
-        	// 	$social->id_user = $record->id_user;
-        	// 	$social->first_name = $explodename[0];
-        	// 	$social->last_name = isset($explodename[1]) ? $explodename[1] : '';
-        	// 	$social->username = $explodemail[0];
-        	// 	$social->email = $username;
-        	// 	$social->picture = 'css/images/anonymous.png';
-            //
-        	// 	$social->save();
-        	// }
-
-        	// $explodemail = explode('@',$username);
-    		// $explodename = explode('.',$explodemail[0]);
-            //
-            // $record->first_name = $explodename[0];
-            // $record->last_name = isset($explodename[1]) ? $explodename[1] : '';
-            // $record->email = $username;
-            // $record->picture = 'css/images/anonymous.png';
-            // $record->provider = $oauth_provider;
-            // $record->facade = 'dashboard';
-            // $record->save();
-
-            // return $record;
-      	// }
     }
 
     /**
@@ -150,7 +113,8 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
      */
     public function getAuthKey()
     {
-        return $this->authKey;
+        // return $this->authKey;
+        return null; // update from yii framework 2.0.40 to 2.0.41
     }
 
     /**
@@ -173,6 +137,12 @@ class BoltLogin extends \yii\db\ActiveRecord implements \yii\web\IdentityInterfa
         // echo '<br>'.$this->password;
         // exit;
         return Yii::$app->getSecurity()->validatePassword($password, $this->password);
+    }
+
+    //
+    public function getAuths()
+    {
+        return $this->hasMany(Auth::className, ['user_id' => 'id']);
     }
 
 }
