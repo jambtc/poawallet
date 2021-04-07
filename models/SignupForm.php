@@ -56,7 +56,7 @@ class SignupForm extends Model
 
     public function uniqueByProvider()
 	{
-        if (null !== BoltLogin::findUserByProvider($this->username,'mail'))
+        if (null !== Users::findUserByProvider($this->username,'mail'))
         {
             $this->addError('email', Yii::t('app','This username has already been taken.'));
             return false;
