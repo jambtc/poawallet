@@ -115,6 +115,10 @@ class AuthHandler
                         'source' => $this->client->getId(),
                         'source_id' => (string) $id,
                     ]);
+                    $existingUser->picture = $picture;
+                    $existingUser->first_name = $first_name;
+                    $existingUser->last_name = $last_name;
+                    
                     if ($this->updateUserInfo($existingUser) && $auth->save()){
                         Yii::$app->user->login($existingUser, Yii::$app->params['user.rememberMeDuration']);
                     } else {
@@ -217,6 +221,7 @@ class AuthHandler
             $password = Yii::$app->security->generateRandomString(60);
             $user->status_activation_code = Users::STATUS_ACTIVE;
             $user->password = $password;
+
             return $user->save();
         }
         return $user->status_activation_code !== Users::STATUS_BLOCKED;
