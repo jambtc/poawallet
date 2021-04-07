@@ -67,7 +67,7 @@ class AuthHandler
         $oauth_provider = $this->client->name;
 
         if ($this->client->name == 'facebook'){
-            $picture = 'https://graph.facebook.com/'. $pictureAttr .'/picture';
+            $picture = 'https://graph.facebook.com/'. $id .'/picture';
         } else {
             $picture = ArrayHelper::getValue($attributes, $pictureAttr);
         }
