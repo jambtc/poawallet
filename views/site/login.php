@@ -20,9 +20,9 @@ $this->title = 'Login';
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
-      <div class="body-content dash-balance jumbotron pb-0">
+      <div class="body-content dash-balance jumbotron pb-5">
           <div class="text-center">
-              <img src="css/img/content/onboard2.png" alt="" width="220">
+              <img src="css/images/logo.png" alt="" width="220">
           </div>
           <div class="form-divider"></div>
 
@@ -79,7 +79,7 @@ $this->title = 'Login';
 
         </div>
         <div class="form-row text-center mt-15 mb-5 text-light">
-          <a style="color: #dee2e6;" href="forgot-password.html" data-loader="show">Forgot password?</a>
+          <a style="color: #dee2e6;" href="<?= Url::to(['site/request-password-reset'])?>" data-loader="show">Forgot password?</a>
         </div>
         <div class="form-divider"></div>
         <div class="form-label-divider"><span>OR</span></div>

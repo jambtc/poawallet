@@ -11,8 +11,11 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\Users;
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
 use app\components\WebApp;
 use app\components\AuthHandler;
+
 
 define ('NONCE_TIMEOUT', 24 * 60 * 60); // 1 day
 
@@ -251,9 +254,9 @@ class SiteController extends Controller
         // compare the two signatures
         if (strcmp($sign, $_GET['sign']) == 0){
             // echo "<pre>".print_r('sono uguali',true)."</pre>";
-            $user->activation_code = '';
-            $user->accessToken = '';
-            $user->status_activation_code = 1;
+            $user->activation_code = '0';
+            $user->accessToken = '0';
+            $user->status_activation_code = Users::STATUS_ACTIVE;
             $user->save();
             // exit;
         }else{
@@ -273,6 +276,59 @@ class SiteController extends Controller
         ]);
 
     }
+
+    /**
+    * Requests password reset.
+    *
+    * @return mixed
+    */
+   public function actionRequestPasswordReset()
+   {
+       $this->layout = 'auth';
+
+       $model = new PasswordResetRequestForm();
+       if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+           if ($model->sendEmail()) {
+               Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+
+               return $this->goHome();
+           } else {
+               Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
+           }
+       }
+
+       return $this->render('requestPasswordResetToken', [
+           'model' => $model,
+       ]);
+   }
+
+   /**
+    * Resets password.
+    *
+    * @param string $token
+    * @return mixed
+    * @throws BadRequestHttpException
+    */
+   public function actionResetPassword($token)
+   {
+       $this->layout = 'auth';
+
+       try {
+           $model = new ResetPasswordForm($token);
+       } catch (InvalidArgumentException $e) {
+           throw new BadRequestHttpException($e->getMessage());
+       }
+
+       if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+           Yii::$app->session->setFlash('success', Yii::t('app','New password saved.'));
+
+           return $this->goHome();
+       }
+
+       return $this->render('resetPassword', [
+           'model' => $model,
+       ]);
+   }
 
     /**
      * Finds the Users model based on its user_id value.

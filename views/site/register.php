@@ -17,7 +17,14 @@ $this->title = Yii::t('app','Register');
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
       <div class="body-content dash-balance jumbotron pb-5">
-          <h1 class="alert alert-info"><?= Yii::t('app','Registration form') ?></h1>
+
+          <div class="text-center">
+              <img src="css/images/logo.png" alt="" width="220">
+          </div>
+          <div class="form-divider"></div>
+          <h3 class="alert alert-info"><?= Yii::t('app','Registration form') ?></h3>
+
+          <p class="text-light"><?= Yii::t('app','Please fill out the fields. A link to activate your account will be sent.') ?></p>
 
           <?php if (Yii::$app->session->hasFlash('registerFormSubmitted')): ?>
 

@@ -7,8 +7,8 @@ $this->title = Yii::$app->id;
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
-      <div class="body-content dash-balance jumbotron  text-center pb-0">
-        <img src="css/img/content/onboard2.png" alt="" width="220">
+      <div class="body-content dash-balance jumbotron  text-center pb-5">
+        <img src="css/images/logo.png" alt="" width="220">
         <div class="form-divider"></div>
         <h3  class="txt-white"><?php echo Yii::$app->id; ?></h3>
         <div class="form-divider"></div>

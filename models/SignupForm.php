@@ -117,7 +117,7 @@ class SignupForm extends Model
             $user->provider = 'mail';
             $user->picture = 'css/images/anonymous.png';
             $user->last_name = isset($explodename[1]) ? $explodename[1] : '';
-            $user->first_name = $explodename[0];
+            $user->first_name = isset($explodename[0]) ? $explodename[0] : '';
 
             if ($user->save()){
                 $this->sendAccountActivationEmail($user);

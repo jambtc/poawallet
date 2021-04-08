@@ -15,6 +15,8 @@ return [
      * Set the password reset token expiration time.
      */
     'user.passwordResetTokenExpire' => 3600,
+    'user.passwordMinLength' => 8,
+
 
     /**
      * Set the list of usernames that we do not want to allow to users to take upon registration or profile change.

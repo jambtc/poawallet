@@ -1,17 +1,16 @@
 <?php
+
+/* @var $this yii\web\View */
+/* @var $user common\models\User */
+
 use yii\helpers\Url;
+use yii\helpers\Html;
 use app\components\Settings;
 use app\components\WebApp;
 
-// echo "<pre>".print_r($user->attributes,true)."</pre>";
-// exit;
 
-// do the sign
-$sign = base64_encode(hash_hmac('sha512', hash('sha256', $user->activation_code . $user->accessToken, true), base64_decode($user->authKey), true));
-
-$URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::encrypt($user->id),'sign'=>$sign]);
+$resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => $user->activation_code]);
 ?>
-<link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900' rel='stylesheet' type='text/css'>
 <table style="font-family:Roboto; border-spacing:0px;padding: 20px; background-color: #F8F9FA; border-collapse:separate;" summary="o_mail_notification" width="100%" cellpadding="0" border="0" bgcolor="#F8F9FA">
 	<!-- HEADER -->
 	<tr>
@@ -35,18 +34,18 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 				<tr>
 					<td style="font-family:Roboto,Tahoma,Verdana,Segoe,sans-serif; color: #555; font-size: 14px;" valign="top">
 						<div>
-							<p style="font-size:34px;color:rgb(57,150,220)"><?php echo Yii::t('app','Account registration');?></p>
+							<p style="font-size:34px;color:rgb(57,150,220)"><?php echo Yii::t('app','Reset password request');?></p>
 						</div>
 						<div>
 							<p style="margin-top: 28px;font-size: 14px;"><?php echo Yii::t('app','Hi');?>, <strong><?php echo ($user->first_name <> 0 ? $user->first_name : $user->email); ?></strong>.</p>
 						</div>
 						<div>
-							<p style="margin-top: 28px;font-size: 14px;"><?php echo Yii::t('app','Someone requested to register a new account.');?>
+							<p style="margin-top: 28px;font-size: 14px;"><?php echo Yii::t('app','Follow the link below to reset your password.');?>
 				          	<br>
 				          	<b><?php echo Yii::t('app','If you did not make this request please ignore this email and do NOT follow the link below');?></b>.</p>
 						</div>
 						<div>
-							<a href="<?php echo $URL;?>" data-method="POST">
+							<a href="<?php echo $resetLink;?>" data-method="POST">
                             	<button type="button" style="padding: 3px 3px 3px 3px;
                     				outline: none;
                               		cursor: pointer;
@@ -58,7 +57,7 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
                     				min-width: 100px;
 									min-height: 30px;
                     				text-shadow: 1px 1px 2px black;">
-									<?php echo Yii::t('app','Activate account');?>
+									<?php echo Yii::t('app','Reset password');?>
 								</button>
 
 							</a>
@@ -108,5 +107,5 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 	</tr>
 </table>
 <?php
-// exit;
+  exit;
 ?>

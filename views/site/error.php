@@ -9,19 +9,27 @@ use yii\helpers\Html;
 
 $this->title = $name;
 ?>
-<div class="site-error">
+<div class="container h-100">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="site-error">
+      <div class="body-content dash-balance jumbotron pb-5">
+        <div class="text-center">
+          <img src="css/images/logo.png" alt="" width="220">
+        </div>
+        <div class="form-divider"></div>
+        <h3><?= Html::encode($this->title) ?></h3>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+        <div class="alert alert-danger">
+            <?= nl2br(Html::encode($message)) ?>
+        </div>
 
-    <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
+        <p>
+            The above error occurred while the Web server was processing your request.
+        </p>
+        <p>
+            Please contact us if you think this is a server error. Thank you.
+        </p>
     </div>
-
-    <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
-
+    </div>
+  </div>
 </div>

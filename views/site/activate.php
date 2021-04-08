@@ -17,7 +17,11 @@ $this->title = 'Activation';
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
       <div class="body-content dash-balance jumbotron pb-5">
-          <h1 class="alert alert-info"><?= Yii::t('app','Activation form') ?></h1>
+          <div class="text-center">
+              <img src="css/images/logo.png" alt="" width="220">
+          </div>
+          <div class="form-divider"></div>
+          <h3 class="alert alert-info"><?= Yii::t('app','Activation form') ?></h3>
 
           <?php if (Yii::$app->session->hasFlash('dataOutdated')): ?>
 
