@@ -20,25 +20,11 @@ $this->title = 'Login';
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
-      <div class="body-content dash-balance jumbotron pb-5">
-        <div class="form-divider"></div>
-
-        <!-- <div class="form-row">
-            <div class="btn btn-info circle block  mb-15">
-
-          </div> -->
-            <!-- <button id='telegram-login-button' type="button" class="button circle block green" data-toggle="modal" data-target="#modal-telegram">
-              <i class="fa fa-telegram"></i> Login with TELEGRAM
-            </button> -->
-        <!-- </div> -->
-
-        <!-- <div class="form-row">
-
-        </div> -->
-
-        <!-- <div class="form-divider"></div>
-        <div class="form-label-divider"><span>OR</span></div>
-        <div class="form-divider"></div> -->
+      <div class="body-content dash-balance jumbotron pb-0">
+          <div class="text-center">
+              <img src="css/img/content/onboard2.png" alt="" width="220">
+          </div>
+          <div class="form-divider"></div>
 
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',
@@ -99,14 +85,33 @@ $this->title = 'Login';
         <div class="form-label-divider"><span>OR</span></div>
         <div class="form-divider"></div>
         <div class="row">
-                <?= yii\authclient\widgets\AuthChoice::widget([
-                     'baseAuthUrl' => ['site/auth'],
-                     'popupMode' => false,
-                     'options' => [
-                         'class' => 'auth-clients-holder'
-                     ]
-                ]) ?>
-                <div id="w1" class="auth-clients-holder">
+            <div class="col-lg-offset-1 col-lg-11">
+                <div class="d-flex flex-column">
+            <?php
+            $authAuthChoice = yii\authclient\widgets\AuthChoice::begin([
+                'baseAuthUrl' => ['site/auth'],
+                'popupMode' => false, // don't show the popup window
+            ]) ?>
+                <?php
+                foreach ($authAuthChoice->getClients() as $client) : ?>
+                    <li class="auth-clients-holder w-100">
+                    <?=
+                        $authAuthChoice->clientLink($client,
+                            '<span class="btn btn-block btn-primary mb-3">
+                                <div class="d-flex flex-row">
+                                    <span class="ml-0 mr-4 auth-icon ' . $client->getName() . '"></span>
+                                    <span class="block">'.Yii::t('app','Sign with').' '.$client->getTitle() . '</span>
+                                </div>
+                            </span>',
+                            [
+                                'class' => ''
+                            ]) ?>
+                    </li>
+                <?php endforeach; ?>
+
+                <?php yii\authclient\widgets\AuthChoice::end() ?>
+
+                <div id="w1" class="auth-clients-holder w-100">
                     <ul class="auth-clients">
                         <li>
                             <a class="telegram auth-link" href="#" title="Telegram">
@@ -118,7 +123,8 @@ $this->title = 'Login';
                         </li>
                     </ul>
                 </div>
-
+                </div>
+            </div>
         </div>
         <div class="form-mini-divider"></div>
 

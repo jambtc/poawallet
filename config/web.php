@@ -63,6 +63,9 @@ $config = [
                    'attributeNames' => ['id', 'email', 'first_name', 'last_name'],
                    'clientId' => $secrets['facebook_client_id'],
                    'clientSecret' => $secrets['facebook_client_secret'],
+                    // 'attributeParams' => [
+                    //     'include_email' => 'true'
+                    // ],
                ],
                'github' => [
                    'class' => 'yii\authclient\clients\GitHub',
@@ -70,7 +73,7 @@ $config = [
                    'clientSecret' => $secrets['github_client_secret'],
                ],
                // 'twitter' => [
-               //      'class' => 'yii\authclient\clients\TwitterOAuth2',
+               //      'class' => 'yii\authclient\clients\Twitter',
                //      'attributeParams' => [
                //          'include_email' => 'true'
                //      ],

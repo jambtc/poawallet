@@ -118,7 +118,7 @@ class AuthHandler
                     $existingUser->picture = $picture;
                     $existingUser->first_name = $first_name;
                     $existingUser->last_name = $last_name;
-                    
+
                     if ($this->updateUserInfo($existingUser) && $auth->save()){
                         Yii::$app->user->login($existingUser, Yii::$app->params['user.rememberMeDuration']);
                     } else {
