@@ -171,7 +171,7 @@ label {
 }
 
 /* WIZARD WALLET GENERATION */
-#stepwizard_step3_save {
+#stepwizard_step4_save {
     display: none;
 }
 
@@ -369,4 +369,10 @@ header .page-title {
     background-image: url(images/telegram.jpg);
     /* width: 32px;
     height: 32px; */
+}
+
+@media (max-width: 585px){
+    .wizard li.active:after {
+        left: 50% !important;
+    }
 }

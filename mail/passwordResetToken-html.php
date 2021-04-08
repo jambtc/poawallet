@@ -107,5 +107,5 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 	</tr>
 </table>
 <?php
-  exit;
+  // exit;
 ?>

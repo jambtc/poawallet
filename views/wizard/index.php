@@ -60,8 +60,28 @@ $wizard_config = [
 		],
 		3 => [
 			'title' => 'Step 3',
-			'icon' => 'glyphicon glyphicon-transfer',
+			'icon' => 'glyphicon glyphicon-cloud-upload',
 			'content' => $this->render('_wizard-step3'),
+			'skippable' => false,
+            'buttons' => [
+				'next' => [
+					'title' => 'no-title',
+					'options' => [
+						'class' => 'hidden',
+					],
+				 ],
+                 'prev' => [
+ 					'title' => 'no-title',
+ 					'options' => [
+ 						'class' => 'hidden',
+ 					],
+ 				 ],
+			 ],
+		],
+		4 => [
+			'title' => 'Step 4',
+			'icon' => 'glyphicon glyphicon-transfer',
+			'content' => $this->render('_wizard-step4'),
             'skippable' => false,
             'buttons' => [
 				'next' => [

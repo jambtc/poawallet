@@ -1,39 +1,26 @@
 <?php
 use yii\helpers\Url;
-// make restore session id
-$session = Yii::$app->session;
-$string = Yii::$app->security->generateRandomString(32);
-$session->set('token-restore', $string );
-$session->set('token-spawn', $string );
-
 ?>
 <div class="jumbotron jumbotron-fluid">
 
-    <p class="lead">
-        <?php echo Yii::t('app','If you already have a mnemonic key (seed) and want to restore your old wallet, press the button <i><b>"Restore"</b></i>');?>
+    <p class="alert-warning">
+        <b>
+        <?php echo Yii::t('app','But be careful, keep them in a safe place \'cause anyone who gets hold of this key can access its contents.');?>
+        </b>
     </p>
-
-    <hr class="my-4">
     <p class="lead">
-        <?php echo Yii::t('app','If you want to generate a new digital wallet, click on the <i><b>"New"</b> </i> button and follow the recommended instructions.');?>
+        <?php echo Yii::t('app','Remember to make a backup of your digital wallet. This is an important step in securing your asset.');?>
     </p>
     <div class="form-divider"></div>
-
-    <button type="button" id="stepwizard_step3_prev" class="btn btn-warning btn-md prev-step">
-    <i class="fa fa-backward"></i> <?php echo Yii::t('app','Previous');?>
-    </button>
-
-    <div class="float-right">
-        <a href="<?php echo Url::to(['/restore/index','token' => $string]) ?>" />
-            <button type="button"  class="btn btn-primary btn-md " >
-                <i class="glyphicon glyphicon-repeat"></i> <?php echo Yii::t('app','Restore');?>
-            </button>
-        </a>
-        <a href="<?php echo Url::to(['/spawn/index','token' => $string]) ?>" />
-            <button type="button"  class="btn btn-primary btn-md" >
-                <i class="fas fa-key"></i> <?php echo Yii::t('app','New');?>
-            </button>
-        </a>
+    <div class="container">
+      <div class="float-left">
+        <button type="button" id="stepwizard_step3_prev" class="btn btn-warning btn-md prev-step">
+          <i class="fa fa-backward"></i> <?php echo Yii::t('app','Previous');?></button>
+      </div>
+      <div class="float-right">
+        <button type="button" id="stepwizard_step3_next" class="btn btn-primary btn-md next-step">
+          <i class="fa fa-forward"></i><?php echo Yii::t('app','Next');?>
+        </button>
+      </div>
     </div>
-
 </div>

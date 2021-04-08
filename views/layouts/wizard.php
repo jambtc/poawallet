@@ -12,10 +12,6 @@ use app\assets\AppAsset;
 use app\assets\LightWalletAsset;
 use app\assets\ServiceWorkerAsset;
 
-// Yii::$classMap['logo'] = Yii::getAlias('@packages').'/logo.php';
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-
-use app\components\Settings;
 use app\components\Logo;
 
 AppAsset::register($this);
@@ -33,8 +29,6 @@ ServiceWorkerAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
 
-    <meta name="google-signin-client_id" content="<?php echo Settings::load()->GoogleOauthClientId; ?>">
-
     <!-- Manifest Progressive Web App -->
     <link rel="manifest" href="manifest.json">
 
@@ -45,10 +39,6 @@ ServiceWorkerAsset::register($this);
   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 
     <?php $this->head() ?>
-
-    <!-- Template global css file. Requared all pages -->
-  	<!-- <link rel="stylesheet" type="text/css" href="css/global.style.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="css/site.css"> -->
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -68,32 +58,13 @@ ServiceWorkerAsset::register($this);
 
 </div>
 
-<footer class="footer">
+<footer class="mt-5 footer">
     <div class="container">
       <?= Logo::footer(); ?>
     </div>
 </footer>
 
 <?php $this->endBody() ?>
-<!-- Template global script file. requared all pages -->
-<!-- <script src="js/global.script.js"></script> -->
-
-
-<!-- Crypto ethereum and aes crypt and decrypt -->
-<!-- <script src="src/ethjs/lightwallet.min.js"></script> -->
-<!-- <script src="src/ethjs/aes.js"></script> -->
-<!-- <script src="src/ethjs/aes-json-format.js"></script> -->
-
-
-<!-- Call Service Worker-->
-<!-- <script src="src/js/promise.js"></script> -->
-<!-- <script src="src/js/fetch.js"></script> -->
-<!-- <script src="src/js/idb.js"></script> -->
-
-<!-- my utility js -->
-<!-- <script src="src/js/utility.js"></script> -->
-<!-- <script src="src/js/service.js"></script> -->
-
 
 </body>
 </html>
