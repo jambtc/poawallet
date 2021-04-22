@@ -135,13 +135,10 @@ class AuthHandler
                         'username' => $username,
                         'email' => $email,
                         'password' => $password,
-                        'ga_secret_key' => null,
                         'activation_code' => Yii::$app->security->generateRandomString(50), // daportare a 60
                         'status_activation_code' => Users::STATUS_ACTIVE,
                         'oauth_provider' => $oauth_provider,
                         'oauth_uid' => (string) $id,
-                        'facade' => 'wallet',
-                        'provider' => $oauth_provider,
                         'picture' => $picture,
                         'first_name' => $first_name,
             			'last_name' => $last_name,
