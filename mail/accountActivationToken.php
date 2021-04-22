@@ -75,7 +75,7 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 	</tr>
 	<!-- FOOTER -->
 	<?php
-	$settings = Settings::load();
+	$settings = Settings::owner();
 	 ?>
 	<tr>
 		<td style="min-width: 590px;" align="center">
@@ -86,9 +86,9 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 							<div>
 								<p style="font-size: 14px;">
 									<strong><?php echo Yii::$app->name; ?></strong>
-									<!-- <br><?php //echo $settings->gdpr_address; ?>
-									<br><?php //echo $settings->gdpr_cap.' - '. $settings->gdpr_city; ?>
-									<br>Tel. <?php //echo $settings->gdpr_telefono; ?> -->
+									<br><?= $settings->address; ?>
+									<br><?= $settings->cap.' - '. $settings->city; ?>
+									<br>Tel. <?= $settings->phone; ?> 
 									<br><?php echo Yii::$app->params['adminEmail'] .' | '. Yii::$app->params['website']; ?>
 								</p>
 							</div>

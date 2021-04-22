@@ -1,15 +1,16 @@
 <?php
 
-namespace app\models;
+namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BoltUsers;
+use app\models\NotificationsReaders;
+use Yii;
 
 /**
- * BoltUsersSearch represents the model behind the search form of `app\models\BoltUsers`.
+ * NotificationsReadersSearch represents the model behind the search form of `app\models\NotificationsReaders`.
  */
-class BoltUsersSearch extends BoltUsers
+class NotificationsReadersSearch extends NotificationsReaders
 {
     /**
      * {@inheritdoc}
@@ -17,8 +18,7 @@ class BoltUsersSearch extends BoltUsers
     public function rules()
     {
         return [
-            [['id_user', 'status_activation_code'], 'integer'],
-            [['email', 'password', 'ga_secret_key', 'activation_code', 'oauth_provider', 'oauth_uid'], 'safe'],
+            [['id', 'id_notification', 'id_user', 'alreadyread'], 'integer'],
         ];
     }
 
@@ -40,7 +40,9 @@ class BoltUsersSearch extends BoltUsers
      */
     public function search($params)
     {
-        $query = BoltUsers::find();
+        $query = NotificationsReaders::find()
+            ->joinWith(['notification'])
+        ;
 
         // add conditions that should always apply here
 
@@ -58,16 +60,14 @@ class BoltUsersSearch extends BoltUsers
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_user' => $this->id_user,
-            'status_activation_code' => $this->status_activation_code,
+            'id' => $this->id,
+            'id_notification' => $this->id_notification,
+            'id_user' => (Yii::$app->user->id == 1) ? null : Yii::$app->user->id, //$this->id_user,
+            'alreadyread' => $this->alreadyread,
         ]);
 
-        $query->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'ga_secret_key', $this->ga_secret_key])
-            ->andFilterWhere(['like', 'activation_code', $this->activation_code])
-            ->andFilterWhere(['like', 'oauth_provider', $this->oauth_provider])
-            ->andFilterWhere(['like', 'oauth_uid', $this->oauth_uid]);
+        // echo '<pre>'.print_r($dataProvider->getmodels(),true);exit;
+
 
         return $dataProvider;
     }

@@ -11,15 +11,12 @@ use app\models\Auth;
  * @property int $id
  * @property string $username
  * @property string $password
- * @property string|null $ga_secret_key
  * @property string $activation_code
  * @property int $status_activation_code
  * @property string $oauth_provider
  * @property string $oauth_uid
  * @property string|null $authKey
  * @property string|null $accessToken
- * @property string|null $facade
- * @property string|null $provider
  * @property string|null $picture
  * @property string|null $email
  * @property string|null $last_name
@@ -51,11 +48,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['username', 'password', 'activation_code', 'status_activation_code', 'oauth_provider', 'oauth_uid'], 'required'],
             [['status_activation_code'], 'integer'],
             [['username', 'password', 'authKey', 'accessToken', 'picture', 'email', 'last_name', 'first_name'], 'string', 'max' => 255],
-            [['ga_secret_key'], 'string', 'max' => 16],
-            [['activation_code'], 'string', 'max' => 50],
-            [['oauth_provider'], 'string', 'max' => 8],
+            [['activation_code'], 'string', 'max' => 60],
+            [['oauth_provider'], 'string', 'max' => 20],
             [['oauth_uid'], 'string', 'max' => 100],
-            [['facade', 'provider'], 'string', 'max' => 20],
         ];
     }
 
@@ -68,15 +63,12 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'id' => Yii::t('app', 'ID'),
             'username' => Yii::t('app', 'Username'),
             'password' => Yii::t('app', 'Password'),
-            'ga_secret_key' => Yii::t('app', 'Ga Secret Key'),
             'activation_code' => Yii::t('app', 'Activation Code'),
             'status_activation_code' => Yii::t('app', 'Status Activation Code'),
             'oauth_provider' => Yii::t('app', 'Oauth Provider'),
             'oauth_uid' => Yii::t('app', 'Oauth Uid'),
             'authKey' => Yii::t('app', 'Auth Key'),
             'accessToken' => Yii::t('app', 'Access Token'),
-            'facade' => Yii::t('app', 'Facade'),
-            'provider' => Yii::t('app', 'Provider'),
             'picture' => Yii::t('app', 'Picture'),
             'email' => Yii::t('app', 'Email'),
             'last_name' => Yii::t('app', 'Last Name'),
@@ -89,9 +81,19 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      *
      * @return \yii\db\ActiveQuery|\app\models\query\MpWalletQuery
      */
-    public function getMpWallets()
+    public function getWallets()
     {
         return $this->hasMany(MpWallet::className(), ['id_user' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Transactions]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\TransactionsQuery
+     */
+    public function getTransactions()
+    {
+        return $this->hasMany(Transactions::className(), ['id_user' => 'id']);
     }
 
     /**

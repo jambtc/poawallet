@@ -1,15 +1,15 @@
 <?php
 
-namespace app\models;
+namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BoltSocialusers;
+use app\models\Vapid;
 
 /**
- * BoltSocialusersSearch represents the model behind the search form of `app\models\BoltSocialusers`.
+ * VapidSearch represents the model behind the search form of `app\models\Vapid`.
  */
-class BoltSocialusersSearch extends BoltSocialusers
+class VapidSearch extends Vapid
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class BoltSocialusersSearch extends BoltSocialusers
     public function rules()
     {
         return [
-            [['id_social', 'id_user'], 'integer'],
-            [['oauth_provider', 'oauth_uid', 'first_name', 'last_name', 'username', 'email', 'picture'], 'safe'],
+            [['id'], 'integer'],
+            [['public_key', 'secret_key'], 'safe'],
         ];
     }
 
@@ -40,7 +40,7 @@ class BoltSocialusersSearch extends BoltSocialusers
      */
     public function search($params)
     {
-        $query = BoltSocialusers::find();
+        $query = Vapid::find();
 
         // add conditions that should always apply here
 
@@ -58,17 +58,11 @@ class BoltSocialusersSearch extends BoltSocialusers
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_social' => $this->id_social,
-            'id_user' => $this->id_user,
+            'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'oauth_provider', $this->oauth_provider])
-            ->andFilterWhere(['like', 'oauth_uid', $this->oauth_uid])
-            ->andFilterWhere(['like', 'first_name', $this->first_name])
-            ->andFilterWhere(['like', 'last_name', $this->last_name])
-            ->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'picture', $this->picture]);
+        $query->andFilterWhere(['like', 'public_key', $this->public_key])
+            ->andFilterWhere(['like', 'secret_key', $this->secret_key]);
 
         return $dataProvider;
     }

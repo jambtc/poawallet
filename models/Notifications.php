@@ -5,18 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "np_notifications".
+ * This is the model class for table "notifications".
  *
- * @property int $id_notification
- * @property string $type_notification
- * @property int $id_user
- * @property int $id_tocheck
+ * @property int $id
+ * @property int $timestamp
+ * @property string $type
  * @property string $status
  * @property string $description
  * @property string $url
- * @property int $timestamp
  * @property float $price
- * @property int $deleted
+ *
+ * @property NotificationsReaders[] $notificationsReaders
  */
 class Notifications extends \yii\db\ActiveRecord
 {
@@ -25,7 +24,7 @@ class Notifications extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'np_notifications';
+        return 'mp_notifications';
     }
 
     /**
@@ -34,11 +33,11 @@ class Notifications extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_notification', 'id_user', 'id_tocheck', 'status', 'description', 'url', 'timestamp'], 'required'],
-            [['id_user', 'id_tocheck', 'timestamp', 'deleted'], 'integer'],
-            [['description'], 'string'],
+            [['timestamp', 'type', 'status', 'description', 'url', 'price'], 'required'],
+            [['timestamp'], 'integer'],
+            [['description', 'url'], 'string'],
             [['price'], 'number'],
-            [['type_notification', 'status', 'url'], 'string', 'max' => 250],
+            [['type', 'status'], 'string', 'max' => 50],
         ];
     }
 
@@ -48,17 +47,24 @@ class Notifications extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_notification' => Yii::t('app', 'Id Notification'),
-            'type_notification' => Yii::t('app', 'Type Notification'),
-            'id_user' => Yii::t('app', 'Id User'),
-            'id_tocheck' => Yii::t('app', 'Id Tocheck'),
+            'id' => Yii::t('app', 'ID'),
+            'timestamp' => Yii::t('app', 'Timestamp'),
+            'type' => Yii::t('app', 'Type'),
             'status' => Yii::t('app', 'Status'),
             'description' => Yii::t('app', 'Description'),
             'url' => Yii::t('app', 'Url'),
-            'timestamp' => Yii::t('app', 'Timestamp'),
             'price' => Yii::t('app', 'Price'),
-            'deleted' => Yii::t('app', 'Deleted'),
         ];
+    }
+
+    /**
+     * Gets query for [[NotificationsReaders]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\NotificationsReadersQuery
+     */
+    public function getNotificationsReaders()
+    {
+        return $this->hasMany(NotificationsReaders::className(), ['id_notification' => 'id']);
     }
 
     /**

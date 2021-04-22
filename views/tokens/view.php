@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\BoltTokens */
 
-$this->title = Yii::t('app','Transaction details') .' - '. $model->id_token;
+$this->title = Yii::t('app','Transaction details') .' - '. $model->id;
 \yii\web\YiiAsset::register($this);
 
 include ('view_js.php');
@@ -39,7 +39,7 @@ include ('view_js.php');
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('app','id_token'),
-                                'value'=>app\components\WebApp::encrypt($model->id_token),
+                                'value'=>app\components\WebApp::encrypt($model->id),
                                 'contentOptions' => ['class' => 'text-break']
                             ],
                             [
@@ -50,7 +50,7 @@ include ('view_js.php');
                                     'class' => ($model->status == 'complete') ?
                                         'trans-get button circle block green text-capitalize'
                                         : 'trans-get button circle block gray text-capitalize',
-                                    'id' => 'trans-get-'.$model->id_token
+                                    'id' => 'trans-get-'.$model->id
                                 ]
                             ],
                             'invoice_timestamp:datetime',
@@ -76,13 +76,13 @@ include ('view_js.php');
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('app','blocknumber'),
-                                'value'=>'0x'.dechex($model->blocknumber),
+                                'value'=>$model->blocknumber,
                                 'contentOptions' => ['class' => 'text-break']
                             ],
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('app','memo'),
-                                'value'=>$model->memo,
+                                'value'=>$model->message,
                                 'contentOptions' => ['class' => 'text-break']
                             ],
                             // '',

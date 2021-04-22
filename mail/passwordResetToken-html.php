@@ -74,7 +74,7 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 	</tr>
 	<!-- FOOTER -->
 	<?php
-	$settings = Settings::load();
+	$settings = Settings::owner();
 	 ?>
 	<tr>
 		<td style="min-width: 590px;" align="center">
@@ -85,9 +85,9 @@ $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 't
 							<div>
 								<p style="font-size: 14px;">
 									<strong><?php echo Yii::$app->name; ?></strong>
-									<!-- <br><?php //echo $settings->gdpr_address; ?>
-									<br><?php //echo $settings->gdpr_cap.' - '. $settings->gdpr_city; ?>
-									<br>Tel. <?php //echo $settings->gdpr_telefono; ?> -->
+									<br><?php echo $settings->address; ?>
+									<br><?php echo $settings->cap.' - '. $settings->city; ?>
+									<br>Tel. <?php echo $settings->phone; ?>
 									<br><?php echo Yii::$app->params['adminEmail'] .' | '. Yii::$app->params['website']; ?>
 								</p>
 							</div>

@@ -36,8 +36,6 @@ ServiceWorkerAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
 
-    <!-- <meta name="google-signin-client_id" content="<?php //echo Settings::load()->GoogleOauthClientId; ?>"> -->
-
     <!-- Manifest Progressive Web App -->
     <link rel="manifest" href="manifest.json">
 
@@ -49,9 +47,6 @@ ServiceWorkerAsset::register($this);
 
     <?php $this->head() ?>
 
-    <!-- Template global css file. Requared all pages -->
-  	<!-- <link rel="stylesheet" type="text/css" href="css/global.style.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="css/site.css"> -->
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -85,25 +80,7 @@ ServiceWorkerAsset::register($this);
 
 <?php //echo $this->render('_oauth-modal'); ?>
 
-
-
-
-
-
 <?php $this->endBody() ?>
-<!-- Template global script file. requared all pages -->
-<!-- <script src="js/global.script.js"></script> -->
-
-
-<!-- Call Service Worker-->
-<!-- <script src="src/js/promise.js"></script> -->
-<!-- <script src="src/js/fetch.js"></script> -->
-<!-- <script src="src/js/idb.js"></script> -->
-
-<!-- my utility js -->
-<!-- <script src="src/js/utility.js"></script> -->
-<!-- <script src="src/js/service.js"></script> -->
-
 
 </body>
 </html>

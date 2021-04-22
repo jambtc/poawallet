@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Users;
 use app\models\MPWallets;
-use app\models\BoltTokens;
+use app\models\Transactions;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,9 +20,6 @@ use yii\helpers\Url;
 use app\components\WebApp;
 use app\components\Settings;
 
-
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -63,20 +60,22 @@ class UsersController extends Controller
  	     		->andWhere(['id_user'=>Yii::$app->user->id])
  	    		->one();
 
-        $tokens_from = BoltTokens::find()
+        $tokens_from = Transactions::find()
                     ->andWhere(['from_address'=>$wallet->wallet_address])
                     ->andWhere(['status'=>'complete']);
 
-        $tokens_to = BoltTokens::find()
+        $tokens_to = Transactions::find()
                     ->where(['to_address'=>$wallet->wallet_address])
                     ->andWhere(['status'=>'complete']);
 
 
-        $sent['sum'] = round($tokens_from->sum('token_price'), Settings::load()->poa_decimals);
-        $sent['count'] = round($tokens_from->count(), Settings::load()->poa_decimals);
+        $blockchain = Settings::poa(1);
 
-        $received['sum'] = round($tokens_to->sum('token_price'), Settings::load()->poa_decimals);
-        $received['count'] = round($tokens_to->count(), Settings::load()->poa_decimals);
+        $sent['sum'] = round($tokens_from->sum('token_price'), $blockchain->decimals);
+        $sent['count'] = round($tokens_from->count(), $blockchain->decimals);
+
+        $received['sum'] = round($tokens_to->sum('token_price'), $blockchain->decimals);
+        $received['count'] = round($tokens_to->count(), $blockchain->decimals);
 
         $total_transactions = $sent['count'] + $received['count'];
 

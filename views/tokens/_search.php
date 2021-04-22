@@ -28,7 +28,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'token_price') ?>
 
-    <?php // echo $form->field($model, 'token_ricevuti') ?>
+    <?php // echo $form->field($model, 'token_received') ?>
 
     <?php // echo $form->field($model, 'fiat_price') ?>
 

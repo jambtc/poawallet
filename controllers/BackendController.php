@@ -178,16 +178,14 @@ class BackendController extends Controller
 		 		 </li>';
 		   }
 		   // Leggo la notifica tramite key
-		   $notify = Notifications::find()
- 		  			->andWhere(['id_notification'=>$item->id_notification])
- 		  			->one();
+		   $notify = Notifications::findOne($item->id_notification);
 
 		   //$notify = Notifications::model()->findByPk($item->id_notification);
-		   $notifi__icon = WebApp::Icon($notify->type_notification);
+		   $notifi__icon = WebApp::Icon($notify->type);
 		   $notifi__color = WebApp::Color($notify->status);
 
 		   // verifico che sia un allarme
-		   if ($notify->type_notification == 'alarm' && $item->alreadyread == 0)
+		   if ($notify->type == 'alarm' && $item->alreadyread == 0)
 			   $response['playAlarm'] = true;
 
 
@@ -199,9 +197,9 @@ class BackendController extends Controller
 			}
 
 			$response['htmlContent'] .= '<li class='.$classUnread.'>
-			<a onclick="notify.openEnvelope('.$notify->id_notification.');"
+			<a onclick="notify.openEnvelope('.$notify->id.');"
 				href="'.htmlentities('index.php?'.$parsedurl['query']).'"
-				id="news_'.$notify->id_notification.'">
+				id="news_'.$notify->id.'">
 	   			<div class="d-flex align-items-center justify-content-between">
 	                   <div class="d-flex align-items-center">
 	                       <div class="notice-icon available" style="min-width:30px;">
@@ -212,13 +210,13 @@ class BackendController extends Controller
 
 							 <div class="text-right">';
 							 // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
-							 if ($notify->type_notification <> 'help'
-									 && $notify->type_notification <> 'contact'
-									 && $notify->type_notification <> 'alarm'
+							 if ($notify->type <> 'help'
+									 && $notify->type <> 'contact'
+									 && $notify->type <> 'alarm'
 							 ){
 								 $response['htmlContent'] .= '<b class="d-block mb-0 float-left txt-dark">'.$notify->price.'</b>';
 								 //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
-								 $response['status'][$notify->id_tocheck] = $notify->status;
+								 // $response['status'][$notify->id_tocheck] = $notify->status;
 							 }
 							 $response['htmlContent'] .= '
 								 <small class="text-muted">'.Yii::$app->formatter->asRelativeTime($notify->timestamp).'</small>
@@ -230,42 +228,6 @@ class BackendController extends Controller
 	               </div>
 			   </a>
 	   		</li>';
-
-		   // $response['htmlContent'] .= '
-			//    <a href="'.htmlentities($notify->url).'" id="news_'.$notify->id_notification.'">
-			// 	   <div class="notifi__item">
-			// 		   <div class="'.$notifi__color.' img-cir img-40">
-			// 			   <i class="'.$notifi__icon.'"></i>
-			// 		   </div>
-			// 		   <div class="content">
-			// 			   <div onclick="backend.openEnvelope('.$notify->id_notification.');" >';
-			// 				   if ($item->alreadyread == 0){
-			// 					   $response['htmlContent'] .= '<p style="font-weight:bold;">';
-			// 				   }else{
-			// 					   $response['htmlContent'] .= '<p>';
-			// 				   }
-		   //
-			// 				   $response['htmlContent'] .= Yii::t('app',$notify->description);
-			// 				    // $response['htmlContent'] .= WebApp::translateMsg($notify->description);
-			// 				   $response['htmlContent'] .= '</p>';
-		   //
-			// 				   // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
-			// 				   if ($notify->type_notification <> 'help'
-			// 						   && $notify->type_notification <> 'contact'
-			// 						   && $notify->type_notification <> 'alarm'
-			// 				   ){
-			// 					   $response['htmlContent'] .= '<p>'.$notify->price.'</p>';
-			// 					   //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
-			// 					   $response['status'][$notify->id_tocheck] = $notify->status;
-			// 				   }
-			// 				   // $time = new DateTime($notify->timestamp, new DateTimeZone('UTC'));
-    		// 	   			   $response['htmlContent'] .= '
-			// 				   <span class="date text-primary">'. date('d M Y - H:i:s',$notify->timestamp) .'</span>
-			// 			   </div>
-			// 		   </div>
-			// 	   </div>
-			//    </a>
-		   // ';
 
 
 		   $x++;
@@ -302,6 +264,6 @@ class BackendController extends Controller
 
 
 
-	
+
 
 }

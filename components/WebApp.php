@@ -14,7 +14,8 @@ use yii\helpers\Url;
 use yii\httpclient\Client;
 
 use app\models\Nodes;
-
+use app\models\Blockchains;
+use app\models\Notifications;
 
 class WebApp extends Component
 {
@@ -22,11 +23,18 @@ class WebApp extends Component
      * Recupera casualmente il primo nodo POA disponibile
      * @return nodeurl
      */
-    public static function getPoaNode()
+    public static function getPoaNode($blockchain_id)
     {
-        $nodelist = ArrayHelper::map(Nodes::find()->all(), 'id_node', function ($item, $defaultValue) {
-            return $item->url . ':' . $item->port;
-        });
+        $blockchain = Blockchains::findOne($blockchain_id);
+        $nodes = $blockchain->nodes;
+
+        $nodelist = ArrayHelper::map(
+            $nodes,
+            'id_node',
+            function ($item, $defaultValue) {
+                return $item->url . ':' . $item->port;
+            }
+        );
 
         $isdown = true;
         shuffle($nodelist);
@@ -44,7 +52,6 @@ class WebApp extends Component
 
         return $node;
     }
-
     /**
 	 * PHP/cURL function to check a web site status. If HTTP status is not 200 or 302, or
 	 * the requests takes longer than 1 seconds, the website is unreachable.
@@ -153,7 +160,7 @@ class WebApp extends Component
         $newTxClass = ($newTransaction == true) ? 'bg-newtransaction' : '';
 
         $line = '
-        <a href="index.php?r=tokens/view&id='. self::encrypt($data->id_token) . '" />
+        <a href="index.php?r=tokens/view&id='. self::encrypt($data->id) . '" />
         <div class="container-fluid m-0 p-0">
               <div class="row">
                   <div class="col-12 m-0 p-0">
@@ -161,7 +168,7 @@ class WebApp extends Component
                           <div class="transaction-card-horizontal '.$newTxClass.'">
                               <div class="img-square-wrapper">
                                   <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
-                                  <center><small>'.$data->id_token.'</small></center>
+                                  <!-- <center><small>'.$data->id.'</small></center> -->
 
                               </div>
                               <div class="transaction-card-body ml-1">
@@ -175,11 +182,11 @@ class WebApp extends Component
                               <div class="card-footer">
                                   <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
                                   <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
-                                  .self::encrypt($data->id_token).'">'.$data->status.'</small>
+                                  .self::encrypt($data->id).'">'.$data->status.'</small>
                               </div>
                           </div>';
-                          ($data->memo != "")
-                          ?  $line .= '<small class="mx-2 alert alert-info d-inline-block text-truncate" style="max-width: 330px;">'.$data->memo.'</small>'
+                          ($data->message != "")
+                          ?  $line .= '<small class="mx-2 alert alert-info d-inline-block text-truncate" style="max-width: 330px;">'.$data->message.'</small>'
                           :  $line .= '';
                           $line .= '
                       </div>
@@ -311,12 +318,15 @@ class WebApp extends Component
 		return ($sent == 'sent' ? '<h5 class="text-warning">-' : '<h5 class="text-success">+') . $price . '</h5>';
 	}
 
-    public static function showMessagesRow($data){
+    public static function showMessagesRow($item){
+        $data = Notifications::findOne($item->id_notification);
+        // return print_r($data,true);
+
         $dateLN = date("d M `y",$data->timestamp);
         $timeLN = date("H:i:s",$data->timestamp);
 
         $notifi__icon = self::Icon(
-            (strpos($data->description,'token') !== false ? 'token' : $data->type_notification )
+            (strpos($data->description,'token') !== false ? 'token' : $data->type )
         );
 
         switch ($data->status){
@@ -334,7 +344,7 @@ class WebApp extends Component
         // $classStatus = ($data->status == 'complete') ? 'bg-success' : ($data->status == 'expired') ? 'bg-warning' : 'bg-secondary';
 
         $line = '
-        <a href="'.Url::to(['tokens/view', 'id' => self::encrypt($data->id_tocheck)]).'" />
+        <a href="'.$data->url.'" />
         <div class="container-fluid m-0 p-0">
               <div class="row">
                   <div class="col-12 m-0 p-0">

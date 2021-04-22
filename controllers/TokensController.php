@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\BoltTokens;
-use app\models\search\BoltTokensSearch;
+use app\models\Transactions;
+use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -15,7 +15,7 @@ use yii\filters\VerbFilter;
 use app\components\WebApp;
 
 /**
- * BoltTokensController implements the CRUD actions for BoltTokens model.
+ * TransactionsController implements the CRUD actions for Transactions model.
  */
 class TokensController extends Controller
 {
@@ -37,7 +37,7 @@ class TokensController extends Controller
 
 
     /**
-     * Lists all BoltTokens models.
+     * Lists all Transactions models.
      * @return mixed
      */
     public function actionIndex()
@@ -50,7 +50,7 @@ class TokensController extends Controller
 			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
-        $searchModel = new BoltTokensSearch();
+        $searchModel = new TransactionsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->setPagination(['pageSize' => 10]);
 		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];
@@ -66,7 +66,7 @@ class TokensController extends Controller
     }
 
     /**
-     * Displays a single BoltTokens model.
+     * Displays a single Transactions model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -79,7 +79,7 @@ class TokensController extends Controller
     }
 
     /**
-     * Displays a single BoltTokens model.
+     * Displays a single Transactions model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -89,9 +89,11 @@ class TokensController extends Controller
         $receipt = '';
         $success = false;
 
+        $ERC20 = Yii::$app->Erc20(1);
+
         if ($txhash != '0x0'){
             $success = true;
-            $receipt = Yii::$app->Erc20->getReceipt($txhash);
+            $receipt = $ERC20->getReceipt($txhash);
         }
         $return = [
             'success' => $success,
@@ -107,15 +109,15 @@ class TokensController extends Controller
 
 
     /**
-     * Finds the BoltTokens model based on its primary key value.
+     * Finds the Transactions model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return BoltTokens the loaded model
+     * @return Transactions the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = BoltTokens::findOne($id)) !== null) {
+        if (($model = Transactions::findOne($id)) !== null) {
             return $model;
         }
 

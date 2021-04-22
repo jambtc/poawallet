@@ -5,11 +5,12 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "np_nodes".
+ * This is the model class for table "nodes".
  *
- * @property int $id_node
+ * @property int $id
  * @property string $url
  * @property string $port
+ * @property int|null $id_blockchain
  */
 class Nodes extends \yii\db\ActiveRecord
 {
@@ -18,7 +19,7 @@ class Nodes extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'np_nodes';
+        return 'nodes';
     }
 
     /**
@@ -28,8 +29,10 @@ class Nodes extends \yii\db\ActiveRecord
     {
         return [
             [['url', 'port'], 'required'],
-            [['url'], 'string', 'max' => 100],
-            [['port'], 'string', 'max' => 10],
+            [['id_blockchain'], 'integer'],
+            [['url'], 'string', 'max' => 255],
+            [['port'], 'string', 'max' => 50],
+            [['id_blockchain'], 'exist', 'skipOnError' => true, 'targetClass' => Blockchains::className(), 'targetAttribute' => ['id_blockchain' => 'id']],
         ];
     }
 
@@ -39,15 +42,26 @@ class Nodes extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_node' => Yii::t('app', 'Id Node'),
+            'id' => Yii::t('app', 'ID'),
             'url' => Yii::t('app', 'Url'),
             'port' => Yii::t('app', 'Port'),
+            'id_blockchain' => Yii::t('app', 'Id Blockchain'),
         ];
     }
 
     /**
+     * Gets query for [[Blockchain]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\BlockchainsQuery
+     */
+    public function getBlockchain()
+    {
+        return $this->hasOne(Blockchains::className(), ['id' => 'id_blockchain']);
+    }
+
+    /**
      * {@inheritdoc}
-     * @return NodesQuery the active query used by this AR class.
+     * @return \app\models\query\NodesQuery the active query used by this AR class.
      */
     public static function find()
     {

@@ -5,15 +5,17 @@ use yii\web\View;
 
 use app\components\Settings;
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
+$blockchain = Settings::poa(1);
 
 $options = [
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
-    'poaDecimals' => Settings::load()->poa_decimals,
+    'poaDecimals' => $blockchain->decimals,
     'invalidAmountError' => Yii::t('app', 'Invalid amount!'),
-    'decimalError' => Yii::t('app','Use a maximum of 2 decimal places.'),
+    'decimalError' => Yii::t('app','Use a maximum of {count} decimal places.',[
+        'count' => $blockchain->decimals,
+    ]),
     'higherError' => Yii::t('app','Amount is higher than Balance.'),
     'recipientError' => Yii::t('app','Recipient address not entered.'),
     'htmlTransactionBody' => '<div class="alert alert-warning">

@@ -113,7 +113,9 @@ class CommandsServer extends WebSocketServer
    			 "success"=>false,
              'command'=>'check-transactions',
    		];
-        $blockLatest = Yii::$app->Erc20->getBlockInfo();
+        $ERC20 = new Yii::$app->Erc20(1);
+
+        $blockLatest = $ERC20->getBlockInfo();
 
    		//calcolo la differenza tra i blocchi
    		$difference = hexdec($blockLatest->number) - hexdec($wallet->blocknumber);
@@ -161,7 +163,8 @@ class CommandsServer extends WebSocketServer
         // echo '\r\n<pre>il transactiopn found è'.print_r($this->getTransactionsFound(),true).'</pre>';
 
         //Carico i parametri della webapp
-		$settings = Settings::load();
+        $ERC20 = new Yii::$app->Erc20(1);
+		$settings = Settings::poa(1);
 
 		// numero massimo di blocchi da scansionare
 		// if (isset($settings->maxBlocksToScan))
@@ -199,7 +202,7 @@ class CommandsServer extends WebSocketServer
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
-						if (strtoupper($transaction->to) <> strtoupper($settings->poa_contractAddress) ){
+						if (strtoupper($transaction->to) <> strtoupper($settings->smart_contract_address) ){
 							$this->log(" : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
@@ -208,7 +211,7 @@ class CommandsServer extends WebSocketServer
 						    $ReceivingType = 'token';
 						    // $transactionId = $transaction->hash;
 						    // recupero la ricevuta della transazione tramite hash
-						    $transactionContract = Yii::$app->Erc20->getReceipt($transaction->hash);
+						    $transactionContract = $ERC20->getReceipt($transaction->hash);
 
 						   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
 						   {
@@ -222,7 +225,7 @@ class CommandsServer extends WebSocketServer
 								   // $save = new Save;
 
 								   // carica da db tramite hash (che è univoco)
-								   $tokens = BoltTokens::find()->findByHash($transactionContract->transactionHash);
+								   $tokens = Transactions::find()->findByHash($transactionContract->transactionHash);
 
 								   // SE da DB è null, è NECESSARIA LA NOTIFICA per chi invia e riceve
 								   if (null===$tokens){
@@ -230,9 +233,9 @@ class CommandsServer extends WebSocketServer
 
 									   //salva la transazione
 									   $timestamp = 0;
-									   $transactionValue = Yii::$app->Erc20->wei2eth(
+									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $settings->poa_decimals
+										   $settings->decimals
 									   ); // decimali del token
 									   $rate = 1; //eth::getFiatRate('token');
 
@@ -240,27 +243,22 @@ class CommandsServer extends WebSocketServer
 									   // la  transazione
 									   // NB: il timestamp è quello sul server POA.
 
-									   $blockByHash = Yii::$app->Erc20->getBlockByHash($transaction->blockHash);
+									   $blockByHash = $ERC20->getBlockByHash($transaction->blockHash);
 
 									   // salvo la transazione NULL in db. Restituisce object
-									   $tokens = new BoltTokens;
+									   $tokens = new Transactions;
 									   $tokens->id_user = $client->user_id;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
 							           $tokens->token_price	= $transactionValue;
-							           $tokens->token_ricevuti	= $transactionValue;
-							           $tokens->fiat_price		=  abs($rate * $transactionValue);
-							           $tokens->currency	= 'EUR';
-							           $tokens->item_desc = 'wallet';
-							           $tokens->item_code = '0';
+							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
 							           $tokens->expiration_timestamp = hexdec($blockByHash->timestamp) + 60*15;
-							           $tokens->rate = $rate;
 							           $tokens->from_address = $transaction->from;
 							           $tokens->to_address = $receivingAccount;
-							           $tokens->blocknumber = hexdec($transactionContract->blockNumber);
+							           $tokens->blocknumber = $transactionContract->blockNumber;
 							           $tokens->txhash = $transactionContract->transactionHash;
-									   $tokens->memo = '';
+									   $tokens->message = '';
 									   $tokens->save();
 
 									    $this->log("Saving transaction: <pre>".print_r($tokens->attributes,true)."</pre>\n");
@@ -269,23 +267,17 @@ class CommandsServer extends WebSocketServer
 									   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 							           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
 
-
-
-
 									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 
 									   // notifica per chi ha inviato (from_address)
 									   $notification = [
-										   'type_notification' => 'token',
+										   'type' => 'token',
 										   'id_user' => $id_user_from === null ? 1 : $id_user_from,
-										   'id_tocheck' => $tokens->id_token,
 										   'status' => 'complete',
 										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-										   // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id_token),
+                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
 										   'timestamp' => time(),
 										   'price' => $tokens->token_price,
-										   'deleted' => 0,
 									   ];
 
                                        $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -317,7 +309,7 @@ class CommandsServer extends WebSocketServer
 
                                        // imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
                                       $this->setTransactionsFound([
-                                          'id_token' => $tokens->id_token,
+                                          'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
                                            'balance' => Yii::$app->Erc20->Balance($postData['search_address']),
                                            'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
@@ -335,13 +327,13 @@ class CommandsServer extends WebSocketServer
 									   if (strtoupper($tokens->to_address) == $SEARCH_ADDRESS){
 										   $this->log("L'user address è il ricevente (to_address)\n");
 
-										   if ($tokens->token_ricevuti == 0 ){ //&& $tokens->status <> 'complete'){
+										   if ($tokens->token_received == 0 ){ //&& $tokens->status <> 'complete'){
 											    $this->log("ma ha ricevuto 0....\n");
 
 											   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 											   $timeLN = date("H:i:s",$tokens->invoice_timestamp);
                                                $tokens->status = 'complete';
-                                               $tokens->token_ricevuti = $tokens->token_price;
+                                               $tokens->token_received = $tokens->token_price;
 
 
 
@@ -350,16 +342,13 @@ class CommandsServer extends WebSocketServer
 
                                                //salva la notifica
 											   $notification = [
-												  'type_notification' => 'token',
+												  'type' => 'token',
 												  'id_user' => $client->user_id,
-												  'id_tocheck' => $tokens->id_token,
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
-												  // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                                  'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id_token),
+                                                  'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
 												  'timestamp' => time(),
 												  'price' => $tokens->token_price,
-												  'deleted' => 0,
 											  ];
 
                                               $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -368,9 +357,9 @@ class CommandsServer extends WebSocketServer
                                               $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
                                               $this->setTransactionsFound([
-                                                  'id_token' => $tokens->id_token,
+                                                  'id_token' => $tokens->id,
                                                  'pushoptions' => $messages,
-                                                 'balance' => Yii::$app->Erc20->Balance($postData['search_address']),
+                                                 'balance' => $ERC20->Balance($postData['search_address']),
                                                  'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                               ]);
                                           }else {
@@ -458,15 +447,17 @@ class CommandsServer extends WebSocketServer
 		   ->andWhere(['id_user'=>$client->user_id])
 		   ->one();
 
+        //Carico i parametri della webapp
+   		$settings = Settings::poa(1);
+        $ERC20 = new Yii::$app->Erc20(1);
 
-		$blockLatest = Yii::$app->Erc20->getBlockInfo();
+		$blockLatest = $ERC20->getBlockInfo();
 
    		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 		$chainBlock = $blockLatest->number;
 		$savedBlock = dechex (hexdec($blockLatest->number) -15 );
 
-		//Carico i parametri della webapp
-		$settings = Settings::load();
+
 
         // Inizio il ciclo sui blocchi
 		for ($x=0; $x <= 15; $x++)
@@ -476,7 +467,7 @@ class CommandsServer extends WebSocketServer
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 			   	// ricerco le informazioni del blocco tramite il suo numero
-				$block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
+				$block = $ERC20->getBlockInfo($searchBlock,true);
 				$transactions = $block->transactions;
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
 				// echo '<pre>'.print_r($transactions,true).'</pre>';
@@ -488,7 +479,7 @@ class CommandsServer extends WebSocketServer
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
-						if (strtoupper($transaction->to) <> strtoupper($settings->poa_contractAddress) ){
+						if (strtoupper($transaction->to) <> strtoupper($settings->smart_contract_address) ){
 							// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
@@ -497,7 +488,7 @@ class CommandsServer extends WebSocketServer
 						   $ReceivingType = 'token';
 						   // $transactionId = $transaction->hash;
 						   // recupero la ricevuta della transazione tramite hash
-						   $transactionContract = Yii::$app->Erc20->getReceipt($transaction->hash);
+						   $transactionContract = $ERC20->getReceipt($transaction->hash);
 
 						   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
 						   {
@@ -511,7 +502,7 @@ class CommandsServer extends WebSocketServer
 								   // $save = new Save;
 
 								   // carica da db tramite hash (che è univoco)
-								   $tokens = BoltTokens::find()->findByHash($transactionContract->transactionHash);
+								   $tokens = Transactions::find()->findByHash($transactionContract->transactionHash);
 
 								   // SE da DB è null, è NECESSARIA LA NOTIFICA per chi invia e riceve
 								   if (null===$tokens){
@@ -520,9 +511,9 @@ class CommandsServer extends WebSocketServer
 
 									   //salva la transazione
 									   $timestamp = 0;
-									   $transactionValue = Yii::$app->Erc20->wei2eth(
+									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $settings->poa_decimals
+										   $settings->decimals
 									   ); // decimali del token
 									   $rate = 1; //eth::getFiatRate('token');
 
@@ -530,27 +521,22 @@ class CommandsServer extends WebSocketServer
 									   // la  transazione
 									   // NB: il timestamp è quello sul server POA.
 
-									   $blockByHash = Yii::$app->Erc20->getBlockByHash($transaction->blockHash);
+									   $blockByHash = $ERC20->getBlockByHash($transaction->blockHash);
 
 									   // salvo la transazione NULL in db. Restituisce object
-									   $tokens = new BoltTokens;
+									   $tokens = new Transactions;
 									   $tokens->id_user = $wallets->id_user;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
 							           $tokens->token_price	= $transactionValue;
-							           $tokens->token_ricevuti	= $transactionValue;
-							           $tokens->fiat_price		=  abs($rate * $transactionValue);
-							           $tokens->currency	= 'EUR';
-							           $tokens->item_desc = 'wallet';
-							           $tokens->item_code = '0';
+							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
 							           $tokens->expiration_timestamp = hexdec($blockByHash->timestamp) + 60*15;
-							           $tokens->rate = $rate;
 							           $tokens->from_address = $transaction->from;
 							           $tokens->to_address = $receivingAccount;
-							           $tokens->blocknumber = hexdec($transactionContract->blockNumber);
+							           $tokens->blocknumber = $transactionContract->blockNumber;
 							           $tokens->txhash = $transactionContract->transactionHash;
-									   $tokens->memo = '';
+									   $tokens->message = '';
 									   $tokens->save();
 
 									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Saving transaction: <pre>".print_r($tokens->attributes,true)."</pre>\n");
@@ -564,16 +550,13 @@ class CommandsServer extends WebSocketServer
 
 									   // notifica per chi ha inviato (from_address)
 									   $notification = [
-										   'type_notification' => 'token',
+										   'type' => 'token',
 										   'id_user' => $id_user_from === null ? 1 : $id_user_from,
-										   'id_tocheck' => $tokens->id_token,
 										   'status' => 'complete',
 										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-										   // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id_token),
+                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
 										   'timestamp' => time(),
 										   'price' => $tokens->token_price,
-										   'deleted' => 0,
 									   ];
 
                                        // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -591,7 +574,7 @@ class CommandsServer extends WebSocketServer
                                        // l'indirizzo di quel particolare user nella tabella
                                        // quindi NON INVIO il messaggio
                                        if ($id_user_to !== null){
-                                           $notification['id_user'] = $id_user_to;;
+                                           $notification['id_user'] = $id_user_to;
     									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
                                             // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -605,9 +588,9 @@ class CommandsServer extends WebSocketServer
 
                                        // imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
                                       $this->setLatestTransactionsFound([
-                                          'id_token' => $tokens->id_token,
+                                          'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
-										   'balance' => Yii::$app->Erc20->Balance($wallets->wallet_address),
+										   'balance' => $ERC20->Balance($wallets->wallet_address),
                                            'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                       ]);
 
@@ -622,29 +605,26 @@ class CommandsServer extends WebSocketServer
 									   if (strtoupper($tokens->to_address) == $SEARCH_ADDRESS){
 										   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address is to_address....\n");
 
-										   if ($tokens->token_ricevuti == 0 ){ //&& $tokens->status <> 'complete'){
+										   if ($tokens->token_received == 0 ){ //&& $tokens->status <> 'complete'){
 											   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Ricevuto è 0....\n");
 
 											   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 											   $timeLN = date("H:i:s",$tokens->invoice_timestamp);
                                                $tokens->status = 'complete';
-                                               $tokens->token_ricevuti = $tokens->token_price;
+                                               $tokens->token_received = $tokens->token_price;
 
 											   $tokens->update();
 											    // $this->log("allora ho aggiornato tabella tokens....\n");
 
                                                //salva la notifica
 											   $notification = [
-												  'type_notification' => 'token',
+												  'type' => 'token',
 												  'id_user' => $client->user_id,
-												  'id_tocheck' => $tokens->id_token,
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
-												  // 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id_token)]),
-                                                  'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id_token),
+                                                  'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
 												  'timestamp' => time(),
 												  'price' => $tokens->token_price,
-												  'deleted' => 0,
 											  ];
 
                                                // $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -653,9 +633,9 @@ class CommandsServer extends WebSocketServer
                                                // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
                                               $this->setLatestTransactionsFound([
-                                                  'id_token' => $tokens->id_token,
+                                                  'id_token' => $tokens->id,
                                                  'pushoptions' => $messages,
-												 'balance' => Yii::$app->Erc20->Balance($wallets->wallet_address),
+												 'balance' => $ERC20->Balance($wallets->wallet_address),
                                                  'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                               ]);
 											  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");
@@ -752,16 +732,14 @@ class CommandsServer extends WebSocketServer
 		 		 </li>';
 		    }
 		    // Leggo la notifica tramite key
-		    $notify = Notifications::find()
- 		  			->andWhere(['id_notification'=>$item->id_notification])
- 		  			->one();
+		    $notify = Notifications::findOne($item->id_notification);
 
 		    //$notify = Notifications::model()->findByPk($item->id_notification);
-		    $notifi__icon = WebApp::Icon($notify->type_notification);
+		    $notifi__icon = WebApp::Icon($notify->type);
 		    $notifi__color = WebApp::Color($notify->status);
 
 		    // verifico che sia un allarme
-		    if ($notify->type_notification == 'alarm' && $item->alreadyread == 0)
+		    if ($notify->type == 'alarm' && $item->alreadyread == 0)
 			   $response['playAlarm'] = true;
 
 
@@ -773,9 +751,9 @@ class CommandsServer extends WebSocketServer
 			}
 
 			$response['htmlContent'] .= '<li class='.$classUnread.'>
-			<a onclick="notify.openEnvelope('.$notify->id_notification.');"
+			<a onclick="notify.openEnvelope('.$notify->id.');"
 				href="'.htmlentities('index.php?'.$parsedurl['query']).'"
-				id="news_'.$notify->id_notification.'">
+				id="news_'.$notify->id.'">
 	   			<div class="d-flex align-items-center justify-content-between">
 	                   <div class="d-flex align-items-center">
 	                       <div class="notice-icon available" style="min-width:30px;">
@@ -786,13 +764,13 @@ class CommandsServer extends WebSocketServer
 
 							 <div class="text-right">';
 							 // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
-							 if ($notify->type_notification <> 'help'
-									 && $notify->type_notification <> 'contact'
-									 && $notify->type_notification <> 'alarm'
+							 if ($notify->type <> 'help'
+									 && $notify->type <> 'contact'
+									 && $notify->type <> 'alarm'
 							 ){
 								 $response['htmlContent'] .= '<b class="d-block mb-0 float-left txt-dark">'.$notify->price.'</b>';
 								 //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
-								 $response['status'][$notify->id_tocheck] = $notify->status;
+								 // $response['status'][$notify->id_tocheck] = $notify->status;
 							 }
 							 $response['htmlContent'] .= '
 								 <small class="text-muted">'.Yii::$app->formatter->asRelativeTime($notify->timestamp).'</small>

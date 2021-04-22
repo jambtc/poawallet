@@ -15,6 +15,8 @@ use app\models\Notifications;
 use app\models\NotificationsReaders;
 
 use app\components\Settings;
+use app\components\WebApp;
+
 use yii\data\ActiveDataProvider;
 use app\models\PushSubscriptions;
 
@@ -27,17 +29,16 @@ use app\models\PushSubscriptions;
 class Messages extends Component
 {
     public static function save($attributes){
+        $id_user = $attributes['id_user'];
+        unset($attributes['id_user']);
+
         $model = new Notifications;
-
         $model->attributes = $attributes;
-        $model->id_user = $attributes['id_user'];
         $model->insert();
-
         // self::log("Salvato in notification ora chiamo readers...");
 
-
         // Aggiorna le notifiche da leggere per l'utente
-        self::saveReader($model->id_user,$model->id_notification);
+        self::saveReader($id_user,$model->id);
         return (object) $model->attributes;
     }
 
@@ -49,7 +50,6 @@ class Messages extends Component
         $readers->insert();
 
         // self::log("Salvato in readers db");
-
 
         return true;
     }
@@ -71,12 +71,11 @@ class Messages extends Component
     */
     public function push($attributes, $app='wallet')
     {
-
         // self::log("Salvo il messaggio in db");
         $notification = self::save($attributes);
 
         //Carico i parametri della webapp
-        $settings = Settings::load();
+        $settings = Settings::Vapid();
 
         // $subscriptions = array();
         // self::log("settings: <pre>".print_r($settings,true)."</pre>\n");
@@ -84,7 +83,7 @@ class Messages extends Component
         $dataProvider = new ActiveDataProvider([
             'query' => PushSubscriptions::find()->
                 where([
-                    'id_user'=>$notification->id_user,
+                    'id_user'=>$attributes['id_user'],
                     'type' => $app
                     ]),
             'pagination' => false // !!! IMPORTANT TO GET ALL MODELS
@@ -104,8 +103,8 @@ class Messages extends Component
             $auth = array(
                 'VAPID' => array(
                     'subject' => $notification->description,
-                    'publicKey' => $settings->VapidPublic, // don't forget that your public key also lives in app.js
-                    'privateKey' => $settings->VapidSecret, // in the real world, this would be in a secret file
+                    'publicKey' => $settings->public_key, // don't forget that your public key also lives in app.js
+                    'privateKey' => WebApp::decrypt($settings->secret_key), // in the real world, this would be in a secret file
                 ),
             );
 
@@ -119,7 +118,7 @@ class Messages extends Component
 
             // il contenuto del messaggio
             $content = array(
-                'title' => '['.self::appTitle($notification->type_notification,$app).'] - '. Yii::t('app','New message'), //'$array->type_notification,
+                'title' => '['.self::appTitle($notification->type,$app).'] - '. Yii::t('app','New message'), //'$array->type_notification,
                 'body' => $notification->description,
                 'icon' => 'src/images/icons/app-icon-96x96.png',
                 'badge' => 'src/images/icons/app-icon-96x96.png',

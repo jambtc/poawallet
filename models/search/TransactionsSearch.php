@@ -4,12 +4,12 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\BoltTokens;
+use app\models\Transactions;
 
 /**
- * BoltTokensSearch represents the model behind the search form of `app\models\BoltTokens`.
+ * TransactionsSearch represents the model behind the search form of `app\models\Transactions`.
  */
-class BoltTokensSearch extends BoltTokens
+class TransactionsSearch extends Transactions
 {
     /**
      * {@inheritdoc}
@@ -17,9 +17,9 @@ class BoltTokensSearch extends BoltTokens
     public function rules()
     {
         return [
-            [['id_token', 'id_user', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
-            [['type', 'status', 'currency', 'item_desc', 'item_code', 'from_address', 'to_address', 'txhash'], 'safe'],
-            [['token_price', 'token_ricevuti', 'fiat_price', 'rate', 'blocknumber'], 'number'],
+            [['id', 'id_user', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
+            [['type', 'status', 'from_address', 'to_address', 'blocknumber', 'txhash', 'message'], 'safe'],
+            [['token_price', 'token_received'], 'number'],
         ];
     }
 
@@ -41,7 +41,7 @@ class BoltTokensSearch extends BoltTokens
      */
     public function search($params)
     {
-        $query = BoltTokens::find();
+        $query = Transactions::find();
 
         // add conditions that should always apply here
 
@@ -59,25 +59,21 @@ class BoltTokensSearch extends BoltTokens
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id_token' => $this->id_token,
+            'id' => $this->id,
             'id_user' => $this->id_user,
             'token_price' => $this->token_price,
-            'token_ricevuti' => $this->token_ricevuti,
-            'fiat_price' => $this->fiat_price,
+            'token_received' => $this->token_received,
             'invoice_timestamp' => $this->invoice_timestamp,
             'expiration_timestamp' => $this->expiration_timestamp,
-            'rate' => $this->rate,
-            'blocknumber' => $this->blocknumber,
         ]);
 
         $query->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'status', $this->status])
-            ->andFilterWhere(['like', 'currency', $this->currency])
-            ->andFilterWhere(['like', 'item_desc', $this->item_desc])
-            ->andFilterWhere(['like', 'item_code', $this->item_code])
             ->andFilterWhere(['like', 'from_address', $this->from_address])
             ->andFilterWhere(['like', 'to_address', $this->to_address])
-            ->andFilterWhere(['like', 'txhash', $this->txhash]);
+            ->andFilterWhere(['like', 'blocknumber', $this->blocknumber])
+            ->andFilterWhere(['like', 'txhash', $this->txhash])
+            ->andFilterWhere(['like', 'message', $this->message]);
 
         return $dataProvider;
     }

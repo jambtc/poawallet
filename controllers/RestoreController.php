@@ -30,17 +30,8 @@ class RestoreController extends Controller
 
 	public function beforeAction($action)
 	{
-    $this->enableCsrfValidation = false;
-
-		// $session = Yii::$app->session;
-		// $token = $session->get('token-restore');
-		// if ($token === null || $token != $_GET['token']) {
-		// 	Yii::$app->response->statusCode = 403;
-		// 	return false;
-		// }
-		// $session->remove('token-restore');
-
-    return parent::beforeAction($action);
+    	$this->enableCsrfValidation = false;
+    	return parent::beforeAction($action);
 	}
 
 
@@ -113,9 +104,10 @@ class RestoreController extends Controller
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
 			if(null === $boltWallet) {
 			  //doesn't exist so create record
+			  	$ERC20 = new Yii::$app->Erc20(1); // blockchain id -> 1
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
-				$block = Yii::$app->Erc20->getBlockInfo();
+				$block = $ERC20->getBlockInfo();
 				$boltWallet->blocknumber = ($block->number === null) ? '0x0' : $block->number;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];

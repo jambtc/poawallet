@@ -5,15 +5,17 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "bolt_vapid_subscription".
+ * This is the model class for table "mp_subscriptions".
  *
- * @property int $id_subscription
- * @property int $id_user
+ * @property int $id
+ * @property int|null $id_user
  * @property string $type
  * @property string $browser
  * @property string $endpoint
  * @property string $auth
  * @property string $p256dh
+ *
+ * @property Users $user
  */
 class PushSubscriptions extends \yii\db\ActiveRecord
 {
@@ -31,10 +33,11 @@ class PushSubscriptions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'type', 'browser', 'endpoint', 'auth', 'p256dh'], 'required'],
             [['id_user'], 'integer'],
+            [['type', 'browser', 'endpoint', 'auth', 'p256dh'], 'required'],
             [['type'], 'string', 'max' => 20],
             [['browser', 'endpoint', 'auth', 'p256dh'], 'string', 'max' => 1000],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -44,7 +47,7 @@ class PushSubscriptions extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id_subscription' => Yii::t('app', 'Id Subscription'),
+            'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
             'type' => Yii::t('app', 'Type'),
             'browser' => Yii::t('app', 'Browser'),
@@ -52,6 +55,16 @@ class PushSubscriptions extends \yii\db\ActiveRecord
             'auth' => Yii::t('app', 'Auth'),
             'p256dh' => Yii::t('app', 'P256dh'),
         ];
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\MpUsersQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'id_user']);
     }
 
     /**

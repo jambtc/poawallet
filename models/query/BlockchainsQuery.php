@@ -1,13 +1,13 @@
 <?php
 
-namespace app\models;
+namespace app\models\query;
 
 /**
- * This is the ActiveQuery class for [[BoltUsers]].
+ * This is the ActiveQuery class for [[\app\models\Blockchains]].
  *
- * @see BoltUsers
+ * @see \app\models\Blockchains
  */
-class BoltUsersQuery extends \yii\db\ActiveQuery
+class BlockchainsQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class BoltUsersQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltUsers[]|array
+     * @return \app\models\Blockchains[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class BoltUsersQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return BoltUsers|array|null
+     * @return \app\models\Blockchains|array|null
      */
     public function one($db = null)
     {

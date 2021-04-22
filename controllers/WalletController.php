@@ -13,11 +13,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-use app\models\BoltTokens;
-use app\models\search\BoltTokensSearch;
+use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
 use app\models\Users;
-//use app\models\LoginForm;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -70,6 +68,7 @@ class WalletController extends Controller
 		return [
 			'error' => [
 				'class' => 'yii\web\ErrorAction',
+				'layout' => 'auth',
 			],
 			'captcha' => [
 				'class' => 'yii\captcha\CaptchaAction',
@@ -78,10 +77,10 @@ class WalletController extends Controller
 		];
 	}
 
-	public function actionError(){
-        $this->layout = 'auth';
-        return $this->render('error');
-    }
+	// public function actionError(){
+    //     $this->layout = 'auth';
+    //     return $this->render('error');
+    // }
 
 
 	private function loadSocialUser()
@@ -110,7 +109,7 @@ class WalletController extends Controller
 			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
-		$searchModel = new BoltTokensSearch();
+		$searchModel = new TransactionsSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->setPagination(['pageSize' => 5]);
 		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];

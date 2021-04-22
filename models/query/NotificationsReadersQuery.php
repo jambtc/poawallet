@@ -32,8 +32,7 @@ class NotificationsReadersQuery extends \yii\db\ActiveQuery
         return parent::one($db);
     }
 
-
     public function latest(){
-        return $this->orderBy('id_notification DESC');
+        return $this->orderBy('id DESC');
     }
 }

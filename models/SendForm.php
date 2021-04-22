@@ -60,12 +60,12 @@ class SendForm extends Model
 	 */
     public function validateAmount($attribute, $params)
     {
-        $settings = Settings::load();
+        $settings = Settings::poa(1);
         if ($this->amount == 0)
             $this->addError($attribute, 'There are too decimals.');
 
         if ((int)$this->amount != $this->amount) {
-            if (strlen($this->amount) - strrpos($this->amount, '.') - 1 > $settings->poa_decimals)
+            if (strlen($this->amount) - strrpos($this->amount, '.') - 1 > $settings->decimals)
                 $this->addError($attribute, 'There are too decimals.');
         }
     }
@@ -76,7 +76,7 @@ class SendForm extends Model
 	public function isValidAddress($attribute, $params)
     {
         $WebApp = new WebApp;
-		$poaNode = $WebApp->getPoaNode();
+		$poaNode = $WebApp->getPoaNode(1);
 		if (!$poaNode)
             $this->addError($attribute, 'All Nodes are down...');
 

@@ -106,15 +106,12 @@ class SignupForm extends Model
             $user->username = $this->username;
             $user->email = $this->username;
             $user->password = $this->password;
-            $user->ga_secret_key = null;
             $user->activation_code = $nonce;
             $user->status_activation_code = 0;
             $user->oauth_provider = 'mail';
             $user->oauth_uid = Yii::$app->security->generateRandomString(16);
             $user->authKey = $secretkey;
             $user->accessToken = $randomkey;
-            $user->facade = 'dashboard';
-            $user->provider = 'mail';
             $user->picture = 'css/images/anonymous.png';
             $user->last_name = isset($explodename[1]) ? $explodename[1] : '';
             $user->first_name = isset($explodename[0]) ? $explodename[0] : '';

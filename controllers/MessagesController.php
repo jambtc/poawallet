@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
-use app\models\Notifications;
+use app\models\NotificationsReaders;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -37,11 +37,31 @@ class MessagesController extends Controller
      */
     public function actionIndex()
     {
+        // $dataProvider = new ActiveDataProvider([
+        //     'query' => NotificationsReaders::find()
+        //         ->andWhere(['id_user' => Yii::$app->user->id])
+        //         ->orderBy(['id' => SORT_DESC])
+        // ]);
+
+        // $dataProvider = NotificationsReaders::find()
+        //         ->andWhere(['id_user' => Yii::$app->user->id])
+        //         ;
+
+        $query = NotificationsReaders::find()
+            ->where(['id_user'=>Yii::$app->user->id]);
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Notifications::find()
-                ->andWhere(['id_user' => Yii::$app->user->id])
-                ->orderBy(['id_notification' => SORT_DESC])
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
         ]);
+
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

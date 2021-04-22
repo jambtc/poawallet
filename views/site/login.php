@@ -12,7 +12,6 @@ use yii\web\View;
 use jambtc\oauthtelegram;
 use app\components\Settings;
 $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
-$settings = Settings::load();
 
 
 $this->title = 'Login';
@@ -116,7 +115,9 @@ $this->title = 'Login';
                         <li>
                             <a class="telegram auth-link" href="#" title="Telegram">
                                 <?php
-                                $loginTelegram = new jambtc\oauthtelegram\telegram($settings->MegapayTelegramBotName,$settings->MegapayTelegramToken);
+                                $loginTelegram = new jambtc\oauthtelegram\telegram(
+                                    Yii::$app->params['telegram.clientId'],
+                                    Yii::$app->params['telegram.clientSecret']);
                                 echo $loginTelegram->loginButton($checkTelegramAuthorization,'large');
                                 ?>
                             </a>
@@ -132,7 +133,7 @@ $this->title = 'Login';
 
 
         <div class="form-row txt-center text-light mt-15">
-          Don't you have an account yet? <a style="color:#007bff;" href="<?php echo Url::to(['site/register']); ?>" data-loader="show">Sign Up</a>
+          <?= Yii::t('app','Don\'t you have an account yet?') ?> <a style="color:#007bff;" href="<?php echo Url::to(['site/register']); ?>" data-loader="show"><?= Yii::t('app','Sign Up') ?></a>
         </div>
         <?php ActiveForm::end(); ?>
       </div>
