@@ -37,16 +37,6 @@ class MessagesController extends Controller
      */
     public function actionIndex()
     {
-        // $dataProvider = new ActiveDataProvider([
-        //     'query' => NotificationsReaders::find()
-        //         ->andWhere(['id_user' => Yii::$app->user->id])
-        //         ->orderBy(['id' => SORT_DESC])
-        // ]);
-
-        // $dataProvider = NotificationsReaders::find()
-        //         ->andWhere(['id_user' => Yii::$app->user->id])
-        //         ;
-
         $query = NotificationsReaders::find()
             ->where(['id_user'=>Yii::$app->user->id]);
 
@@ -81,6 +71,25 @@ class MessagesController extends Controller
         ]);
     }
 
+    /**
+     * Deletes an existing Notifications model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete()
+    {
+        //echo '<pre>'.print_r($_POST,true);
+        $json = json_decode($_POST['keys']);
+
+        foreach ($json as $idx => $key)
+            $this->findModel($key)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+
 
 
 
@@ -93,7 +102,7 @@ class MessagesController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Notifications::findOne($id)) !== null) {
+        if (($model = NotificationsReaders::findOne($id)) !== null) {
             return $model;
         }
 

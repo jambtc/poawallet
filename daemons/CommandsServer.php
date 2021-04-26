@@ -275,7 +275,7 @@ class CommandsServer extends WebSocketServer
     										   'status' => 'complete',
     										   'description' => Yii::t('app','A transaction you sent has been completed.'),
                                                'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-    										   'timestamp' => time(),
+    										   'timestamp' => $tokens->invoice_timestamp,
     										   'price' => $tokens->token_price,
     									   ];
 
@@ -347,7 +347,7 @@ class CommandsServer extends WebSocketServer
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
                                                   'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-												  'timestamp' => time(),
+												  'timestamp' => $tokens->invoice_timestamp,
 												  'price' => $tokens->token_price,
 											  ];
 
@@ -555,7 +555,7 @@ class CommandsServer extends WebSocketServer
     										   'status' => 'complete',
     										   'description' => Yii::t('app','A transaction you sent has been completed.'),
                                                'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-    										   'timestamp' => time(),
+    										   'timestamp' => $tokens->invoice_timestamp,
     										   'price' => $tokens->token_price,
     									   ];
 
@@ -624,7 +624,7 @@ class CommandsServer extends WebSocketServer
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
                                                   'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-												  'timestamp' => time(),
+												  'timestamp' => $tokens->invoice_timestamp,
 												  'price' => $tokens->token_price,
 											  ];
 
