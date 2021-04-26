@@ -8,11 +8,12 @@ use yii\widgets\DetailView;
 \yii\web\YiiAsset::register($this);
 
 // include ('sparkline_js.php');
+include ('manage-blockchainscan_js.php');
 include ('manage-options_js.php');
 include ('manage-pin_js.php');
 include ('manage-masterseed_js.php');
 include ('manage-push_js.php');
-include ('manage-blockchainscan_js.php');
+
 
 ?>
 <div class="dash-balance">

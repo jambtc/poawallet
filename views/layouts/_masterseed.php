@@ -1,11 +1,12 @@
 <!-- show Master Seed -->
 <div class="modal fade" id="showMasterSeedModal" tabindex="-1" role="dialog" aria-labelledby="showMasterSeedModalLabel" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
+		<div class="modal-content alert alert-danger">
 			<div class="modal-header">
 				<h5 class="modal-title" id="showMasterSeedModalLabel"><?php echo Yii::t('app','Master Seed');?></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
+					<span aria-hidden="true" id="resetSliderAriaMaster1">×</span>
+
 				</button>
 			</div>
 			<div class="modal-body">
@@ -25,11 +26,12 @@
 <!-- show Master Seed modal dialog-->
 <div class="modal fade" id="masterSeedModal" tabindex="-1" role="dialog" aria-labelledby="masterSeedModalLabel" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
+		<div class="modal-content alert alert-danger">
 			<div class="modal-header">
 				<h5 class="modal-title" id="masterSeedModalLabel"><?php echo Yii::t('app','Backup Master Seed');?></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">×</span>
+					<span aria-hidden="true" id="resetSliderAriaMaster2">×</span>
+
 				</button>
 			</div>
 			<div class="modal-body">

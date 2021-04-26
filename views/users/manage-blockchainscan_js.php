@@ -30,7 +30,7 @@ $(function () {
     });
 
     // INTERCETTA IL PULSANTE indietro e reset pulsanti
-    var resetSliderAria = document.querySelector('#resetSliderAria');
+    var resetSliderAria = document.querySelector('#resetSliderAriablockchain');
     resetSliderAria.addEventListener('click', function(){
         resetSlider('blockchainRescan');
     });
