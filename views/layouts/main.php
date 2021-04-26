@@ -24,7 +24,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 // impostazioni variabili globali per tutti i js
 $options = [
     'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
-    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7502' : 'wss://wss.megawallet.tk/wss',
+    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : 'wss://wss.megawallet.tk/wss',
     // ...
 ];
 $this->registerJs(
@@ -137,6 +137,7 @@ if (Yii::$app->controller->id == 'users'){
     echo $this->render('_pin-manage');
     echo $this->render('_push-manage');
     echo $this->render('_masterseed');
+    echo $this->render('_blockchainscan');
 }
 
 if (Yii::$app->controller->id == 'receive'){

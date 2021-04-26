@@ -203,21 +203,21 @@ class BlockchainController extends Controller
 							           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
 
 									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
+									   if ($id_user_from !== null){
+										   // notifica per chi ha inviato (from_address)
+										   $notification = [
+											   'type' => 'token',
+											   'id_user' => $id_user_from,
+											   'status' => 'complete',
+											   'description' => Yii::t('app','A transaction you sent has been completed.'),
+	                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
+											   'timestamp' => time(),
+											   'price' => $tokens->token_price,
+										   ];
 
-
-									   // notifica per chi ha inviato (from_address)
-									   $notification = [
-										   'type' => 'token',
-										   'id_user' => $id_user_from === null ? 1 : $id_user_from,
-										   'status' => 'complete',
-										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-										   'timestamp' => time(),
-										   'price' => $tokens->token_price,
-									   ];
-
-                                       // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
-                                       $messages= Messages::push($notification);
+	                                       // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+	                                       $messages= Messages::push($notification);
+									   }
                                        // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
 
 									   // $save->Notification($notification);

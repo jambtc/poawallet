@@ -16,7 +16,7 @@ $config = [
         '@tests' => '@app/tests',
     ],
     'components' => [
-        // 'Erc20' => ['class' => 'app\components\Erc20'],
+        'Erc20' => ['class' => 'app\components\Erc20'],
         // 'WebApp' => ['class' => 'app\components\WebApp'],
         // 'Logo' => ['class' => 'app\components\Logo'],
         // 'Settings' => ['class' => 'app\components\Settings'],

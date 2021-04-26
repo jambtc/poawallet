@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use app\models\Auth;
+use app\models\MPWallets;
 
 /**
  * This is the model class for table "mp_users".
@@ -83,7 +84,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function getWallets()
     {
-        return $this->hasMany(MpWallet::className(), ['id_user' => 'id']);
+        return $this->hasMany(MpWallets::className(), ['id_user' => 'id']);
     }
 
     /**

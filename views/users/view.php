@@ -12,6 +12,7 @@ include ('manage-options_js.php');
 include ('manage-pin_js.php');
 include ('manage-masterseed_js.php');
 include ('manage-push_js.php');
+include ('manage-blockchainscan_js.php');
 
 ?>
 <div class="dash-balance">
@@ -94,7 +95,8 @@ include ('manage-push_js.php');
 		<div class="list-item">
 			<i class="fas fa-key text-primary"></i>
 			<em class="seperate"></em>
-			<span class="list-item-title"><?= Yii::t('app','Show Master Seed');?> <small class="text-muted"></small></span>
+			<span class="list-item-title"><?= Yii::t('app','Show Master Seed');?>
+				<small class="text-muted"></small></span>
 
 			<div class="masterseedSlider sweet-check">
 				<div class="outline">
@@ -119,18 +121,7 @@ include ('manage-push_js.php');
 
 
 
-	<!-- <div class="list-box">
-		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('app','Scan the blockchain');?> <small class="text-muted"></small></span>
 
-			<div class="sweet-check">
-				<input type="checkbox" name="documents" value="1">
-				<div class="outline">
-					<span></span>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 	<!-- <div class="list-box">
 		<div class="list-item">
@@ -154,6 +145,21 @@ include ('manage-push_js.php');
 			<div class="js-push-btn-modal sweet-check "
 					data-toggle="modal"
 					data-target="#pushEnableModal">
+				<div class="outline">
+					<span></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-link text-primary"></i>
+			<em class="seperate"></em>
+			<span class="list-item-title"><?php echo Yii::t('app','Scan the blockchain');?>
+				<small class="text-muted"></small></span>
+
+			<div class="blockchainRescan sweet-check">
 				<div class="outline">
 					<span></span>
 				</div>

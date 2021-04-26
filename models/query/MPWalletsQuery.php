@@ -35,9 +35,9 @@ class MPWalletsQuery extends \yii\db\ActiveQuery
     }
 
 
-    // public function userWalletAddress($id){
-    //     return $this->andWhere(['id_user'=>$id]);
-    // }
+    public function byUserId($id){
+        return $this->andWhere(['id_user'=>$id]);
+    }
 
     /**
 	 * This function return the wallet address from user id

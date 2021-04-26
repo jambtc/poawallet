@@ -8,7 +8,7 @@ use Ratchet\ConnectionInterface;
 
 use yii\base\Model;
 use app\models\MPWallets;
-use app\models\BoltTokens;
+use app\models\Transactions;
 use app\models\NotificationsReaders;
 use app\models\Notifications;
 
@@ -23,7 +23,6 @@ use app\components\WebApp;
 use app\components\Settings;
 use app\components\Messages;
 use Web3\Web3;
-
 
 
 class CommandsServer extends WebSocketServer
@@ -70,15 +69,15 @@ class CommandsServer extends WebSocketServer
     {
        $request = json_decode($msg, true);
 
-       if (!empty($request['user_id']) && $user_id = trim($request['user_id'])) {
-           $client->user_id = WebApp::decrypt($user_id);
-       }
+        if (!empty($request['user_id']) && $user_id = trim($request['user_id'])) {
+            $client->user_id = WebApp::decrypt($user_id);
+        }
 
-       // ricerca il blocknumber adesso e restituisci il valore
-       $result = $this->getBlockNumber($client->user_id);
-       $this->log("Subscription with user_id: $client->user_id");
+        // ricerca il blocknumber adesso e restituisci il valore
+        $result = $this->getBlockNumber($client->user_id);
+        $this->log("Subscription with user_id: $client->user_id");
 
-       $client->send(json_encode($result));
+        $client->send(json_encode($result));
     }
 
     // scrive a video
@@ -114,7 +113,7 @@ class CommandsServer extends WebSocketServer
              'command'=>'check-transactions',
    		];
         $ERC20 = new Yii::$app->Erc20(1);
-
+        // $this->log("result<pre>".print_r($return,true)."</pre>\n");   exit;
         $blockLatest = $ERC20->getBlockInfo();
 
    		//calcolo la differenza tra i blocchi
@@ -267,22 +266,23 @@ class CommandsServer extends WebSocketServer
 									   $dateLN = date("d M `y",$tokens->invoice_timestamp);
 							           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
 
-									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
+									    $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
+                                        if ($id_user_from !== null){
+    									   // notifica per chi ha inviato (from_address)
+    									   $notification = [
+    										   'type' => 'token',
+    										   'id_user' => $id_user_from,
+    										   'status' => 'complete',
+    										   'description' => Yii::t('app','A transaction you sent has been completed.'),
+                                               'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
+    										   'timestamp' => time(),
+    										   'price' => $tokens->token_price,
+    									   ];
 
-									   // notifica per chi ha inviato (from_address)
-									   $notification = [
-										   'type' => 'token',
-										   'id_user' => $id_user_from === null ? 1 : $id_user_from,
-										   'status' => 'complete',
-										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-										   'timestamp' => time(),
-										   'price' => $tokens->token_price,
-									   ];
-
-                                       $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
-                                       $messages= Messages::push($notification);
-                                       $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                           $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+                                           $messages= Messages::push($notification);
+                                           $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                       }
 
 									   // $save->Notification($notification);
 
@@ -295,7 +295,7 @@ class CommandsServer extends WebSocketServer
                                        // l'indirizzo di quel particolare user nella tabella
                                        // quindi NON INVIO il messaggio
                                        if ($id_user_to !== null){
-                                           $notification['id_user'] = $id_user_to;;
+                                           $notification['id_user'] = $id_user_to;
     									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
                                            $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
@@ -547,21 +547,22 @@ class CommandsServer extends WebSocketServer
 
 									   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 
+                                        if ($id_user_from !== null){
+    									   // notifica per chi ha inviato (from_address)
+    									   $notification = [
+    										   'type' => 'token',
+    										   'id_user' => $id_user_from,
+    										   'status' => 'complete',
+    										   'description' => Yii::t('app','A transaction you sent has been completed.'),
+                                               'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
+    										   'timestamp' => time(),
+    										   'price' => $tokens->token_price,
+    									   ];
 
-									   // notifica per chi ha inviato (from_address)
-									   $notification = [
-										   'type' => 'token',
-										   'id_user' => $id_user_from === null ? 1 : $id_user_from,
-										   'status' => 'complete',
-										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-										   'timestamp' => time(),
-										   'price' => $tokens->token_price,
-									   ];
-
-                                       // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
-                                       $messages= Messages::push($notification);
-                                       // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                           // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
+                                           $messages= Messages::push($notification);
+                                           // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
+                                       }
 
 									   // $save->Notification($notification);
 
