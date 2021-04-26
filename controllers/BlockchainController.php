@@ -231,7 +231,7 @@ class BlockchainController extends Controller
                                        // l'indirizzo di quel particolare user nella tabella
                                        // quindi NON INVIO il messaggio
                                        if ($id_user_to !== null){
-                                           $notification['id_user'] = $id_user_to;;
+                                           $notification['id_user'] = $id_user_to;
     									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
 
                                             // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");

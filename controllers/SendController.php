@@ -305,9 +305,13 @@ class SendController extends Controller
 
 			// notifica per chi riceve (to_address)
 			$id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
-			$notification['id_user'] = $id_user_to === null ? 1 : $id_user_to;
-			$notification['description'] = Yii::t('app','A transaction you received has been completed.');
-			Messages::push($notification);
+
+			// fix
+			if (null !== $id_user_to){
+				$notification['id_user'] = $id_user_to;
+				$notification['description'] = Yii::t('app','A transaction you received has been completed.');
+				Messages::push($notification);
+			}
 
 			//adesso posso uscire CON IL JSON DA REGISTRARE NEL SW.
 			$data = [
