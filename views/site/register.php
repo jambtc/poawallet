@@ -25,6 +25,7 @@ $this->title = Yii::t('app','Register');
           <h3 class="alert alert-info"><?= Yii::t('app','Registration form') ?></h3>
 
           <p class="text-light"><?= Yii::t('app','Please fill out the fields. A link to activate your account will be sent.') ?></p>
+          <div class="form-divider"></div>
 
           <?php if (Yii::$app->session->hasFlash('registerFormSubmitted')): ?>
 
@@ -76,8 +77,9 @@ $this->title = Yii::t('app','Register');
           ];
             ?>
 
-        <?= $form->field($model, 'username', $fieldOptions1)->textInput(['autofocus' => false, 'autocomplete'=>"off"]) ?>
-        <?= $form->field($model, 'password', $fieldOptions2)->passwordInput(['autocomplete'=>"new-password"]) ?>
+        <?= $form->field($model, 'username', $fieldOptions1)->textInput(['autofocus' => false, 'autocomplete'=>"off",'placeholder'=>Yii::t('app','Username')])->label(false) ?>
+        <?= $form->field($model, 'password', $fieldOptions2)->passwordInput(['autocomplete'=>"new-password",'placeholder'=>Yii::t('app','Password')])->label(false) ?>
+        <?= $form->field($model, 'password_repeat', $fieldOptions2)->passwordInput(['placeholder'=>Yii::t('app','Repeat password')])->label(false) ?>
 
         <div class="txt-left">
             <?= $form->errorSummary($model, ['id' => 'error-summary','class'=>'col-lg-12']) ?>
@@ -89,7 +91,7 @@ $this->title = Yii::t('app','Register');
 
 
         <div class="form-group row">
-            <div class="col-lg-offset-1 col-lg-11">
+            <div class="col-sm-12">
                 <?= Html::submitButton('Register', ['class' => 'button circle block orange', 'name' => 'login-button']) ?>
             </div>
         </div>

@@ -20,7 +20,7 @@ $this->title = Yii::$app->id;
         <div class="form-divider"></div>
 
           <div class="form-row">
-            <a href="<?php echo Url::to(['site/login']); ?>" class="button circle block orange">Login</a>
+            <a href="<?php echo Url::to(['site/login']); ?>" class="button circle block orange"><?= Yii::t('app','Start') ?></a>
           </div>
           <div class="form-divider"></div>
           <div class="form-divider"></div>

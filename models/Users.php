@@ -131,12 +131,12 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return $this->authKey;
     }
 
-    public function beforeSave($insert) {
-        if(isset($this->password))
-            $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
-
-        return parent::beforeSave($insert);
-    }
+    // public function beforeSave($insert) {
+    //     if(isset($this->password))
+    //         $this->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
+    //
+    //     return parent::beforeSave($insert);
+    // }
 
     public function getAuths()
     {
@@ -263,7 +263,8 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
      */
     public function setPassword($password)
     {
-        $this->password = $password; // l'hash viene generato befor-save
+        $this->password = Yii::$app->getSecurity()->generatePasswordHash($password);
+        // $this->password = $password; // l'hash viene generato befor-save
     }
 
     /**

@@ -59,8 +59,8 @@ $this->title = 'Login';
           ];
             ?>
 
-        <?= $form->field($model, 'username', $fieldOptions1)->textInput(['autofocus' => false, 'autocomplete'=>"off"]) ?>
-        <?= $form->field($model, 'password', $fieldOptions2)->passwordInput(['autocomplete'=>"new-password"]) ?>
+        <?= $form->field($model, 'username', $fieldOptions1)->textInput(['autofocus' => false, 'autocomplete'=>"off"])->label(false) ?>
+        <?= $form->field($model, 'password', $fieldOptions2)->passwordInput(['autocomplete'=>"new-password"])->label(false) ?>
         <?= $form->field($model, 'oauth_provider')->hiddenInput(['value'=>'mail'])->label(false) ?>
 
         <div class="txt-left">
@@ -71,9 +71,8 @@ $this->title = 'Login';
 
 
         <div class="form-group row">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton(Yii::t('app','Login'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-
+            <div class="col-sm-12">
+                <?= Html::submitButton(Yii::t('app','Login'), ['class' => 'btn btn-block btn-primary', 'name' => 'login-button']) ?>
             </div>
 
         </div>
@@ -84,7 +83,7 @@ $this->title = 'Login';
         <div class="form-label-divider"><span>OR</span></div>
         <div class="form-divider"></div>
         <div class="row">
-            <div class="col-lg-offset-1 col-lg-11">
+            <div class="col-sm-12">
                 <div class="d-flex flex-column">
             <?php
             $authAuthChoice = yii\authclient\widgets\AuthChoice::begin([

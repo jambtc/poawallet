@@ -51,15 +51,14 @@ ServiceWorkerAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrapper">
+<div class="wrapper-inline">
     <?php
     // mi serve per far caricare bootstrap4
-    NavBar::begin();
-    NavBar::end();
+    // NavBar::begin();
+    // NavBar::end();
     ?>
-    <div class="wrapper-inline">
-        <?php //$this->beginContent('@app/views/layouts/base.php') ?>
-        <main class="margin mt-0">
+
+        <main class="margin mt-0 h-100">
 
             <?= Alert::widget() ?>
             <?= $content ?>
@@ -70,7 +69,7 @@ ServiceWorkerAsset::register($this);
               <?= Logo::footer(); ?>
             </div>
         </footer>
-    </div>
+
 
 
 

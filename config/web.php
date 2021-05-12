@@ -13,14 +13,9 @@ $config = [
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
-        // '@packages' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'yii2-packages',
     ],
     'components' => [
         'Erc20' => ['class' => 'app\components\Erc20'],
-        // 'WebApp' => ['class' => 'app\components\WebApp'],
-        // 'Logo' => ['class' => 'app\components\Logo'],
-        // 'Settings' => ['class' => 'app\components\Settings'],
-        // 'Messages' => ['class' => 'app\components\Messages'],
         'i18n' => [
             'translations' => [
                 'app*' => [

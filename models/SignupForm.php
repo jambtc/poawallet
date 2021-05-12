@@ -11,8 +11,8 @@ use app\models\Users;
 class SignupForm extends Model
 {
     public $username;
-    // public $email;
     public $password;
+    public $password_repeat;
 
     /**
      * Returns the validation rules for attributes.
@@ -42,6 +42,7 @@ class SignupForm extends Model
             ['username', 'uniqueByProvider'],
 
             ['password', 'required'],
+            ['password_repeat', 'compare', 'compareAttribute'=>'password', 'message'=>Yii::t('app',"Passwords don't match") ],
             // use passwordStrengthRule() method to determine password strength
             // $this->passwordStrengthRule(),
 
@@ -88,9 +89,6 @@ class SignupForm extends Model
      */
     public function signup()
     {
-        // echo "<pre>".print_r($_POST,true)."</pre>";
-		// exit;
-
         if ($this->validate()) {
             $explodemail = explode('@',$this->username);
     		$explodename = explode('.',$explodemail[0]);
@@ -105,7 +103,8 @@ class SignupForm extends Model
             $user = new Users();
             $user->username = $this->username;
             $user->email = $this->username;
-            $user->password = $this->password;
+            // $user->password = $this->password;
+            $user->password = Yii::$app->getSecurity()->generatePasswordHash($this->password);
             $user->activation_code = $nonce;
             $user->status_activation_code = 0;
             $user->oauth_provider = 'mail';
