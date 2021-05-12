@@ -108,5 +108,5 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 	</tr>
 </table>
 <?php
-exit;
+// exit;
 ?>
