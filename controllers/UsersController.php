@@ -85,8 +85,7 @@ class UsersController extends Controller
             ->orwhere(['=','to_address', $wallet->wallet_address])
             ->andWhere(['status'=>'complete'])
             ->select('token_price')
-            //->all()
-            ;
+            ->all();
 
 
 
@@ -94,7 +93,7 @@ class UsersController extends Controller
         $increase = 0;
         $color = 'gray';
         $arrow = 'arrows-alt-v';
-        if ($chart->count() > 0){
+        if (count ($chart) > 0){
             foreach ($chart as $item)
                 $userAccountValues[] = $item['token_price'];
 
