@@ -23,7 +23,7 @@ class WebApp extends Component
      * Recupera casualmente il primo nodo POA disponibile
      * @return nodeurl
      */
-    public static function getPoaNode($blockchain_id)
+    public static function getPoaNode($blockchain_id = 1)
     {
         $blockchain = Blockchains::findOne($blockchain_id);
         $nodes = $blockchain->nodes;

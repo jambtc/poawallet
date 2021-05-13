@@ -13,6 +13,7 @@ use yii\base\Model;
 
 use yii\helpers\Json;
 use yii\helpers\Url;
+use app\components\WebApp;
 
 class NetworkController extends Controller
 {
@@ -67,9 +68,8 @@ class NetworkController extends Controller
 	 */
 	public function actionIndex()
  	{
-
  		return $this->render('index', [
-			//'formModel' => $formModel,
+			'node' => WebApp::getPoaNode(),
 		]);
  	}
 
