@@ -21,7 +21,11 @@ NavBar::end();
 		<div class="nav-container">
 			<ul class="main-menu">
 				<li class="">
-					<a href="<?= Url::to(['/wallet/index']) ?>"><img src="css/img/content/icons/2.png" alt=""><strong class="special"><?= Yii::t('app','My Wallet') ?></strong> </a>
+					<a href="<?= Url::to(['/wallet/index']) ?>">
+						<!-- <img src="css/img/content/icons/2.png" alt=""> -->
+						<i class="fas fa-wallet fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','My Wallet') ?></strong>
+					</a>
 				</li>
 				<li class="">
 					<a href="<?= Url::to(['/send/index']) ?>">
@@ -45,12 +49,16 @@ NavBar::end();
 					</a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>"><img src="css/img/content/icons/5.png" alt=""><strong class="special"><?= Yii::t('app','Profile') ?></strong> </a>
+					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>">
+						<!-- <img src="css/img/content/icons/5.png" alt=""> -->
+						<i class="fas fa-user-circle fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','Profile') ?></strong>
+					</a>
 				</li>
-				<li><i class="fa fa-logout"></i><?php
+				<li><?php
 			             echo Html::beginForm(['/site/logout'], 'post')
 			                . Html::submitButton(
-			                  'Logout (' . Yii::$app->user->identity->first_name . ')',
+			                  '<i class="fa fa-sign-out-alt fa-lg mr-4"></i>'.Yii::t('app','Logout').' (' . Yii::$app->user->identity->first_name . ')',
 			                  ['class' => 'btn btn-link logout']
 			                  )
 			                  . Html::endForm();

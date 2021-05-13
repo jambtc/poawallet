@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-
 \yii\web\YiiAsset::register($this);
 
 // include ('sparkline_js.php');
@@ -158,13 +156,23 @@ include ('manage-push_js.php');
 			<i class="fa fa-link text-primary"></i>
 			<em class="seperate"></em>
 			<span class="list-item-title"><?php echo Yii::t('app','Scan the blockchain');?>
-				<small class="text-muted"></small></span>
-
+				<small class="text-muted"></small>
+			</span>
 			<div class="blockchainRescan sweet-check">
 				<div class="outline">
 					<span></span>
 				</div>
 			</div>
+		</div>
+	</div>
+
+	<div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-network-wired text-primary"></i>
+			<em class="seperate"></em>
+			<span class="list-item-title"><?php echo Yii::t('app','Scan the network');?>
+				<small class="text-muted"></small>
+			</span>
 		</div>
 	</div>
 

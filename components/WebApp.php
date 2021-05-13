@@ -150,12 +150,17 @@ class WebApp extends Component
           $price = '- '.$data->token_price;
           $color = 'red';
           $addressToShow = $data->to_address;
+          $coinImg = 'fa-arrow-up text-danger';
+          $recipient = Yii::t('app','To: ');
         } else {
           $price = $data->token_price;
           $color = 'green';
           $addressToShow = $data->from_address;
+          $coinImg = 'fa-arrow-down text-success';
+          $recipient = Yii::t('app','From: ');
         }
-        $coinImg = ($data->type == 'token') ? 'coin5' : 'coin2';
+        // $coinImg = ($data->type == 'token') ? 'coin5' : 'coin2';
+
         $classStatus = ($data->status == 'complete') ? 'bg-success' : 'bg-secondary';
         $newTxClass = ($newTransaction == true) ? 'bg-newtransaction' : '';
 
@@ -166,20 +171,18 @@ class WebApp extends Component
                   <div class="col-12 m-0 p-0">
                       <div class="card shadow">
                           <div class="transaction-card-horizontal '.$newTxClass.'">
-                              <div class="img-square-wrapper">
-                                  <img class="img-xxs pl-1 pt-2" src="css/img/content/'.$coinImg.'.png" alt="coin image">
-                                  <!-- <center><small>'.$data->id.'</small></center> -->
-
+                              <div class="img-square-wrapper ">
+                                  <i class="pt-2 fas fa-2x '.$coinImg.'"></i>
                               </div>
-                              <div class="transaction-card-body ml-1">
-                                  <h6 class="card-title pt-2">
-                                    <small class="d-inline-block text-truncate" style="max-width: 190px;">'.$addressToShow.'</small>
-                                  </h6>
+                              <div class="transaction-card-body ml-1 mb-0">
+                                  <span class="card-title">
+                                    <small class="pt-1 d-inline-block text-truncate" style="max-width: 225px;">'.$recipient.$addressToShow.'</small>
+                                  </span>
                                   <p class="card-text">
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
                               </div>
-                              <div class="card-footer">
+                              <div class="card-footer py-0">
                                   <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
                                   <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
                                   .self::encrypt($data->id).'">'.$data->status.'</small>
