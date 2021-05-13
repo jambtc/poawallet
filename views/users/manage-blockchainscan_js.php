@@ -10,6 +10,9 @@ $(function () {
     // check click su slider
     var blockchainRescanSlider = document.querySelector('.blockchainRescan');
     blockchainRescanSlider.addEventListener('click', function(){
+        wssstop = 1;
+        webSocket.close();
+        console.log('[ws] websocket close', wssstop);
         $('#blockchainScanModal').modal({
 			  backdrop: 'static',
 			  keyboard: false
@@ -19,6 +22,7 @@ $(function () {
 
     function resetSlider(className)
     {
+        wssstop = 0;
         $('.'+className).removeClass('checked');
     }
 
@@ -49,14 +53,6 @@ $(function () {
 
         });
 	});
-
-
-
-
-
-
-
-
 });
 
 

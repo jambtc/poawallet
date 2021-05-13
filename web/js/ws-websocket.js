@@ -1,10 +1,15 @@
+let wssstop = 0;
+let webSocket;
+console.log('wss-stop',wssstop);
+
 $(function () {
     var countError = 0;
     let wssalert = document.getElementById('wss_server');
+
     startWebSocket();
 
     function startWebSocket(){
-        var webSocket = new WebSocket(yiiGlobalOptions.WebSocketServerAddress);
+        webSocket = new WebSocket(yiiGlobalOptions.WebSocketServerAddress);
 
         // console.log('[ws] readyState:', readyState);
         // all'apertura leggi il numero di blocchi
@@ -85,7 +90,8 @@ $(function () {
     function getWsState(ws){
         var readyState = ws.readyState;
         console.log('[ws] readyState:', readyState);
-        if (readyState == 3){
+        console.log('[ws] readyStop:', wssstop);
+        if (readyState == 3 && wssstop == 0){
             startWebSocket();
         }else{
             setTimeout(function(){
