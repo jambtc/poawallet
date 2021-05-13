@@ -7,7 +7,7 @@ use app\assets\ClipboardCopyAsset;
 $this->title = Yii::$app->id;
 
 $qrCode = (new QrCode($fromAddress))
-    ->setSize(200)
+    ->setSize(600)
     ->setMargin(5)
     // ->useForegroundColor(51, 153, 255);
     ->useForegroundColor(11, 21, 31);
@@ -20,7 +20,7 @@ ClipboardCopyAsset::register($this);
     <div class="dash-balance">
 
         <div class="card text-center ">
-            <?php echo '<img class="card-img-top" src="' . $qrCode->writeDataUri() . '">'; ?>
+            <?php echo '<img style="max-width:300px;" class="rounded mx-auto mt-4 d-block" src="' . $qrCode->writeDataUri() . '">'; ?>
             <div class="card-header">
                 <?= Yii::t('app','Click on address to copy in the clipboard') ?>
             </div>

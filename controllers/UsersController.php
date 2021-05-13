@@ -79,6 +79,54 @@ class UsersController extends Controller
 
         $total_transactions = $sent['count'] + $received['count'];
 
+        // genero array per il grafico
+        $chart = Transactions::find()
+            ->orwhere(['=','from_address', $wallet->wallet_address])
+            ->orwhere(['=','to_address', $wallet->wallet_address])
+            ->andWhere(['status'=>'complete'])
+            ->select('token_price')
+            //->all()
+            ;
+
+
+
+        $userAccountValues = [0.01];
+        $increase = 0;
+        $color = 'gray';
+        $arrow = 'arrows-alt-v';
+        if ($chart->count() > 0){
+            foreach ($chart as $item)
+                $userAccountValues[] = $item['token_price'];
+
+            // echo count($userAccountValues);
+            // exit;
+            $last1 = $userAccountValues[count($userAccountValues)-1];
+            $last2 = $userAccountValues[count($userAccountValues)-2];
+
+            if ($last1 > $last2){
+                $increase = round($last1 / $last2 *100, 2);
+                $color = 'green';
+                $arrow = 'up';
+            } else {
+                $increase = round($last2 / $last1 *100, 2);
+                $color = 'red';
+                $arrow = 'down';
+            }
+        }
+
+
+
+        $userAccountValueArray = [
+            'accountValues' => $userAccountValues,
+            'balance' => $received['sum'] - $sent['sum'],
+            'increase' => $increase,
+            'color' => $color,
+            'arrow' => $arrow,
+        ];
+
+
+        // echo '<pre>'.print_r($userAccountValueArray,true);exit;
+
         return $this->render('view', [
             'model' => $this->findModel(WebApp::decrypt($id)),
             'sent' => $sent,
@@ -86,6 +134,7 @@ class UsersController extends Controller
             'transactions' => $total_transactions,
             'percent_sent' => $sent['count'] / (1+$total_transactions) * 100,
             'percent_received' => $received['count'] / (1+$total_transactions) * 100,
+            'userAccountValueArray' => $userAccountValueArray
         ]);
 
     }

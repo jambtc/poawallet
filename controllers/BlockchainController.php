@@ -106,11 +106,16 @@ class BlockchainController extends Controller
 		   ->andWhere(['id_user'=>Yii::$app->user->id])
 		   ->one();
 
+		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
+
 
 		$ERC20 = new Yii::$app->Erc20(1);
 		$blockLatest = $ERC20->getBlockInfo();
 
-   		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
+		if (!is_object($blockLatest))
+			return false;
+
+
 		$chainBlock = $blockLatest->number;
 		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) -14 );
 
@@ -121,13 +126,17 @@ class BlockchainController extends Controller
 		for ($x=0; $x <= 15; $x++)
 		{
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
+				$transactions = [];
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 			   	// ricerco le informazioni del blocco tramite il suo numero
 				$block = $ERC20->getBlockInfo($searchBlock,true);
-				$transactions = $block->transactions;
+
+				if (is_object($block))
+					$transactions = $block->transactions;
+
+				// echo '<pre>'.print_r($block,true).'</pre>';exit;
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
-				// echo '<pre>'.print_r($transactions,true).'</pre>';
 				// exit;
 
 				if (!empty($transactions))
@@ -322,9 +331,13 @@ class BlockchainController extends Controller
 	   // echo "\r\n<pre>differenza è: $difference</pre>";
 	   // echo "\r\n<pre>txfound è : ".$this->getTransactionsFound() ."</pre>";
 	   // echo '\r\n<pre>il transactiopn found finale è'.print_r($this->getTransactionsFound(),true).'</pre>';
-	   $timeToComplete = time() - hexdec($block->timestamp);
 
-	   $txFound = $this->getTransactionsFound();
+	    if (is_object($block))
+	   		$timeToComplete = time() - hexdec($block->timestamp);
+		else
+			$timeToComplete = time();
+
+		$txFound = $this->getTransactionsFound();
 	    // if (!(empty($txFound)))
 	    //     $this->log("getTransaction: <pre>".print_r($txFound,true)."</pre>\n");
 
@@ -337,7 +350,7 @@ class BlockchainController extends Controller
 	   	'searchFromBlockNumber' => $savedBlock,
 	   	// "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
 	   	"transactions"=>$txFound,
-	   	 "walletBlocknumber"=>$searchBlock,
+	   	 "walletBlocknumber"=>$wallets->blocknumber,
 	   	 "chainBlocknumber"=>$chainBlock,
 	   	 "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
 	   	 "difference"=> $difference,
@@ -345,11 +358,7 @@ class BlockchainController extends Controller
 	   	 "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
 	   ];
 
-
 	   // $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
-
-
-
 
 		return $this->json($return);
 

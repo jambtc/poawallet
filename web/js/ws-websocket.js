@@ -40,9 +40,12 @@ $(function () {
         // gestico i messaggi di risposta dal server
         webSocket.onmessage = function(e) {
             var response = JSON.parse(e.data);
+            console.log('[ws] Json response is: ', response);
 
             if (response.success == true){
                 $('.pulse-button').removeClass('pulse-button-offline');
+
+                networkDetails(response);
 
                 // analizzare la risposta delle transazioni
                 var transactions = response.transactions;
@@ -126,4 +129,16 @@ $(function () {
         $('.star-total-balance').addClass('animationStar');
         $('#total-balance').text(tx.balance);
     }
+
+    function networkDetails(r){
+        if ($('.network-details').length){
+            $('.network-block-number').text(r.chainBlocknumber);
+            $('.network-block-wallet').text(r.walletBlocknumber);
+            $('.network-block-percentage').text(r.percentageCompletion);
+            $('.network-block-relativeTime').text(r.relativeTime);
+        }
+    }
+
+
+
 });

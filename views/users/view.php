@@ -1,25 +1,33 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
+use app\assets\AccountValueAsset;
 
-\yii\web\YiiAsset::register($this);
 
-// include ('sparkline_js.php');
+// impostazioni variabili
+$options = [
+    'accountValueArray' => $userAccountValueArray['accountValues'],
+];
+$this->registerJs(
+    "var yiiUserOptions = ".\yii\helpers\Json::htmlEncode($options).";",
+    yii\web\View::POS_HEAD,
+    'yiiUserOptions'
+);
+
+AccountValueAsset::register($this);
+
 include ('manage-blockchainscan_js.php');
 include ('manage-options_js.php');
 include ('manage-pin_js.php');
 include ('manage-masterseed_js.php');
 include ('manage-push_js.php');
 
-
 ?>
 <div class="dash-balance">
 	<div class="dash-content relative">
 		<h3 class="w-text"><?= Yii::t('app','User Profile') ?></h3>
-		<!-- <div class="notification">
-			<a href="#"><i class="fa fa-plus"></i></a>
-		</div> -->
 	</div>
 </div>
 <section class="container bal-section">
@@ -64,6 +72,31 @@ include ('manage-push_js.php');
             </div>
         </div>
 	</div>
+</section>
+
+
+<section class="mt-15 mb-15 container">
+	<div class="coin-box">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <img class="img-xs" src="css/img/content/coin2.png" alt="coin image">
+                <div class="ml-10">
+                  <h3 class="coin-name"><?= Yii::t('app','Balance') ?></h3>
+                  <small class="text-muted"><?= $userAccountValueArray['balance'] ?> </small>
+                </div>
+            </div>
+            <div>
+                <small class="d-block mb-0 txt-<?= $userAccountValueArray['color'] ?>">
+                    <i class="txt-<?= $userAccountValueArray['color'] ?> fa fa-arrow-<?= $userAccountValueArray['arrow'] ?> mr-10 mb-5"></i>
+                    <?= $userAccountValueArray['increase'] ?>%
+                </small>
+            </div>
+        </div>
+        <div class="watch-chart mt-15">
+            <span class="accountValue"><canvas width="252" height="80" style="display: inline-block; width: 252px; height: 80px; vertical-align: top;"></canvas></span>
+        </div>
+
+    </div>
 </section>
 
 <form id="settingsForm bg-primary">
@@ -170,9 +203,11 @@ include ('manage-push_js.php');
 		<div class="list-item">
 			<i class="fa fa-network-wired text-primary"></i>
 			<em class="seperate"></em>
-			<span class="list-item-title"><?php echo Yii::t('app','Scan the network');?>
-				<small class="text-muted"></small>
-			</span>
+			<a href="<?= Url::to(['network/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Scan the network');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
 		</div>
 	</div>
 

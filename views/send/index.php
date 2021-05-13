@@ -16,7 +16,7 @@ $form = ActiveForm::begin([
 	'layout' => 'horizontal',
 	'fieldConfig' => [
 		'template' => "{label}\n<div class=\"col-lg-12\">{input}</div>\n{error}\n<div class=\"col-lg-8\">{error}</div>",
-		'labelOptions' => ['class' => 'col-lg-1 control-label'],
+		'labelOptions' => ['class' => 'col-lg-12 control-label'],
 	],
 
 ]);
