@@ -27,7 +27,7 @@ use Web3\Web3;
 
 class CommandsServer extends WebSocketServer
 {
-    public $maxBlocksToScan = 17;
+    public $maxBlocksToScan = 11;
     public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
