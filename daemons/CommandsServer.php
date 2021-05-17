@@ -156,7 +156,9 @@ class CommandsServer extends WebSocketServer
 
 		$savedBlock = $wallets->blocknumber; //dovrebbe essere già stato salvato in formato hex
 		$SEARCH_ADDRESS = strtoupper($postData['search_address']);
-        $chainBlock = $postData['chainBlocknumber'];
+
+
+        //$chainBlock = $postData['chainBlocknumber'];
 
         // echo '\r\n<pre>il saved blocknumber è'.print_r($savedBlock,true).'</pre>';
         // echo '\r\n<pre>il transactiopn found è'.print_r($this->getTransactionsFound(),true).'</pre>';
@@ -164,6 +166,9 @@ class CommandsServer extends WebSocketServer
         //Carico i parametri della webapp
         $ERC20 = new Yii::$app->Erc20(1);
 		$settings = Settings::poa(1);
+
+        $blockInfo = $ERC20->getBlockInfo();
+        $chainBlock = $blockInfo->number;
 
 		// numero massimo di blocchi da scansionare
 		// if (isset($settings->maxBlocksToScan))
@@ -405,7 +410,7 @@ class CommandsServer extends WebSocketServer
 
        // echo "\r\n<pre>fine funzione</pre>";
        $difference = hexdec($chainBlock) - hexdec($searchBlock);
-       $percentageCompletion = round(hexdec($searchBlock) / hexdec($chainBlock) * 100, 2);
+       $percentageCompletion = round(hexdec($searchBlock) / hexdec($chainBlock) * 100, 4);
        // echo "\r\n<pre>differenza è: $difference</pre>";
        // echo "\r\n<pre>txfound è : ".$this->getTransactionsFound() ."</pre>";
        // echo '\r\n<pre>il transactiopn found finale è'.print_r($this->getTransactionsFound(),true).'</pre>';
@@ -428,7 +433,9 @@ class CommandsServer extends WebSocketServer
             "difference"=> $difference,
             "user_address"=>$postData['search_address'],
             "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
-            "percentageCompletion" => $percentageCompletion,
+            "percentageCompletion" => $percentageCompletion."%",
+            "latestBlockHash"=>Html::a($blockInfo->hash,$settings->url_block_explorer.'/block/'.hexdec($chainBlock),['target'=>'_blank']),
+            "walletBlockHash"=>Html::a($block->hash,$settings->url_block_explorer.'/block/'.hexdec($searchBlock),['target'=>'_blank']),
         ];
         $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
         $client->send(json_encode($return));

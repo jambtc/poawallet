@@ -136,6 +136,9 @@ $(function () {
             $('.network-block-wallet').text(r.walletBlocknumber);
             $('.network-block-percentage').text(r.percentageCompletion);
             $('.network-block-relativeTime').text(r.relativeTime);
+
+            $('.network-block-hash').html(r.latestBlockHash);
+            $('.network-block-wallet-hash').html(r.walletBlockHash);
         }
     }
 
