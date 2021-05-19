@@ -1,3 +1,4 @@
+
 <?php
 
 namespace app\controllers;
@@ -44,7 +45,6 @@ class BlockchainController extends Controller
     	$this->enableCsrfValidation = false;
     	return parent::beforeAction($action);
 	}
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -219,7 +219,7 @@ class BlockchainController extends Controller
 											   'id_user' => $id_user_from,
 											   'status' => 'complete',
 											   'description' => Yii::t('app','A transaction you sent has been completed.'),
-	                                           'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
+	                                           'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
 											   'timestamp' => $tokens->invoice_timestamp,
 											   'price' => $tokens->token_price,
 										   ];

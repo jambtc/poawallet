@@ -297,7 +297,8 @@ class SendController extends Controller
 				'id_user' => $id_user_from,
 				'status' => 'complete',
 				'description' => Yii::t('app','A transaction you sent has been completed.'),
-				'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id)]),
+				// 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id)]),
+				'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
 				'timestamp' => time(),
 				'price' => $tokens->token_price,
 			];
