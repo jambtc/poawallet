@@ -24,7 +24,6 @@ var STATIC_FILES = [
 	'js/global.script.js',
 	'js/clipboard-copy.js',
 	'js/ws-websocket.js',
-	'js/jquery.sparkline.js',
 
 	// search latest transactions
 	'js/ws-latest.js',
@@ -38,7 +37,7 @@ var STATIC_FILES = [
 	'js/pincode/pincode-settings.js',
 	'js/pincode/pincode-utility.js',
 
-	'src/images/icons/app-icon-144x144.png',
+	// 'src/images/icons/app-icon-144x144.png',
 
 	'src/js/promise.js',
 	'src/js/fetch.js',
