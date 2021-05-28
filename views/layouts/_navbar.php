@@ -37,7 +37,7 @@ NavBar::end();
 				<li class="">
 					<a href="<?= Url::to(['/receive/index']) ?>">
 						<!-- <img src="css/img/content/icon2.png" alt=""> -->
-						<i class="fas fa-chevron-circle-down fa-lg text-primary"></i>
+						<i class="fas fa-download fa-lg text-primary"></i>
 						<strong class="special"><?= Yii::t('app','Receive') ?></strong>
 					</a>
 				</li>

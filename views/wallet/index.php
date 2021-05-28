@@ -49,7 +49,7 @@ include ('index_js.php');
                 <div class="serv-item">
                   <a href="<?= $receiveUrl ?>" class="serv-icon">
                       <!-- <img src="css/img/content/icon2.png" class="mb-5" alt=""> -->
-                       <i class="fas fa-chevron-circle-down fa-lg text-primary"></i>
+                       <i class="fas fa-download fa-lg text-primary"></i>
                   </a>
                    <span><?= Yii::t('app','Receive');?> </span>
                 </div>
