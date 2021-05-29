@@ -84,18 +84,31 @@ class UsersController extends Controller
             ->orwhere(['=','from_address', $wallet->wallet_address])
             ->orwhere(['=','to_address', $wallet->wallet_address])
             ->andWhere(['status'=>'complete'])
-            ->select('token_price')
+            ->select('token_price, from_address, to_address')
             ->all();
 
 
+        // echo '<pre>'.print_r($wallet->wallet_address,true);exit;
 
-        $userAccountValues = [0.01];
+        $userAccountValues = [0.00];
         $increase = 0;
         $color = 'gray';
         $arrow = 'arrows-alt-v';
         if (count ($chart) > 0){
-            foreach ($chart as $item)
-                $userAccountValues[] = $item['token_price'];
+            $actualPrice = 0;
+            $symbol = '';
+            foreach ($chart as $item){
+                // echo '<pre>'.print_r($item,true);exit;
+
+                if ($item->from_address == $wallet->wallet_address){
+                    $actualPrice -= $item['token_price'];
+                } else {
+                    $actualPrice += $item['token_price'];
+                }
+
+                $userAccountValues[] = $actualPrice;
+
+            }
 
             // echo count($userAccountValues);
             // exit;
