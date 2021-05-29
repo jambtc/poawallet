@@ -90,7 +90,7 @@ class UsersController extends Controller
 
         // echo '<pre>'.print_r($wallet->wallet_address,true);exit;
 
-        $userAccountValues = [0.00];
+        $userAccountValues = [0.01];
         $increase = 0;
         $color = 'gray';
         $arrow = 'arrows-alt-v';
