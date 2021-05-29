@@ -4,11 +4,11 @@ use yii\bootstrap4\ActiveForm;
 
 use drsdre\wizardwidget;
 use app\components\WebApp;
+use app\assets\QRCodeReaderAsset;
+
+QRCodeReaderAsset::register($this);
 
 $this->title = Yii::$app->id;
-
-
-
 $form = ActiveForm::begin([
 	'id' => 'send-form',
 	'enableAjaxValidation' => true,
@@ -207,9 +207,11 @@ $sendForm->from = $fromAddress;
                     </div>
                     <div  class="modal-body" id='camera-body'>
                         <center>
-                            <div id="video-content" class="embed-responsive embed-responsive-4by3 text-center">
-                                <video muted playsinline id="qr-video"></video>
-                                <div id='rounded-box'>&nbsp;</div>
+                            <div id="video-content" class="embed-responsive embed-responsive-3by4 text-center">
+								<!-- <h2>This is some content</h2> -->
+								<p>
+									<video muted playsinline id="qr-video"></video>
+								</p>
                             </div>
                         </center>
                     </div>
