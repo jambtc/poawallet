@@ -1,7 +1,4 @@
-
-<?php
-
-namespace app\controllers;
+<?php namespace app\controllers;
 
 use Yii;
 use yii\filters\AccessControl;

@@ -109,10 +109,20 @@ class RestoreController extends Controller
 				$boltWallet->id_user = Yii::$app->user->id;
 				$block = $ERC20->getBlockInfo();
 
+
+				$json = json_decode($block);
+
+				if (!isset($json->error)){
+					$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
+				} else {
+					$boltWallet->blocknumber = '0x0';
+
+				}
+
+
 				// echo '<pre>'.print_r($block,true);exit;
 
 
-				$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
