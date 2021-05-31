@@ -112,7 +112,7 @@ class RestoreController extends Controller
 				// echo '<pre>'.print_r($block,true);exit;
 
 
-				$boltWallet->blocknumber = ($block->number === null) ? '0x0' : $block->number;
+				$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
