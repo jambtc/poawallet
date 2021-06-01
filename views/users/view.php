@@ -188,7 +188,7 @@ include ('manage-push_js.php');
 		<div class="list-item">
 			<i class="fa fa-link text-primary"></i>
 			<em class="seperate"></em>
-			<span class="list-item-title"><?php echo Yii::t('app','Scan the blockchain');?>
+			<span class="list-item-title"><?php echo Yii::t('app','Reset blockchain');?>
 				<small class="text-muted"></small>
 			</span>
 			<div class="blockchainRescan sweet-check">
@@ -204,7 +204,7 @@ include ('manage-push_js.php');
 			<i class="fa fa-network-wired text-primary"></i>
 			<em class="seperate"></em>
 			<a href="<?= Url::to(['network/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Scan the network');?>
+				<span class="list-item-title"><?php echo Yii::t('app','Scan network');?>
 					<small class="text-muted"></small>
 				</span>
 			</a>
