@@ -8,9 +8,11 @@ use Yii;
  * This is the model class for table "nodes".
  *
  * @property int $id
- * @property string $url
- * @property string $port
+ * @property int $id_user
  * @property int|null $id_blockchain
+ *
+ * @property Blockchains $blockchain
+ * @property Users $user
  */
 class Nodes extends \yii\db\ActiveRecord
 {
@@ -28,11 +30,10 @@ class Nodes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['url', 'port'], 'required'],
-            [['id_blockchain'], 'integer'],
-            [['url'], 'string', 'max' => 255],
-            [['port'], 'string', 'max' => 50],
+            [['id_user'], 'required'],
+            [['id_user', 'id_blockchain'], 'integer'],
             [['id_blockchain'], 'exist', 'skipOnError' => true, 'targetClass' => Blockchains::className(), 'targetAttribute' => ['id_blockchain' => 'id']],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -43,8 +44,7 @@ class Nodes extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'url' => Yii::t('app', 'Url'),
-            'port' => Yii::t('app', 'Port'),
+            'id_user' => Yii::t('app', 'Id User'),
             'id_blockchain' => Yii::t('app', 'Id Blockchain'),
         ];
     }
@@ -57,6 +57,16 @@ class Nodes extends \yii\db\ActiveRecord
     public function getBlockchain()
     {
         return $this->hasOne(Blockchains::className(), ['id' => 'id_blockchain']);
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\MpUsersQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(MpUsers::className(), ['id' => 'id_user']);
     }
 
     /**

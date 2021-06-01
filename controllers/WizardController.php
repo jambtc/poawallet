@@ -33,13 +33,13 @@ class WizardController extends Controller
 	{
     	$this->enableCsrfValidation = false;
 
-			$session = Yii::$app->session;
-			$token = $session->get('token-wizard');
-			if ($token === null || $token != $_GET['token']) {
-				Yii::$app->response->statusCode = 403;
-				return false;
-			}
-			$session->remove('token-wizard');
+		// $session = Yii::$app->session;
+		// $token = $session->get('token-wizard');
+		// if ($token === null || $token != $_GET['token']) {
+		// 	Yii::$app->response->statusCode = 403;
+		// 	return false;
+		// }
+		// $session->remove('token-wizard');
 
     	return parent::beforeAction($action);
 	}

@@ -1,6 +1,6 @@
 {
-  "name": "MegaPay Wallet",
-  "short_name": "MegaPay",
+  "name": "Poa Wallet",
+  "short_name": "Poa Wallet",
   "icons": [
     {
       "src": "src/images/icons/app-icon-48x48.png",
@@ -12,7 +12,7 @@
       "type": "image/png",
       "sizes": "96x96"
     },
-    
+
     {
       "src": "src/images/icons/app-icon-192x192.png",
       "type": "image/png",
@@ -40,7 +40,7 @@
   "orientation": "portrait-primary",
   "background_color": "#fff",
   "theme_color": "#3f51b5",
-  "description": "A wallet using ERC20 Tokens, implementing a lot of PWA love.",
+  "description": "A wallet using ERC20 and BEP20 Tokens, implementing a lot of PWA love.",
   "dir": "ltr",
   "lang": "it-IT"
 }

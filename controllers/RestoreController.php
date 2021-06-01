@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 
 use app\models\WizardWalletForm;
 use app\models\MPWallets;
+use app\models\Nodes;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -99,11 +100,24 @@ class RestoreController extends Controller
 		}
 
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+			// controllo se sono inseriti dei nodi all'interno del db
+			$nodes = Nodes::findOne(1);
+
+			if (null === $nodes){
+				// entro nella richiesta di selezione o inserimento del nodo
+				return $this->redirect(['/settings/blockchains/index']);
+			}
+			echo '<pre> [nodes]'.print_r($nodes,true);exit;
+
+
+
+
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
+
 			if(null === $boltWallet) {
-			  //doesn't exist so create record
+			  	//doesn't exist so create record
 			  	$ERC20 = new Yii::$app->Erc20(1); // blockchain id -> 1
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;

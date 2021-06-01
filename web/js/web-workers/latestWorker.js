@@ -33,7 +33,7 @@ var blockchain = {
         })
         .then(function(json) {
 
-            // console.log('[bc worker] response', json);
+            console.log('[bc worker] response', json);
 
             var transactions = json.transactions;
             console.log('[bc] Transactions are: ', transactions);

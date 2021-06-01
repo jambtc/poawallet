@@ -3,9 +3,9 @@
 namespace app\models\query;
 
 /**
- * This is the ActiveQuery class for [[Nodes]].
+ * This is the ActiveQuery class for [[\app\models\Nodes]].
  *
- * @see Nodes
+ * @see \app\models\Nodes
  */
 class NodesQuery extends \yii\db\ActiveQuery
 {
@@ -16,7 +16,7 @@ class NodesQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Nodes[]|array
+     * @return \app\models\Nodes[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class NodesQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return Nodes|array|null
+     * @return \app\models\Nodes|array|null
      */
     public function one($db = null)
     {

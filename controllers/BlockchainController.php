@@ -103,6 +103,10 @@ class BlockchainController extends Controller
 		   ->andWhere(['id_user'=>Yii::$app->user->id])
 		   ->one();
 
+		if (null === $wallets){
+			return Json::encode(['success'=>false]);
+		}
+
 		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 
 
@@ -110,7 +114,7 @@ class BlockchainController extends Controller
 		$blockLatest = $ERC20->getBlockInfo();
 
 		if (!is_object($blockLatest))
-			return false;
+			return Json::encode(['success'=>false]);
 
 
 		$chainBlock = $blockLatest->number;

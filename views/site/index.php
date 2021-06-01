@@ -14,7 +14,7 @@ $this->title = Yii::$app->id;
         <div class="form-divider"></div>
 
         <h5 class="txt-white">
-          <?php echo Yii::$app->id; ?> – <?= Yii::t('app','is a mobile-based website ideal to pay for things like, electricity bills, event tickets, charity and more. Built with the');?> <span class="txt-orange">Yii2 Framework</span><?= Yii::t('app',', with a clean and modern design, and a user friendly layout.') ?>
+          <?php echo Yii::$app->id; ?> – <?= Yii::t('app','a Progressive Web App. It works with several crypto tokens and blockchains. With Poa Wallet, you are in control over your funds. Receive, send, store and exchange your cryptocurrency within the mobile interface.') ?>
         </h5>
 
         <div class="form-divider"></div>
