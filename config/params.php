@@ -30,4 +30,6 @@ return [
     'telegram.clientId' => $secrets['telegram_client_id'],
     'telegram.clientSecret' => $secrets['telegram_client_secret'],
 
+    'websocket_url' => $secrets['websocket_url'],
+
 ];
