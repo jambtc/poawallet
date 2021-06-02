@@ -26,31 +26,38 @@ class WebApp extends Component
     public static function getPoaNode($blockchain_id = 1)
     {
         $blockchain = Blockchains::findOne($blockchain_id);
-        $nodes = $blockchain->nodes;
+        // $nodes = $blockchain->nodes;
+        //
+        // $nodelist = ArrayHelper::map(
+        //     $nodes,
+        //     'id_node',
+        //     function ($item, $defaultValue) {
+        //         return $item->url . ':' . $item->port;
+        //     }
+        // );
+        //
+        // $isdown = true;
+        // shuffle($nodelist);
+        // do {
+        //     $node = array_shift($nodelist);
+        //
+        //     if (empty($node)){
+        //         return false;
+        //     }
+        //
+        //     if( self::checkUrl( $node ) ) {
+        //         $isdown = false;
+        //     }
+        // } while ($isdown);
 
-        $nodelist = ArrayHelper::map(
-            $nodes,
-            'id_node',
-            function ($item, $defaultValue) {
-                return $item->url . ':' . $item->port;
-            }
-        );
+        // return $node;
 
-        $isdown = true;
-        shuffle($nodelist);
-        do {
-            $node = array_shift($nodelist);
-
-            if (empty($node)){
-                return false;
-            }
-
-            if( self::checkUrl( $node ) ) {
-                $isdown = false;
-            }
-        } while ($isdown);
-
-        return $node;
+        if( self::checkUrl( $blockchain->url ) ) {
+            return false;
+        }
+        // echo $blockchain->url;
+        // exit;
+        return $blockchain->url;
     }
     /**
 	 * PHP/cURL function to check a web site status. If HTTP status is not 200 or 302, or

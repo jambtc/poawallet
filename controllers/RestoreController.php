@@ -107,10 +107,7 @@ class RestoreController extends Controller
 				// entro nella richiesta di selezione o inserimento del nodo
 				return $this->redirect(['/settings/blockchains/index']);
 			}
-			echo '<pre> [nodes]'.print_r($nodes,true);exit;
-
-
-
+			// echo '<pre> [nodes]'.print_r($nodes,true);exit;
 
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
@@ -118,7 +115,7 @@ class RestoreController extends Controller
 
 			if(null === $boltWallet) {
 			  	//doesn't exist so create record
-			  	$ERC20 = new Yii::$app->Erc20(1); // blockchain id -> 1
+			  	$ERC20 = new Yii::$app->Erc20($nodes->id_blockchain); // blockchain id -> 1
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
 				$block = $ERC20->getBlockInfo();
