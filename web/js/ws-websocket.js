@@ -14,7 +14,7 @@ $(function () {
         // console.log('[ws] readyState:', readyState);
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
-            $('.pulse-button').addClass('pulse-button-offline');
+            // $('.pulse-button').addClass('pulse-button-offline');
             hideWssAlert();
             console.log('[ws] onopen user_id:', yiiGlobalOptions.cryptedIdUser);
             webSocket.send( JSON.stringify({

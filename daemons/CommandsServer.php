@@ -11,13 +11,12 @@ use app\models\MPWallets;
 use app\models\Transactions;
 use app\models\NotificationsReaders;
 use app\models\Notifications;
-
+use app\models\Nodes;
 
 use yii\web\Response;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Html;
-
 
 use app\components\WebApp;
 use app\components\Settings;
@@ -112,7 +111,9 @@ class CommandsServer extends WebSocketServer
    			 "success"=>false,
              'command'=>'check-transactions',
    		];
-        $ERC20 = new Yii::$app->Erc20(1);
+
+        $node = Nodes::find()->where(['id_user'=>$user_id])->one();
+        $ERC20 = new Yii::$app->Erc20($node->id);
         // $this->log("result<pre>".print_r($return,true)."</pre>\n");   exit;
         $blockLatest = $ERC20->getBlockInfo();
 
@@ -164,8 +165,10 @@ class CommandsServer extends WebSocketServer
         // echo '\r\n<pre>il transactiopn found è'.print_r($this->getTransactionsFound(),true).'</pre>';
 
         //Carico i parametri della webapp
-        $ERC20 = new Yii::$app->Erc20(1);
-		$settings = Settings::poa(1);
+        $node = Nodes::find()->where(['id_user'=>$client->user_id])->one();
+        $ERC20 = new Yii::$app->Erc20($node->id);
+
+		// $settings = Settings::poa($node->id_user);
 
         $blockInfo = $ERC20->getBlockInfo();
         $chainBlock = $blockInfo->number;
@@ -182,17 +185,18 @@ class CommandsServer extends WebSocketServer
         for ($x=0; $x < $maxBlockToScan;$x++)
 		{
             $this->log('Inizio il ciclo: '.$x. ' sul blocco n. 0x'.dechex((hexdec($savedBlock)+$x)));
-            $this->log('Il massimo è: 0x'.dechex(hexdec($chainBlock)));
 
             if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock))
             {
+                $this->log('Il massimo è: 0x'.dechex(hexdec($chainBlock)));
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 			   	// ricerco le informazioni del blocco tramite il suo numero
 
 
-                $block = Yii::$app->Erc20->getBlockInfo($searchBlock,true);
+                $block = $ERC20->getBlockInfo($searchBlock,true);
                 // $this->log("Informazioni sul blocco: <pre>".print_r($block,true)."</pre>\n");
+
                 $transactions = $block->transactions;
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
 				$this->log('Transazioni è: <pre>'.print_r($transactions,true).'</pre>');
@@ -206,7 +210,7 @@ class CommandsServer extends WebSocketServer
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
-						if (strtoupper($transaction->to) <> strtoupper($settings->smart_contract_address) ){
+						if (strtoupper($transaction->to) <> strtoupper($node->smartContract->smart_contract_address) ){
 							$this->log(" : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
@@ -239,7 +243,7 @@ class CommandsServer extends WebSocketServer
 									   $timestamp = 0;
 									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $settings->decimals
+										   $node->smartContract->decimals
 									   ); // decimali del token
 									   $rate = 1; //eth::getFiatRate('token');
 
@@ -317,7 +321,7 @@ class CommandsServer extends WebSocketServer
                                       $this->setTransactionsFound([
                                           'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
-                                           'balance' => Yii::$app->Erc20->Balance($postData['search_address']),
+                                           'balance' => $ERC20->Balance($postData['search_address']),
                                            'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                       ]);
 
@@ -435,273 +439,14 @@ class CommandsServer extends WebSocketServer
             "user_address"=>$postData['search_address'],
             "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
             "percentageCompletion" => $percentageCompletion."%",
-            "latestBlockHash"=>Html::a($blockInfo->hash,$settings->url_block_explorer.'/block/'.hexdec($chainBlock),['target'=>'_blank']),
-            "walletBlockHash"=>Html::a($block->hash,$settings->url_block_explorer.'/block/'.hexdec($searchBlock),['target'=>'_blank']),
+            "latestBlockHash"=>Html::a($blockInfo->hash,$node->blockchain->url_block_explorer.'/block/'.hexdec($chainBlock),['target'=>'_blank']),
+            "walletBlockHash"=>Html::a($block->hash,$node->blockchain->url_block_explorer.'/block/'.hexdec($searchBlock),['target'=>'_blank']),
         ];
         $this->log("<pre>il test found finale è: ".print_r($return,true)."</pre>");
         $client->send(json_encode($return));
     }
 
-    /**
-	 * Check user notification messages
-	 */
-    // function commandCheckLatest(ConnectionInterface $client, $msg)
-    // {
-    //     // $this->log("sono in check latest");
-    //
-    //     // inizializza il transactionsFound
-    //     $this->latestTransactionsFound = [];
-    //
-    //     //carico info del wallet
-	// 	$wallets = MPWallets::find()
-	// 	   ->andWhere(['id_user'=>$client->user_id])
-	// 	   ->one();
-    //
-    //     //Carico i parametri della webapp
-   	// 	$settings = Settings::poa(1);
-    //     $ERC20 = new Yii::$app->Erc20(1);
-    //
-	// 	$blockLatest = $ERC20->getBlockInfo();
-    //
-   	// 	$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
-	// 	$chainBlock = $blockLatest->number;
-	// 	$savedBlock = dechex (hexdec($blockLatest->number) -15 );
-    //
-    //
-    //
-    //     // Inizio il ciclo sui blocchi
-	// 	for ($x=0; $x <= 15; $x++)
-	// 	{
-    //         // $this->log('LATEST Inizio il ciclo: '.$x);
-	// 		if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
-	// 			//somma del valore del blocco in decimali
-	// 			$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
-	// 		   	// ricerco le informazioni del blocco tramite il suo numero
-	// 			$block = $ERC20->getBlockInfo($searchBlock,true);
-	// 			$transactions = $block->transactions;
-	// 			// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
-	// 			// echo '<pre>'.print_r($transactions,true).'</pre>';
-	// 			// exit;
-    //
-	// 			if (!empty($transactions))
-	// 			{
-	// 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
-	// 				foreach ($transactions as $transaction)
-	// 				{
-	// 					//controlla transazioni ethereum
-	// 					if (strtoupper($transaction->to) <> strtoupper($settings->smart_contract_address) ){
-	// 						// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
-	// 						$ReceivingType = 'ether';
-	// 				    }else{
-	// 					   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token...\n");
-	// 					   //smart contract
-	// 					   $ReceivingType = 'token';
-	// 					   // $transactionId = $transaction->hash;
-	// 					   // recupero la ricevuta della transazione tramite hash
-	// 					   $transactionContract = $ERC20->getReceipt($transaction->hash);
-    //
-	// 					   if ($transactionContract <> '' && !(empty($transactionContract->logs)))
-	// 					   {
-	// 						   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token non vuota...\n");
-	// 						   $receivingAccount = $transactionContract->logs[0]->topics[2];
-	// 						   $receivingAccount = str_replace('000000000000000000000000','',$receivingAccount);
-    //
-	// 						   // verifica se nella transazione ricevi o hai inviato
-	// 						   if (strtoupper($receivingAccount) == $SEARCH_ADDRESS || strtoupper($transactionContract->from) == $SEARCH_ADDRESS){
-	// 							   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token che appartiene all'utente...\n");
-	// 							   // $save = new Save;
-    //
-	// 							   // carica da db tramite hash (che è univoco)
-	// 							   $tokens = Transactions::find()->findByHash($transactionContract->transactionHash);
-    //
-	// 							   // SE da DB è null, è NECESSARIA LA NOTIFICA per chi invia e riceve
-	// 							   if (null===$tokens){
-	// 								   //$save->WriteLog('bolt','blockchain','SyncBlockchain',"Transaction found but it isn\'t in DB. I\'ll save it in DB.");
-	// 								   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found but it isn\'t in DB. I\'ll save it in DB....\n");
-    //
-	// 								   //salva la transazione
-	// 								   $timestamp = 0;
-	// 								   $transactionValue = $ERC20->wei2eth(
-	// 									   $transactionContract->logs[0]->data,
-	// 									   $settings->decimals
-	// 								   ); // decimali del token
-	// 								   $rate = 1; //eth::getFiatRate('token');
-    //
-	// 								   // con questa funzione recupero il timestamp in cui è stata minata
-	// 								   // la  transazione
-	// 								   // NB: il timestamp è quello sul server POA.
-    //
-	// 								   $blockByHash = $ERC20->getBlockByHash($transaction->blockHash);
-    //
-	// 								   // salvo la transazione NULL in db. Restituisce object
-	// 								   $tokens = new Transactions;
-	// 								   $tokens->id_user = $wallets->id_user;
-	// 						           $tokens->status	= 'complete';
-	// 						           $tokens->type	= 'token';
-	// 						           $tokens->token_price	= $transactionValue;
-	// 						           $tokens->token_received	= $transactionValue;
-	// 						           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
-	// 						           $tokens->expiration_timestamp = hexdec($blockByHash->timestamp) + 60*15;
-	// 						           $tokens->from_address = $transaction->from;
-	// 						           $tokens->to_address = $receivingAccount;
-	// 						           $tokens->blocknumber = $transactionContract->blockNumber;
-	// 						           $tokens->txhash = $transactionContract->transactionHash;
-	// 								   $tokens->message = '';
-	// 								   $tokens->save();
-    //
-	// 								   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Saving transaction: <pre>".print_r($tokens->attributes,true)."</pre>\n");
-	// 								   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction errors: <pre>".print_r($tokens->errors,true)."</pre>\n");
-    //
-	// 								   $dateLN = date("d M `y",$tokens->invoice_timestamp);
-	// 						           $timeLN = date("H:i:s",$tokens->invoice_timestamp);
-    //
-	// 								   $id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
-    //
-    //                                     if ($id_user_from !== null){
-    // 									   // notifica per chi ha inviato (from_address)
-    // 									   $notification = [
-    // 										   'type' => 'token',
-    // 										   'id_user' => $id_user_from,
-    // 										   'status' => 'complete',
-    // 										   'description' => Yii::t('app','A transaction you sent has been completed.'),
-    //                                            'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-    // 										   'timestamp' => $tokens->invoice_timestamp,
-    // 										   'price' => $tokens->token_price,
-    // 									   ];
-    //
-    //                                        // $this->log("quindi salvo il primo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
-    //                                        $messages= Messages::push($notification);
-    //                                        // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
-    //                                    }
-    //
-	// 								   // $save->Notification($notification);
-    //
-	// 								   // notifica per chi riceve (to_address)
-	// 								   $id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
-    //
-    //                                    // perchè id_user_to === null  ???
-    //                                    // potrebbe accadere che la trtansazione viene inviata da
-    //                                    // METAMASK o da altra applicazione quindi non trovo
-    //                                    // l'indirizzo di quel particolare user nella tabella
-    //                                    // quindi NON INVIO il messaggio
-    //                                    if ($id_user_to !== null){
-    //                                        $notification['id_user'] = $id_user_to;
-    // 									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
-    //
-    //                                         // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
-    //                                        $messages= Messages::push($notification);
-    //                                         // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
-    //                                    } else {
-    //                                         // $this->log("quindi NON invio il messaggio al DESTINATARIO, in quanto non trovato in tabella wallet");
-    //                                    }
-    //
-    //
-    //
-    //                                    // imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
-    //                                   $this->setLatestTransactionsFound([
-    //                                       'id_token' => $tokens->id,
-    //                                        'pushoptions' => $messages,
-	// 									   'balance' => $ERC20->Balance($wallets->wallet_address),
-    //                                        'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
-    //                                   ]);
-    //
-	// 								  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");
-    //
-    //
-    //
-    //
-	// 							   }else{
-	// 								   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transaction on blockchain found and it is found also on DB....\n");
-	// 								   // se NON è NULL notifico solo il ricevente
-	// 								   if (strtoupper($tokens->to_address) == $SEARCH_ADDRESS){
-	// 									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address is to_address....\n");
-    //
-	// 									   if ($tokens->token_received == 0 ){ //&& $tokens->status <> 'complete'){
-	// 										   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Ricevuto è 0....\n");
-    //
-	// 										   $dateLN = date("d M `y",$tokens->invoice_timestamp);
-	// 										   $timeLN = date("H:i:s",$tokens->invoice_timestamp);
-    //                                            $tokens->status = 'complete';
-    //                                            $tokens->token_received = $tokens->token_price;
-    //
-	// 										   $tokens->update();
-	// 										    // $this->log("allora ho aggiornato tabella tokens....\n");
-    //
-    //                                            //salva la notifica
-	// 										   $notification = [
-	// 											  'type' => 'token',
-	// 											  'id_user' => $client->user_id,
-	// 											  'status' => 'complete',
-	// 											  'description' => Yii::t('app','You received a new transaction.'),
-    //                                               'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
-	// 											  'timestamp' => $tokens->invoice_timestamp,
-	// 											  'price' => $tokens->token_price,
-	// 										  ];
-    //
-    //                                            // $this->log("quindi salvo messaggio 3\n: <pre>".print_r($notification,true)."</pre>\n");
-    //
-    //                                           $messages= Messages::push($notification);
-    //                                            // $this->log("che è: <pre>".print_r($messages,true)."</pre>\n");
-    //
-    //                                           $this->setLatestTransactionsFound([
-    //                                               'id_token' => $tokens->id,
-    //                                              'pushoptions' => $messages,
-	// 											 'balance' => $ERC20->Balance($wallets->wallet_address),
-    //                                              'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
-    //                                           ]);
-	// 										  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");
-	// 									   }
-	// 								   }else{
-	// 									   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : The search address non è to_address e quindi non faccio nulla....\n");
-	// 								   } // notifica al ricevente
-	// 							   } // tabella tokens found
-    //
-	// 						   } // if ricevi o hai inviato
-	// 					   }// se transaction contract != ''
-	// 				   } //endif 'ethereum or token'
-	// 			   } // per ogni transazione trovata
-	// 		   }// if not empty transaction
-    //
-	// 		   //aggiorno il numero dei blocchi sul wallet
-	// 		   // print_r($searchBlock);
-	// 		   // $wallets->blocknumber = $searchBlock;
-	// 		   // $wallets->update();
-	// 	   }else{
-	// 		   break;
-	// 	   }
-	//    } // ciclo for
-    //
-    //    $difference = hexdec($chainBlock) - hexdec($searchBlock);
-    //    $percentageCompletion = round(hexdec($searchBlock) / hexdec($chainBlock) * 100, 2);
-    //
-	//    // echo "\r\n<pre>differenza è: $difference</pre>";
-	//    // echo "\r\n<pre>txfound è : ".$this->getTransactionsFound() ."</pre>";
-	//    // echo '\r\n<pre>il transactiopn found finale è'.print_r($this->getTransactionsFound(),true).'</pre>';
-	//    $timeToComplete = time() - hexdec($block->timestamp);
-    //
-	//    $txFound = $this->getLatestTransactionsFound();
-	//     // if (!(empty($txFound)))
-	//     //     $this->log("getTransaction: <pre>".print_r($txFound,true)."</pre>\n");
-    //
-    //
-    //     $return = [
-    //         'success'=>true,
-    //         'command'=>'check-latest',
-    //         "transactions"=>$txFound,
-    //         "walletBlocknumber"=>$searchBlock,
-    //         "chainBlocknumber"=>$chainBlock,
-    //         "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
-    //         "difference"=> $difference,
-    //         "user_address"=>$wallets->wallet_address,
-    //         "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
-    //         "percentageCompletion" => $percentageCompletion,
-    //     ];
-    //
-    //     $this->log("<pre>Latest FINALE è: ".print_r($return,true)."</pre>");
-    //     $client->send(json_encode($return));
-    //
-    // }
-
+    
     /**
 	 * Check user notification messages
 	 */

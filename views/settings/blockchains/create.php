@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="ref-card ">
 			<div class="d-flex align-items-center">
                 <div class="d-flex flex-grow">
-                    <div class="mr-auto">
+                    <div class="col-lg-12">
 
                     <?= $this->render('_form', [
                         'model' => $model,

@@ -151,9 +151,9 @@ class SendController extends Controller
 			throw new HttpException(404,'Cannot decrypt private key.');
 		}
 
-		$settings = Settings::poa(1);
-		$ERC20 = new Yii::$app->Erc20(1);
-		$amountForContract = $amount * pow(10, $settings->decimals);
+		$settings = Settings::poa();
+		$ERC20 = new Yii::$app->Erc20();
+		$amountForContract = $amount * pow(10, $settings->smartContract->decimals);
 
 		// carico il gas in caso questo sia a 0 per inviare transazioni
 		$gasBalance = $ERC20->loadGas($fromAccount);
@@ -171,13 +171,13 @@ class SendController extends Controller
 			$tx = $ERC20->SendToken([
 				'nonce' => $nonce,
 				'from' => $fromAccount, //indirizzo commerciante
-				'contractAddress' => $settings->smart_contract_address, //indirizzo contratto
+				'contractAddress' => $settings->smartContract->smart_contract_address, //indirizzo contratto
 				'toAccount' => $toAccount,
 				'amount' => $amountForContract,
 				'gas' => '0x200b20', // $gas se supera l'importo 0x200b20 va in eerrore gas exceed limit !!!!!!
 				'gasPrice' => '1000', // gasPrice giusto?
 				'value' => '0',
-				'chainId' => $settings->chain_id,
+				'chainId' => $settings->blockchain->chain_id,
 				'decryptedSign' => $decrypted,
 			]);
 
@@ -198,7 +198,7 @@ class SendController extends Controller
 		$invoice_timestamp = $timestamp;
 
 		//calcolo expiration time
-		$totalseconds = $settings->invoice_expiration * 60; //poa_expiration è in minuti, * 60 lo trasforma in secondi
+		$totalseconds = 15 * 60; //poa_expiration è in minuti, * 60 lo trasforma in secondi
 		$expiration_timestamp = $timestamp + $totalseconds; //DEFAULT = 15 MINUTES
 
 		//$rate = $this->getFiatRate(); // al momento il token è peggato 1/1 sull'euro
@@ -259,8 +259,7 @@ class SendController extends Controller
 		$requests = 1;
 
 		$WebApp = new WebApp;
-		$settings = Settings::poa(1);
-		$ERC20 = new Yii::$app->Erc20(1);
+		$ERC20 = new Yii::$app->Erc20();
 
 		$tokens = Transactions::findOne($WebApp->decrypt($_POST['id']));
 

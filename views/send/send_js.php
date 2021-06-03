@@ -5,16 +5,16 @@ use yii\web\View;
 
 use app\components\Settings;
 
-$blockchain = Settings::poa(1);
+$blockchain = Settings::poa();
 
 $options = [
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
-    'poaDecimals' => $blockchain->decimals,
+    'poaDecimals' => $blockchain->smartContract->decimals,
     'invalidAmountError' => Yii::t('app', 'Invalid amount!'),
     'decimalError' => Yii::t('app','Use a maximum of {count} decimal places.',[
-        'count' => $blockchain->decimals,
+        'count' => $blockchain->smartContract->decimals,
     ]),
     'higherError' => Yii::t('app','Amount is higher than Balance.'),
     'recipientError' => Yii::t('app','Recipient address not entered.'),

@@ -166,17 +166,21 @@ $(function () {
                                             id : new Date().toISOString(), // id of indexedDB
                                             cryptedseed : seed_crypted,
                                         }
-                                        writeData('mseed', seedPost)
+                                        clearAllData('mseed')
                                         .then(function() {
-                                            // imposta il valore dell'address nella campo input nascosto
-                                            $('#wizardwalletform-address').val(address);
-                                            // Quindi, chiedo di installare la webapp sulla home del cell
-                                            saveOnDesktop();
-                                            // quindi invio il submit per salvare
-                                            // l'address in archivio
-                                            setTimeout(function(){
-                                                wizardForm.submit ();
-                                            }, 50);
+                                            writeData('mseed', seedPost)
+                                            .then(function() {
+                                                // imposta il valore dell'address nella campo input nascosto
+                                                $('#wizardwalletform-address').val(address);
+                                                // Quindi, chiedo di installare la webapp sulla home del cell
+                                                saveOnDesktop();
+                                                // quindi invio il submit per salvare
+                                                // l'address in archivio
+                                                setTimeout(function(){
+                                                    wizardForm.submit ();
+                                                }, 50);
+                                            });
+
                                         });
                                     });
 

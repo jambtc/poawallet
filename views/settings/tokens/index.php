@@ -8,19 +8,13 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\search\BlockchainsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Blockchains');
+$this->title = Yii::t('app', 'Tokens');
 ?>
 <div class="dash-balance">
 
     <div class="card">
         <div class="card-header">
             <h3 class="card-title "><?= $this->title ?></h3>
-            <?php if ($dataProvider->totalCount == 0): ?>
-                <p>
-                    <?= Yii::t('app','You must insert a Blockchain node'); ?>
-                </p>
-            <?php endif ?>
-
         </div>
         <div class="card-body" >
             <div class="table-responsive">
@@ -55,7 +49,7 @@ $this->title = Yii::t('app', 'Blockchains');
         </div>
         <div class="card-footer text-muted ">
             <?= Html::a('<button type="button" class="btn btn-success float-right">
-                <i class="fas fa-plus"></i> '. Yii::t('app', 'Add Blockchain').'
+                <i class="fas fa-plus"></i> '. Yii::t('app', 'Add Token').'
             </button>', ['create']) ?>
         </div>
     </div>

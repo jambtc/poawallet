@@ -184,11 +184,67 @@ include ('manage-push_js.php');
 		</div>
 	</div>
 
+    <div class="form-divider"></div>
+	<div class="form-label-divider"><span><?= Yii::t('app','Blockchain');?></span></div>
+	<div class="form-divider"></div>
+
+    <div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-network-wired text-primary"></i>
+			<em class="seperate"></em>
+			<a href="<?= Url::to(['settings/nodes/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Select nodes');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
+		</div>
+	</div>
+
 	<div class="list-box">
 		<div class="list-item">
 			<i class="fa fa-link text-primary"></i>
 			<em class="seperate"></em>
-			<span class="list-item-title"><?php echo Yii::t('app','Reset blockchain');?>
+			<a href="<?= Url::to(['network/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Scan network');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
+		</div>
+	</div>
+
+    <div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-link text-info"></i>
+			<em class="seperate"></em>
+			<a href="<?= Url::to(['/settings/blockchains/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Manage blockchain');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
+		</div>
+	</div>
+
+    <div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-star text-info"></i>
+			<em class="seperate"></em>
+			<a href="<?= Url::to(['/settings/tokens/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Manage tokens');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
+		</div>
+	</div>
+
+    <div class="form-divider"></div>
+	<div class="form-label-divider"><span><?= Yii::t('app','Experimental');?></span></div>
+	<div class="form-divider"></div>
+
+    <div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-eraser text-danger"></i>
+			<em class="seperate"></em>
+			<span class="list-item-title text-danger"><?php echo Yii::t('app','Reset blockchain');?>
 				<small class="text-muted"></small>
 			</span>
 			<div class="blockchainRescan sweet-check">
@@ -196,18 +252,6 @@ include ('manage-push_js.php');
 					<span></span>
 				</div>
 			</div>
-		</div>
-	</div>
-
-	<div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-network-wired text-primary"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['network/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Scan network');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
 		</div>
 	</div>
 

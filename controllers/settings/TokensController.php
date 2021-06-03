@@ -3,18 +3,17 @@
 namespace app\controllers\settings;
 
 use Yii;
-use app\models\Blockchains;
-use app\models\search\BlockchainsSearch;
-use app\models\Nodes;
+use app\models\SmartContract;
+use app\models\search\SmartContractsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 
 /**
- * BlockchainsController implements the CRUD actions for Blockchains model.
+ * TokensController implements the CRUD actions for Tokens model.
  */
-class BlockchainsController extends Controller
+class TokensController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -33,12 +32,12 @@ class BlockchainsController extends Controller
 
 
     /**
-     * Lists all Blockchains models.
+     * Lists all Tokens models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new BlockchainsSearch();
+        $searchModel = new SmartContractsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -48,7 +47,7 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Displays a single Blockchains model.
+     * Displays a single Tokens model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -61,13 +60,13 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Creates a new Blockchains model.
+     * Creates a new Tokens model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Blockchains();
+        $model = new SmartContract();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -79,7 +78,7 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Updates an existing Blockchains model.
+     * Updates an existing Tokens model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,7 +98,7 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Deletes an existing Blockchains model.
+     * Deletes an existing Tokens model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -113,15 +112,15 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Finds the Blockchains model based on its primary key value.
+     * Finds the SmartContract model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Blockchains the loaded model
+     * @return SmartContract the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Blockchains::findOne($id)) !== null) {
+        if (($model = SmartContract::findOne($id)) !== null) {
             return $model;
         }
 

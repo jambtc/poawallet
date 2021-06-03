@@ -3,8 +3,6 @@
 namespace app\controllers\settings;
 
 use Yii;
-use app\models\Blockchains;
-use app\models\search\BlockchainsSearch;
 use app\models\Nodes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -12,9 +10,9 @@ use yii\filters\VerbFilter;
 
 
 /**
- * BlockchainsController implements the CRUD actions for Blockchains model.
+ * NodesController implements the CRUD actions for Nodes model.
  */
-class BlockchainsController extends Controller
+class NodesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -38,12 +36,8 @@ class BlockchainsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BlockchainsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('view', [
+            'model' => $this->findModel(Yii::$app->user->id),
         ]);
     }
 
@@ -67,7 +61,7 @@ class BlockchainsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Blockchains();
+        $model = new Nodes();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -79,7 +73,7 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Updates an existing Blockchains model.
+     * Updates an existing Nodes model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -99,7 +93,7 @@ class BlockchainsController extends Controller
     }
 
     /**
-     * Deletes an existing Blockchains model.
+     * Deletes an existing Nodes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -107,21 +101,21 @@ class BlockchainsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        // $this->findModel($id)->delete();
+        //
+        // return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Blockchains model based on its primary key value.
+     * Finds the Nodes model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Blockchains the loaded model
+     * @return Nodes the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Blockchains::findOne($id)) !== null) {
+        if (($model = Nodes::findOne($id)) !== null) {
             return $model;
         }
 

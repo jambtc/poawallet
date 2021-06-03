@@ -109,8 +109,10 @@ class BlockchainController extends Controller
 
 		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 
+		//Carico i parametri della webapp
+		$settings = Settings::poa();
 
-		$ERC20 = new Yii::$app->Erc20(1);
+		$ERC20 = new Yii::$app->Erc20();
 		$blockLatest = $ERC20->getBlockInfo();
 
 		if (!is_object($blockLatest))
@@ -120,8 +122,7 @@ class BlockchainController extends Controller
 		$chainBlock = $blockLatest->number;
 		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) -14 );
 
-		//Carico i parametri della webapp
-		$settings = Settings::poa(1);
+
 
 		// Inizio il ciclo sui blocchi
 		for ($x=0; $x <= 15; $x++)
@@ -146,7 +147,7 @@ class BlockchainController extends Controller
 					foreach ($transactions as $transaction)
 					{
 						//controlla transazioni ethereum
-						if (strtoupper($transaction->to) <> strtoupper($settings->smart_contract_address) ){
+						if (strtoupper($transaction->to) <> strtoupper($settings->smartContract->smart_contract_address) ){
 							// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
@@ -180,7 +181,7 @@ class BlockchainController extends Controller
 									   $timestamp = 0;
 									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $settings->decimals
+										   $settings->smartContract->decimals
 									   ); // decimali del token
 									   $rate = 1; //eth::getFiatRate('token');
 

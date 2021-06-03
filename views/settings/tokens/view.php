@@ -7,27 +7,28 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Blockchains */
 
-$this->title = $model->id;
+$this->title = $model->denomination;
 ?>
 <div class="dash-balance">
 	<div class="dash-content relative">
 		<h3 class="w-text">
-            <a class="text-light" href="<?= Url::to(['settings/blockchains/index']) ?>">
-                <?= Yii::t('app','Blockchain list') ?>
-            </a>
+            <?= Yii::t('app','Token details') ?>
         </h3>
+		<a class="text-light float-right" href="<?= Url::to(['settings/tokens/index']) ?>">
+			<?= Yii::t('app','back') ?>
+		</a>
 	</div>
 </div>
 <section class="mb-2">
     <div class="row">
         <div class="col-lg-12">
-            <div class="card ref-card c3">
+            <div class="card ref-card c2">
 
                 <div class="card-body">
                     <div class="table-responsive">
                         <?= DetailView::widget([
                             'model' => $model,
-                            'options' => ['class' => 'table table-sm m-0 table-striped'],
+                            'options' => ['class' => 'table table-sm m-0 table-striped text-light'],
                             'attributes' => [
                                 [
                                     'attribute' => 'denomination',
@@ -35,9 +36,14 @@ $this->title = $model->id;
                                     'value' => $model->denomination,
                                     'contentOptions' => ['style' => 'width:75%;']
                                 ],
-                                'url:url',
-                                'chain_id',
-                                'url_block_explorer:url',
+								[
+                                    'attribute' => 'smart_contract_address',
+                                    'type' => 'raw',
+                                    'value' => $model->smart_contract_address,
+                                    'contentOptions' => ['class' => 'text-break']
+                                ],
+								'decimals',
+                                'symbol',
                             ],
                         ]) ?>
 

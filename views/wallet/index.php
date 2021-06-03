@@ -40,22 +40,19 @@ include ('index_js.php');
            <div class="services-bulk">
              <div class="content-row">
                 <div class="serv-item">
-                   <a href="<?= $sendUrl ?>" class="serv-icon">
-                       <!-- <img src="css/img/content/icon1.png" class="mb-5" alt=""> -->
+                   <a href="<?= $sendUrl ?>" class="serv-icon btn btn-light p-0">
                        <i class="fa fa-paper-plane fa-lg text-primary"></i>
                    </a>
                    <span><?= Yii::t('app','Send');?> </span>
                 </div>
                 <div class="serv-item">
-                  <a href="<?= $receiveUrl ?>" class="serv-icon">
-                      <!-- <img src="css/img/content/icon2.png" class="mb-5" alt=""> -->
+                  <a href="<?= $receiveUrl ?>" class="serv-icon btn btn-light p-0">
                        <i class="fas fa-download fa-lg text-primary"></i>
                   </a>
                    <span><?= Yii::t('app','Receive');?> </span>
                 </div>
                 <div class="serv-item">
-	                <a href="<?= $tokensUrl ?>" class="serv-icon">
-                        <!-- <img src="css/img/content/p2.png" class="mb-5" alt=""> -->
+	                <a href="<?= $tokensUrl ?>" class="serv-icon btn btn-light p-0">
                          <i class="fa fa-list fa-lg text-primary"></i>
                     </a>
 	                <span><?= Yii::t('app','Transactions');?></span>

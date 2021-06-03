@@ -108,11 +108,32 @@ class SpawnController extends Controller
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
 			if(null === $boltWallet) {
-			  //doesn't exist so create record
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
-				$block = Yii::$app->Erc20->getBlockInfo();
-				$boltWallet->blocknumber = ($block->number === null) ? '0x0' : $block->number;
+				$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
+
+				// controllo se sono inseriti dei nodi all'interno del db
+				$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
+
+				if (null === $node){
+					$boltWallet->blocknumber = '0x0';
+					$boltWallet->save();
+					// entro nella richiesta di selezione del nodo
+					// 2 sono stati già preinseriti
+					return $this->redirect(['/settings/nodes/create']);
+				} else {
+					$ERC20 = new Yii::$app->Erc20($node->id_blockchain); // blockchain id -> 1
+					$block = $ERC20->getBlockInfo();
+					// echo '<pre>'.print_r($block,true);exit;
+					$json = json_decode($block);
+
+					if (!isset($json->error)){
+						$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
+					} else {
+						$boltWallet->blocknumber = '0x0';
+					}
+				}
+				// echo '<pre> [nodes]'.print_r($nodes,true);exit;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 

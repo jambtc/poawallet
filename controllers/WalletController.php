@@ -142,7 +142,6 @@ class WalletController extends Controller
 	}
 
 
-
 	private static function json ($data)
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;

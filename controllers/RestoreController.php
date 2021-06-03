@@ -89,6 +89,8 @@ class RestoreController extends Controller
 	 */
 	public function actionIndex()
  	{
+		// echo '<pre> '.print_r($_POST,true);exit;
+
 		$this->layout = 'wizard';
 
 		$formModel = new WizardWalletForm; //form di input dei dati
@@ -100,40 +102,36 @@ class RestoreController extends Controller
 		}
 
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
-			// controllo se sono inseriti dei nodi all'interno del db
-			$nodes = Nodes::findOne(1);
-
-			if (null === $nodes){
-				// entro nella richiesta di selezione o inserimento del nodo
-				return $this->redirect(['/settings/blockchains/index']);
-			}
-			// echo '<pre> [nodes]'.print_r($nodes,true);exit;
-
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
-
 			if(null === $boltWallet) {
-			  	//doesn't exist so create record
-			  	$ERC20 = new Yii::$app->Erc20($nodes->id_blockchain); // blockchain id -> 1
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
-				$block = $ERC20->getBlockInfo();
+				$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
+				// controllo se sono inseriti dei nodi all'interno del db
+				$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
 
-				$json = json_decode($block);
-
-				if (!isset($json->error)){
-					$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
-				} else {
+				if (null === $node){
 					$boltWallet->blocknumber = '0x0';
+					$boltWallet->save();
+					// entro nella richiesta di selezione del nodo
+					// 2 sono stati già preinseriti
+					return $this->redirect(['/settings/nodes/create']);
+				} else {
+					$ERC20 = new Yii::$app->Erc20($node->id_blockchain); // blockchain id -> 1
+					$block = $ERC20->getBlockInfo();
+					// echo '<pre>'.print_r($block,true);exit;
+					$json = json_decode($block);
 
+					if (!isset($json->error)){
+						$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
+					} else {
+						$boltWallet->blocknumber = '0x0';
+					}
 				}
-
-
-				// echo '<pre>'.print_r($block,true);exit;
-
-
+				// echo '<pre> [nodes]'.print_r($nodes,true);exit;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
