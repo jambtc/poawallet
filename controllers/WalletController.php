@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
 use app\models\Users;
+use app\models\Nodes;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -138,6 +139,8 @@ class WalletController extends Controller
 				'fromAddress' => $fromAddress,
 				'balance' => Yii::$app->Erc20->Balance($fromAddress),
 				'userImage' => $this->loadSocialUser()->picture,
+				'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
+				'symbols' => Nodes::find(['id_user'=>Yii::$app->user->id])->one(),
 		]);
 	}
 

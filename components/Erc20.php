@@ -201,6 +201,28 @@ class Erc20 extends Component
 
 	}
 
+    public function BalanceGas($address)
+    {
+        $settings = Settings::poa();
+        $web3 = new Web3($settings->blockchain->url);
+
+        //recupero il balance
+        $balance = 0;
+        $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
+            $jsonBody = $this->getJsonBody($err);
+
+            if ($jsonBody !== NULL){
+                throw new HttpException(404,$jsonBody['error']['message']);
+            }
+            $balance = $response->toString() ;
+        });
+        $value = (string) $balance * 1;
+		$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
+
+        return $balance;
+
+    }
+
 
 
     public function getBlockInfo($blocknumber = 'latest', $search = false)

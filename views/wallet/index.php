@@ -27,10 +27,27 @@ include ('index_js.php');
        <div class="wallet-address"> -->
             <div class="d-flex align-items-center mt-30">
               <div class="d-flex flex-grow">
-                  <div class="mr-auto">
-                      <h1 class="b-val"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h1>
-                      <p class="g-text mb-0"><?= Yii::t('app','Total Balance');?></p>
-                  </div>
+                  <div class="w-100 pr-5">
+
+
+                      <div class="card">
+                          <div class="card-header">
+                              <?= Yii::t('app','Balance') ?>
+                          </div>
+                          <div class="card-body text-center">
+                              <p class="text-primary">
+                                  <i class="fa fa-star star-total-balance"></i>
+                                  <span id="total-balance"><?= $balance ?>&nbsp;<?= $symbols->smartContract->symbol ?></span>
+                              </p>
+                              <p class="mb-0">
+                                  <i class="fab fa-ethereum"></i>
+                                  <span id="total-balance_gas"><?= $balance_gas ?>&nbsp;<?= $symbols->blockchain->symbol ?></span>
+                              </p>
+                          </div>
+
+                      </div>
+
+                   </div>
                   <div class="ml-auto align-self-end">
                       <a href="<?= $userUrl ?>" class="profile-av"><img src="<?= $userImage ?>"></a>
                   </div>
