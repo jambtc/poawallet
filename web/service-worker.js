@@ -2,7 +2,7 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'poawallet-static-008';
+var CACHE_STATIC_NAME = 'poawallet-static-009';
 var CACHE_DYNAMIC_NAME = 'poawallet-dynamic-008';
 
 var OFFLINE_URL = 'offline.html';

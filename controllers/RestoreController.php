@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
@@ -13,7 +12,6 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-
 use app\models\WizardWalletForm;
 use app\models\MPWallets;
 use app\models\Nodes;
@@ -23,18 +21,12 @@ use app\models\StandardSmartContractValues;
 use app\models\Blockchains;
 use app\models\SmartContracts;
 
-
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
-
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-
 class RestoreController extends Controller
 {
-
 	public function beforeAction($action)
 	{
     	$this->enableCsrfValidation = false;
@@ -84,19 +76,11 @@ class RestoreController extends Controller
 	}
 
 
-
-
-
-
-
-
 	/**
 	 * Show Restore old wallet page
 	 */
 	public function actionIndex()
  	{
-		// echo '<pre> '.print_r($_POST,true);exit;
-
 		$this->layout = 'wizard';
 
 		$formModel = new WizardWalletForm; //form di input dei dati
@@ -171,27 +155,37 @@ class RestoreController extends Controller
 		$default_blockchains = StandardBlockchainValues::find()->all();
 		$default_smartcontracts = StandardSmartContractValues::find()->all();
 
-		foreach ($default_blockchains as $default_blockchain){
-			$blockchain = new Blockchains;
-			$blockchain->id_user = Yii::$app->user->id;
-			$blockchain->denomination = $default_blockchain->denomination;
-			$blockchain->chain_id = $default_blockchain->chain_id;
-			$blockchain->url = $default_blockchain->url;
-			$blockchain->symbol = $default_blockchain->symbol;
-			$blockchain->url_block_explorer = $default_blockchain->url_block_explorer;
-			$blockchain->save();
+		$blockchain = Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		$smartcontract = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
+
+
+		if (null === $blockchain) {
+			foreach ($default_blockchains as $default_blockchain){
+				$blockchain = new Blockchains;
+				$blockchain->id_user = Yii::$app->user->id;
+				$blockchain->denomination = $default_blockchain->denomination;
+				$blockchain->chain_id = $default_blockchain->chain_id;
+				$blockchain->url = $default_blockchain->url;
+				$blockchain->symbol = $default_blockchain->symbol;
+				$blockchain->url_block_explorer = $default_blockchain->url_block_explorer;
+				$blockchain->save();
+			}
 		}
 
-		foreach ($default_smartcontracts as $default_smartcontract){
-			$smartcontract = new SmartContracts;
-			$smartcontract->id_user = Yii::$app->user->id;
-			$smartcontract->id_contract_type = $default_smartcontract->id_contract_type;
-			$smartcontract->denomination = $default_smartcontract->denomination;
-			$smartcontract->smart_contract_address = $default_smartcontract->smart_contract_address;
-			$smartcontract->decimals = $default_smartcontract->decimals;
-			$smartcontract->symbol = $default_smartcontract->symbol;
-			$smartcontract->save();
+		if (null === $smartcontract){
+			foreach ($default_smartcontracts as $default_smartcontract){
+				$smartcontract = new SmartContracts;
+				$smartcontract->id_user = Yii::$app->user->id;
+				$smartcontract->id_contract_type = $default_smartcontract->id_contract_type;
+				$smartcontract->denomination = $default_smartcontract->denomination;
+				$smartcontract->smart_contract_address = $default_smartcontract->smart_contract_address;
+				$smartcontract->decimals = $default_smartcontract->decimals;
+				$smartcontract->symbol = $default_smartcontract->symbol;
+				$smartcontract->save();
+			}
 		}
+
+		return true;
 	}
 
 
