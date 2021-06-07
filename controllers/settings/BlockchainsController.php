@@ -40,6 +40,8 @@ class BlockchainsController extends Controller
     {
         $searchModel = new BlockchainsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query
+					->andWhere(['=','id_user', Yii::$app->user->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

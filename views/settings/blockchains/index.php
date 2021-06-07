@@ -12,7 +12,7 @@ $this->title = Yii::t('app', 'Blockchains');
 ?>
 <div class="dash-balance">
 
-    <div class="card">
+    <div class="card hot txt-white">
         <div class="card-header">
             <h3 class="card-title "><?= $this->title ?></h3>
             <?php if ($dataProvider->totalCount == 0): ?>
@@ -27,7 +27,7 @@ $this->title = Yii::t('app', 'Blockchains');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'layout' => "{summary}\n{items}\n{pager}",
-                    'tableOptions' => ['class' => 'table m-0 table-striped'],
+                    'tableOptions' => ['class' => 'table m-0 table-striped table-sm'],
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
                             // 'id',
@@ -35,7 +35,9 @@ $this->title = Yii::t('app', 'Blockchains');
                                 'attribute' => 'denomination',
                                 'format' => 'raw',
                                 'value' => function ($data) {
-                                    return Html::a($data->denomination, Url::toRoute(['view', 'id' => $data->id]));
+                                    return Html::a($data->denomination, Url::toRoute(['view', 'id' => $data->id]),[
+                                        'class' => 'txt-white'
+                                    ]);
                                 },
                             ],
 

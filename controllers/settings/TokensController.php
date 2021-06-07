@@ -39,6 +39,8 @@ class TokensController extends Controller
     {
         $searchModel = new SmartContractsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query
+            ->andWhere(['=','id_user', Yii::$app->user->id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

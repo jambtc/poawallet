@@ -59,6 +59,7 @@ class BlockchainsSearch extends Blockchains
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_user' => $this->id_user,
         ]);
 
         $query->andFilterWhere(['like', 'denomination', $this->denomination])

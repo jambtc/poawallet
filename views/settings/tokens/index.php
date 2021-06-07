@@ -12,7 +12,7 @@ $this->title = Yii::t('app', 'Tokens');
 ?>
 <div class="dash-balance">
 
-    <div class="card">
+    <div class="card vip txt-white">
         <div class="card-header">
             <h3 class="card-title "><?= $this->title ?></h3>
         </div>
@@ -21,7 +21,7 @@ $this->title = Yii::t('app', 'Tokens');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'layout' => "{summary}\n{items}\n{pager}",
-                    'tableOptions' => ['class' => 'table m-0 table-striped'],
+                    'tableOptions' => ['class' => 'table m-0 table-striped table-sm'],
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
                             // 'id',
@@ -29,7 +29,9 @@ $this->title = Yii::t('app', 'Tokens');
                                 'attribute' => 'denomination',
                                 'format' => 'raw',
                                 'value' => function ($data) {
-                                    return Html::a($data->denomination, Url::toRoute(['view', 'id' => $data->id]));
+                                    return Html::a($data->denomination, Url::toRoute(['view', 'id' => $data->id]),[
+                                        'class' => 'txt-white'
+                                    ]);
                                 },
                             ],
 
