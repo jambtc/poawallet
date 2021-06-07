@@ -24,7 +24,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 // impostazioni variabili globali per tutti i js
 $options = [
     'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
-    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : 'wss://wss.megawallet.tk/wss',
+    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : Yii::$app->params['websocket_url'],
     // ...
 ];
 $this->registerJs(
