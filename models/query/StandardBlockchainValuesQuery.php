@@ -3,11 +3,11 @@
 namespace app\models\query;
 
 /**
- * This is the ActiveQuery class for [[\app\models\SmartContract]].
+ * This is the ActiveQuery class for [[\app\models\StandardBlockchainValues]].
  *
- * @see \app\models\SmartContract
+ * @see \app\models\StandardBlockchainValues
  */
-class SmartContractQuery extends \yii\db\ActiveQuery
+class StandardBlockchainValuesQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class SmartContractQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \app\models\SmartContract[]|array
+     * @return \app\models\StandardBlockchainValues[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class SmartContractQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \app\models\SmartContract|array|null
+     * @return \app\models\StandardBlockchainValues|array|null
      */
     public function one($db = null)
     {

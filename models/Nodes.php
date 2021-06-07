@@ -13,7 +13,7 @@ use Yii;
  * @property int $id_smart_contract
  *
  * @property Blockchains $blockchain
- * @property SmartContract $smartContract
+ * @property SmartContracts $smartContract
  * @property Users $user
  */
 class Nodes extends \yii\db\ActiveRecord
@@ -35,7 +35,7 @@ class Nodes extends \yii\db\ActiveRecord
             [['id_user', 'id_blockchain', 'id_smart_contract'], 'required'],
             [['id_user', 'id_blockchain', 'id_smart_contract'], 'integer'],
             [['id_blockchain'], 'exist', 'skipOnError' => true, 'targetClass' => Blockchains::className(), 'targetAttribute' => ['id_blockchain' => 'id']],
-            [['id_smart_contract'], 'exist', 'skipOnError' => true, 'targetClass' => SmartContract::className(), 'targetAttribute' => ['id_smart_contract' => 'id']],
+            [['id_smart_contract'], 'exist', 'skipOnError' => true, 'targetClass' => SmartContracts::className(), 'targetAttribute' => ['id_smart_contract' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -48,8 +48,8 @@ class Nodes extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
-            'id_blockchain' => Yii::t('app', 'Id Blockchain'),
-            'id_smart_contract' => Yii::t('app', 'Id Smart Contract'),
+            'id_blockchain' => Yii::t('app', 'Blockchain'),
+            'id_smart_contract' => Yii::t('app', 'Smart Contract'),
         ];
     }
 
@@ -70,7 +70,7 @@ class Nodes extends \yii\db\ActiveRecord
      */
     public function getSmartContract()
     {
-        return $this->hasOne(SmartContract::className(), ['id' => 'id_smart_contract']);
+        return $this->hasOne(SmartContracts::className(), ['id' => 'id_smart_contract']);
     }
 
     /**

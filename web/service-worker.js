@@ -3,7 +3,7 @@ importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
 var CACHE_STATIC_NAME = 'poawallet-static-008';
-var CACHE_DYNAMIC_NAME = 'poawallet-dynamic-007';
+var CACHE_DYNAMIC_NAME = 'poawallet-dynamic-008';
 
 var OFFLINE_URL = 'offline.html';
 
@@ -36,8 +36,6 @@ var STATIC_FILES = [
 	'js/pincode/pincode-global.js',
 	'js/pincode/pincode-settings.js',
 	'js/pincode/pincode-utility.js',
-
-	// 'src/images/icons/app-icon-144x144.png',
 
 	'src/js/promise.js',
 	'src/js/fetch.js',

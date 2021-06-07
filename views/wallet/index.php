@@ -3,8 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
-
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
+use app\components\WebApp;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\BoltTokensSearch */
@@ -14,43 +13,39 @@ $this->title = Yii::t('app', 'Wallet');
 
 $receiveUrl = Url::to(['receive/index']);
 $sendUrl = Url::to(['send/index','v'=>time()]);
-$userUrl = Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]);
+$userUrl = Url::to(['users/view','id'=>WebApp::encrypt(Yii::$app->user->identity->id)]);
 $tokensUrl = Url::to(['tokens/index']);
 
 include ('index_js.php');
-
 ?>
 
 
 <div class="dash-balance">
     <!-- <section class="wallets-list container">
        <div class="wallet-address"> -->
-            <div class="d-flex align-items-center mt-30">
+            <div class="d-flex align-items-center mt-10">
               <div class="d-flex flex-grow">
-                  <div class="w-100 pr-5">
-
-
-                      <div class="card">
-                          <div class="card-header">
-                              <?= Yii::t('app','Balance') ?>
+                  <div class="w-100">
+                      <div class="ref-card c1">
+                          <div class="card-header txt-white">
+                              <?= Yii::t('app','Balance on: ') ?><a class="txt-white" href="<?= Url::to(['settings/nodes/index']) ?>"><?= $node->blockchain->denomination ?></a>
                           </div>
-                          <div class="card-body text-center">
-                              <p class="text-primary">
-                                  <i class="fa fa-star star-total-balance"></i>
-                                  <span id="total-balance"><?= $balance ?>&nbsp;<?= $symbols->smartContract->symbol ?></span>
-                              </p>
-                              <p class="mb-0">
-                                  <i class="fab fa-ethereum"></i>
-                                  <span id="total-balance_gas"><?= $balance_gas ?>&nbsp;<?= $symbols->blockchain->symbol ?></span>
-                              </p>
+                          <div class="resources-card-wrapper">
+                              <div class="resources-card bg-transparent txt-white">
+                                  <p class="p-1">
+                                      <i class="fa fa-star star-total-balance"></i>
+                                      <span class="" id="total-balance"><?= WebApp::number_shorten($balance) ?>&nbsp;<?= $node->smartContract->symbol ?></span>
+                                  </p>
+                              </div>
+                              <div class="resources-card bg-transparent txt-white">
+                                  <p class="p-1">
+                                      <i class="fab fa-ethereum"></i>
+                                      <span class="" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?>&nbsp;<?= $node->blockchain->symbol ?></span>
+                                  </p>
+                              </div>
                           </div>
-
                       </div>
-
                    </div>
-                  <div class="ml-auto align-self-end">
-                      <a href="<?= $userUrl ?>" class="profile-av"><img src="<?= $userImage ?>"></a>
-                  </div>
               </div>
             </div>
 
@@ -74,6 +69,12 @@ include ('index_js.php');
                     </a>
 	                <span><?= Yii::t('app','Transactions');?></span>
 	            </div>
+                <div class="serv-item">
+                    <a href="<?= $userUrl ?>" class="serv-icon profile-av p-0">
+                        <img src="<?= $userImage ?>">
+                    </a>
+                    <span><?= Yii::t('app','Profile');?></span>
+                </div>
             </div>
            </div>
         <!-- </div>

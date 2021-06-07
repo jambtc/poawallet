@@ -44,10 +44,11 @@ $sendForm->from = $fromAddress;
 				<div class="d-flex align-items-center">
 				    <div class="d-flex flex-grow">
 				        <div class="mr-auto">
-				            <p class="mb-0"><?= Yii::t('app','Total Balance');?></p>
+				            <p class="mb-0"><?= Yii::t('app','Balance on: ') ?><a href="<?= Url::to(['settings/nodes/index']) ?>"><?= $node->blockchain->denomination ?></a></p>
 				        </div>
 				        <div class="ml-auto align-self-end">
-				            <h3 class="text-muted mt-0 mb-0"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= $balance ?></span> </h3>
+							<p class="text-primary mt-0 mb-0"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= WebApp::number_shorten($balance) ?>&nbsp;<?= $node->smartContract->symbol ?></span> </p>
+							<p class="text-muted mt-0 mb-0"><i class="fab fa-ethereum star-total-balance_gas"></i> <span id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?>&nbsp;<?= $node->blockchain->symbol ?></span> </p>
 				        </div>
 				    </div>
 				</div>

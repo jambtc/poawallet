@@ -18,7 +18,7 @@ $this->registerJs(
 
 AccountValueAsset::register($this);
 
-include ('manage-blockchainscan_js.php');
+// include ('manage-blockchainscan_js.php');
 include ('manage-options_js.php');
 include ('manage-pin_js.php');
 include ('manage-masterseed_js.php');
@@ -138,35 +138,11 @@ include ('manage-push_js.php');
 		</div>
 	</div>
 
-	<!-- <div class="list-box">
-		<div class="list-item">
-			<span class="list-item-title"><?= Yii::t('app','Two factors authentication');?> <small class="text-muted"></small></span>
-
-			<div class="sweet-check checked">
-				<input type="checkbox" name="2fa" value="1" checked="">
-				<div class="outline">
-					<span></span>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 
 
 
 
-	<!-- <div class="list-box">
-		<div class="list-item">
-			<span class="list-item-title"><?php echo Yii::t('app','Save application on Homepage');?> <small class="text-muted"></small></span>
-
-			<div class="sweet-check">
-				<input type="checkbox" name="sourcecode" value="1">
-				<div class="outline">
-					<span></span>
-				</div>
-			</div>
-		</div>
-	</div> -->
 
 	<div class="list-box">
 		<div class="list-item">
@@ -184,76 +160,6 @@ include ('manage-push_js.php');
 		</div>
 	</div>
 
-    <div class="form-divider"></div>
-	<div class="form-label-divider"><span><?= Yii::t('app','Blockchain');?></span></div>
-	<div class="form-divider"></div>
-
-    <div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-network-wired text-primary"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['settings/nodes/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Select nodes');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
-		</div>
-	</div>
-
-	<div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-link text-primary"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['network/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Scan network');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
-		</div>
-	</div>
-
-    <div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-link text-info"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['/settings/blockchains/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Manage blockchain');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
-		</div>
-	</div>
-
-    <div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-star text-info"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['/settings/tokens/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Manage tokens');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
-		</div>
-	</div>
-
-    <div class="form-divider"></div>
-	<div class="form-label-divider"><span><?= Yii::t('app','Experimental');?></span></div>
-	<div class="form-divider"></div>
-
-    <div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-eraser text-danger"></i>
-			<em class="seperate"></em>
-			<span class="list-item-title text-danger"><?php echo Yii::t('app','Reset blockchain');?>
-				<small class="text-muted"></small>
-			</span>
-			<div class="blockchainRescan sweet-check">
-				<div class="outline">
-					<span></span>
-				</div>
-			</div>
-		</div>
-	</div>
 
 	<!-- <div class="list-box">
 		<div class="list-item">

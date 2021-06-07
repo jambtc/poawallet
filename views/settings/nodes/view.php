@@ -47,7 +47,7 @@ $this->title = Yii::t('app', 'View Node');
                 </div>
                 <div class="card-footer border-transparent ">
                     <?= Html::a('<button type="button" class="btn btn-success float-right mr-2">
-                        <i class="fas fa-edit"></i> '. Yii::t('app', 'Update').'
+                        <i class="fas fa-edit"></i> '. Yii::t('app', 'Change').'
                     </button>', ['update','id' => $model->id]) ?>
                 </div>
             </div>

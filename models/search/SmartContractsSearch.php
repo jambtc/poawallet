@@ -4,12 +4,12 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SmartContract;
+use app\models\SmartContracts;
 
 /**
  * SmartContractSearch represents the model behind the search form of `app\models\SmartContract`.
  */
-class SmartContractsSearch extends SmartContract
+class SmartContractsSearch extends SmartContracts
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class SmartContractsSearch extends SmartContract
      */
     public function search($params)
     {
-        $query = SmartContract::find();
+        $query = SmartContracts::find();
 
         // add conditions that should always apply here
 
@@ -59,6 +59,8 @@ class SmartContractsSearch extends SmartContract
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_user' => $this->id_user,
+            'id_contract_type' => $this->id_contract_type,
         ]);
 
         $query->andFilterWhere(['like', 'denomination', $this->denomination])

@@ -5,24 +5,23 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "smart_contract".
+ * This is the model class for table "standard_smart_contract_values".
  *
  * @property int $id
+ * @property int $id_contract_type
  * @property string $denomination
  * @property string $smart_contract_address
  * @property int $decimals
  * @property string $symbol
- *
- * @property Nodes[] $nodes
  */
-class SmartContract extends \yii\db\ActiveRecord
+class StandardSmartContractValues extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'smart_contract';
+        return 'standard_smart_contract_values';
     }
 
     /**
@@ -31,8 +30,8 @@ class SmartContract extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['denomination', 'smart_contract_address', 'decimals', 'symbol'], 'required'],
-            [['decimals'], 'integer'],
+            [['id_contract_type', 'denomination', 'smart_contract_address', 'decimals', 'symbol'], 'required'],
+            [['id_contract_type', 'decimals'], 'integer'],
             [['denomination', 'smart_contract_address', 'symbol'], 'string', 'max' => 255],
         ];
     }
@@ -44,6 +43,7 @@ class SmartContract extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'id_contract_type' => Yii::t('app', 'Id Contract Type'),
             'denomination' => Yii::t('app', 'Denomination'),
             'smart_contract_address' => Yii::t('app', 'Smart Contract Address'),
             'decimals' => Yii::t('app', 'Decimals'),
@@ -52,21 +52,11 @@ class SmartContract extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Nodes]].
-     *
-     * @return \yii\db\ActiveQuery|\app\models\query\NodesQuery
-     */
-    public function getNodes()
-    {
-        return $this->hasMany(Nodes::className(), ['id_smart_contract' => 'id']);
-    }
-
-    /**
      * {@inheritdoc}
-     * @return \app\models\query\SmartContractQuery the active query used by this AR class.
+     * @return \app\models\query\StandardSmartContractValuesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new \app\models\query\SmartContractQuery(get_called_class());
+        return new \app\models\query\StandardSmartContractValuesQuery(get_called_class());
     }
 }

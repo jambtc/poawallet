@@ -137,6 +137,9 @@ if (Yii::$app->controller->id == 'users'){
     echo $this->render('_pin-manage');
     echo $this->render('_push-manage');
     echo $this->render('_masterseed');
+}
+
+if (Yii::$app->controller->id == 'settings'){
     echo $this->render('_blockchainscan');
 }
 

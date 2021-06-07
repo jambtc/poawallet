@@ -10,7 +10,7 @@ use yii\web\HttpException;
 use yii\helpers\Json;
 
 use app\models\MPWallets;
-use app\models\Erc20abi;
+use app\models\ContractType;
 
 use Web3\Web3;
 use Web3\Contract;
@@ -172,7 +172,7 @@ class Erc20 extends Component
         $settings = Settings::poa($this->node_id);
         $web3 = new Web3($settings->blockchain->url);
 
-        $erc20abi = Erc20abi::findOne(1);
+        $erc20abi = $settings->smartContract->contractType;
 		$this->setDecimals($settings->smartContract->decimals);
 
 		$utils = $web3->utils;
@@ -187,13 +187,18 @@ class Erc20 extends Component
 			// exit;
 			if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-				$value = $utils->fromWei((string)$result[0]->value, 'ether');
+				$value = $utils->toEther((string)$result[0]->value, 'ether');
 				$Value0 = (string) $value[0]->value;
-				$Value1 = (float) $value[1]->value / pow(10, $this->getDecimals());
+                $Value1 = (string) $value[1]->value;
+                $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
 
-				$this->setBalance($Value0 + $Value1);
+				$this->setBalance($Value2);
 			}
-			// echo '<pre>'.print_r($this->getBalance(),true).'</pre>';
+            // echo '<pre>'.print_r($result,true).'</pre>';
+            // echo '<pre>'.print_r($value,true).'</pre>';
+            // echo '<pre>'.print_r($Value0,true).'</pre>';
+            // echo '<pre>'.print_r($Value1,true).'</pre>';
+            // echo '<pre>'.print_r($this->getBalance(),true).'</pre>';
 			// exit;
 		});
 
@@ -217,12 +222,11 @@ class Erc20 extends Component
             $balance = $response->toString() ;
         });
         $value = (string) $balance * 1;
-		$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
+		$balance = $value / (1*pow(10,18)); //1000000000000000000;
 
         return $balance;
 
     }
-
 
 
     public function getBlockInfo($blocknumber = 'latest', $search = false)

@@ -20,6 +20,8 @@ use app\models\Users;
 use app\models\SendForm;
 use app\models\WizardWalletForm;
 use app\models\PushSubscriptions;
+use app\models\Nodes;
+
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -121,12 +123,18 @@ class SendController extends Controller
 		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
         	return $this->redirect(['/wallet/index']);
     	}
-		$ERC20 = new Yii::$app->Erc20(1);
+		// $ERC20 = new Yii::$app->Erc20(1);
+
+		$node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
 
  		return $this->render('index', [
  			'fromAddress' => $fromAddress,
 			'sendForm' => $formModel,
-			'balance' => $ERC20->Balance($fromAddress),
+			'balance' => Yii::$app->Erc20->Balance($fromAddress),
+			'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
+			'node' => $node,
 			// 'userImage' => $this->loadSocialUser()->picture,
  		]);
  	}

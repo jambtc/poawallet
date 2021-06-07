@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use app\models\Blockchains;
-use app\models\SmartContract;
+use app\models\SmartContracts;
 use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Nodes */
 $blockchains = ArrayHelper::map(Blockchains::find()->all(), 'id', 'denomination');
-$smartcontract = ArrayHelper::map(SmartContract::find()->all(), 'id', 'denomination');
+$smartcontract = ArrayHelper::map(SmartContracts::find()->all(), 'id', 'denomination');
 
 ?>
 

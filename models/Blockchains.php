@@ -8,12 +8,14 @@ use Yii;
  * This is the model class for table "blockchains".
  *
  * @property int $id
+ * @property int $id_user
  * @property string $denomination
  * @property string $chain_id
  * @property string $url
  * @property string $symbol
  * @property string|null $url_block_explorer
  *
+ * @property Users $user
  * @property Nodes[] $nodes
  */
 class Blockchains extends \yii\db\ActiveRecord
@@ -32,9 +34,11 @@ class Blockchains extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['denomination', 'chain_id', 'url', 'symbol'], 'required'],
+            [['id_user', 'denomination', 'chain_id', 'url', 'symbol'], 'required'],
+            [['id_user'], 'integer'],
             [['denomination', 'url', 'symbol', 'url_block_explorer'], 'string', 'max' => 255],
             [['chain_id'], 'string', 'max' => 50],
+            [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
 
@@ -45,12 +49,23 @@ class Blockchains extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'denomination' => Yii::t('app', 'Denomination'),
+            'id_user' => Yii::t('app', 'Id User'),
+            'denomination' => Yii::t('app', 'Blockchain'),
             'chain_id' => Yii::t('app', 'Chain ID'),
             'url' => Yii::t('app', 'Url'),
             'symbol' => Yii::t('app', 'Symbol'),
             'url_block_explorer' => Yii::t('app', 'Url Block Explorer'),
         ];
+    }
+
+    /**
+     * Gets query for [[User]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\UsersQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'id_user']);
     }
 
     /**

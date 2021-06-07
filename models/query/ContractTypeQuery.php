@@ -3,11 +3,11 @@
 namespace app\models\query;
 
 /**
- * This is the ActiveQuery class for [[\app\models\Erc20abi]].
+ * This is the ActiveQuery class for [[\app\models\ContractType]].
  *
- * @see \app\models\Erc20abi
+ * @see \app\models\ContractType
  */
-class Erc20abiQuery extends \yii\db\ActiveQuery
+class ContractTypeQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class Erc20abiQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \app\models\Erc20abi[]|array
+     * @return \app\models\ContractType[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class Erc20abiQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \app\models\Erc20abi|array|null
+     * @return \app\models\ContractType|array|null
      */
     public function one($db = null)
     {

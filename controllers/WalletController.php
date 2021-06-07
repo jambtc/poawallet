@@ -116,8 +116,11 @@ class WalletController extends Controller
 	public function actionIndex()
 	{
 		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
+		$node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
 
-		if (NULL === $fromAddress){
+		if (NULL === $fromAddress || NULL === $node){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
@@ -140,7 +143,7 @@ class WalletController extends Controller
 				'balance' => Yii::$app->Erc20->Balance($fromAddress),
 				'userImage' => $this->loadSocialUser()->picture,
 				'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
-				'symbols' => Nodes::find(['id_user'=>Yii::$app->user->id])->one(),
+				'node' => $node,
 		]);
 	}
 

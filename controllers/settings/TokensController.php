@@ -3,7 +3,7 @@
 namespace app\controllers\settings;
 
 use Yii;
-use app\models\SmartContract;
+use app\models\SmartContracts;
 use app\models\search\SmartContractsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,7 +66,7 @@ class TokensController extends Controller
      */
     public function actionCreate()
     {
-        $model = new SmartContract();
+        $model = new SmartContracts();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -120,7 +120,7 @@ class TokensController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = SmartContract::findOne($id)) !== null) {
+        if (($model = SmartContracts::findOne($id)) !== null) {
             return $model;
         }
 
