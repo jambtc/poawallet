@@ -30,14 +30,14 @@ class m210607_135621_create_standard_blockchain_values_table extends Migration
            'url_block_explorer' => 'https://bscscan.com',
         ]);
 
-        // INSERT BINANCE TEST CHAIN DATA
-        $this->insert('standard_blockchain_values', [
-           'denomination' => 'Smart Chain - Testnet',
-           'chain_id' => '97',
-           'url' => 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-           'symbol' => 'BNB',
-           'url_block_explorer' => 'https://testnet.bscscan.com',
-        ]);
+        // // INSERT BINANCE TEST CHAIN DATA
+        // $this->insert('standard_blockchain_values', [
+        //    'denomination' => 'Smart Chain - Testnet',
+        //    'chain_id' => '97',
+        //    'url' => 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+        //    'symbol' => 'BNB',
+        //    'url_block_explorer' => 'https://testnet.bscscan.com',
+        // ]);
 
         // INSERT CZN POA BLOCKCHAIN DATA
         $this->insert('standard_blockchain_values', [
