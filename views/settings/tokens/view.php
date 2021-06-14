@@ -44,6 +44,7 @@ $this->title = $model->denomination;
                                 ],
 								'decimals',
                                 'symbol',
+								'blockchain.denomination'
                             ],
                         ]) ?>
 
@@ -53,6 +54,13 @@ $this->title = $model->denomination;
                     <?= Html::a('<button type="button" class="btn btn-success float-right mr-2">
                         <i class="fas fa-edit"></i> '. Yii::t('app', 'Update').'
                     </button>', ['update','id' => $model->id]) ?>
+					<?= Html::a('<i class="fas fa-trash"></i> '.Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger',
+                        'data' => [
+                            'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+                            'method' => 'post',
+                        ],
+                    ]) ?>
                 </div>
             </div>
         </div>

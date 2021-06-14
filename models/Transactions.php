@@ -10,6 +10,7 @@ use Yii;
  * @property int $id
  * @property int $id_user
  * @property string $type
+ * @property int|null $id_smart_contract
  * @property string $status
  * @property float $token_price
  * @property float $token_received
@@ -21,7 +22,8 @@ use Yii;
  * @property string|null $txhash
  * @property string|null $message
  *
- * @property MpUsers $user
+ * @property SmartContract $smartContract
+ * @property Users $user
  */
 class Transactions extends \yii\db\ActiveRecord
 {
@@ -40,13 +42,14 @@ class Transactions extends \yii\db\ActiveRecord
     {
         return [
             [['id_user', 'type', 'status', 'token_price', 'token_received', 'invoice_timestamp', 'expiration_timestamp', 'from_address', 'to_address', 'blocknumber'], 'required'],
-            [['id_user', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
+            [['id_user', 'id_smart_contract', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
             [['token_price', 'token_received'], 'number'],
             [['type', 'status'], 'string', 'max' => 20],
             [['from_address', 'to_address'], 'string', 'max' => 100],
             [['blocknumber'], 'string', 'max' => 50],
             [['txhash'], 'string', 'max' => 250],
             [['message'], 'string', 'max' => 1000],
+            [['id_smart_contract'], 'exist', 'skipOnError' => true, 'targetClass' => SmartContract::className(), 'targetAttribute' => ['id_smart_contract' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -60,17 +63,28 @@ class Transactions extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
             'type' => Yii::t('app', 'Type'),
+            'id_smart_contract' => Yii::t('app', 'Smart Contract'),
             'status' => Yii::t('app', 'Status'),
-            'token_price' => Yii::t('app', 'Token Price'),
-            'token_received' => Yii::t('app', 'Token Received'),
+            'token_price' => Yii::t('app', 'Amount'),
+            'token_received' => Yii::t('app', 'Received'),
             'invoice_timestamp' => Yii::t('app', 'Invoice Timestamp'),
             'expiration_timestamp' => Yii::t('app', 'Expiration Timestamp'),
             'from_address' => Yii::t('app', 'From Address'),
             'to_address' => Yii::t('app', 'To Address'),
-            'blocknumber' => Yii::t('app', 'blocknumber'),
-            'txhash' => Yii::t('app', 'Txhash'),
+            'blocknumber' => Yii::t('app', 'Blocknumber'),
+            'txhash' => Yii::t('app', 'tx Hash'),
             'message' => Yii::t('app', 'Message'),
         ];
+    }
+
+    /**
+     * Gets query for [[SmartContract]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\SmartContractQuery
+     */
+    public function getSmartContract()
+    {
+        return $this->hasOne(SmartContract::className(), ['id' => 'id_smart_contract']);
     }
 
     /**
@@ -80,7 +94,7 @@ class Transactions extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Users::className(), ['id' => 'id_user']);
+        return $this->hasOne(MpUsers::className(), ['id' => 'id_user']);
     }
 
     /**

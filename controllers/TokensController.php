@@ -6,12 +6,12 @@ use Yii;
 use app\models\Transactions;
 use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
+use app\models\Nodes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 use app\components\WebApp;
 
 /**
@@ -43,7 +43,11 @@ class TokensController extends Controller
     public function actionIndex()
     {
         $fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
-        if (null === $fromAddress){
+        $node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		if (NULL === $fromAddress || NULL === $node){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
@@ -55,6 +59,7 @@ class TokensController extends Controller
         $dataProvider->setPagination(['pageSize' => 10]);
 		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];
 		$dataProvider->query
+                    ->andwhere(['=','id_smart_contract', $node->id_smart_contract])
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
 

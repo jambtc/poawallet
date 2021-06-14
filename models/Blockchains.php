@@ -50,7 +50,7 @@ class Blockchains extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
-            'denomination' => Yii::t('app', 'Blockchain'),
+            'denomination' => Yii::t('app', 'Networks'),
             'chain_id' => Yii::t('app', 'Chain ID'),
             'url' => Yii::t('app', 'Url'),
             'symbol' => Yii::t('app', 'Symbol'),

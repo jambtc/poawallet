@@ -16,12 +16,13 @@ include ('manage-blockchainscan_js.php');
 
 
 <form id="settingsForm bg-primary">
-    <div class="list-box">
+
+	<div class="list-box">
 		<div class="list-item">
-			<i class="fa fa-network-wired text-primary"></i>
+			<i class="fa fa-link text-primary"></i>
 			<em class="seperate"></em>
-			<a href="<?= Url::to(['settings/nodes/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Select nodes');?>
+			<a href="<?= Url::to(['network/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Network info');?>
 					<small class="text-muted"></small>
 				</span>
 			</a>
@@ -30,22 +31,10 @@ include ('manage-blockchainscan_js.php');
 
 	<div class="list-box">
 		<div class="list-item">
-			<i class="fa fa-link text-primary"></i>
+			<i class="fa fa-network-wired text-primary"></i>
 			<em class="seperate"></em>
-			<a href="<?= Url::to(['network/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Scan network');?>
-					<small class="text-muted"></small>
-				</span>
-			</a>
-		</div>
-	</div>
-
-    <div class="list-box">
-		<div class="list-item">
-			<i class="fa fa-link text-info"></i>
-			<em class="seperate"></em>
-			<a href="<?= Url::to(['/settings/blockchains/index'])?>" >
-				<span class="list-item-title"><?php echo Yii::t('app','Manage blockchain');?>
+			<a href="<?= Url::to(['settings/nodes/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Select nodes');?>
 					<small class="text-muted"></small>
 				</span>
 			</a>
@@ -58,6 +47,18 @@ include ('manage-blockchainscan_js.php');
 			<em class="seperate"></em>
 			<a href="<?= Url::to(['/settings/tokens/index'])?>" >
 				<span class="list-item-title"><?php echo Yii::t('app','Manage tokens');?>
+					<small class="text-muted"></small>
+				</span>
+			</a>
+		</div>
+	</div>
+
+	<div class="list-box">
+		<div class="list-item">
+			<i class="fa fa-link text-info"></i>
+			<em class="seperate"></em>
+			<a href="<?= Url::to(['/settings/blockchains/index'])?>" >
+				<span class="list-item-title"><?php echo Yii::t('app','Manage networks');?>
 					<small class="text-muted"></small>
 				</span>
 			</a>

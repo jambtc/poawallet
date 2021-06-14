@@ -46,9 +46,31 @@ $sendForm->from = $fromAddress;
 				        <div class="mr-auto">
 				            <p class="mb-0"><?= Yii::t('app','Balance on: ') ?><a href="<?= Url::to(['settings/nodes/index']) ?>"><?= $node->blockchain->denomination ?></a></p>
 				        </div>
-				        <div class="ml-auto align-self-end">
-							<p class="text-primary mt-0 mb-0"><i class="fa fa-star star-total-balance"></i> <span id="total-balance"><?= WebApp::number_shorten($balance) ?>&nbsp;<?= $node->smartContract->symbol ?></span> </p>
-							<p class="text-muted mt-0 mb-0"><i class="fab fa-ethereum star-total-balance_gas"></i> <span id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?>&nbsp;<?= $node->blockchain->symbol ?></span> </p>
+				        <div class="ml-auto align-self-end badge bg-warning">
+							<h5 class="text-light mt-0 mb-0">
+								<i class="fa fa-star star-total-balance"></i>
+								<span id="total-balance">
+									<span>
+										<?= WebApp::number_shorten($balance) ?>
+									</span>
+									<span class="ml-1">
+										<?= $node->smartContract->symbol ?>
+									</span>
+								</span>
+							</h5>
+							<div class="form-mini-divider"></div>
+
+							<h6 class="text-muted mt-0 mb-0">
+								<i class="fab fa-ethereum star-total-balance_gas"></i>
+								<span id="total-balance_gas">
+									<span>
+										<?= WebApp::number_shorten($balance_gas) ?>
+									</span>
+									<span class="ml-1">
+										<?= $node->blockchain->symbol ?>
+									</span>
+								</span>
+							</h6>
 				        </div>
 				    </div>
 				</div>
@@ -76,7 +98,7 @@ $sendForm->from = $fromAddress;
             ];
               ?>
             <!-- DA -->
-            <div class="form-group">
+            <div class="group">
               <?= $form->field($sendForm, 'from', $fieldOptions1)->textInput(['readonly'=>true]) ?>
             </div>
     	</div>
@@ -111,7 +133,7 @@ $sendForm->from = $fromAddress;
             //     'inputOptions' => ['class' => ['widget' => 'form-element']]
             // ];
               ?>
-            <div class="form-group">
+            <div class="group">
                 <?= $form->field($sendForm, 'to', $fieldOptions2)
                     ->textInput(['autofocus' => true, 'validate' ])
                     ->hint(Yii::t('app','Insert address or press camera to scan')) ?>
@@ -136,14 +158,33 @@ $sendForm->from = $fromAddress;
             ];
               ?>
 
-            <div class="form-group">
+            <div class="group">
                  <?= $form->field($sendForm, 'amount', $fieldOptions3)->textInput(['type' => 'number']) ?>
-                 <?= $form->field($sendForm, 'balance')->hiddenInput(['value' => $balance])->label(false) ?>
+				 <?= $form->field($sendForm, 'balance')->hiddenInput(['value' => $balance])->label(false) ?>
+				 <?= $form->field($sendForm, 'balance_gas')->hiddenInput(['value' => $balance_gas])->label(false) ?>
             </div>
-
-
-
         </div>
+		<div class="form-mini-divider"></div>
+		<div class="txt-left">
+			<!-- MESSAGGIO -->
+			<?php
+			$fieldOptions4 = [
+				'inputTemplate' => '
+				<!--<label class="col-lg-12 control-label text-left" for="sendform-memo">'.$sendForm->getAttributeLabel('memo').'</label>-->
+				<div class="form-row-group with-icons">
+					<div class="form-row no-padding" >
+						<i class="fas fa-comment text-primary"></i>
+						{input}
+					</div>
+				</div>',
+				'inputOptions' => ['class' => ['widget' => 'form-element']]
+			];
+			  ?>
+			<div class="group">
+				<?= $form->field($sendForm, 'memo', $fieldOptions4)->textarea([
+					'rows' => 6, 'cols' => 50])->label() ?>
+			</div>
+		</div>
         <div class="form-mini-divider"></div>
         <div class="txt-left">
             <?= $form->errorSummary($sendForm, ['id' => 'error-summary','class'=>'col-lg-12']) ?>
@@ -157,36 +198,96 @@ $sendForm->from = $fromAddress;
 
 
         <!--POPUP HTML CONTENT START -->
-    	<div class="popup-overlay" id="sellOrder"> <!-- if you dont want overlay add class .no-overlay -->
+    	<div class="popup-overlay" id="sellOrder" style="padding: 5px;"> <!-- if you dont want overlay add class .no-overlay -->
     		<div class="popup-container add">
-    			<div class="popup-content">
+    			<div class="popup-content wallet-address">
 
-    				<img src="css/img/content/crypto-buy.png" class="img-buy" alt="">
+    				<img src="css/img/content/crypto-buy.png" class="img-buy mt-20" alt="">
 
-    				<h5 class="txt-blue mb-0"><?= Yii::t('app','Amount that will be sent:') ?></h5>
-    				<h3 class="mt-10 mb-10 text-primary"><span class="ml-1 amount-to-send"></span> </h3>
+					<div class="hide-content">
+						<div class="send-v2__form-row " style="background-color: aliceblue;">
+							<div class="send-v2__form-label"><?= Yii::t('app','Asset:') ?></div>
+							<div class="send-v2__form-field">
+								<div class="send-v2__asset-dropdown">
+									<div class="send-v2__asset-dropdown__input-wrapper">
 
-                        <!-- MESSAGGIO -->
-                        <?php
-                        $fieldOptions4 = [
-                            'inputTemplate' => '
-                            <label class="col-lg-1 control-label text-left text-dark" for="sendform-memo">'.$sendForm->getAttributeLabel('memo').'</label>
-                            <div class="form-row-group with-icons">
-                                <div class="form-row no-padding" >
-                                    {input}
-                                </div>
-                            </div>',
-                            'inputOptions' => ['class' => ['widget' => 'form-control']]
-                        ];
-                          ?>
-                        <div class="form-group hide-text">
-                            <?= $form->field($sendForm, 'memo', $fieldOptions4)->textarea([
-                                'rows' => 6, 'cols' => 50])->label(false) ?>
-                        </div>
+										<div class="send-v2__asset-dropdown__asset">
+											<div class="send-v2__asset-dropdown__asset-data">
+												<div class="send-v2__asset-dropdown__symbol">
+													<span class="ml-auto currency-display-component__text"><?= $balance ?></span>
+													<span class="currency-display-component__suffix"><?= $node->smartContract->symbol ?></span>
+												</div>
+												<div class="send-v2__asset-dropdown__symbol">
+													<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Balance:') ?></span> -->
+													<div class="currency-display-component">
+														<span class="ml-auto currency-display-component__text"><?= $balance_gas ?></span>
+														<span class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="send-v2__form-row " style="background-color: aliceblue;">
+							<div class="send-v2__form-label"><?= Yii::t('app','Amount to send:') ?></div>
+							<div class="send-v2__form-field">
+								<div class="send-v2__asset-dropdown">
+									<div class="send-v2__asset-dropdown__input-wrapper">
+										<div class="send-v2__asset-dropdown__asset">
+											<!-- <div class="send-v2__asset-dropdown__asset-icon">
+											<div class="">
+											<div class="identicon">
+
+										</div>
+									</div>
+								</div> -->
+								<div class="send-v2__asset-dropdown__asset-data">
+									<div class="send-v2__asset-dropdown__name">
+										<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Amount:') ?></span> -->
+										<div class="m-auto currency-display-component" title="">
+											<span class="h4 currency-display-component__text amount-to-send"></span>
+											<span class="h5 currency-display-component__suffix"><?= $node->smartContract->symbol ?></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+						<div class="send-v2__form-row " style="background-color: aliceblue;">
+				<div class="send-v2__form-label"><?= Yii::t('app','Transaction fee:') ?></div>
+				<div class="send-v2__form-field">
+					<div class="send-v2__asset-dropdown">
+						<div class="send-v2__asset-dropdown__input-wrapper">
+							<div class="send-v2__asset-dropdown__asset">
+								<div class="send-v2__asset-dropdown__asset-data">
+									<div class="send-v2__asset-dropdown__name">
+										<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Gas:') ?></span> -->
+										<div class="m-auto currency-display-component" title="">
+											<span class="h4 currency-display-component__text" id="amount-to-send-gas"></span>
+											<span class="h5 currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+					</div>
 
     				<div class="transaction-details list-unstyled " style="display: none;">
     				</div>
-    				<div><a href="#" class="more-btn mb-10 pay-submit"><?= Yii::t('app','Confirm') ?></a></div>
+    				<div>
+						<a href="#" class="pay-submit hide-content">
+							<button class="js-confirm-submit more-btn mb-10 disabled">
+								<?= Yii::t('app','Confirm') ?>
+							</button>
+						</a>
+					</div>
                     <div style="display: none;" class="mt-3 pay-close float-right"><a  href="<?= Url::to(['/wallet/index'])?> " />
                         <button type="button" class="btn button circle block green"><?= Yii::t('app','Close') ?></button>
                         </a>

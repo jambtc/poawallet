@@ -9,6 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $id_user
+ * @property int $id_blockchain
  * @property int $id_contract_type
  * @property string $denomination
  * @property string $smart_contract_address
@@ -16,6 +17,7 @@ use Yii;
  * @property string $symbol
  *
  * @property Nodes[] $nodes
+ * @property Blockchains $blockchain
  * @property ContractType $contractType
  * @property Users $user
  */
@@ -35,9 +37,10 @@ class SmartContracts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_user', 'id_contract_type', 'denomination', 'smart_contract_address', 'decimals', 'symbol'], 'required'],
-            [['id_user', 'id_contract_type', 'decimals'], 'integer'],
+            [['id_user', 'id_blockchain', 'id_contract_type', 'denomination', 'smart_contract_address', 'decimals', 'symbol'], 'required'],
+            [['id_user', 'id_blockchain', 'id_contract_type', 'decimals'], 'integer'],
             [['denomination', 'smart_contract_address', 'symbol'], 'string', 'max' => 255],
+            [['id_blockchain'], 'exist', 'skipOnError' => true, 'targetClass' => Blockchains::className(), 'targetAttribute' => ['id_blockchain' => 'id']],
             [['id_contract_type'], 'exist', 'skipOnError' => true, 'targetClass' => ContractType::className(), 'targetAttribute' => ['id_contract_type' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],
         ];
@@ -51,8 +54,9 @@ class SmartContracts extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
-            'id_contract_type' => Yii::t('app', 'Id Contract Type'),
-            'denomination' => Yii::t('app', 'Smart Contract'),
+            'id_blockchain' => Yii::t('app', 'Network'),
+            'id_contract_type' => Yii::t('app', 'Contract Type'),
+            'denomination' => Yii::t('app', 'Denomination'),
             'smart_contract_address' => Yii::t('app', 'Smart Contract Address'),
             'decimals' => Yii::t('app', 'Decimals'),
             'symbol' => Yii::t('app', 'Symbol'),
@@ -70,6 +74,16 @@ class SmartContracts extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Blockchain]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\BlockchainsQuery
+     */
+    public function getBlockchain()
+    {
+        return $this->hasOne(Blockchains::className(), ['id' => 'id_blockchain']);
+    }
+
+    /**
      * Gets query for [[ContractType]].
      *
      * @return \yii\db\ActiveQuery|\app\models\query\ContractTypeQuery
@@ -82,7 +96,7 @@ class SmartContracts extends \yii\db\ActiveRecord
     /**
      * Gets query for [[User]].
      *
-     * @return \yii\db\ActiveQuery|\app\models\query\UsersQuery
+     * @return \yii\db\ActiveQuery|\app\models\query\MpUsersQuery
      */
     public function getUser()
     {

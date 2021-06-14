@@ -28,7 +28,7 @@ use app\components\WebApp;
     <?= $form->field($model, 'id_user')->hiddenInput(['value' => Yii::$app->user->id])->label(false) ?>
 
 
-    <div class="form-group">
+    <div class="txt-left form-group">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 

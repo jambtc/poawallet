@@ -15,6 +15,7 @@ class m210603_072630_create_smart_contract_table extends Migration
         $this->createTable('{{%smart_contract}}', [
             'id' => $this->primaryKey(),
             'id_user' => $this->integer(11)->notNull(),
+            'id_blockchain' => $this->integer(11)->notNull(),
             'id_contract_type' => $this->integer(11)->notNull(),
             'denomination' => $this->string(255)->notNull(),
             'smart_contract_address' => $this->string(255)->notNull(),
@@ -27,6 +28,13 @@ class m210603_072630_create_smart_contract_table extends Migration
             '{{%idx-smart_contract-id_user}}',
             '{{%smart_contract}}',
             'id_user'
+        );
+
+        // creates index for column `id_blockchain`
+        $this->createIndex(
+            '{{%idx-smart_contract-id_blockchain}}',
+            '{{%smart_contract}}',
+            'id_blockchain'
         );
 
         // creates index for column `id_contract_type`
@@ -42,6 +50,16 @@ class m210603_072630_create_smart_contract_table extends Migration
             '{{%smart_contract}}',
             'id_user',
             '{{%mp_users}}',
+            'id',
+            'CASCADE'
+        );
+
+        //add foreign key for table `{{%smart_contract}}`
+        $this->addForeignKey(
+            '{{%fk-smart_contract-id_blockchain}}',
+            '{{%smart_contract}}',
+            'id_blockchain',
+            '{{%blockchains}}',
             'id',
             'CASCADE'
         );
@@ -70,12 +88,22 @@ class m210603_072630_create_smart_contract_table extends Migration
         );
         // drops foreign key for table `{{%smart_contract}}`
         $this->dropForeignKey(
+            '{{%fk-smart_contract-id_blockchain}}',
+            '{{%smart_contract}}'
+        );
+        // drops foreign key for table `{{%smart_contract}}`
+        $this->dropForeignKey(
             '{{%fk-smart_contract-id_contract_type}}',
             '{{%smart_contract}}'
         );
         // drops index for column `id_contract_type`
         $this->dropIndex(
             '{{%idx-smart_contract-id_contract_type}}',
+            '{{%smart_contract}}'
+        );
+        // drops index for column `id_blockchain`
+        $this->dropIndex(
+            '{{%idx-smart_contract-id_blockchain}}',
             '{{%smart_contract}}'
         );
         // drops index for column `id_user`

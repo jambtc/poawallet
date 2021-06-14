@@ -30,10 +30,13 @@ return [
     'telegram.clientId' => $secrets['telegram_client_id'],
     'telegram.clientSecret' => $secrets['telegram_client_secret'],
 
-    // smart contract on BSC
+    // smart contract
     'smartcontract_address' => $secrets['smartcontract_address'],
+    'default_blockchain' => $secrets['default_blockchain'],
+    'default_smartcontract' => $secrets['default_smartcontract'],
+
 
     // websocker url
-    'websocket_url' => $secrets['websocket_url'], 
+    'websocket_url' => $secrets['websocket_url'],
 
 ];

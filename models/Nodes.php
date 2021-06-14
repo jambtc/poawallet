@@ -48,8 +48,8 @@ class Nodes extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'id_user' => Yii::t('app', 'Id User'),
-            'id_blockchain' => Yii::t('app', 'Blockchain'),
-            'id_smart_contract' => Yii::t('app', 'Smart Contract'),
+            'id_blockchain' => Yii::t('app', 'Network'),
+            'id_smart_contract' => Yii::t('app', 'Token'),
         ];
     }
 

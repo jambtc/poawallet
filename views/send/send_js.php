@@ -11,16 +11,21 @@ $options = [
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
+    'gasLimitUrl' => Url::to(['/send/gas-limit']),
     'poaDecimals' => $blockchain->smartContract->decimals,
     'invalidAmountError' => Yii::t('app', 'Invalid amount!'),
     'decimalError' => Yii::t('app','Use a maximum of {count} decimal places.',[
         'count' => $blockchain->smartContract->decimals,
     ]),
     'higherError' => Yii::t('app','Amount is higher than Balance.'),
+    'nogasError' => Yii::t('app','You have no gas to generate transaction.'),
+    'enoughgasError' => Yii::t('app','You have no enough gas to generate transaction.'),
     'recipientError' => Yii::t('app','Recipient address not entered.'),
     'htmlTransactionBody' => '<div class="alert alert-warning">
                                 <p class="generating">'.Yii::t('app','Generating transaction...').'</p>
                                 </div>',
+    'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
+
     //'textClose' => Yii::t('app','Close'),
     // ...
 ];
@@ -68,8 +73,46 @@ $wallet_send = <<<JS
             $('#error-summary').show().text(yiiOptions.recipientError);
             event.stopPropagation();
 		}
+
+        if ($("#sendform-balance_gas").val() <= 0  ){
+            $('#error-summary').show().text(yiiOptions.nogasError);
+            event.stopPropagation();
+		}
+
+        if (gasLimit() == false){
+            $('#error-summary').show().text(yiiOptions.enoughgasError);
+            event.stopPropagation();
+        }
 	});
 
+
+    gasLimit = function () {
+        $.ajax({
+            url	: yiiOptions.gasLimitUrl, // gasLimitUrl  url,
+            type: "POST",
+            data: {
+                'toAddress' : $("#sendform-to").val(),
+                'fromAddress' : $("#sendform-from").val(),
+                'amount' : $("#sendform-amount").val(),
+            },
+            dataType: "json",
+            beforeSend: function(){
+                $('#amount-to-send-gas').html(yiiOptions.spinner);
+            },
+            success:function(data){
+                console.log('[gaslimit]: data from send/gaslimit controller',data);
+                if (data.success){
+                    $('#amount-to-send-gas').text(data.gasLimit);
+                } else {
+                    return false;
+                }
+                return true;
+            },
+            error: function(j){
+                console.log(j);
+            }
+        });
+    }
 
     submitButton.addEventListener('click', function(event){
         event.preventDefault();
@@ -108,8 +151,7 @@ $wallet_send = <<<JS
             				data: sendPost,
             				dataType: "json",
                             beforeSend: function() {
-                                $('.pay-submit').hide();
-                                $('.hide-text').hide();
+                                $('.hide-content').hide();
                                 $('.transaction-details').show();
         						$('.transaction-details').html(yiiOptions.htmlTransactionBody);
         					},
@@ -119,7 +161,6 @@ $wallet_send = <<<JS
                                 $('.generating').html(data.row);
                                 $('.pay-close').show();
                                 console.log('[Send]: loaded gas is: ', data.gas.balance);
-
 
                                 writeData('sync-send-erc20', data).then(function() {
         							console.log('[Send]: Registered sync-send-erc20 request in indexedDB', data);

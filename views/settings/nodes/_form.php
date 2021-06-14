@@ -8,8 +8,10 @@ use yii\bootstrap4\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Nodes */
-$blockchains = ArrayHelper::map(Blockchains::find()->all(), 'id', 'denomination');
-$smartcontract = ArrayHelper::map(SmartContracts::find()->all(), 'id', 'denomination');
+
+
+$blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
+$smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 
 ?>
 

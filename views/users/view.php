@@ -18,7 +18,6 @@ $this->registerJs(
 
 AccountValueAsset::register($this);
 
-// include ('manage-blockchainscan_js.php');
 include ('manage-options_js.php');
 include ('manage-pin_js.php');
 include ('manage-masterseed_js.php');
@@ -138,12 +137,6 @@ include ('manage-push_js.php');
 		</div>
 	</div>
 
-
-
-
-
-
-
 	<div class="list-box">
 		<div class="list-item">
 			<i class="far fa-comment text-primary"></i>
@@ -159,6 +152,38 @@ include ('manage-push_js.php');
 			</div>
 		</div>
 	</div>
+
+    <div class="list-box">
+    	<div class="list-item">
+            <i class="fa fa-desktop text-primary"></i>
+			<em class="seperate"></em>
+    		<span class="list-item-title"><?php echo Yii::t('app','Save app on Home');?> <small class="text-muted"></small></span>
+    		<div class="sweet-check saveOnDesktop" onclick="js:saveOnDesktop();">
+    			<div class="outline">
+    				<span></span>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+
+    <script>
+    // chiede di salvare l'applicazione sulla home
+    function saveOnDesktop() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function(choiceResult) {
+                 console.log('[deferred prompt]',choiceResult.outcome);
+                if (choiceResult.outcome === 'dismissed') {
+                    console.log('[deferred prompt] User cancelled installation');
+                } else {
+                    console.log('[deferred prompt] User added to home screen');
+                }
+                $('.saveOnDesktop').removeClass('checked');
+            });
+            deferredPrompt = null;
+        }
+    }
+    </script>
 
 
 	<!-- <div class="list-box">

@@ -1,6 +1,7 @@
 <?php
 
 use yii\db\Migration;
+use app\components\WebApp;
 
 /**
  * Handles the creation of table `{{%vapid}}`.
@@ -21,7 +22,7 @@ class m210415_085447_create_vapid_table extends Migration
         // Generate vapid keys from https://d3v.one/vapid-key-generator/
         $this->insert('vapid', [
            'public_key' => 'BOnchKPJ2XM1RoWmXWAhn_C8mtTvnpO94aOFIN1QPdF8NBAV7udLQ89h5BrbCJxb814Cg9CiIbHqxh6on9edl-I',
-           'secret_key' => 'HFR-QNlfmBVrKfGd5Iw9kbDy2IGLd_wR304WHxqfDc8',
+           'secret_key' => WebApp::encrypt('HFR-QNlfmBVrKfGd5Iw9kbDy2IGLd_wR304WHxqfDc8'),
         ]);
     }
 

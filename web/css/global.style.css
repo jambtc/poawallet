@@ -3313,3 +3313,108 @@ footer ul li a i {
 }
 
 /*end of part 31----------------------------------------------------*/
+
+.send-v2__form-row {
+    margin: 1rem 1rem 0;
+    position: relative;
+    display: flex;
+    flex-flow: row;
+    flex: 1 0 auto;
+    justify-content: space-between;
+    align-items: center;
+}
+.send-v2__form-label {
+    font-size: 1rem;
+    font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: normal;
+    color: #5d5d5d;
+    width: 120px;
+    flex: 0 0 auto;
+}
+.send-v2__form-field {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.send-v2__asset-dropdown {
+    height: 54px;
+    border: none;
+    position: relative;
+}
+.send-v2__from-dropdown, .send-v2__asset-dropdown {
+    font-size: 0.75rem;
+    font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: normal;
+    width: 100%;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #4d4d4d;
+    position: relative;
+}
+.send-v2__asset-dropdown__input-wrapper {
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    height: 100%;
+}
+.send-v2__asset-dropdown__input-wrapper .send-v2__asset-dropdown__asset {
+    height: 100%;
+}
+.send-v2__asset-dropdown__asset {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: 0 8px;
+    cursor: pointer;
+}
+.send-v2__asset-dropdown__asset-icon .identicon {
+    border: 1px solid #dedede;
+	height: 36px;
+    width: 36px;
+    border-radius: 18px;
+}
+.send-v2__asset-dropdown__asset-data {
+    display: flex;
+    flex-flow: column nowrap;
+    margin-left: 8px;
+    flex-grow: 1;
+}
+.send-v2__asset-dropdown__symbol {
+    font-size: 1rem;
+    font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: normal;
+    margin-bottom: 2px;
+}
+.send-v2__asset-dropdown__name {
+    font-size: 0.75rem;
+    font-family: Euclid, Roboto, Helvetica, Arial, sans-serif;
+    line-height: 140%;
+    font-style: normal;
+    font-weight: normal;
+    display: flex;
+    flex-flow: row nowrap;
+}
+.send-v2__asset-dropdown__name__label {
+    margin-right: 0.25rem;
+}
+.currency-display-component {
+    display: flex;
+    align-items: center;
+}
+.currency-display-component__text {
+    direction: ltr;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.currency-display-component__suffix {
+    padding-left: 4px;
+}
+.form-group {
+    margin-bottom: 0px !important; 
+}

@@ -138,6 +138,23 @@ class SendController extends Controller
 			// 'userImage' => $this->loadSocialUser()->picture,
  		]);
  	}
+	public function actionGasLimit()
+	{
+		$fromAddress = $_POST['fromAddress'];
+		$toAddress = $_POST['toAddress'];
+		$amount = $_POST['amount'];
+		$settings = Settings::poa();
+		$ERC20 = new Yii::$app->Erc20();
+
+		$gasLimit = $ERC20->getGasLimit($toAddress,$fromAddress,$amount);
+
+		$return = ['success'=>false,'gasLimit'=>0];
+
+		if (null !== $gasLimit){
+			$return = ['success'=>true,'gasLimit'=>$gasLimit];
+		}
+		return Json::encode($return);
+	}
 
 	/**
 	 * List send page
@@ -164,7 +181,7 @@ class SendController extends Controller
 		$amountForContract = $amount * pow(10, $settings->smartContract->decimals);
 
 		// carico il gas in caso questo sia a 0 per inviare transazioni
-		$gasBalance = $ERC20->loadGas($fromAccount);
+		//$gasBalance = $ERC20->loadGas($fromAccount);
 
 		// carico le informazioni relative al blocco attuale
 		$block = $ERC20->getBlockInfo();

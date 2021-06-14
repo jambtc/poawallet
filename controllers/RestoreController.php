@@ -83,6 +83,8 @@ class RestoreController extends Controller
  	{
 		$this->layout = 'wizard';
 
+		$defaultNetworkExist = false;
+
 		$formModel = new WizardWalletForm; //form di input dei dati
 
 		if (Yii::$app->request->isAjax && $formModel->load(Yii::$app->request->post())) {
@@ -95,11 +97,10 @@ class RestoreController extends Controller
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
-			// controllo se sono inseriti dei nodi all'interno del db
 			$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
 
 			// echo '<pre> '.print_r($boltWallet,true);;
-			// echo '<pre> '.print_r($node,true);;
+			// echo '<pre> '.print_r($node,true);;exit;
 			// echo '<pre> '.print_r($user->getWallets(),true);exit;
 
 			if(null === $boltWallet) {
@@ -112,7 +113,9 @@ class RestoreController extends Controller
 					$boltWallet->save();
 					// entro nella richiesta di selezione del nodo
 					// 2 sono stati già preinseriti
-					return $this->redirect(['/settings/nodes/create']);
+					 //return $this->redirect(['/settings/nodes/create']);
+					$defaultNetworkExist = true;
+					$this->createDefaultNetworks();
 				} else {
 					$ERC20 = new Yii::$app->Erc20($node->id_blockchain); // blockchain id -> 1
 					$block = $ERC20->getBlockInfo();
@@ -130,14 +133,14 @@ class RestoreController extends Controller
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
 			if ($boltWallet->save()){
-				if (null === $node){
+				if (null === $node && $defaultNetworkExist === false){
 					$this->createDefaultNetworks();
-
-					return $this->redirect(['/settings/nodes/create']);
-				} else {
-
-					return $this->redirect(['/wallet/index']);
 				}
+				// 	return $this->redirect(['/settings/nodes/create']);
+				// } else {
+
+				return $this->redirect(['/wallet/index']);
+				// }
 			}
 			else
 				var_dump( $boltWallet->getErrors());
@@ -157,9 +160,14 @@ class RestoreController extends Controller
 
 		$blockchain = Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all();
 		$smartcontract = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		$nodes = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
 
-
-		if (null === $blockchain) {
+		// echo '<pre>'.print_r($default_blockchains,true);;
+		// echo '<pre>'.print_r($default_smartcontracts,true);;
+		// echo '<pre>blockchain'.print_r($blockchain,true);;
+		// echo '<pre>smart'.print_r($smartcontract,true);;
+		// echo '<pre>nodes'.print_r($nodes,true);;
+		if (empty($blockchain)) {
 			foreach ($default_blockchains as $default_blockchain){
 				$blockchain = new Blockchains;
 				$blockchain->id_user = Yii::$app->user->id;
@@ -168,22 +176,55 @@ class RestoreController extends Controller
 				$blockchain->url = $default_blockchain->url;
 				$blockchain->symbol = $default_blockchain->symbol;
 				$blockchain->url_block_explorer = $default_blockchain->url_block_explorer;
-				$blockchain->save();
+				if (!$blockchain->save()){
+					var_dump( $blockchain->getErrors());
+					die();
+				}
 			}
 		}
 
-		if (null === $smartcontract){
+		if (empty($smartcontract)){
 			foreach ($default_smartcontracts as $default_smartcontract){
 				$smartcontract = new SmartContracts;
 				$smartcontract->id_user = Yii::$app->user->id;
+				$smartcontract->id_blockchain = $default_smartcontract->id_blockchain;
 				$smartcontract->id_contract_type = $default_smartcontract->id_contract_type;
 				$smartcontract->denomination = $default_smartcontract->denomination;
 				$smartcontract->smart_contract_address = $default_smartcontract->smart_contract_address;
 				$smartcontract->decimals = $default_smartcontract->decimals;
 				$smartcontract->symbol = $default_smartcontract->symbol;
-				$smartcontract->save();
+				if (!$smartcontract->save()){
+					var_dump( $smartcontract->getErrors());
+					die();
+				}
 			}
 		}
+		// inserisco la blockchain INSERITA NEI PARAMS come default
+		// Poi l'utente può successivamente cambiarla
+		// in tal modo posso utilizzare lo stesso software in più
+		// ambiti!
+		if (null === $nodes){
+			$model = new Nodes;
+			$model->id_user = Yii::$app->user->id;
+			$model->id_blockchain = Yii::$app->params['default_blockchain'];
+			$model->id_smart_contract = Yii::$app->params['default_smartcontract'];
+			if (!$model->save()){
+				var_dump( $model->getErrors());
+				die();
+			}
+		}
+		//
+		// $blockchain = Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		// $smartcontract = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		// $nodes = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->all();
+
+		// echo '<pre>'.print_r($blockchain,true);;
+		// echo '<pre>'.print_r($smartcontract,true);;
+		// echo '<pre>'.print_r($nodes,true);exit;
+		//
+		//
+		//
+		// die();
 
 		return true;
 	}
