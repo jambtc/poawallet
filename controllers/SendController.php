@@ -181,7 +181,9 @@ class SendController extends Controller
 		$amountForContract = $amount * pow(10, $settings->smartContract->decimals);
 
 		// carico il gas in caso questo sia a 0 per inviare transazioni
-		//$gasBalance = $ERC20->loadGas($fromAccount);
+		// solo nel caso in cui mi trovo sulla mia POA
+		// $gasBalance = $ERC20->loadGas($fromAccount);
+		$gasBalance = $ERC20->BalanceGas($fromAccount);
 
 		// carico le informazioni relative al blocco attuale
 		$block = $ERC20->getBlockInfo();
@@ -233,6 +235,7 @@ class SendController extends Controller
 		$tokens->id_user = Yii::$app->user->id;
 		$tokens->status = 'new';
 		$tokens->type = 'token';
+		$tokens->id_smart_contract = $settings->smartContract->id;
 		$tokens->token_price = $amount;
 		$tokens->token_received = 0;
 		$tokens->invoice_timestamp = $invoice_timestamp;

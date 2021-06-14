@@ -258,6 +258,7 @@ class CommandsServer extends WebSocketServer
 									   $tokens->id_user = $client->user_id;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
+                                       $tokens->id_smart_contract = $node->smartContract->id;
 							           $tokens->token_price	= $transactionValue;
 							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
@@ -446,7 +447,7 @@ class CommandsServer extends WebSocketServer
         $client->send(json_encode($return));
     }
 
-    
+
     /**
 	 * Check user notification messages
 	 */

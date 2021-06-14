@@ -197,7 +197,13 @@ $wallet_send = <<<JS
                     $('#total-balance').addClass('animationBalanceIn');
                     $('.star-total-balance').addClass('animationStar');
                     $('#total-balance').text(data[0].balance);
-                    displayPushNotification(data[0].pushoptions);
+                    console.log('[push options]', data[0].pushoptions);
+                    // console.log('[push options lenght]', data[0].pushoptions.lenght);
+
+                    if (data[0].pushoptions.lenght != 'undefined'){
+                        displayPushNotification(data[0].pushoptions);
+                    }
+
 
                     clearAllData('np-send-erc20');
                 } else {

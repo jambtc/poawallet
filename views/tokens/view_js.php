@@ -21,23 +21,20 @@ $transget = <<<JS
             })
             .then(function(json) {
                 console.log('[tokens view] receipt', json);
-                var response = JSON.parse(json);
+                // var response = JSON.parse(json);
+
+                renewPage();
 
 
-                window.location.href = window.location.href;
             });
         });
 
-
-
-
-
-
-
+        function renewPage()
+        {
+            window.location.href = window.location.href;
+            return false;
+        }
     });
-
-
-
 JS;
 
 $this->registerJs(

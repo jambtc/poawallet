@@ -196,6 +196,7 @@ class BlockchainController extends Controller
 									   $tokens->id_user = $wallets->id_user;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
+									   $tokens->id_smart_contract = $settings->smartContract->id;
 							           $tokens->token_price	= $transactionValue;
 							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);

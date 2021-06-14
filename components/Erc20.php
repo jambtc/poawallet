@@ -240,7 +240,7 @@ class Erc20 extends Component
         $settings = Settings::poa($this->node_id);
         $web3 = new Web3($settings->blockchain->url);
 
-		$contract = new Contract($web3->provider, $settings->smartContract->smart_contract_abi);
+		$contract = new Contract($web3->provider, $settings->smartContract->contractType->smart_contract_abi);
 
 		$response = null;
         $contract->eth->getTransactionReceipt($hash, function ($err, $receipt) use (&$response){
@@ -376,74 +376,65 @@ class Erc20 extends Component
 		 return substr(str_pad(strval($value), 64, "0", STR_PAD_LEFT), 0, 64);
 	}
 
-    // public function loadGas($address)
-    // {
-    //     // $settings = Settings::poa($this->blockchain_id);
-    //     // $WebApp = new WebApp;
-    //     //
-    //     // $poaNode = $WebApp->getPoaNode($this->blockchain_id);
-    //     // if (!$poaNode)
-    //     //     return $this->json($return);
-    //     //
-    //     // $web3 = new Web3($poaNode);
-    //
-    //     $settings = Settings::poa();
-    //     $web3 = new Web3($settings->blockchain->url);
-    //
-    //     //recupero il balance
-    //     $balance = 0;
-    //     $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
-    //         $jsonBody = $this->getJsonBody($err);
-    //
-    //         if ($jsonBody !== NULL){
-    //             throw new HttpException(404,$jsonBody['error']['message']);
-    //         }
-    //         $balance = $response->toString() ;
-    //     });
-    //     $value = (string) $balance * 1;
-	// 	$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
-    //
-    //     $response = null;
-    //     if ($balance <= 0) {
-    //         // preparing items
-    //         $fromAccount = $settings->sealer_address; //'0x654b98728213cf1e20e90b1942fdc5597984eb70'; // node1 fujitsu gabcoin
-    //         $amount = 1;
-    //         $toAccount = $address;
-    //         $hex = dechex(21004);
-    //         $gas = '0x'.$hex;
-    //
-    //         $prv_key = $WebApp::decrypt($settings->sealer_private_key); //'8303D3CA466B73ED5A65DCAB439947793426172C7777F29A8DB68586D4A079D6'; // chiave privata gabcoin Node1 fujitsu server
-    //
-    //         // recupero la nonce per l'account
-    //         $nonce = $this->getNonce($fromAccount);
-    //         $transaction = new Transaction([
-    //             'nonce' => '0x'.dechex($nonce), //è un object BigInteger
-    //             'from' => $fromAccount, //indirizzo sealer Blockchain
-    //             'to' => $toAccount, //indirizzo commerciante
-    //             'gas' => '0x200b20', // gas necessario per la transazione
-    //             'gasPrice' => '1000', // gasPrice giusto?
-    //             'value' => 1 * pow(10, 18),
-    //             'chainId' => $settings->chain_id,
-    //             'data' =>  '0x0', // non ci sono dati per contratto
-    //         ]);
-    //         $transaction->offsetSet('chainId', $settings->chain_id);
-    //         $signed_transaction = $transaction->sign($prv_key); //
-    //
-    //         $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
-    //             if ($err !== null) {
-    //                 $jsonBody = $this->getJsonBody($err->getMessage());
-    //
-    //                 if ($jsonBody === NULL){
-    //                     throw new HttpException(404,'ERROR: Nonce error count...');
-    //                 }else{
-    //                     throw new HttpException(404,$jsonBody['error']['message']);
-    //                 }
-    //             }
-    //             $response = $tx;
-    //         });
-    //     }
-    //
-    //     return ['balance' => $balance, 'tx' => $response];
-    //
-    // }
+    public function loadGas($address)
+    {
+        $settings = Settings::poa();
+        $web3 = new Web3($settings->blockchain->url);
+
+        //recupero il balance
+        $balance = 0;
+        $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
+            $jsonBody = $this->getJsonBody($err);
+
+            if ($jsonBody !== NULL){
+                throw new HttpException(404,$jsonBody['error']['message']);
+            }
+            $balance = $response->toString() ;
+        });
+        $value = (string) $balance * 1;
+		$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
+
+        $response = null;
+        if ($balance <= 0) {
+            // preparing items
+            $fromAccount = $settings->sealer_address; //'0x654b98728213cf1e20e90b1942fdc5597984eb70'; // node1 fujitsu gabcoin
+            $amount = 1;
+            $toAccount = $address;
+            $hex = dechex(21004);
+            $gas = '0x'.$hex;
+
+            $prv_key = $WebApp::decrypt($settings->sealer_private_key); //'8303D3CA466B73ED5A65DCAB439947793426172C7777F29A8DB68586D4A079D6'; // chiave privata gabcoin Node1 fujitsu server
+
+            // recupero la nonce per l'account
+            $nonce = $this->getNonce($fromAccount);
+            $transaction = new Transaction([
+                'nonce' => '0x'.dechex($nonce), //è un object BigInteger
+                'from' => $fromAccount, //indirizzo sealer Blockchain
+                'to' => $toAccount, //indirizzo commerciante
+                'gas' => '0x200b20', // gas necessario per la transazione
+                'gasPrice' => '1000', // gasPrice giusto?
+                'value' => 1 * pow(10, 18),
+                'chainId' => $settings->chain_id,
+                'data' =>  '0x0', // non ci sono dati per contratto
+            ]);
+            $transaction->offsetSet('chainId', $settings->chain_id);
+            $signed_transaction = $transaction->sign($prv_key); //
+
+            $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
+                if ($err !== null) {
+                    $jsonBody = $this->getJsonBody($err->getMessage());
+
+                    if ($jsonBody === NULL){
+                        throw new HttpException(404,'ERROR: Nonce error count...');
+                    }else{
+                        throw new HttpException(404,$jsonBody['error']['message']);
+                    }
+                }
+                $response = $tx;
+            });
+        }
+
+        return ['balance' => $balance, 'tx' => $response];
+
+    }
 }

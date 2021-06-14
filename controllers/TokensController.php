@@ -94,17 +94,42 @@ class TokensController extends Controller
         $receipt = '';
         $success = false;
 
-        $ERC20 = Yii::$app->Erc20(1);
+        $node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		$ERC20 = new Yii::$app->Erc20();
 
         if ($txhash != '0x0'){
             $success = true;
             $receipt = $ERC20->getReceipt($txhash);
+
+            // update transactions
+            $transaction = Transactions::find()
+                ->findByHash($txhash);
+
+            $transactionValue = $ERC20->wei2eth(
+                $receipt->logs[0]->data,
+                $node->smartContract->decimals
+            );
+
+            // echo "<pre>".print_r($transactionValue,true)."</pre>";
+            // echo "<pre>".print_r($receipt,true)."</pre>";
+            // echo "<pre>".print_r($transaction,true)."</pre>";exit;
+
+            $transaction->blocknumber = $receipt->blockNumber;
+            $transaction->token_received = $transactionValue;
+            $transaction->status = 'complete';
+            if (!$transaction->save()){
+                var_dump( $transaction->getErrors());
+                die();
+            }
+
         }
         $return = [
             'success' => $success,
             'receipt' => $receipt,
         ];
-        // echo "<pre>".print_r($return,true)."</pre>";
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $return;
