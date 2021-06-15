@@ -43,14 +43,18 @@ NavBar::end();
 				</li>
 				<li class="">
 					<a href="<?= Url::to(['/tokens/index']) ?>">
-						<!-- <img src="css/img/content/icons/3.png" alt=""> -->
 						<i class="fa fa-list fa-lg text-primary"></i>
 						<strong class="special"><?= Yii::t('app','Transactions') ?></strong>
 					</a>
 				</li>
 				<li class="">
+					<a href="<?= Url::to(['/settings/index']) ?>">
+						<i class="fa fa-network-wired fa-lg text-primary"></i>
+						<strong class="special"><?= Yii::t('app','Network') ?></strong>
+					</a>
+				</li>
+				<li class="">
 					<a href="<?= Url::to(['users/view','id'=>app\components\WebApp::encrypt(Yii::$app->user->identity->id)]); ?>">
-						<!-- <img src="css/img/content/icons/5.png" alt=""> -->
 						<i class="fas fa-user-circle fa-lg text-primary"></i>
 						<strong class="special"><?= Yii::t('app','Profile') ?></strong>
 					</a>

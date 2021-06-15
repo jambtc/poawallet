@@ -30,6 +30,22 @@ return [
     'telegram.clientId' => $secrets['telegram_client_id'],
     'telegram.clientSecret' => $secrets['telegram_client_secret'],
 
+
+    // smart contract
+    'smartcontract_address' => $secrets['smartcontract_address'],
+    'default_blockchain' => $secrets['default_blockchain'],
+    'default_smartcontract' => $secrets['default_smartcontract'],
+
+    // sealer address for POA CZN
+    'sealer_account_2' => $secrets['sealer_account_2'],
+    'sealer_prvkey_2' => $secrets['sealer_prvkey_2'],
+
+    // sealer address for POA FID
+    'sealer_account_3' => $secrets['sealer_account_3'],
+    'sealer_prvkey_3' => $secrets['sealer_prvkey_3'],
+
+
+    // websocker url
     'websocket_url' => $secrets['websocket_url'],
 
 ];

@@ -56,6 +56,8 @@ class Messages extends Component
 
     //scrive nel file log le informazioni richieste
     private function log($text){
+        // fermo il log
+        return true;
         $logFileName = Yii::$app->basePath."/logs/messages-push.log";
         $handlefile = fopen($logFileName, "a");
 
@@ -71,14 +73,14 @@ class Messages extends Component
     */
     public function push($attributes, $app='wallet')
     {
-        // self::log("Salvo il messaggio in db");
+        self::log("Salvo il messaggio in db");
         $notification = self::save($attributes);
 
         //Carico i parametri della webapp
         $settings = Settings::Vapid();
 
         // $subscriptions = array();
-        // self::log("settings: <pre>".print_r($settings,true)."</pre>\n");
+        self::log("settings: <pre>".print_r($settings,true)."</pre>\n");
 
         $dataProvider = new ActiveDataProvider([
             'query' => PushSubscriptions::find()->
@@ -91,13 +93,13 @@ class Messages extends Component
 
         $content = [];
 
-        // self::log("dataprovider: <pre>".print_r($dataProvider,true)."</pre>\n");
-        // self::log("total count: <pre>".print_r($dataProvider->getTotalCount(),true)."</pre>\n");
+        self::log("dataprovider: <pre>".print_r($dataProvider,true)."</pre>\n");
+        self::log("total count: <pre>".print_r($dataProvider->getTotalCount(),true)."</pre>\n");
 
 
         if ($dataProvider->getTotalCount() >0 )
         {
-            // self::log("Dataprovider > 0\n");
+            self::log("Dataprovider > 0\n");
 
 
             $auth = array(
@@ -108,7 +110,7 @@ class Messages extends Component
                 ),
             );
 
-            // self::log("auth: <pre>".print_r($auth,true)."</pre>\n");
+            self::log("auth: <pre>".print_r($auth,true)."</pre>\n");
 
 
             // impostazioni di default
@@ -140,16 +142,16 @@ class Messages extends Component
                 ],
 
             );
-            // self::log("content: <pre>".print_r($content,true)."</pre>\n");
+            self::log("content: <pre>".print_r($content,true)."</pre>\n");
 
 
-            // self::log("Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
+            self::log("Contenuto del messaggio è: <pre>".print_r($content,true)."</pre>\n");
 
             #echo '<pre>'.print_r($content,true).'</pre>';
             // trasformo il payload in json
             $payload = Json::encode($content);
             #echo '<pre>'.print_r($pay_load,true).'</pre>';
-            // self::log("payload: <pre>".print_r($payload,true)."</pre>\n");
+            self::log("payload: <pre>".print_r($payload,true)."</pre>\n");
 
 
             // foreach ($subscribe_array as $id => $array){
@@ -163,11 +165,11 @@ class Messages extends Component
                         "auth" => $item->auth
                     ],
                 ]);
-                // self::log("subscriptions: <pre>".print_r($subscriptions,true)."</pre>\n");
+                self::log("subscriptions: <pre>".print_r($subscriptions,true)."</pre>\n");
 
                 #echo '<pre>'.print_r($array,true).'</pre>';
                 #echo '<pre>'.print_r($subscription,true).'</pre>';
-                // self::log("Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id_subscription\n");
+                self::log("Invio messaggio per ciascuna subscription id_user:$item->id_user id_subscription:$item->id\n");
 
 
                 // inizializzo la classe
@@ -183,7 +185,7 @@ class Messages extends Component
                         $subscription,
                         $payload // optional (defaults null)
                     );
-                    // self::log("subscription: <pre>".print_r($subscription,true)."</pre>\n");
+                    self::log("subscription: <pre>".print_r($subscription,true)."</pre>\n");
 
                 }
 
@@ -231,20 +233,20 @@ class Messages extends Component
             case 'invoice':
             case 'help':
             case 'fattura':
-                $return = 'Fidelity';
+                $return = 'Wallet';
                 break;
 
             case 'token':
             case 'contact':
                 if ($app == 'wallet')
-                    $return = 'MegaPay';
+                    $return = 'Poa Wallet';
                 else
-                    $return = 'MegaPay';
+                    $return = 'Poa Wallet';
 
                 break;
 
             default:
-                $return = 'Fidelity';
+                $return = 'Wallet';
                 break;
         }
         return $return;

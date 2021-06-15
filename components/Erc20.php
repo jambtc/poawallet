@@ -10,6 +10,7 @@ use yii\web\HttpException;
 use yii\helpers\Json;
 
 use app\models\MPWallets;
+use app\models\ContractType;
 
 use Web3\Web3;
 use Web3\Contract;
@@ -17,12 +18,12 @@ use Web3p\EthereumTx\Transaction;
 use Nullix\CryptoJsAes\CryptoJsAes;
 
 use app\components\Settings;
-use app\components\WebApp;
+// use app\components\WebApp;
 
 
 class Erc20 extends Component
 {
-    public $blockchain_id;
+    public $node_id;
 
     public $balance = 0; // token balance
     public $decimals = 0; // decimals into smart contract
@@ -31,9 +32,13 @@ class Erc20 extends Component
     public $transaction = null;
 
 
-    public function __construct($blockchain_id = 1) {
-        $this->blockchain_id = $blockchain_id;
+    public function __construct($node_id = 0) {
+        $this->node_id = $node_id;
     }
+
+    // public function __construct() {
+    //     // $this->blockchain_id = $blockchain_id;
+    // }
 
     private static function json ($data)
 	{
@@ -101,12 +106,16 @@ class Erc20 extends Component
         $transaction->offsetSet('chainId', $tx->chainId);
         $signed_transaction = $transaction->sign($tx->decryptedSign); // la chiave derivata da json js AES to PHP
 
-        $WebApp = new WebApp;
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-			throw new HttpException(404,'All Nodes are down...');
+        // $settings = Settings::poa();
+        // // $WebApp = new WebApp;
+		// //$poaNode = $WebApp->getPoaNode($this->blockchain_id);
+		// //if (!$poaNode)
+		// //	throw new HttpException(404,'All Nodes are down...');
+        //
+        // $web3 = new Web3($settings->blockchain->url);
 
-        $web3 = new Web3($poaNode);
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
     	$response = null;
         $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
@@ -129,12 +138,8 @@ class Erc20 extends Component
     // get the transactions number of address
     public function getNonce($address)
     {
-        $WebApp = new WebApp;
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-			throw new HttpException(404,'All Nodes are down...');
-
-        $web3 = new Web3($poaNode);
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
     	$response = null;
 		$web3->eth->getTransactionCount($address, function ($err, $nonce) use (&$response) {
@@ -155,21 +160,15 @@ class Erc20 extends Component
 	*/
 	public function Balance($fromAddress)
 	{
-		$settings = Settings::poa($this->blockchain_id);
-		$this->setDecimals($settings->decimals);
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
-		// echo '<pre>'.print_r($settings,true).'</pre>';
-		// exit;
-		$WebApp = new WebApp;
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-			throw new HttpException(404,'All Nodes are down...');
+        $erc20abi = $settings->smartContract->contractType;
+		$this->setDecimals($settings->smartContract->decimals);
 
-		$web3 = new Web3($poaNode);
 		$utils = $web3->utils;
-		$contract = new Contract($web3->provider, $settings->smart_contract_abi);
-
-		$contract->at($settings->smart_contract_address)->call('balanceOf', $fromAddress, [
+		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
+		$contract->at($settings->smartContract->smart_contract_address)->call('balanceOf', $fromAddress, [
 			'from' => $fromAddress
 		], function ($err, $result) use ($contract, $utils) {
 			if ($err !== null) {
@@ -179,13 +178,18 @@ class Erc20 extends Component
 			// exit;
 			if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-				$value = $utils->fromWei((string)$result[0]->value, 'ether');
+				$value = $utils->toEther((string)$result[0]->value, 'ether');
 				$Value0 = (string) $value[0]->value;
-				$Value1 = (float) $value[1]->value / pow(10, $this->getDecimals());
+                $Value1 = (string) $value[1]->value;
+                $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
 
-				$this->setBalance($Value0 + $Value1);
+				$this->setBalance($Value2);
 			}
-			// echo '<pre>'.print_r($this->getBalance(),true).'</pre>';
+            // echo '<pre>'.print_r($result,true).'</pre>';
+            // echo '<pre>'.print_r($value,true).'</pre>';
+            // echo '<pre>'.print_r($Value0,true).'</pre>';
+            // echo '<pre>'.print_r($Value1,true).'</pre>';
+            // echo '<pre>'.print_r($this->getBalance(),true).'</pre>';
 			// exit;
 		});
 
@@ -193,17 +197,33 @@ class Erc20 extends Component
 
 	}
 
+    public function BalanceGas($address)
+    {
+        $settings = Settings::poa();
+        $web3 = new Web3($settings->blockchain->url);
+
+        //recupero il balance
+        $balance = 0;
+        $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
+            $jsonBody = $this->getJsonBody($err);
+
+            if ($jsonBody !== NULL){
+                throw new HttpException(404,$jsonBody['error']['message']);
+            }
+            $balance = $response->toString() ;
+        });
+        $value = (string) $balance * 1;
+		$balance = $value / (1*pow(10,18)); //1000000000000000000;
+
+        return $balance;
+
+    }
 
 
     public function getBlockInfo($blocknumber = 'latest', $search = false)
     {
-		$WebApp = new WebApp;
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-            return $this->json(['error'=>'All Nodes are down...']);
-			// throw new HttpException(404,'All Nodes are down...');
-
-		$web3 = new Web3($poaNode);
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
 		$response = null;
 		$web3->eth->getBlockByNumber($blocknumber,$search, function ($err, $block) use (&$response){
@@ -217,15 +237,10 @@ class Erc20 extends Component
 
     public function getReceipt($hash)
     {
-        $settings = Settings::poa($this->blockchain_id);
-		$WebApp = new WebApp;
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-			return $this->json($return);
-
-		$web3 = new Web3($poaNode);
-		$contract = new Contract($web3->provider, $settings->smart_contract_abi);
+		$contract = new Contract($web3->provider, $settings->smartContract->contractType->smart_contract_abi);
 
 		$response = null;
         $contract->eth->getTransactionReceipt($hash, function ($err, $receipt) use (&$response){
@@ -239,14 +254,8 @@ class Erc20 extends Component
 
     public function getBlockByHash($hash)
     {
-        $settings = Settings::poa($this->blockchain_id);
-		$WebApp = new WebApp;
-
-		$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		if (!$poaNode)
-			return $this->json($return);
-
-		$web3 = new Web3($poaNode);
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
 
 		$response = null;
         $web3->eth->getBlockByHash($hash, true, function ($err, $block) use (&$response){
@@ -256,6 +265,57 @@ class Erc20 extends Component
             $response = $block;
         });
         return $response;
+    }
+
+    public function getGasLimit($toAddress,$fromAddress,$amount)
+    {
+        $settings = Settings::poa($this->node_id);
+        $web3 = new Web3($settings->blockchain->url);
+        $erc20abi = $settings->smartContract->contractType;
+		// $this->setDecimals($settings->smartContract->decimals);
+        $utils = $web3->utils;
+        $amountForContract = $amount * pow(10, $settings->smartContract->decimals);
+
+		$gasLimit = 0;
+		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
+		$contract->at($settings->smartContract->smart_contract_address)->estimateGas(
+            'transfer',
+            $toAddress,
+            $amountForContract,
+            [
+                'from'=>$fromAddress,
+            ]
+            , function ($err, $result) use (&$gasLimit, &$utils) {
+			if ($err !== null) {
+				throw new HttpException(404,$err->getMessage());
+			}
+			// echo '<pre>'.print_r($result,true).'</pre>';
+			// exit;
+			// if (isset($result)) {
+			// 	$gasLimit = $result->value;
+			// }
+            if (isset($result)) {
+				//$balance = (string) $result[0]->value;
+				$value = $utils->toEther((string)$result->value, 'ether');
+				$Value0 = (string) $value[0]->value;
+                $Value1 = (string) $value[1]->value;
+                // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
+                $Value2 = ($Value0 + $Value1) / pow(1000, 3);
+
+                $gasLimit = $Value2 ;
+				//$this->setBalance($Value2);
+			}
+            // echo '<pre>'.print_r($result,true).'</pre>';
+            // echo '<pre>'.print_r($value,true).'</pre>';
+            // echo '<pre>'.print_r($Value0,true).'</pre>';
+            // echo '<pre>'.print_r($Value1,true).'</pre>';
+            // echo '<pre>'.print_r($Value2,true).'</pre>';
+			// exit;
+		});
+
+        return $gasLimit;
+
+
     }
 
 
@@ -318,38 +378,25 @@ class Erc20 extends Component
 
     public function loadGas($address)
     {
-        $settings = Settings::poa($this->blockchain_id);
-        $WebApp = new WebApp;
-
-        $poaNode = $WebApp->getPoaNode($this->blockchain_id);
-        if (!$poaNode)
-            return $this->json($return);
-
-        $web3 = new Web3($poaNode);
-
-        //recupero il balance
-        $balance = 0;
-        $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
-            $jsonBody = $this->getJsonBody($err);
-
-            if ($jsonBody !== NULL){
-                throw new HttpException(404,$jsonBody['error']['message']);
-            }
-            $balance = $response->toString() ;
-        });
-        $value = (string) $balance * 1;
-		$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
+        $settings = Settings::poa();
+        $web3 = new Web3($settings->blockchain->url);
 
         $response = null;
-        if ($balance <= 0) {
+        if (self::BalanceGas($address) <= 0) {
+            if ($settings->blockchain->id == 2){
+                $sealer_account = Yii::$app->params['sealer_account_2'];
+                $prv_key = Yii::$app->params['sealer_prvkey_2'];
+            } else {
+                $sealer_account = Yii::$app->params['sealer_account_3'];
+                $prv_key = Yii::$app->params['sealer_prvkey_3'];
+            }
+
             // preparing items
-            $fromAccount = $settings->sealer_address; //'0x654b98728213cf1e20e90b1942fdc5597984eb70'; // node1 fujitsu gabcoin
+            $fromAccount = $sealer_account; // sealer
             $amount = 1;
             $toAccount = $address;
             $hex = dechex(21004);
             $gas = '0x'.$hex;
-
-            $prv_key = $WebApp::decrypt($settings->sealer_private_key); //'8303D3CA466B73ED5A65DCAB439947793426172C7777F29A8DB68586D4A079D6'; // chiave privata gabcoin Node1 fujitsu server
 
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
@@ -380,7 +427,7 @@ class Erc20 extends Component
             });
         }
 
-        return ['balance' => $balance, 'tx' => $response];
+        return self::BalanceGas($address);
 
     }
 }

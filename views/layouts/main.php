@@ -24,8 +24,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 // impostazioni variabili globali per tutti i js
 $options = [
     'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
-    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : Yii::$app->params['websocket_url'].'/wss',
-    // ...
+    'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : Yii::$app->params['websocket_url'],
 ];
 $this->registerJs(
     "var yiiGlobalOptions = ".\yii\helpers\Json::htmlEncode($options).";",
@@ -137,6 +136,9 @@ if (Yii::$app->controller->id == 'users'){
     echo $this->render('_pin-manage');
     echo $this->render('_push-manage');
     echo $this->render('_masterseed');
+}
+
+if (Yii::$app->controller->id == 'settings'){
     echo $this->render('_blockchainscan');
 }
 

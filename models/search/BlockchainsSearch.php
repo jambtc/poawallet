@@ -17,8 +17,8 @@ class BlockchainsSearch extends Blockchains
     public function rules()
     {
         return [
-            [['id', 'invoice_expiration'], 'integer'],
-            [['denomination', 'smart_contract_address', 'decimals', 'chain_id', 'url_block_explorer', 'smart_contract_abi', 'smart_contract_bytecode', 'sealer_address', 'sealer_private_key'], 'safe'],
+            [['id', ], 'integer'],
+            [['denomination', 'url', 'symbol', 'chain_id', 'url_block_explorer'], 'safe'],
         ];
     }
 
@@ -59,18 +59,14 @@ class BlockchainsSearch extends Blockchains
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'invoice_expiration' => $this->invoice_expiration,
-            'decimals' => $this->decimals,
+            'id_user' => $this->id_user,
         ]);
 
         $query->andFilterWhere(['like', 'denomination', $this->denomination])
-            ->andFilterWhere(['like', 'smart_contract_address', $this->smart_contract_address])
             ->andFilterWhere(['like', 'chain_id', $this->chain_id])
             ->andFilterWhere(['like', 'url_block_explorer', $this->url_block_explorer])
-            ->andFilterWhere(['like', 'smart_contract_abi', $this->smart_contract_abi])
-            ->andFilterWhere(['like', 'smart_contract_bytecode', $this->smart_contract_bytecode])
-            ->andFilterWhere(['like', 'sealer_address', $this->sealer_address])
-            ->andFilterWhere(['like', 'sealer_private_key', $this->sealer_private_key]);
+            ->andFilterWhere(['like', 'url', $this->url])
+            ->andFilterWhere(['like', 'symbol', $this->symbol]);
 
         return $dataProvider;
     }

@@ -14,6 +14,7 @@ $(function () {
         // console.log('[ws] readyState:', readyState);
         // all'apertura leggi il numero di blocchi
         webSocket.onopen = function(e) {
+            // $('.pulse-button').addClass('pulse-button-offline');
             hideWssAlert();
             console.log('[ws] onopen user_id:', yiiGlobalOptions.cryptedIdUser);
             webSocket.send( JSON.stringify({
@@ -26,7 +27,7 @@ $(function () {
         // in caso di errore di connessione o server down riavvio
         webSocket.onerror = function(event) {
             console.error("[ws] WebSocket error observed:", event);
-            $('.pulse-button').addClass('pulse-button-offline');
+
             if (countError >= 6){
                 showWssAlert();
                 countError = 0;

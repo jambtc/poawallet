@@ -69,13 +69,13 @@ class UsersController extends Controller
                     ->andWhere(['status'=>'complete']);
 
 
-        $blockchain = Settings::poa(1);
+        $blockchain = Settings::poa();
 
-        $sent['sum'] = round($tokens_from->sum('token_price'), $blockchain->decimals);
-        $sent['count'] = round($tokens_from->count(), $blockchain->decimals);
+        $sent['sum'] = round($tokens_from->sum('token_price'), $blockchain->smartContract->decimals);
+        $sent['count'] = round($tokens_from->count(), $blockchain->smartContract->decimals);
 
-        $received['sum'] = round($tokens_to->sum('token_price'), $blockchain->decimals);
-        $received['count'] = round($tokens_to->count(), $blockchain->decimals);
+        $received['sum'] = round($tokens_to->sum('token_price'), $blockchain->smartContract->decimals);
+        $received['count'] = round($tokens_to->count(), $blockchain->smartContract->decimals);
 
         $total_transactions = $sent['count'] + $received['count'];
 

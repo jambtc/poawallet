@@ -17,6 +17,7 @@ use app\models\Owner;
 use app\models\Blockchains;
 use app\models\Vapid;
 use app\models\Host;
+use app\models\Nodes;
 
 class Settings extends Component
 {
@@ -25,8 +26,13 @@ class Settings extends Component
         return Owner::findOne(1);
     }
 
-    public static function poa($id){
-        return Blockchains::findOne($id);
+    public static function poa($user_id = 0){
+        if ($user_id != 0) {
+            $node = Nodes::find()->where(['id_user'=> $user_id])->one();
+        } else {
+            $node = Nodes::find()->where(['id_user'=> Yii::$app->user->id])->one();
+        }
+        return $node;
     }
 
     public static function vapid(){

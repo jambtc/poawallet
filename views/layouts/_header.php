@@ -13,17 +13,19 @@
 			</span>
 		</span>
 	</div>
-
+	<div class="search-button">
+	  <button class="pulse-button pulse-button-offline"></button>
+	</div>
 	<div class="page-title">
+		<small class="header-message"></small>
+	</div>
+
+	<!-- <div class="page-title">
 		<div class="row">
-			<div class="col-2 pl-4">
-			  <button class="pulse-button"></button>
-		  	</div>
-    		<div class="col-10 text-left">
-        		<small class="header-message text-break"></small>
-    		</div>
+
+
 		</div>
-    </div>
+    </div> -->
 
 
 

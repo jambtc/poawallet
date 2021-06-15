@@ -17,7 +17,7 @@ class TransactionsSearch extends Transactions
     public function rules()
     {
         return [
-            [['id', 'id_user', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
+            [['id', 'id_user', 'id_smart_contract', 'invoice_timestamp', 'expiration_timestamp'], 'integer'],
             [['type', 'status', 'from_address', 'to_address', 'blocknumber', 'txhash', 'message'], 'safe'],
             [['token_price', 'token_received'], 'number'],
         ];
@@ -61,6 +61,7 @@ class TransactionsSearch extends Transactions
         $query->andFilterWhere([
             'id' => $this->id,
             'id_user' => $this->id_user,
+            'id_smart_contract' => $this->id_smart_contract,
             'token_price' => $this->token_price,
             'token_received' => $this->token_received,
             'invoice_timestamp' => $this->invoice_timestamp,

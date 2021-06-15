@@ -6,12 +6,12 @@ use Yii;
 use app\models\Transactions;
 use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
+use app\models\Nodes;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 use app\components\WebApp;
 
 /**
@@ -43,7 +43,11 @@ class TokensController extends Controller
     public function actionIndex()
     {
         $fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
-        if (null === $fromAddress){
+        $node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		if (NULL === $fromAddress || NULL === $node){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
@@ -57,6 +61,9 @@ class TokensController extends Controller
 		$dataProvider->query
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
+
+        $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
+        // echo '<pre>'.print_r($dataProvider,true);exit;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -89,17 +96,42 @@ class TokensController extends Controller
         $receipt = '';
         $success = false;
 
-        $ERC20 = Yii::$app->Erc20(1);
+        $node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+		$ERC20 = new Yii::$app->Erc20();
 
         if ($txhash != '0x0'){
             $success = true;
             $receipt = $ERC20->getReceipt($txhash);
+
+            // update transactions
+            $transaction = Transactions::find()
+                ->findByHash($txhash);
+
+            $transactionValue = $ERC20->wei2eth(
+                $receipt->logs[0]->data,
+                $node->smartContract->decimals
+            );
+
+            // echo "<pre>".print_r($transactionValue,true)."</pre>";
+            // echo "<pre>".print_r($receipt,true)."</pre>";
+            // echo "<pre>".print_r($transaction,true)."</pre>";exit;
+
+            $transaction->blocknumber = $receipt->blockNumber;
+            $transaction->token_received = $transactionValue;
+            $transaction->status = 'complete';
+            if (!$transaction->save()){
+                var_dump( $transaction->getErrors());
+                die();
+            }
+
         }
         $return = [
             'success' => $success,
             'receipt' => $receipt,
         ];
-        // echo "<pre>".print_r($return,true)."</pre>";
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         return $return;

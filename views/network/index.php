@@ -17,7 +17,7 @@ $this->title = Yii::t('app', 'Network details');
                     <i class="fas fa-2x fa-network-wired"></i>
                     <div class="ml-10">
                       <h3 class="coin-name"><?= Yii::t('app','Node') ?></h3>
-                      <small class="text-muted"><?= $node ?></small>
+                      <small class="text-muted"><?= $node->blockchain->url ?></small>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,6 @@ $this->title = Yii::t('app', 'Network details');
     </section>
 
 
-    <div class="form-divider"></div>
     <div class="form-divider"></div>
 
 </div>

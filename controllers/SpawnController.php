@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
@@ -13,9 +12,14 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveRecord;
 
-
 use app\models\WizardWalletForm;
 use app\models\MPWallets;
+use app\models\Nodes;
+use app\models\Users;
+use app\models\StandardBlockchainValues;
+use app\models\StandardSmartContractValues;
+use app\models\Blockchains;
+use app\models\SmartContracts;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -23,20 +27,10 @@ use yii\helpers\Url;
 
 class SpawnController extends Controller
 {
-
 	public function beforeAction($action)
 	{
-    $this->enableCsrfValidation = false;
-
-		// $session = Yii::$app->session;
-		// $token = $session->get('token-spawn');
-		// if ($token === null || $token != $_GET['token']) {
-		// 	Yii::$app->response->statusCode = 403;
-		// 	return false;
-		// }
-		// $session->remove('token-spawn');
-
-    return parent::beforeAction($action);
+    	$this->enableCsrfValidation = false;
+    	return parent::beforeAction($action);
 	}
 
 
@@ -90,10 +84,9 @@ class SpawnController extends Controller
 	 */
 	public function actionIndex()
  	{
-
-		// echo '<pre>'.print_r($_POST,true).'</pre>';
-		// exit;
 		$this->layout = 'wizard';
+
+		$defaultNetworkExist = false;
 
 		$formModel = new WizardWalletForm; //form di input dei dati
 
@@ -107,17 +100,50 @@ class SpawnController extends Controller
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
+			$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
+
 			if(null === $boltWallet) {
-			  //doesn't exist so create record
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
-				$block = Yii::$app->Erc20->getBlockInfo();
-				$boltWallet->blocknumber = ($block->number === null) ? '0x0' : $block->number;
+				$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
+
+				if (null === $node){
+					$boltWallet->blocknumber = '0x0';
+					$boltWallet->save();
+					// entro nella richiesta di selezione del nodo
+					// 2 sono stati già preinseriti
+					// return $this->redirect(['/settings/nodes/create']);
+					$defaultNetworkExist = true;
+					$this->createDefaultNetworks();
+				} else {
+					$ERC20 = new Yii::$app->Erc20($node->id_blockchain); // blockchain id -> 1
+					$block = $ERC20->getBlockInfo();
+					// echo '<pre>'.print_r($block,true);exit;
+					$json = json_decode($block);
+
+					if (!isset($json->error)){
+						$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
+					} else {
+						$boltWallet->blocknumber = '0x0';
+					}
+				}
+				// echo '<pre> [nodes]'.print_r($nodes,true);exit;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
-			if ($boltWallet->save())
-        		return $this->redirect(['/wallet/index']);
+			if ($boltWallet->save()){
+				if (null === $node && $defaultNetworkExist === false){
+					$this->createDefaultNetworks();
+				}
+				// if (null === $node){
+				// 	$this->createDefaultNetworks();
+				//
+				// 	return $this->redirect(['/settings/nodes/create']);
+				// } else {
+
+					return $this->redirect(['/wallet/index']);
+				// }
+			}
 			else
 				var_dump( $boltWallet->getErrors());
 
@@ -128,6 +154,69 @@ class SpawnController extends Controller
 			'formModel' => $formModel,
 		]);
  	}
+
+	private function createDefaultNetworks()
+	{
+		$default_blockchains = StandardBlockchainValues::find()->all();
+		$default_smartcontracts = StandardSmartContractValues::find()->all();
+
+		$blockchain = Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		$smartcontract = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		$nodes = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
+
+		if (empty($blockchain)) {
+			foreach ($default_blockchains as $default_blockchain){
+				$blockchain = new Blockchains;
+				$blockchain->id_user = Yii::$app->user->id;
+				$blockchain->denomination = $default_blockchain->denomination;
+				$blockchain->chain_id = $default_blockchain->chain_id;
+				$blockchain->url = $default_blockchain->url;
+				$blockchain->symbol = $default_blockchain->symbol;
+				$blockchain->url_block_explorer = $default_blockchain->url_block_explorer;
+				if (!$blockchain->save()){
+					var_dump( $blockchain->getErrors());
+					die();
+				}
+			}
+		}
+
+		if (empty($smartcontract)){
+			foreach ($default_smartcontracts as $default_smartcontract){
+				$smartcontract = new SmartContracts;
+				$smartcontract->id_user = Yii::$app->user->id;
+				$smartcontract->id_blockchain = $default_smartcontract->id_blockchain;
+				$smartcontract->id_contract_type = $default_smartcontract->id_contract_type;
+				$smartcontract->denomination = $default_smartcontract->denomination;
+				$smartcontract->smart_contract_address = $default_smartcontract->smart_contract_address;
+				$smartcontract->decimals = $default_smartcontract->decimals;
+				$smartcontract->symbol = $default_smartcontract->symbol;
+				if (!$smartcontract->save()){
+					var_dump( $smartcontract->getErrors());
+					die();
+				}
+			}
+		}
+
+		// inserisco la blockchain INSERITA NEI PARAMS come default
+		// Poi l'utente può successivamente cambiarla
+		// in tal modo posso utilizzare lo stesso software in più
+		// ambiti!
+		if (null === $nodes){
+			$model = new Nodes;
+			$model->id_user = Yii::$app->user->id;
+			$model->id_blockchain = Yii::$app->params['default_blockchain'];
+			$model->id_smart_contract = Yii::$app->params['default_smartcontract'];
+			if (!$model->save()){
+				var_dump( $model->getErrors());
+				die();
+			}
+		}
+
+
+		return true;
+	}
+
+
 
 	/**
 	 * Show new wallet page

@@ -13,7 +13,7 @@ use yii\base\Model;
 
 use yii\helpers\Json;
 use yii\helpers\Url;
-use app\components\WebApp;
+use app\models\Nodes;
 
 class NetworkController extends Controller
 {
@@ -69,7 +69,7 @@ class NetworkController extends Controller
 	public function actionIndex()
  	{
  		return $this->render('index', [
-			'node' => WebApp::getPoaNode(),
+			'node' => Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one(),
 		]);
  	}
 

@@ -23,7 +23,12 @@ use app\models\MPWallets;
  * @property string|null $last_name
  * @property string|null $first_name
  *
- * @property MPWallet[] $mpWallets
+ * @property MpAuth[] $mpAuths
+ * @property MpNotificationsReaders[] $mpNotificationsReaders
+ * @property MpSubscriptions[] $mpSubscriptions
+ * @property MpWallets[] $mpWallets
+ * @property Nodes[] $nodes
+ * @property Transactions[] $transactions
  */
 class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -78,13 +83,33 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+    * Gets query for [[MpNotificationsReaders]].
+    *
+    * @return \yii\db\ActiveQuery|\app\models\query\MpNotificationsReadersQuery
+    */
+   public function getNotificationsReaders()
+   {
+       return $this->hasMany(NotificationsReaders::className(), ['id_user' => 'id']);
+   }
+
+   /**
+    * Gets query for [[MpSubscriptions]].
+    *
+    * @return \yii\db\ActiveQuery|\app\models\query\MpSubscriptionsQuery
+    */
+   public function getSubscriptions()
+   {
+       return $this->hasMany(PushSubscriptions::className(), ['id_user' => 'id']);
+   }
+
+    /**
      * Gets query for [[MpWallets]].
      *
      * @return \yii\db\ActiveQuery|\app\models\query\MpWalletQuery
      */
     public function getWallets()
     {
-        return $this->hasMany(MpWallets::className(), ['id_user' => 'id']);
+        return $this->hasMany(MPWallets::className(), ['id_user' => 'id']);
     }
 
     /**
@@ -95,6 +120,16 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function getTransactions()
     {
         return $this->hasMany(Transactions::className(), ['id_user' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Nodes]].
+     *
+     * @return \yii\db\ActiveQuery|\app\models\query\NodesQuery
+     */
+    public function getNodes()
+    {
+        return $this->hasMany(Nodes::className(), ['id_user' => 'id']);
     }
 
     /**

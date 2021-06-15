@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 use app\models\search\TransactionsSearch;
 use app\models\MPWallets;
 use app\models\Users;
+use app\models\Nodes;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
@@ -115,8 +116,11 @@ class WalletController extends Controller
 	public function actionIndex()
 	{
 		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
+		$node = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
 
-		if (NULL === $fromAddress){
+		if (NULL === $fromAddress || NULL === $node){
 			$session = Yii::$app->session;
 			$string = Yii::$app->security->generateRandomString(32);
 			$session->set('token-wizard', $string );
@@ -132,15 +136,18 @@ class WalletController extends Controller
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
 
+        $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
+
 		return $this->render('index', [
 				'searchModel' => $searchModel,
 				'dataProvider' => $dataProvider,
 				'fromAddress' => $fromAddress,
 				'balance' => Yii::$app->Erc20->Balance($fromAddress),
 				'userImage' => $this->loadSocialUser()->picture,
+				'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
+				'node' => $node,
 		]);
 	}
-
 
 
 	private static function json ($data)

@@ -19,39 +19,46 @@ use app\models\Notifications;
 
 class WebApp extends Component
 {
-    /**
-     * Recupera casualmente il primo nodo POA disponibile
-     * @return nodeurl
-     */
-    public static function getPoaNode($blockchain_id = 1)
-    {
-        $blockchain = Blockchains::findOne($blockchain_id);
-        $nodes = $blockchain->nodes;
-
-        $nodelist = ArrayHelper::map(
-            $nodes,
-            'id_node',
-            function ($item, $defaultValue) {
-                return $item->url . ':' . $item->port;
-            }
-        );
-
-        $isdown = true;
-        shuffle($nodelist);
-        do {
-            $node = array_shift($nodelist);
-
-            if (empty($node)){
-                return false;
-            }
-
-            if( self::checkUrl( $node ) ) {
-                $isdown = false;
-            }
-        } while ($isdown);
-
-        return $node;
-    }
+    // /**
+    //  * Recupera casualmente il primo nodo POA disponibile
+    //  * @return nodeurl
+    //  */
+    // public static function getPoaNode($blockchain_id = 1)
+    // {
+    //     $blockchain = Blockchains::findOne($blockchain_id);
+    //     // $nodes = $blockchain->nodes;
+    //     //
+    //     // $nodelist = ArrayHelper::map(
+    //     //     $nodes,
+    //     //     'id_node',
+    //     //     function ($item, $defaultValue) {
+    //     //         return $item->url . ':' . $item->port;
+    //     //     }
+    //     // );
+    //     //
+    //     // $isdown = true;
+    //     // shuffle($nodelist);
+    //     // do {
+    //     //     $node = array_shift($nodelist);
+    //     //
+    //     //     if (empty($node)){
+    //     //         return false;
+    //     //     }
+    //     //
+    //     //     if( self::checkUrl( $node ) ) {
+    //     //         $isdown = false;
+    //     //     }
+    //     // } while ($isdown);
+    //
+    //     // return $node;
+    //
+    //     if( self::checkUrl( $blockchain->url ) ) {
+    //         return false;
+    //     }
+    //     // echo $blockchain->url;
+    //     // exit;
+    //     return $blockchain->url;
+    // }
     /**
 	 * PHP/cURL function to check a web site status. If HTTP status is not 200 or 302, or
 	 * the requests takes longer than 1 seconds, the website is unreachable.
@@ -97,6 +104,36 @@ class WebApp extends Component
     //
     //     return $request->getisOk();
     // }
+
+	// Shortens a number and attaches K, M, B, etc. accordingly
+    public function number_shorten($number, $precision = 3, $divisors = null) {
+        // Setup default $divisors if not provided
+        if (!isset($divisors)) {
+            $divisors = array(
+                pow(1000, 0) => '', // 1000^0 == 1
+                pow(1000, 1) => 'k', // Thousand
+                pow(1000, 2) => 'Mega', // Mega - Million
+                pow(1000, 3) => 'Giga', // Giga - Billion
+                pow(1000, 4) => 'Tera', // Tera - Trillion
+                pow(1000, 5) => 'Peta', // Peta - Quadrillion
+                pow(1000, 6) => 'Exa', // Exa - Quintillion
+                gmp_strval('1000000000000000000000') => 'Zetta', // Sextillion
+                gmp_strval('1000000000000000000000000') => 'Yotta', // Septillion
+            );
+        }
+
+        // Loop through each $divisor and find the
+        // lowest amount that matches
+        foreach ($divisors as $divisor => $shorthand) {
+            if (abs($number) < ($divisor * 1000)) {
+                // We found a match!
+                break;
+            }
+        }
+        // We found our match, or there were no matches.
+        // Either way, use the last defined value for $divisor.
+        return number_format($number / $divisor, $precision) .' '. $shorthand;
+    }
 
     /**
      * funzione che crypta un testo

@@ -6,6 +6,7 @@
 /* @var $exception Exception */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = $name;
 ?>
@@ -28,6 +29,11 @@ $this->title = $name;
         </p>
         <p>
             Please contact us if you think this is a server error. Thank you.
+        </p>
+        <p class="mt-3">
+            <a href="<?= Url::to(['site/index']) ?>">
+                <button type="button" class="btn btn-warning">Go back!</button>
+            </a>
         </p>
     </div>
     </div>

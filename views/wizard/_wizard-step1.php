@@ -4,12 +4,12 @@ use yii\helpers\Url;
 <div class="jumbotron jumbotron-fluid">
     <h3 class="display-4"><?php echo Yii::t('app','Hi').' <span class="text-capitalize">'.Yii::$app->user->identity->first_name.'</span>,';?></h3>
     <p class="lead">
-        <?= Yii::t('app','soon you will activate your new wallet, so you will be able to receive and send tokens (discount coupons) among the activities participating in the project.'); ?>
+        <?= Yii::t('app','soon you will activate your new wallet.'); ?>
     </p>
     <p>
         <?= Yii::t('app','Your electronic wallet will be made secure thanks to a mathematical process that will make the content unreadable.'); ?>
     </p>
-    
+
 
     <div class="form-divider"></div>
     <div class="container">
