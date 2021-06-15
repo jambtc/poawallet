@@ -199,7 +199,7 @@ class CommandsServer extends WebSocketServer
 
                 $transactions = $block->transactions;
 				// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Transactions on block n. $searchBlock: \n".'<pre>'.print_r($transactions,true).'</pre>');
-				$this->log('Transazioni è: <pre>'.print_r($transactions,true).'</pre>');
+				// $this->log('Transazioni è: <pre>'.print_r($transactions,true).'</pre>');
 				// exit;
 
 				if (!empty($transactions))
@@ -207,14 +207,16 @@ class CommandsServer extends WebSocketServer
                     $this->log("$x Transaction piena on block n. $searchBlock");
 
 					 // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
-					foreach ($transactions as $transaction)
+					foreach ($transactions as $idx => $transaction)
 					{
 						//controlla transazioni ethereum
+
 						if (strtoupper($transaction->to) <> strtoupper($node->smartContract->smart_contract_address) ){
 							$this->log(" : è una transazione ether...\n");
+
 							$ReceivingType = 'ether';
 					    }else{
-						    $this->log(" : è una transazione token...\n");
+						    $this->log($idx." : è una transazione token...\n");
 						    //smart contract
 						    $ReceivingType = 'token';
 						    // $transactionId = $transaction->hash;
