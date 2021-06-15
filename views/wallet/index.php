@@ -32,15 +32,21 @@ include ('index_js.php');
                           </div>
                           <div class="resources-card-wrapper">
                               <div class="resources-card bg-transparent txt-white">
-                                  <p class="p-1">
-                                      <i class="fa fa-star star-total-balance"></i>
+                                  <p class=" d-flex justify-content-center p-1">
+                                      <!-- <i class="fa fa-star star-total-balance"></i> -->
                                       <span class="" id="total-balance"><?= WebApp::number_shorten($balance) ?>&nbsp;<?= $node->smartContract->symbol ?></span>
+                                  </p>
+                                  <p class="badge d-flex justify-content-end">
+                                      Token
                                   </p>
                               </div>
                               <div class="resources-card bg-transparent txt-white">
-                                  <p class="p-1">
-                                      <i class="fab fa-ethereum"></i>
+                                  <p class=" d-flex justify-content-center p-1">
+                                      <!-- <i class="fab fa-ethereum"></i> -->
                                       <span class="" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?>&nbsp;<?= $node->blockchain->symbol ?></span>
+                                  </p>
+                                  <p class="badge d-flex justify-content-end">
+                                      Gas
                                   </p>
                               </div>
                           </div>

@@ -133,9 +133,10 @@ class WalletController extends Controller
 		$dataProvider->setPagination(['pageSize' => 5]);
 		$dataProvider->sort->defaultOrder = ['invoice_timestamp' => SORT_DESC];
 		$dataProvider->query
-					->andwhere(['=','id_smart_contract', $node->id_smart_contract])
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
+
+        $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
 
 		return $this->render('index', [
 				'searchModel' => $searchModel,

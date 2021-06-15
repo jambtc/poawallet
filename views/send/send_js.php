@@ -8,6 +8,7 @@ use app\components\Settings;
 $blockchain = Settings::poa();
 
 $options = [
+
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
     'sendURL' => Url::to(['/send/generate-transaction']),
@@ -25,7 +26,7 @@ $options = [
                                 <p class="generating">'.Yii::t('app','Generating transaction...').'</p>
                                 </div>',
     'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
-
+    'network' => $blockchain->blockchain->id,
     //'textClose' => Yii::t('app','Close'),
     // ...
 ];
@@ -74,15 +75,18 @@ $wallet_send = <<<JS
             event.stopPropagation();
 		}
 
-        if ($("#sendform-balance_gas").val() <= 0  ){
-            $('#error-summary').show().text(yiiOptions.nogasError);
-            event.stopPropagation();
-		}
+        if (yiiOptions.network != 2 && yiiOptions.network != 3){
+            if ($("#sendform-balance_gas").val() <= 0  ){
+                $('#error-summary').show().text(yiiOptions.nogasError);
+                event.stopPropagation();
+            }
 
-        if (gasLimit() == false){
-            $('#error-summary').show().text(yiiOptions.enoughgasError);
-            event.stopPropagation();
+            if (gasLimit() == false){
+                $('#error-summary').show().text(yiiOptions.enoughgasError);
+                event.stopPropagation();
+            }
         }
+
 	});
 
 

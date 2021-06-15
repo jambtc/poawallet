@@ -180,10 +180,14 @@ class SendController extends Controller
 		$ERC20 = new Yii::$app->Erc20();
 		$amountForContract = $amount * pow(10, $settings->smartContract->decimals);
 
-		// carico il gas in caso questo sia a 0 per inviare transazioni
-		// solo nel caso in cui mi trovo sulla mia POA
-		// $gasBalance = $ERC20->loadGas($fromAccount);
-		$gasBalance = $ERC20->BalanceGas($fromAccount);
+		// carico il gas in caso questo sia a 0 MA SOLO
+		// se mi trovo sul network POA 2 e 3 inserito di default
+		// nel DB 
+		if ($settings->blockchain->id ==2 || $settings->blockchain->id == 3){
+			$gasBalance = $ERC20->loadGas($fromAccount);
+		} else {
+			$gasBalance = $ERC20->BalanceGas($fromAccount);
+		}
 
 		// carico le informazioni relative al blocco attuale
 		$block = $ERC20->getBlockInfo();

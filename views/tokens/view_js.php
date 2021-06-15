@@ -21,11 +21,7 @@ $transget = <<<JS
             })
             .then(function(json) {
                 console.log('[tokens view] receipt', json);
-                // var response = JSON.parse(json);
-
                 renewPage();
-
-
             });
         });
 

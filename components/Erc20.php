@@ -381,29 +381,22 @@ class Erc20 extends Component
         $settings = Settings::poa();
         $web3 = new Web3($settings->blockchain->url);
 
-        //recupero il balance
-        $balance = 0;
-        $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
-            $jsonBody = $this->getJsonBody($err);
-
-            if ($jsonBody !== NULL){
-                throw new HttpException(404,$jsonBody['error']['message']);
-            }
-            $balance = $response->toString() ;
-        });
-        $value = (string) $balance * 1;
-		$balance = round ($value / (1*pow(10,18)), 4); //1000000000000000000;
-
         $response = null;
-        if ($balance <= 0) {
+        if (self::BalanceGas($address) <= 0) {
+            if ($settings->blockchain->id == 2){
+                $sealer_account = Yii::$app->params['sealer_account_2'];
+                $prv_key = Yii::$app->params['sealer_prvkey_2'];
+            } else {
+                $sealer_account = Yii::$app->params['sealer_account_3'];
+                $prv_key = Yii::$app->params['sealer_prvkey_3'];
+            }
+
             // preparing items
-            $fromAccount = $settings->sealer_address; //'0x654b98728213cf1e20e90b1942fdc5597984eb70'; // node1 fujitsu gabcoin
+            $fromAccount = $sealer_account; // sealer
             $amount = 1;
             $toAccount = $address;
             $hex = dechex(21004);
             $gas = '0x'.$hex;
-
-            $prv_key = $WebApp::decrypt($settings->sealer_private_key); //'8303D3CA466B73ED5A65DCAB439947793426172C7777F29A8DB68586D4A079D6'; // chiave privata gabcoin Node1 fujitsu server
 
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
@@ -434,7 +427,7 @@ class Erc20 extends Component
             });
         }
 
-        return ['balance' => $balance, 'tx' => $response];
+        return self::BalanceGas($address);
 
     }
 }
