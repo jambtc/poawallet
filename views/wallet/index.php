@@ -33,20 +33,26 @@ include ('index_js.php');
                           <div class="resources-card-wrapper">
                               <div class="resources-card bg-transparent txt-white">
                                   <p class=" d-flex justify-content-center p-1">
-                                      <!-- <i class="fa fa-star star-total-balance"></i> -->
-                                      <span class="" id="total-balance"><?= WebApp::number_shorten($balance) ?>&nbsp;<?= $node->smartContract->symbol ?></span>
+                                      <div>
+                                          <!-- <span id="total-balance"><?= WebApp::number_shorten($balance) ?></span> -->
+                                          <span id="total-balance"><?= $balance ?></span>
+                                          <span><?= $node->smartContract->symbol ?></span>
+                                      </div>
                                   </p>
                                   <p class="badge d-flex justify-content-end">
-                                      Token
+                                      Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
                                   </p>
                               </div>
                               <div class="resources-card bg-transparent txt-white">
                                   <p class=" d-flex justify-content-center p-1">
-                                      <!-- <i class="fab fa-ethereum"></i> -->
-                                      <span class="" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?>&nbsp;<?= $node->blockchain->symbol ?></span>
+                                      <div>
+                                          <!-- <span id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span> -->
+                                          <span id="total-balance_gas"><?= $balance_gas ?></span>
+                                          <span><?= $node->blockchain->symbol ?></span>
+                                      </div>
                                   </p>
                                   <p class="badge d-flex justify-content-end">
-                                      Gas
+                                      Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
                                   </p>
                               </div>
                           </div>

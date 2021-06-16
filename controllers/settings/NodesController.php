@@ -34,12 +34,12 @@ class NodesController extends Controller
      * Lists all Blockchains models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        return $this->render('view', [
-            'model' => $this->findModel(Yii::$app->user->id),
-        ]);
-    }
+    // public function actionIndex()
+    // {
+    //     return $this->render('update', [
+    //         'model' => $this->findModel(Yii::$app->user->id),
+    //     ]);
+    // }
 
     /**
      * Displays a single Blockchains model.
@@ -47,30 +47,30 @@ class NodesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+    // public function actionView($id)
+    // {
+    //     return $this->render('view', [
+    //         'model' => $this->findModel($id),
+    //     ]);
+    // }
 
     /**
      * Creates a new Blockchains model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Nodes();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+    // public function actionCreate()
+    // {
+    //     $model = new Nodes();
+    //
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     }
+    //
+    //     return $this->render('create', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Updates an existing Nodes model.
@@ -79,12 +79,12 @@ class NodesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdate()
     {
-        $model = $this->findModel($id);
+        $model = $this->findModel();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
@@ -113,9 +113,13 @@ class NodesController extends Controller
      * @return Nodes the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
+    protected function findModel()
     {
-        if (($model = Nodes::findOne($id)) !== null) {
+        $model = Nodes::find()
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
+ 	    		->one();
+
+        if ($model !== null) {
             return $model;
         }
 

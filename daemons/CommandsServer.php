@@ -61,20 +61,23 @@ class CommandsServer extends WebSocketServer
     protected function getCommand(ConnectionInterface $from, $msg)
     {
         $request = json_decode($msg, true);
+        // $this->log("Command is: <pre>".print_r($request,true).'</pre>');
         return !empty($request['action']) ? $request['action'] : parent::getCommand($from, $msg);
     }
 
     public function commandSetUserId(ConnectionInterface $client, $msg)
     {
-       $request = json_decode($msg, true);
+        $request = json_decode($msg, true);
 
         if (!empty($request['user_id']) && $user_id = trim($request['user_id'])) {
             $client->user_id = WebApp::decrypt($user_id);
         }
+        $this->log("Subscription with user_id: $client->user_id");
 
         // ricerca il blocknumber adesso e restituisci il valore
         $result = $this->getBlockNumber($client->user_id);
-        $this->log("Subscription with user_id: $client->user_id");
+
+        // $this->log("getBlocknumber function: <pre>".print_r($result,true).'</pre>');
 
         $client->send(json_encode($result));
     }
@@ -113,12 +116,20 @@ class CommandsServer extends WebSocketServer
    		];
 
         $node = Nodes::find()->where(['id_user'=>$user_id])->one();
-        $ERC20 = new Yii::$app->Erc20($node->id);
-        // $this->log("result<pre>".print_r($return,true)."</pre>\n");   exit;
+        $ERC20 = new Yii::$app->Erc20($user_id);
+
+        // $this->log("return<pre>".print_r($return,true)."</pre>\n");   exit;
+
+        // $this->log("node table: <pre>".print_r($node,true).'</pre>');
+        // $this->log("response: <pre>".print_r($return,true).'</pre>');
+
         $blockLatest = $ERC20->getBlockInfo();
+
+        // $this->log("blocklatest info: <pre>".print_r($blockLatest,true).'</pre>');
 
    		//calcolo la differenza tra i blocchi
    		$difference = hexdec($blockLatest->number) - hexdec($wallet->blocknumber);
+
 
    		$return = [
    			 'id'=>time(),
@@ -133,6 +144,9 @@ class CommandsServer extends WebSocketServer
              'command'=>'check-transactions',
    		];
 
+        // $this->log("return info: <pre>".print_r($return,true).'</pre>');
+
+
         return $return;
    	}
 
@@ -145,11 +159,9 @@ class CommandsServer extends WebSocketServer
         $this->transactionsFound = [];
 
         $request = json_decode($msg, true);
-		// echo '<pre>'.print_r($request,true).'</pre>';
         $postData = $request['postData'];
 
-        // $filename = Yii::$app->basePath."/web/assets/blockchain-command.log";
-		// $myfile = fopen($filename, "a");
+        // $this->log("postdata: <pre>".print_r($postData,true).'</pre>');
 
         $wallets = MPWallets::find()
 		   ->andWhere(['id_user'=>$client->user_id])
@@ -158,15 +170,9 @@ class CommandsServer extends WebSocketServer
 		$savedBlock = $wallets->blocknumber; //dovrebbe essere già stato salvato in formato hex
 		$SEARCH_ADDRESS = strtoupper($postData['search_address']);
 
-
-        //$chainBlock = $postData['chainBlocknumber'];
-
-        // echo '\r\n<pre>il saved blocknumber è'.print_r($savedBlock,true).'</pre>';
-        // echo '\r\n<pre>il transactiopn found è'.print_r($this->getTransactionsFound(),true).'</pre>';
-
         //Carico i parametri della webapp
         $node = Nodes::find()->where(['id_user'=>$client->user_id])->one();
-        $ERC20 = new Yii::$app->Erc20($node->id);
+        $ERC20 = new Yii::$app->Erc20($client->user_id);
 
 		// $settings = Settings::poa($node->id_user);
 
@@ -174,12 +180,7 @@ class CommandsServer extends WebSocketServer
         $chainBlock = $blockInfo->number;
 
 		// numero massimo di blocchi da scansionare
-		// if (isset($settings->maxBlocksToScan))
-		// 	$this->setMaxBlocksToScan($settings->maxBlocksToScan);
-
         $maxBlockToScan = $this->getMaxBlocksToScan();
-
-        // echo '\r\n<pre>il maxBlockToScan è'.print_r($maxBlockToScan,true).'</pre>';
 
 		// Inizio il ciclo sui blocchi
         for ($x=0; $x < $maxBlockToScan;$x++)
@@ -285,7 +286,10 @@ class CommandsServer extends WebSocketServer
     										   'type' => 'token',
     										   'id_user' => $id_user_from,
     										   'status' => 'complete',
-    										   'description' => Yii::t('app','A transaction you sent has been completed.'),
+                                               'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
+												   'amount' => $tokens->token_price,
+												   'symbol' => $node->smartContract->symbol,
+											   ]),
                                                // 'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
                                                'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
     										   'timestamp' => $tokens->invoice_timestamp,
@@ -309,7 +313,10 @@ class CommandsServer extends WebSocketServer
                                        // quindi NON INVIO il messaggio
                                        if ($id_user_to !== null){
                                            $notification['id_user'] = $id_user_to;
-    									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
+                                           $notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
+                                              'amount' => $tokens->token_price,
+                                              'symbol' => $node->smartContract->symbol,
+                                            ]);
 
                                            $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
                                            $messages= Messages::push($notification);

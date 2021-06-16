@@ -75,7 +75,7 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 	</tr>
 	<!-- FOOTER -->
 	<?php
-	$settings = Settings::owner();
+	//$settings = Settings::owner();
 	 ?>
 	<tr>
 		<td style="min-width: 590px;" align="center">
@@ -86,10 +86,8 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 							<div>
 								<p style="font-size: 14px;">
 									<strong><?php echo Yii::$app->name; ?></strong>
-									<br><?= $settings->address; ?>
-									<br><?= $settings->cap.' - '. $settings->city; ?>
-									<br>Tel. <?= $settings->phone; ?>
-									<br><?php echo Yii::$app->params['adminEmail'] .' | '. Yii::$app->params['website']; ?>
+									<br>Tel. +39 081 19463570
+									<br><?php echo Yii::$app->params['supportEmail'] .' | '. Yii::$app->params['website']; ?>
 								</p>
 							</div>
 							<div>
@@ -106,6 +104,7 @@ $URL = Yii::$app->urlManager->createAbsoluteUrl(['site/activate','id'=>WebApp::e
 			</table>
 		</td>
 	</tr>
+
 </table>
 <?php
 // exit;

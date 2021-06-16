@@ -23,7 +23,7 @@ use app\components\Settings;
 
 class Erc20 extends Component
 {
-    public $node_id;
+    public $user_id;
 
     public $balance = 0; // token balance
     public $decimals = 0; // decimals into smart contract
@@ -32,8 +32,8 @@ class Erc20 extends Component
     public $transaction = null;
 
 
-    public function __construct($node_id = 0) {
-        $this->node_id = $node_id;
+    public function __construct($user_id = 0) {
+        $this->user_id = $user_id;
     }
 
     // public function __construct() {
@@ -106,15 +106,7 @@ class Erc20 extends Component
         $transaction->offsetSet('chainId', $tx->chainId);
         $signed_transaction = $transaction->sign($tx->decryptedSign); // la chiave derivata da json js AES to PHP
 
-        // $settings = Settings::poa();
-        // // $WebApp = new WebApp;
-		// //$poaNode = $WebApp->getPoaNode($this->blockchain_id);
-		// //if (!$poaNode)
-		// //	throw new HttpException(404,'All Nodes are down...');
-        //
-        // $web3 = new Web3($settings->blockchain->url);
-
-        $settings = Settings::poa($this->node_id);
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
     	$response = null;
@@ -138,7 +130,7 @@ class Erc20 extends Component
     // get the transactions number of address
     public function getNonce($address)
     {
-        $settings = Settings::poa($this->node_id);
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
     	$response = null;
@@ -160,8 +152,14 @@ class Erc20 extends Component
 	*/
 	public function Balance($fromAddress)
 	{
-        $settings = Settings::poa($this->node_id);
+        // echo '<pre>'.print_r($fromAddress,true).'</pre>';
+        // echo '<pre>'.print_r($this->user_id,true).'</pre>';
+        // exit;
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
+
+        // echo '<pre>'.print_r($settings,true).'</pre>';
+        // exit;
 
         $erc20abi = $settings->smartContract->contractType;
 		$this->setDecimals($settings->smartContract->decimals);
@@ -178,7 +176,11 @@ class Erc20 extends Component
 			// exit;
 			if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-				$value = $utils->toEther((string)$result[0]->value, 'ether');
+                if (isset($result[0])){
+                    $value = $utils->toEther((string)$result[0]->value, 'ether');
+                } else {
+                    $value = $utils->toEther((string)$result['balance']->value, 'ether');
+                }
 				$Value0 = (string) $value[0]->value;
                 $Value1 = (string) $value[1]->value;
                 $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
@@ -222,7 +224,12 @@ class Erc20 extends Component
 
     public function getBlockInfo($blocknumber = 'latest', $search = false)
     {
-        $settings = Settings::poa($this->node_id);
+        // echo 'node id: <pre>'.print_r($this->user_id,true).'</pre>';
+
+        $settings = Settings::poa($this->user_id);
+        // echo 'settings: <pre>'.print_r($settings,true).'</pre>';
+        // echo 'blockchain: <pre>'.print_r($settings->blockchain,true).'</pre>';
+
         $web3 = new Web3($settings->blockchain->url);
 
 		$response = null;
@@ -232,12 +239,15 @@ class Erc20 extends Component
 			}
 			$response = $block;
 		});
+        // echo 'block info: <pre>'.print_r($response,true).'</pre>';
+
+        // exit;
         return $response;
     }
 
     public function getReceipt($hash)
     {
-        $settings = Settings::poa($this->node_id);
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
 		$contract = new Contract($web3->provider, $settings->smartContract->contractType->smart_contract_abi);
@@ -254,7 +264,7 @@ class Erc20 extends Component
 
     public function getBlockByHash($hash)
     {
-        $settings = Settings::poa($this->node_id);
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
 		$response = null;
@@ -269,7 +279,7 @@ class Erc20 extends Component
 
     public function getGasLimit($toAddress,$fromAddress,$amount)
     {
-        $settings = Settings::poa($this->node_id);
+        $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
         $erc20abi = $settings->smartContract->contractType;
 		// $this->setDecimals($settings->smartContract->decimals);

@@ -132,7 +132,7 @@ class WebApp extends Component
         }
         // We found our match, or there were no matches.
         // Either way, use the last defined value for $divisor.
-        return number_format($number / $divisor, $precision) .' '. $shorthand;
+        return round(number_format($number / $divisor, $precision),$precision) .' '. $shorthand;
     }
 
     /**

@@ -26,6 +26,8 @@ class Settings extends Component
         return Owner::findOne(1);
     }
 
+
+    // questa funziona ora assume come valore lo user id 
     public static function poa($user_id = 0){
         if ($user_id != 0) {
             $node = Nodes::find()->where(['id_user'=> $user_id])->one();

@@ -221,7 +221,10 @@ class BlockchainController extends Controller
 											   'type' => 'token',
 											   'id_user' => $id_user_from,
 											   'status' => 'complete',
-											   'description' => Yii::t('app','A transaction you sent has been completed.'),
+											   'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
+												   'amount' => $tokens->token_price,
+												   'symbol' => $settings->smartContract->symbol,
+											   ]),
 	                                           'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
 											   'timestamp' => $tokens->invoice_timestamp,
 											   'price' => $tokens->token_price,
@@ -244,7 +247,10 @@ class BlockchainController extends Controller
                                        // quindi NON INVIO il messaggio
                                        if ($id_user_to !== null){
                                            $notification['id_user'] = $id_user_to;
-    									   $notification['description'] = Yii::t('app','A transaction you received has been completed.');
+    									   $notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
+											   'amount' => $tokens->token_price,
+											   'symbol' => $settings->smartContract->symbol,
+										   ]);
 
                                             // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");
                                            $messages= Messages::push($notification);
@@ -259,7 +265,7 @@ class BlockchainController extends Controller
                                       $this->setTransactionsFound([
                                            'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
-										   'balance' => $ERC20->Balance($wallets->wallet_address),
+										   'balance' => WebApp::number_shorten($ERC20->Balance($wallets->wallet_address)),
                                            'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                       ]);
 
@@ -304,7 +310,7 @@ class BlockchainController extends Controller
                                               $this->setTransactionsFound([
                                                   'id_token' => $tokens->id,
                                                  'pushoptions' => $messages,
-												 'balance' => $ERC20->Balance($wallets->wallet_address),
+												 'balance' => WebApp::number_shorten($ERC20->Balance($wallets->wallet_address)),
                                                  'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                               ]);
 											  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");

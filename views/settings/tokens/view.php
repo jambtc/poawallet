@@ -42,6 +42,7 @@ $this->title = $model->denomination;
                                     'value' => $model->smart_contract_address,
                                     'contentOptions' => ['class' => 'text-break']
                                 ],
+								'contractType.denomination',
 								'decimals',
                                 'symbol',
 								'blockchain.denomination'

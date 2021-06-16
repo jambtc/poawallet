@@ -3416,5 +3416,9 @@ footer ul li a i {
     padding-left: 4px;
 }
 .form-group {
-    margin-bottom: 0px !important; 
+    margin-bottom: 0px !important;
+}
+
+small >i {
+	font-size: 100% !important;
 }

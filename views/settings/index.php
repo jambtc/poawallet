@@ -33,7 +33,7 @@ include ('manage-blockchainscan_js.php');
 		<div class="list-item">
 			<i class="fa fa-network-wired text-primary"></i>
 			<em class="seperate"></em>
-			<a href="<?= Url::to(['settings/nodes/index'])?>" >
+			<a href="<?= Url::to(['settings/nodes/update'])?>" >
 				<span class="list-item-title"><?php echo Yii::t('app','Select nodes');?>
 					<small class="text-muted"></small>
 				</span>

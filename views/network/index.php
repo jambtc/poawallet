@@ -16,8 +16,12 @@ $this->title = Yii::t('app', 'Network details');
                 <div class="d-flex align-items-center">
                     <i class="fas fa-2x fa-network-wired"></i>
                     <div class="ml-10">
-                      <h3 class="coin-name"><?= Yii::t('app','Node') ?></h3>
-                      <small class="text-muted"><?= $node->blockchain->url ?></small>
+                      <h3 class="coin-name"><?= Yii::t('app','Node info') ?></h3>
+                      <div class="d-flex flex-column">
+                          <div class="p-0"><?= Yii::t('app','Url: ') ?><small class="text-muted"><?= $node->blockchain->url ?></small></div>
+                          <div class="p-0"><?= Yii::t('app','Network: ') ?><small class="text-muted"><?= $node->blockchain->denomination ?></small></div>
+                          <div class="p-0"><?= Yii::t('app','Token: ') ?><small class="text-muted"><?= $node->smartContract->denomination ?></small></div>
+                      </div>
                     </div>
                 </div>
             </div>

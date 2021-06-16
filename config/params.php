@@ -6,9 +6,9 @@ return [
     'senderEmail' => $secrets['mail_username'],
     'senderName' => $secrets['mail_name'],
     'logoApplicazione' => '/css/images/logo.png',
-    'website' => 'www.txlab.it',
-    'adminName' => 'txLab',
-    'supportEmail' => $secrets['mail_username'],
+    'website' => $secrets['website'],
+    'adminName' => $secrets['adminName'],
+    'supportEmail' => $secrets['mail_support'],
     'encryptionFile' => dirname(__FILE__).'/encrypt.json',
 
     /**

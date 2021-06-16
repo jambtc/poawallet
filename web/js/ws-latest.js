@@ -14,7 +14,7 @@ $(function () {
             var bcWorker = new Worker("js/web-workers/latestWorker.js");
         }
         bcWorker.onmessage = function(event) {
-            console.log('[From ws-latest] data:',event.data);
+            console.log('[From bc-latest] data:',event.data);
             var transactions = event.data;
             for (var tx of transactions) {
                 console.log('[bc latest] single transaction data:', tx);

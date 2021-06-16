@@ -43,7 +43,7 @@ class ContractType extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'denomination' => Yii::t('app', 'Denomination'),
+            'denomination' => Yii::t('app', 'Contract Type'),
             'smart_contract_abi' => Yii::t('app', 'Smart Contract Abi'),
             'smart_contract_bytecode' => Yii::t('app', 'Smart Contract Bytecode'),
         ];

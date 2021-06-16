@@ -178,11 +178,14 @@ class SendController extends Controller
 
 		$settings = Settings::poa();
 		$ERC20 = new Yii::$app->Erc20();
-		$amountForContract = $amount * pow(10, $settings->smartContract->decimals);
+		$amountForContract =  $amount * pow(10, $settings->smartContract->decimals);
+
+		// echo $amountForContract;
+		// exit;
 
 		// carico il gas in caso questo sia a 0 MA SOLO
 		// se mi trovo sul network POA 2 e 3 inserito di default
-		// nel DB 
+		// nel DB
 		if ($settings->blockchain->id ==2 || $settings->blockchain->id == 3){
 			$gasBalance = $ERC20->loadGas($fromAccount);
 		} else {
@@ -321,14 +324,18 @@ class SendController extends Controller
 				throw new HttpException(404,$tokens->errors);
 			}
 
+			$settings = Settings::poa();
+
 			// notifica per chi ha inviato (from_address)
 			$id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 			$notification = [
 				'type' => 'token',
 				'id_user' => $id_user_from,
 				'status' => 'complete',
-				'description' => Yii::t('app','A transaction you sent has been completed.'),
-				// 'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id)]),
+				'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
+					'amount' => $tokens->token_price,
+					'symbol' => $settings->smartContract->symbol,
+				]),
 				'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
 				'timestamp' => time(),
 				'price' => $tokens->token_price,
@@ -341,7 +348,10 @@ class SendController extends Controller
 			// fix
 			if (null !== $id_user_to){
 				$notification['id_user'] = $id_user_to;
-				$notification['description'] = Yii::t('app','A transaction you received has been completed.');
+				$notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
+					'amount' => $tokens->token_price,
+					'symbol' => $settings->smartContract->symbol,
+				]);
 				Messages::push($notification);
 			}
 
