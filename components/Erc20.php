@@ -77,9 +77,17 @@ class Erc20 extends Component
     public function sendToken($item)
     {
         $tx = (object) $item;
-
         // echo '<pre>'.print_r($tx,true).'</pre>';
 		// exit;
+
+        $settings = Settings::poa($this->user_id);
+        $web3 = new Web3($settings->blockchain->url);
+
+        $big =  $web3->utils->toBn($tx->amount * pow(10, $settings->smartContract->decimals));
+        $wei = $web3->utils->toWei($big,'wei');
+        // $value = $wei->value;
+        // echo '<pre>value: '.print_r($value,true).'</pre>';
+
         /**
           * This is fairly straightforward as per the ABI spec
           * First you need the function selector for test(address,uint256) which is the first four bytes of the keccak-256 hash of that string, namely 0xba14d606.
@@ -90,7 +98,7 @@ class Erc20 extends Component
         $data_tx = [
             'selector' => '0xa9059cbb', //ERC20	0xa9059cbb function transfer(address,uint256)
             'address' => self::Encode("address", $tx->toAccount), // $receiving_address è l'indirizzo destinatario,
-            'amount' => self::Encode("uint", $tx->amount), //$amount l'ammontare della transazione (da moltiplicare per 10^2)
+            'amount' => self::Encode("uint", $wei->value), //$amount l'ammontare della transazione (da moltiplicare per 10^2)
         ];
 
         $transaction = new Transaction([
@@ -106,8 +114,7 @@ class Erc20 extends Component
         $transaction->offsetSet('chainId', $tx->chainId);
         $signed_transaction = $transaction->sign($tx->decryptedSign); // la chiave derivata da json js AES to PHP
 
-        $settings = Settings::poa($this->user_id);
-        $web3 = new Web3($settings->blockchain->url);
+
 
     	$response = null;
         $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
@@ -277,21 +284,47 @@ class Erc20 extends Component
         return $response;
     }
 
+    private function numberOfDecimals($value)
+    {
+        if ((int)$value == $value)
+        {
+            return 0;
+        }
+        else if (! is_numeric($value))
+        {
+            // throw new Exception('numberOfDecimals: ' . $value . ' is not a number!');
+            return false;
+        }
+
+        return strlen($value) - strrpos($value, '.') - 1;
+    }
+
     public function getGasLimit($toAddress,$fromAddress,$amount)
     {
         $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
         $erc20abi = $settings->smartContract->contractType;
 		// $this->setDecimals($settings->smartContract->decimals);
-        $utils = $web3->utils;
-        $amountForContract = $amount * pow(10, $settings->smartContract->decimals);
+        //$utils = $web3->utils;
+
+        $decimals = self::numberOfDecimals($amount);
+
+        // $integer =  $web3->utils->toBn($amount * pow(10, $decimals));
+        $integer =  $amount * pow(10, $decimals);
+        // echo ': <pre>'.print_r($integer,true).'</pre>';
+        // exit;
+
+
+        // $wei = $web3->utils->toWei((string) $integer,'wei');
+        //$value = $wei->value;
+
 
 		$gasLimit = 0;
 		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
 		$contract->at($settings->smartContract->smart_contract_address)->estimateGas(
             'transfer',
             $toAddress,
-            $amountForContract,
+            $integer,
             [
                 'from'=>$fromAddress,
             ]
@@ -306,7 +339,7 @@ class Erc20 extends Component
 			// }
             if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-				$value = $utils->toEther((string)$result->value, 'ether');
+				$value = $utils->toEther((string)$result->value, 'gwei');
 				$Value0 = (string) $value[0]->value;
                 $Value1 = (string) $value[1]->value;
                 // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());

@@ -178,8 +178,9 @@ class SendController extends Controller
 
 		$settings = Settings::poa();
 		$ERC20 = new Yii::$app->Erc20();
-		$amountForContract =  $amount * pow(10, $settings->smartContract->decimals);
 
+		// $amountForContract =  $amount * pow(10, $settings->smartContract->decimals);
+		//
 		// echo $amountForContract;
 		// exit;
 
@@ -207,7 +208,7 @@ class SendController extends Controller
 				'from' => $fromAccount, //indirizzo commerciante
 				'contractAddress' => $settings->smartContract->smart_contract_address, //indirizzo contratto
 				'toAccount' => $toAccount,
-				'amount' => $amountForContract,
+				'amount' => $amount, // $amountForContract,
 				'gas' => '0x200b20', // $gas se supera l'importo 0x200b20 va in eerrore gas exceed limit !!!!!!
 				'gasPrice' => '1000', // gasPrice giusto?
 				'value' => '0',

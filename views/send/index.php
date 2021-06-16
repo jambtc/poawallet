@@ -267,8 +267,8 @@ $sendForm->from = $fromAddress;
 									<div class="send-v2__asset-dropdown__name">
 										<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Gas:') ?></span> -->
 										<div class="m-auto currency-display-component" title="">
-											<span class="h4 currency-display-component__text" id="amount-to-send-gas"></span>
-											<span class="h5 currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
+											<span class="currency-display-component__text" id="amount-to-send-gas"></span> Gwei
+											<span class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
 										</div>
 									</div>
 								</div>
@@ -279,7 +279,7 @@ $sendForm->from = $fromAddress;
 			</div>
 					</div>
 
-    				<div class="transaction-details list-unstyled " style="display: none;">
+    				<div class="transaction-details list-unstyled mt-5" style="display: none;">
     				</div>
     				<div>
 						<a href="#" class="pay-submit hide-content">

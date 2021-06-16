@@ -85,6 +85,8 @@ $wallet_send = <<<JS
                 $('#error-summary').show().text(yiiOptions.enoughgasError);
                 event.stopPropagation();
             }
+        } else {
+            var outcome = gasLimit();
         }
 
 	});
