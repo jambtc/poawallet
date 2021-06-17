@@ -72,6 +72,37 @@ class Erc20 extends Component
         $substr = substr($response,$start);
         return json_decode($substr, true);
     }
+    /**
+     * toAmountForContract
+     * Trasforma string or integer in wei (importo per contract)
+     *
+     * @param string|int $value
+     * @param int $decimals
+     * @return string
+     */
+    private function toAmountForContract($value, $contractDecimals)
+    {
+        $decimals = self::numberOfDecimals($value);
+        $integer = $value * pow(10,$decimals);
+        $string = (string) $integer;
+        $weidecimals = $contractDecimals - $decimals;
+        $pow = $string * pow(10, $weidecimals);
+        $contractAmount = gmp_strval($pow);
+
+        return $contractAmount;
+    }
+    private function numberOfDecimals($value)
+    {
+        if ((int)$value == $value)
+        {
+            return 0;
+        }
+        else if (! is_numeric($value))
+        {
+            return false;
+        }
+        return strlen($value) - strrpos($value, '.') - 1;
+    }
 
     // sign and send a raw token transaction
     public function sendToken($item)
@@ -83,10 +114,15 @@ class Erc20 extends Component
         $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
-        $big =  $web3->utils->toBn($tx->amount * pow(10, $settings->smartContract->decimals));
-        $wei = $web3->utils->toWei($big,'wei');
-        // $value = $wei->value;
-        // echo '<pre>value: '.print_r($value,true).'</pre>';
+        // trasforma un numero decimale in valore wei
+        // $decimals = self::numberOfDecimals($tx->amount);
+        // $integer = $tx->amount * pow(10,$decimals);
+        // $string = (string) $integer;
+        // $weidecimals = $settings->smartContract->decimals - $decimals;
+        // $pow = $string * pow(10, $weidecimals);
+        // $contractAmount = gmp_strval($pow);
+
+        $contractAmount = $this->toAmountForContract($tx->amount, $settings->smartContract->decimals);
 
         /**
           * This is fairly straightforward as per the ABI spec
@@ -98,7 +134,7 @@ class Erc20 extends Component
         $data_tx = [
             'selector' => '0xa9059cbb', //ERC20	0xa9059cbb function transfer(address,uint256)
             'address' => self::Encode("address", $tx->toAccount), // $receiving_address è l'indirizzo destinatario,
-            'amount' => self::Encode("uint", $wei->value), //$amount l'ammontare della transazione (da moltiplicare per 10^2)
+            'amount' => self::Encode("uint", $contractAmount), //$amount l'ammontare della transazione (da moltiplicare per 10^2)
         ];
 
         $transaction = new Transaction([
@@ -284,47 +320,30 @@ class Erc20 extends Component
         return $response;
     }
 
-    private function numberOfDecimals($value)
-    {
-        if ((int)$value == $value)
-        {
-            return 0;
-        }
-        else if (! is_numeric($value))
-        {
-            // throw new Exception('numberOfDecimals: ' . $value . ' is not a number!');
-            return false;
-        }
 
-        return strlen($value) - strrpos($value, '.') - 1;
-    }
 
     public function getGasLimit($toAddress,$fromAddress,$amount)
     {
         $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
         $erc20abi = $settings->smartContract->contractType;
-		// $this->setDecimals($settings->smartContract->decimals);
-        //$utils = $web3->utils;
 
-        $decimals = self::numberOfDecimals($amount);
+        // // trasforma un numero decimale in valore wei
+        // $decimals = self::numberOfDecimals($amount);
+        // $integer = $amount * pow(10,$decimals);
+        // $string = (string) $integer;
+        // $weidecimals = $settings->smartContract->decimals - $decimals;
+        // $pow = $string * pow(10, $weidecimals);
+        // $contractAmount = gmp_strval($pow);
 
-        // $integer =  $web3->utils->toBn($amount * pow(10, $decimals));
-        $integer =  $amount * pow(10, $decimals);
-        // echo ': <pre>'.print_r($integer,true).'</pre>';
-        // exit;
-
-
-        // $wei = $web3->utils->toWei((string) $integer,'wei');
-        //$value = $wei->value;
-
+        $contractAmount = $this->toAmountForContract($amount, $settings->smartContract->decimals);
 
 		$gasLimit = 0;
 		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
 		$contract->at($settings->smartContract->smart_contract_address)->estimateGas(
             'transfer',
             $toAddress,
-            $integer,
+            $contractAmount,
             [
                 'from'=>$fromAddress,
             ]
@@ -338,21 +357,30 @@ class Erc20 extends Component
 			// 	$gasLimit = $result->value;
 			// }
             if (isset($result)) {
-				//$balance = (string) $result[0]->value;
-				$value = $utils->toEther((string)$result->value, 'gwei');
-				$Value0 = (string) $value[0]->value;
-                $Value1 = (string) $value[1]->value;
-                // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
-                $Value2 = ($Value0 + $Value1) / pow(1000, 3);
-
-                $gasLimit = $Value2 ;
+                // $wei = $utils->toWei($result,'gwei');
+                //
+                //
+                // // //$balance = (string) $result[0]->value;
+				// // $value = $result->value;
+				// // $value = $utils->toEther((string)$result, 'gwei');
+                // echo '<pre>'.print_r($wei,true).'</pre>';
+                // exit;
+                //
+				// $Value0 = (string) $value[0]->value;
+                // $Value1 = (string) $value[1]->value;
+                // // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
+                // $Value2 = ($Value0 + $Value1) / pow(1000, 3);
+                //
+                // $gasLimit = $Value2 ;
 				//$this->setBalance($Value2);
+
+                $gasLimit = gmp_strval($result->value);
 			}
             // echo '<pre>'.print_r($result,true).'</pre>';
             // echo '<pre>'.print_r($value,true).'</pre>';
             // echo '<pre>'.print_r($Value0,true).'</pre>';
             // echo '<pre>'.print_r($Value1,true).'</pre>';
-            // echo '<pre>'.print_r($Value2,true).'</pre>';
+            // echo '<pre>'.print_r(gmp_strval($gasLimit),true).'</pre>';
 			// exit;
 		});
 
