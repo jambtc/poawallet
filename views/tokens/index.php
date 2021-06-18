@@ -14,12 +14,12 @@ $this->title = Yii::t('app', 'Transactions');
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- <div class="form-divider"></div> -->
-<div class="dash-balance ">
+<div class="dash-balance ref-card c10">
     <div class="dash-content relative">
 		<h3 class="w-text"><?= Yii::t('app','Transaction list');?></h3>
 	</div>
 
-    <section class="mb-2">
+    <section class="px-3 mb-5">
 
 
         <?php Pjax::begin(); ?>

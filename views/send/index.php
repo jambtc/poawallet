@@ -39,41 +39,44 @@ $sendForm->from = $fromAddress;
 
 <section class="bal-section container">
 	<div id="content">
-	    <div id="content-body">
+	    <div class="ref-card c4 pb-0 mb-0 pr-0">
 	    	<div class="content-head">
-				<div class="d-flex align-items-center">
-				    <div class="d-flex flex-grow">
-				        <div class="mr-auto">
-				            <p class="mb-0"><?= Yii::t('app','Balance on: ') ?><a href="<?= Url::to(['settings/nodes/index']) ?>"><?= $node->blockchain->denomination ?></a></p>
-				        </div>
-				        <div class="ml-auto align-self-end badge bg-warning">
-							<h5 class="text-light mt-0 mb-0">
-								<i class="fa fa-star star-total-balance"></i>
-								<span id="total-balance">
-									<span>
-										<?= WebApp::number_shorten($balance) ?>
+				<div class="d-flex justify-content-between">
+					<div>
+						<?= Yii::t('app','Balance on: ') ?></br>
+						<a href="<?= Url::to(['settings/nodes/index']) ?>">
+							<?= $node->blockchain->denomination ?>
+						</a>
+					</div>
+					<div class="ref-card c11">
+						<p class="d-flex flex-column">
+							<div>
+								<p class="d-flex justify-content-end">
+									<span class="h5 text-dark" id="total-balance"><?= WebApp::number_shorten($balance) ?></span>
+									<!-- <span id="total-balance"><?= $balance ?></span> -->
+									<small><?= $node->smartContract->symbol ?></small>
+									<span class="ml-2">
+										Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
 									</span>
-									<span class="ml-1">
-										<?= $node->smartContract->symbol ?>
-									</span>
-								</span>
-							</h5>
-							<div class="form-mini-divider"></div>
+								</p>
+							</div>
+							<div>
+								<p class="d-flex justify-content-end">
 
-							<h6 class="text-muted mt-0 mb-0">
-								<i class="fab fa-ethereum star-total-balance_gas"></i>
-								<span id="total-balance_gas">
-									<span>
-										<?= WebApp::number_shorten($balance_gas) ?>
+									<span class="h5 text-dark" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span>
+									<!-- <span id="total-balance_gas"><?= $balance_gas ?></span> -->
+									<small><?= $node->blockchain->symbol ?></small>
+									<span class="ml-2">
+										Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
 									</span>
-									<span class="ml-1">
-										<?= $node->blockchain->symbol ?>
-									</span>
-								</span>
-							</h6>
-				        </div>
-				    </div>
+
+								</p>
+							</div>
+						</p>
+					</div>
+
 				</div>
+
 			</div>
 	    </div>
 	</div>
@@ -83,27 +86,27 @@ $sendForm->from = $fromAddress;
 	<div class="wallet-address">
 
 
-    	<div class="txt-left">
+    	<!-- <div class="txt-left"> -->
             <?php
-            $fieldOptions1 = [
-                'inputTemplate' => '
-                    <div class="form-row-group with-icons">
-        				<div class="form-row no-padding">
-        					<i class="fas fa-wallet text-primary"></i>
-                            {input}
-                        </div>
-        			</div>',
-                'inputOptions' => ['class' => ['widget' => 'form-element']]
-
-            ];
+            // $fieldOptions1 = [
+            //     'inputTemplate' => '
+            //         <div class="form-row-group with-icons">
+        	// 			<div class="form-row no-padding">
+        	// 				<i class="fas fa-wallet text-primary"></i>
+            //                 {input}
+            //             </div>
+        	// 		</div>',
+            //     'inputOptions' => ['class' => ['widget' => 'form-element']]
+			//
+            // ];
               ?>
             <!-- DA -->
-            <div class="group">
-              <?= $form->field($sendForm, 'from', $fieldOptions1)->textInput(['readonly'=>true]) ?>
-            </div>
-    	</div>
+            <!-- <div class="group"> -->
+              <?= $form->field($sendForm, 'from')->hiddenInput(['readonly'=>true])->label(false) ?>
+            <!-- </div> -->
+    	<!-- </div> -->
 
-    	<div class="form-mini-divider"></div>
+    	<!-- <div class="form-mini-divider"></div> -->
 
     	<div class="txt-left">
             <?php
@@ -199,8 +202,8 @@ $sendForm->from = $fromAddress;
 
         <!--POPUP HTML CONTENT START -->
     	<div class="popup-overlay" id="sellOrder" style="padding: 5px;"> <!-- if you dont want overlay add class .no-overlay -->
-    		<div class="popup-container add">
-    			<div class="popup-content wallet-address">
+    		<div class="popup-container add bg-transparent">
+    			<div class="popup-content wallet-address h-100">
 
     				<img src="css/img/content/crypto-buy.png" class="img-buy mt-20" alt="">
 
@@ -214,13 +217,13 @@ $sendForm->from = $fromAddress;
 										<div class="send-v2__asset-dropdown__asset">
 											<div class="send-v2__asset-dropdown__asset-data">
 												<div class="send-v2__asset-dropdown__symbol">
-													<span class="ml-auto currency-display-component__text"><?= $balance ?></span>
+													<span class="ml-auto currency-display-component__text"><?= WebApp::number_shorten($balance) ?></span>
 													<span class="currency-display-component__suffix"><?= $node->smartContract->symbol ?></span>
 												</div>
 												<div class="send-v2__asset-dropdown__symbol">
 													<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Balance:') ?></span> -->
 													<div class="currency-display-component">
-														<span class="ml-auto currency-display-component__text"><?= $balance_gas ?></span>
+														<span class="ml-auto currency-display-component__text"><?= WebApp::number_shorten($balance_gas) ?></span>
 														<span class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
 													</div>
 												</div>
@@ -243,40 +246,40 @@ $sendForm->from = $fromAddress;
 										</div>
 									</div>
 								</div> -->
-								<div class="send-v2__asset-dropdown__asset-data">
-									<div class="send-v2__asset-dropdown__name">
-										<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Amount:') ?></span> -->
-										<div class="m-auto currency-display-component" title="">
-											<span class="h4 currency-display-component__text amount-to-send"></span>
-											<span class="h5 currency-display-component__suffix"><?= $node->smartContract->symbol ?></span>
+											<div class="send-v2__asset-dropdown__asset-data">
+												<div class="send-v2__asset-dropdown__name">
+													<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Amount:') ?></span> -->
+													<div class="m-auto currency-display-component" title="">
+														<span class="h4 currency-display-component__text amount-to-send"></span>
+														<span class="h5 currency-display-component__suffix"><?= $node->smartContract->symbol ?></span>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
 						<div class="send-v2__form-row " style="background-color: aliceblue;">
-				<div class="send-v2__form-label"><?= Yii::t('app','Transaction fee:') ?></div>
-				<div class="send-v2__form-field">
-					<div class="send-v2__asset-dropdown">
-						<div class="send-v2__asset-dropdown__input-wrapper">
-							<div class="send-v2__asset-dropdown__asset">
-								<div class="send-v2__asset-dropdown__asset-data">
-									<div class="send-v2__asset-dropdown__name">
-										<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Gas:') ?></span> -->
-										<div class="m-auto currency-display-component" title="">
-											<span class="currency-display-component__text" id="amount-to-send-gas"></span> Gwei
-											<span class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
+							<div class="send-v2__form-label"><?= Yii::t('app','Transaction fee:') ?></div>
+							<div class="send-v2__form-field">
+								<div class="send-v2__asset-dropdown">
+									<div class="send-v2__asset-dropdown__input-wrapper">
+										<div class="send-v2__asset-dropdown__asset">
+											<div class="send-v2__asset-dropdown__asset-data">
+												<div class="send-v2__asset-dropdown__name">
+													<!-- <span class="send-v2__asset-dropdown__name__label"><?= Yii::t('app','Gas:') ?></span> -->
+													<div class="m-auto currency-display-component" title="">
+														<span class="currency-display-component__text mr-2" id="amount-to-send-gas"></span> Gwei
+														<span class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></span>
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
 					</div>
 
     				<div class="transaction-details list-unstyled mt-5" style="display: none;">

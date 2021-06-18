@@ -184,13 +184,13 @@ class WebApp extends Component
         $timeLN = date("H:i:s",$data->invoice_timestamp);
 
         if ($data->from_address == $fromAddress){
-          $price = '- '.$data->token_price;
+          $price = '- '.self::number_shorten($data->token_price);
           $color = 'red';
           $addressToShow = $data->to_address;
           $coinImg = 'fa-arrow-up text-danger';
           $recipient = Yii::t('app','To: ');
         } else {
-          $price = $data->token_price;
+          $price = self::number_shorten($data->token_price);
           $color = 'green';
           $addressToShow = $data->from_address;
           $coinImg = 'fa-arrow-down text-success';
@@ -204,8 +204,8 @@ class WebApp extends Component
         $line = '
         <a href="index.php?r=tokens/view&id='. self::encrypt($data->id) . '" />
         <div class="container-fluid m-0 p-0">
-              <div class="row">
-                  <div class="col-12 m-0 p-0">
+              <div class="row d-flex justify-content-center">
+                  <div class="col-11 m-0 p-0">
                       <div class="card shadow">
                           <div class="transaction-card-horizontal '.$newTxClass.'">
                               <div class="img-square-wrapper ">
@@ -213,7 +213,7 @@ class WebApp extends Component
                               </div>
                               <div class="transaction-card-body ml-1 mb-0">
                                   <span class="card-title">
-                                    <small class="pt-1 d-inline-block text-truncate" style="max-width: 225px;">'.$recipient.$addressToShow.'</small>
+                                    <small class="pt-1 d-inline-block text-truncate" style="max-width: 150px;">'.$recipient.$addressToShow.'</small>
                                   </span>
                                   <p class="card-text">
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>

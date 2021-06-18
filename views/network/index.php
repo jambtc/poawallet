@@ -3,10 +3,10 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 
-$this->title = Yii::t('app', 'Network details');
+$this->title = Yii::t('app', 'Network info');
 ?>
-<div class="h-100 network-details dash-balance">
-    <div class="dash-content relative">
+<div class="h-100 network-details ref-card c7">
+    <div class="mt-5 dash-content relative">
 		<h3 class="w-text"><?= $this->title ?></h3>
 	</div>
 

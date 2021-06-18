@@ -2816,6 +2816,30 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1ddc3e', end
 .ref-card.c3{
 	background: url(img/content/ref3.png) no-repeat center center;
 }
+.ref-card.c4{
+	background: url(img/cards/abstract-blue.jpg) no-repeat center center;
+}
+.ref-card.c5{
+	background: url(img/cards/abstract-green.jpg) no-repeat center center;
+}
+.ref-card.c6{
+	background: url(img/cards/abstract-internet.png) no-repeat center center;
+}
+.ref-card.c7{
+	background: url(img/cards/abstract-metallic-blue.png) no-repeat center center;
+}
+.ref-card.c8{
+	background: url(img/cards/abstract-vector-violet-mesh-background.jpg) no-repeat center center;
+}
+.ref-card.c9{
+	background: url(img/cards/argento.png) no-repeat center center;
+}
+.ref-card.c10{
+	background: url(img/cards/magento.png) no-repeat center center;
+}
+.ref-card.c11{
+	background: url(img/cards/metallo.png) no-repeat center center;
+}
 
 .refer #content-body{
 	padding-top: 0;

@@ -26,33 +26,49 @@ include ('index_js.php');
             <div class="d-flex align-items-center mt-10">
               <div class="d-flex flex-grow">
                   <div class="w-100">
-                      <div class="ref-card c1">
+                      <div class="ref-card c8">
                           <div class="card-header txt-white">
-                              <?= Yii::t('app','Balance on: ') ?><a class="txt-white" href="<?= Url::to(['settings/nodes/index']) ?>"><?= $node->blockchain->denomination ?></a>
+                              <div class="d-flex justify-content-between">
+                                  <div>
+                                      <?= Yii::t('app','Balance on: ') ?></br>
+                                      <a class="txt-white" href="<?= Url::to(['settings/nodes/index']) ?>">
+                                          <?= $node->blockchain->denomination ?>
+                                      </a>
+                                  </div>
+                                  <div>
+                                      <a href="<?= $userUrl ?>" class="profile-av p-0">
+                                          <img src="<?= $userImage ?>">
+                                      </a>
+                                  </div>
+                              </div>
                           </div>
-                          <div class="resources-card-wrapper">
+
+                          <div class="resources-card-wrapper"
+                                style="background-color: rgba(255, 255, 255, 0.2);
+                                        border-radius: 10px;
+                                ">
                               <div class="resources-card bg-transparent txt-white">
-                                  <p class=" d-flex justify-content-center p-1">
+                                  <p class="d-flex">
+                                      <p class="d-flex justify-content-start">
+                                          Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
+                                      </p>
                                       <div>
-                                          <!-- <span id="total-balance"><?= WebApp::number_shorten($balance) ?></span> -->
-                                          <span id="total-balance"><?= $balance ?></span>
-                                          <span><?= $node->smartContract->symbol ?></span>
+                                          <span class="h5" id="total-balance"><?= WebApp::number_shorten($balance) ?></span>
+                                          <!-- <span id="total-balance"><?= $balance ?></span> -->
+                                          <small><?= $node->smartContract->symbol ?></small>
                                       </div>
-                                  </p>
-                                  <p class="badge d-flex justify-content-end">
-                                      Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
                                   </p>
                               </div>
                               <div class="resources-card bg-transparent txt-white">
-                                  <p class=" d-flex justify-content-center p-1">
+                                  <p class="d-flex">
+                                      <p class="d-flex justify-content-start">
+                                          Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
+                                      </p>
                                       <div>
-                                          <!-- <span id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span> -->
-                                          <span id="total-balance_gas"><?= $balance_gas ?></span>
-                                          <span><?= $node->blockchain->symbol ?></span>
+                                          <span class="h5" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span>
+                                          <!-- <span id="total-balance_gas"><?= $balance_gas ?></span> -->
+                                          <small><?= $node->blockchain->symbol ?></small>
                                       </div>
-                                  </p>
-                                  <p class="badge d-flex justify-content-end">
-                                      Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
                                   </p>
                               </div>
                           </div>
@@ -81,26 +97,23 @@ include ('index_js.php');
                     </a>
 	                <span><?= Yii::t('app','Transactions');?></span>
 	            </div>
-                <div class="serv-item">
-                    <a href="<?= $userUrl ?>" class="serv-icon profile-av p-0">
-                        <img src="<?= $userImage ?>">
-                    </a>
-                    <span><?= Yii::t('app','Profile');?></span>
-                </div>
+                <!-- <div class="serv-item">
+
+                </div> -->
             </div>
            </div>
         <!-- </div>
     </section> -->
 </div>
 
-    <section class="trans-sec container mb-2">
-      <h4 class="title-main mt-0 text-light"><?= Yii::t('app','Recent Transactions');?></h4>
+<section class="trans-sec container mb-2">
+    <h4 class="title-main mt-0 text-light"><?= Yii::t('app','Recent Transactions');?></h4>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'showHeader'=> false,
-        'tableOptions' => ['class' => 'table-98 table table-sm mb-3 ml-1 mr-1'],
+        'tableOptions' => ['class' => 'table-98 table table-sm mb-3 mx-1'],
         // 'layout' => "{summary}\n{items}\n{pager}",
         'layout' => "{items}",
         'columns' => [
@@ -119,4 +132,3 @@ include ('index_js.php');
     ]); ?>
 
     </section>
-</div>
