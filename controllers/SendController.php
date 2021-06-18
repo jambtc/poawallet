@@ -132,8 +132,8 @@ class SendController extends Controller
  		return $this->render('index', [
  			'fromAddress' => $fromAddress,
 			'sendForm' => $formModel,
-			'balance' => Yii::$app->Erc20->Balance($fromAddress),
-			'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
+			'balance' => Yii::$app->Erc20->tokenBalance($fromAddress),
+			'balance_gas' => Yii::$app->Erc20->gasBalance($fromAddress),
 			'node' => $node,
 			// 'userImage' => $this->loadSocialUser()->picture,
  		]);
@@ -179,18 +179,13 @@ class SendController extends Controller
 		$settings = Settings::poa();
 		$ERC20 = new Yii::$app->Erc20();
 
-		// $amountForContract =  $amount * pow(10, $settings->smartContract->decimals);
-		//
-		// echo $amountForContract;
-		// exit;
-
 		// carico il gas in caso questo sia a 0 MA SOLO
 		// se mi trovo sul network POA 2 e 3 inserito di default
 		// nel DB
 		if ($settings->blockchain->id ==2 || $settings->blockchain->id == 3){
 			$gasBalance = $ERC20->loadGas($fromAccount);
 		} else {
-			$gasBalance = $ERC20->BalanceGas($fromAccount);
+			$gasBalance = $ERC20->gasBalance($fromAccount);
 		}
 
 		// carico le informazioni relative al blocco attuale
@@ -362,7 +357,7 @@ class SendController extends Controller
 				'status' => $tokens->status,
 				'success' => true,
 				'row' => $WebApp->showTransactionRow($tokens,$tokens->from_address),
-				'balance' => $ERC20->Balance($tokens->from_address),
+				'balance' => $ERC20->tokenBalance($tokens->from_address),
 				'pushoptions' => $pushOptions,
 			];
 

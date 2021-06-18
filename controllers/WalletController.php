@@ -142,9 +142,9 @@ class WalletController extends Controller
 				'searchModel' => $searchModel,
 				'dataProvider' => $dataProvider,
 				'fromAddress' => $fromAddress,
-				'balance' => Yii::$app->Erc20->Balance($fromAddress),
+				'balance' => Yii::$app->Erc20->tokenBalance($fromAddress),
 				'userImage' => $this->loadSocialUser()->picture,
-				'balance_gas' => Yii::$app->Erc20->BalanceGas($fromAddress),
+				'balance_gas' => Yii::$app->Erc20->gasBalance($fromAddress),
 				'node' => $node,
 		]);
 	}

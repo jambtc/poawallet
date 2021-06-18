@@ -331,7 +331,7 @@ class CommandsServer extends WebSocketServer
                                       $this->setTransactionsFound([
                                           'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
-                                           'balance' => $ERC20->Balance($postData['search_address']),
+                                           'balance' => $ERC20->tokenBalance($postData['search_address']),
                                            'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                       ]);
 
@@ -379,7 +379,7 @@ class CommandsServer extends WebSocketServer
                                               $this->setTransactionsFound([
                                                   'id_token' => $tokens->id,
                                                  'pushoptions' => $messages,
-                                                 'balance' => $ERC20->Balance($postData['search_address']),
+                                                 'balance' => $ERC20->tokenBalance($postData['search_address']),
                                                  'row' => WebApp::showTransactionRow($tokens,$postData['search_address'],true),
                                               ]);
                                           }else {

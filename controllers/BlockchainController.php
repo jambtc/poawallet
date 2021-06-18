@@ -265,7 +265,7 @@ class BlockchainController extends Controller
                                       $this->setTransactionsFound([
                                            'id_token' => $tokens->id,
                                            'pushoptions' => $messages,
-										   'balance' => WebApp::number_shorten($ERC20->Balance($wallets->wallet_address)),
+										   'balance' => WebApp::number_shorten($ERC20->tokenBalance($wallets->wallet_address)),
                                            'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                       ]);
 
@@ -310,7 +310,7 @@ class BlockchainController extends Controller
                                               $this->setTransactionsFound([
                                                   'id_token' => $tokens->id,
                                                  'pushoptions' => $messages,
-												 'balance' => WebApp::number_shorten($ERC20->Balance($wallets->wallet_address)),
+												 'balance' => WebApp::number_shorten($ERC20->tokenBalance($wallets->wallet_address)),
                                                  'row' => WebApp::showTransactionRow($tokens,$wallets->wallet_address,true),
                                               ]);
 											  // $this->log("l'array settransactionFound è: <pre>".print_r($this->getTransactionsFound(),true)."</pre>\n");

@@ -72,25 +72,7 @@ class Erc20 extends Component
         $substr = substr($response,$start);
         return json_decode($substr, true);
     }
-    /**
-     * toAmountForContract
-     * Trasforma string or integer in wei (importo per contract)
-     *
-     * @param string|int $value
-     * @param int $decimals
-     * @return string
-     */
-    private function toAmountForContract($value, $contractDecimals)
-    {
-        $decimals = self::numberOfDecimals($value);
-        $integer = $value * pow(10,$decimals);
-        $string = (string) $integer;
-        $weidecimals = $contractDecimals - $decimals;
-        $pow = $string * pow(10, $weidecimals);
-        $contractAmount = gmp_strval($pow);
 
-        return $contractAmount;
-    }
     private function numberOfDecimals($value)
     {
         if ((int)$value == $value)
@@ -104,24 +86,35 @@ class Erc20 extends Component
         return strlen($value) - strrpos($value, '.') - 1;
     }
 
+
+    /**
+     * toAmountForContract
+     * Trasforma string or integer in wei (importo per contract)
+     *
+     * @param string|int $value
+     * @param int $decimals
+     * @return string
+     */
+    private function toAmountForContract($value, $contractDecimals)
+    {
+        $decimals = self::numberOfDecimals($value);
+        $integer = $value * pow(10,$decimals);
+        $string = (string) $integer;
+        $pow = $string * pow( 10, ($contractDecimals - $decimals) );
+
+        return gmp_strval($pow);
+    }
+
+
     // sign and send a raw token transaction
     public function sendToken($item)
     {
         $tx = (object) $item;
         // echo '<pre>'.print_r($tx,true).'</pre>';
-		// exit;
-
         $settings = Settings::poa($this->user_id);
         $web3 = new Web3($settings->blockchain->url);
 
-        // trasforma un numero decimale in valore wei
-        // $decimals = self::numberOfDecimals($tx->amount);
-        // $integer = $tx->amount * pow(10,$decimals);
-        // $string = (string) $integer;
-        // $weidecimals = $settings->smartContract->decimals - $decimals;
-        // $pow = $string * pow(10, $weidecimals);
-        // $contractAmount = gmp_strval($pow);
-
+        // trasforma amount in valore wei
         $contractAmount = $this->toAmountForContract($tx->amount, $settings->smartContract->decimals);
 
         /**
@@ -149,8 +142,6 @@ class Erc20 extends Component
         ]);
         $transaction->offsetSet('chainId', $tx->chainId);
         $signed_transaction = $transaction->sign($tx->decryptedSign); // la chiave derivata da json js AES to PHP
-
-
 
     	$response = null;
         $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
@@ -193,7 +184,7 @@ class Erc20 extends Component
     /*
 	* This function retrieve the token balance of an address
 	*/
-	public function Balance($fromAddress)
+	public function tokenBalance($fromAddress)
 	{
         // echo '<pre>'.print_r($fromAddress,true).'</pre>';
         // echo '<pre>'.print_r($this->user_id,true).'</pre>';
@@ -242,7 +233,7 @@ class Erc20 extends Component
 
 	}
 
-    public function BalanceGas($address)
+    public function gasBalance($address)
     {
         $settings = Settings::poa();
         $web3 = new Web3($settings->blockchain->url);
@@ -329,13 +320,6 @@ class Erc20 extends Component
         $erc20abi = $settings->smartContract->contractType;
 
         // // trasforma un numero decimale in valore wei
-        // $decimals = self::numberOfDecimals($amount);
-        // $integer = $amount * pow(10,$decimals);
-        // $string = (string) $integer;
-        // $weidecimals = $settings->smartContract->decimals - $decimals;
-        // $pow = $string * pow(10, $weidecimals);
-        // $contractAmount = gmp_strval($pow);
-
         $contractAmount = $this->toAmountForContract($amount, $settings->smartContract->decimals);
 
 		$gasLimit = 0;
@@ -453,13 +437,15 @@ class Erc20 extends Component
         $web3 = new Web3($settings->blockchain->url);
 
         $response = null;
-        if (self::BalanceGas($address) <= 0) {
+        if (self::gasBalance($address) <= 0) {
             if ($settings->blockchain->id == 2){
                 $sealer_account = Yii::$app->params['sealer_account_2'];
                 $prv_key = Yii::$app->params['sealer_prvkey_2'];
-            } else {
+            } else if ($settings->blockchain->id == 3) {
                 $sealer_account = Yii::$app->params['sealer_account_3'];
                 $prv_key = Yii::$app->params['sealer_prvkey_3'];
+            } else {
+                return self::gasBalance($address);
             }
 
             // preparing items
@@ -498,7 +484,7 @@ class Erc20 extends Component
             });
         }
 
-        return self::BalanceGas($address);
+        return self::gasBalance($address);
 
     }
 }
