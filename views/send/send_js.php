@@ -26,7 +26,7 @@ $options = [
                                 <p class="generating">'.Yii::t('app','Generating transaction...').'</p>
                                 </div>',
     'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
-    'network' => $blockchain->blockchain->id,
+    'zerogas' => $blockchain->blockchain->zerogas,
     //'textClose' => Yii::t('app','Close'),
     // ...
 ];
@@ -75,7 +75,7 @@ $wallet_send = <<<JS
             event.stopPropagation();
 		}
 
-        if (yiiOptions.network != 2 && yiiOptions.network != 3){
+        if (yiiOptions.zerogas != 1){
             if ($("#sendform-balance_gas").val() <= 0  ){
                 $('#error-summary').show().text(yiiOptions.nogasError);
                 event.stopPropagation();

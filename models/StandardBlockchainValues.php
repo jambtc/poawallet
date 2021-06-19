@@ -13,6 +13,7 @@ use Yii;
  * @property string $url
  * @property string $symbol
  * @property string|null $url_block_explorer
+ * @property integer $zerogas
  */
 class StandardBlockchainValues extends \yii\db\ActiveRecord
 {
@@ -32,6 +33,7 @@ class StandardBlockchainValues extends \yii\db\ActiveRecord
         return [
             [['denomination', 'chain_id', 'url', 'symbol'], 'required'],
             [['denomination', 'url', 'symbol', 'url_block_explorer'], 'string', 'max' => 255],
+            [['zerogas'], 'integer'],
             [['chain_id'], 'string', 'max' => 50],
         ];
     }

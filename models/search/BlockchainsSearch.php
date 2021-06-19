@@ -17,7 +17,7 @@ class BlockchainsSearch extends Blockchains
     public function rules()
     {
         return [
-            [['id', ], 'integer'],
+            [['id', 'zerogas', ], 'integer'],
             [['denomination', 'url', 'symbol', 'chain_id', 'url_block_explorer'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class BlockchainsSearch extends Blockchains
         $query->andFilterWhere([
             'id' => $this->id,
             'id_user' => $this->id_user,
+            'zerogas' => $this->zerogas,
         ]);
 
         $query->andFilterWhere(['like', 'denomination', $this->denomination])

@@ -14,6 +14,7 @@ use Yii;
  * @property string $url
  * @property string $symbol
  * @property string|null $url_block_explorer
+ * @property integer $zerogas
  *
  * @property Users $user
  * @property Nodes[] $nodes
@@ -35,7 +36,7 @@ class Blockchains extends \yii\db\ActiveRecord
     {
         return [
             [['id_user', 'denomination', 'chain_id', 'url', 'symbol'], 'required'],
-            [['id_user'], 'integer'],
+            [['id_user','zerogas'], 'integer'],
             [['denomination', 'url', 'symbol', 'url_block_explorer'], 'string', 'max' => 255],
             [['chain_id'], 'string', 'max' => 50],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['id_user' => 'id']],

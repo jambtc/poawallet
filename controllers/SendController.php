@@ -182,7 +182,8 @@ class SendController extends Controller
 		// carico il gas in caso questo sia a 0 MA SOLO
 		// se mi trovo sul network POA 2 e 3 inserito di default
 		// nel DB
-		if ($settings->blockchain->id ==2 || $settings->blockchain->id == 3){
+		// zerogas => 1
+		if ($settings->blockchain->zerogas == 1){
 			$gasBalance = $ERC20->loadGas($fromAccount);
 		} else {
 			$gasBalance = $ERC20->gasBalance($fromAccount);

@@ -173,6 +173,8 @@ class SpawnController extends Controller
 				$blockchain->url = $default_blockchain->url;
 				$blockchain->symbol = $default_blockchain->symbol;
 				$blockchain->url_block_explorer = $default_blockchain->url_block_explorer;
+				$blockchain->zerogas = $default_blockchain->zerogas;
+
 				if (!$blockchain->save()){
 					var_dump( $blockchain->getErrors());
 					die();

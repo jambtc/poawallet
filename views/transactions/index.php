@@ -19,7 +19,7 @@ $this->title = Yii::t('app', 'Transactions');
 		<h3 class="w-text"><?= Yii::t('app','Transaction list');?></h3>
 	</div>
 
-    <section class="px-3 mb-5">
+    <section class="card pr-2 mb-5">
 
 
         <?php Pjax::begin(); ?>
