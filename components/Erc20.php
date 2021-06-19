@@ -95,14 +95,13 @@ class Erc20 extends Component
      * @param int $decimals
      * @return string
      */
-    private function toAmountForContract($value, $contractDecimals)
+    private function toAmountForContract( $value, $contractDecimals)
     {
         $decimals = self::numberOfDecimals($value);
-        $integer = $value * pow(10,$decimals);
-        $string = (string) $integer;
-        $pow = $string * pow( 10, ($contractDecimals - $decimals) );
+        $bc_integer = bcmul($value, bcpow(10, $decimals));
+        $bc_pow = bcmul($bc_integer, bcpow(10, ($contractDecimals - $decimals) ) );
 
-        return gmp_strval($pow);
+        return $bc_pow;
     }
 
 
@@ -331,41 +330,13 @@ class Erc20 extends Component
             [
                 'from'=>$fromAddress,
             ]
-            , function ($err, $result) use (&$gasLimit, &$utils) {
+            , function ($err, $result) use (&$gasLimit) {
 			if ($err !== null) {
 				throw new HttpException(404,$err->getMessage());
 			}
-			// echo '<pre>'.print_r($result,true).'</pre>';
-			// exit;
-			// if (isset($result)) {
-			// 	$gasLimit = $result->value;
-			// }
             if (isset($result)) {
-                // $wei = $utils->toWei($result,'gwei');
-                //
-                //
-                // // //$balance = (string) $result[0]->value;
-				// // $value = $result->value;
-				// // $value = $utils->toEther((string)$result, 'gwei');
-                // echo '<pre>'.print_r($wei,true).'</pre>';
-                // exit;
-                //
-				// $Value0 = (string) $value[0]->value;
-                // $Value1 = (string) $value[1]->value;
-                // // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
-                // $Value2 = ($Value0 + $Value1) / pow(1000, 3);
-                //
-                // $gasLimit = $Value2 ;
-				//$this->setBalance($Value2);
-
                 $gasLimit = gmp_strval($result->value);
 			}
-            // echo '<pre>'.print_r($result,true).'</pre>';
-            // echo '<pre>'.print_r($value,true).'</pre>';
-            // echo '<pre>'.print_r($Value0,true).'</pre>';
-            // echo '<pre>'.print_r($Value1,true).'</pre>';
-            // echo '<pre>'.print_r(gmp_strval($gasLimit),true).'</pre>';
-			// exit;
 		});
 
         return $gasLimit;
