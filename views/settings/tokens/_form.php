@@ -12,7 +12,7 @@ use app\models\Blockchains;
 /* @var $form yii\widgets\ActiveForm */
 
 $contract_type = ArrayHelper::map(ContractType::find()->all(), 'id', 'denomination');
-$blockchains = ArrayHelper::map(Blockchains::find()->all(), 'id', 'denomination');
+$blockchains = ArrayHelper::map(Blockchains::find()->andWhere(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 
 ?>
 
