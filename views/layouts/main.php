@@ -36,10 +36,10 @@ $this->registerJs(
 AppAsset::register($this);
 
 PincodeAsset::register($this);
-// NotificationsAsset::register($this);
+NotificationsAsset::register($this);
 ServiceWorkerAsset::register($this);
 WebSocketAsset::register($this);
-// SynchronizeLatestBlocksAsset::register($this);
+SynchronizeLatestBlocksAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
