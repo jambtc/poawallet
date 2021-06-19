@@ -202,7 +202,7 @@ class WebApp extends Component
         $newTxClass = ($newTransaction == true) ? 'bg-newtransaction' : '';
 
         $line = '
-        <a href="index.php?r=tokens/view&id='. self::encrypt($data->id) . '" />
+        <a href="index.php?r=transactions/view&id='. self::encrypt($data->id) . '" />
         <div class="container-fluid m-0 p-0">
               <div class="row d-flex justify-content-center">
                   <div class="col-11 m-0 p-0">

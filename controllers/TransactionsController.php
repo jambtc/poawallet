@@ -17,7 +17,7 @@ use app\components\WebApp;
 /**
  * TransactionsController implements the CRUD actions for Transactions model.
  */
-class TokensController extends Controller
+class TransactionsController extends Controller
 {
     /**
      * {@inheritdoc}

@@ -3,7 +3,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 
-$getUrl = Url::to(['tokens/get-transaction-details','txhash'=>$model->txhash]);
+$getUrl = Url::to(['transactions/get-transaction-details','txhash'=>$model->txhash]);
 
 $transget = <<<JS
     $(function(){

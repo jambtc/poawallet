@@ -53,7 +53,6 @@ $this->title = Yii::t('app', 'Transactions');
 
         <?php Pjax::end(); ?>
         <div class="form-divider"></div>
-        <div class="form-divider"></div>
     </section>
 
 

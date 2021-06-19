@@ -14,7 +14,7 @@ $this->title = Yii::t('app', 'Wallet');
 $receiveUrl = Url::to(['receive/index']);
 $sendUrl = Url::to(['send/index','v'=>time()]);
 $userUrl = Url::to(['users/view','id'=>WebApp::encrypt(Yii::$app->user->identity->id)]);
-$tokensUrl = Url::to(['tokens/index']);
+$tokensUrl = Url::to(['transactions/index']);
 
 include ('index_js.php');
 ?>

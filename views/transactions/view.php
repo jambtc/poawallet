@@ -38,7 +38,7 @@ include ('view_js.php');
                             // 'id_token',
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('app','id_token'),
+                                'attribute'=>Yii::t('app','Transaction ID'),
                                 'value'=>app\components\WebApp::encrypt($model->id),
                                 'contentOptions' => ['class' => 'text-break']
                             ],
@@ -69,7 +69,7 @@ include ('view_js.php');
                             ],
                             [
                                 'type'=>'raw',
-                                'attribute'=>Yii::t('app','txhash'),
+                                'attribute'=>Yii::t('app','Transaction hash'),
                                 'value'=>$model->txhash,
                                 'contentOptions' => ['class' => 'text-break']
                             ],

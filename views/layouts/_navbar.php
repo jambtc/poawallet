@@ -42,7 +42,7 @@ NavBar::end();
 					</a>
 				</li>
 				<li class="">
-					<a href="<?= Url::to(['/tokens/index']) ?>">
+					<a href="<?= Url::to(['/transactions/index']) ?>">
 						<i class="fa fa-list fa-lg text-primary"></i>
 						<strong class="special"><?= Yii::t('app','Transactions') ?></strong>
 					</a>
