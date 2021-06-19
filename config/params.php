@@ -1,6 +1,19 @@
 <?php
 $secrets = require __DIR__ . '/secrets.php';
 
+// in secret file you must put the correct info for the correct domain
+// 'oauth_telegram' => [
+//     'client_id' => [
+//         'localhost' => 'aaa'
+//         'exmpale.com' => 'xxxxx',
+//     ],
+//     'secret' => [
+//         'localhost' => 'bbbbbbb'
+//         'axample.com' => 'yyyyyyy',
+//     ]
+// ],
+
+
 return [
     'adminEmail' => $secrets['mail_adminusername'],
     'senderEmail' => $secrets['mail_username'],
@@ -27,8 +40,8 @@ return [
 
 
     // Telegram login informations
-    'telegram.clientId' => $secrets['telegram_client_id'],
-    'telegram.clientSecret' => $secrets['telegram_client_secret'],
+    'telegram.clientId' => $secrets['oauth_telegram']['client_id'][$_SERVER['SERVER_NAME']],
+    'telegram.clientSecret' => $secrets['oauth_telegram']['secret'][$_SERVER['SERVER_NAME']],
 
 
     // smart contract

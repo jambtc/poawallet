@@ -4,6 +4,18 @@ $secrets = require __DIR__ . '/secrets.php';
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
+// in secret file you must put the correct info for the correct domain
+// 'oauth_github' => [
+//     'client_id' => [
+//         'localhost' => 'aaa'
+//         'exmpale.com' => 'xxxxx',
+//     ],
+//     'secret' => [
+//         'localhost' => 'bbbbbbb'
+//         'axample.com' => 'yyyyyyy',
+//     ]
+// ],
+
 $config = [
     'id' => 'Poa Wallet',
     'name' => 'Poa Wallet',
@@ -64,8 +76,8 @@ $config = [
                ],
                'github' => [
                    'class' => 'yii\authclient\clients\GitHub',
-                   'clientId' => $secrets['github_client_id'],
-                   'clientSecret' => $secrets['github_client_secret'],
+                   'clientId' => $secrets['oauth_github']['client_id'][$_SERVER['SERVER_NAME']],
+                   'clientSecret' => $secrets['oauth_telegram']['secret'][$_SERVER['SERVER_NAME']],
                ],
                // 'twitter' => [
                //      'class' => 'yii\authclient\clients\Twitter',
