@@ -77,7 +77,7 @@ $config = [
                'github' => [
                    'class' => 'yii\authclient\clients\GitHub',
                    'clientId' => $secrets['oauth_github']['client_id'][$_SERVER['SERVER_NAME']],
-                   'clientSecret' => $secrets['oauth_telegram']['secret'][$_SERVER['SERVER_NAME']],
+                   'clientSecret' => $secrets['oauth_github']['secret'][$_SERVER['SERVER_NAME']],
                ],
                // 'twitter' => [
                //      'class' => 'yii\authclient\clients\Twitter',
