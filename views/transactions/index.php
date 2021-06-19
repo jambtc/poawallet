@@ -14,14 +14,19 @@ $this->title = Yii::t('app', 'Transactions');
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
 <!-- <div class="form-divider"></div> -->
-<div class="dash-balance ref-card c10">
+<!-- <div class="dash-balance ref-card c10">
     <div class="dash-content relative">
 		<h3 class="w-text"><?= Yii::t('app','Transaction list');?></h3>
+	</div> -->
+
+
+<div class="dash-balance ref-card c10">
+    <div class="ref-card c3 mb-3">
+		<div class="dash-content relative">
+			<h3 class="w-text"><?= Yii::t('app','Transaction list');?></h3>
+		</div>
 	</div>
-
     <section class="card pr-2 mb-5">
-
-
         <?php Pjax::begin(); ?>
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 

@@ -207,7 +207,7 @@ $sendForm->from = $fromAddress;
 
     				<img src="css/img/content/crypto-buy.png" class="img-buy mt-20" alt="">
 
-					<div class="hide-content">
+					<div class="no-hide-content">
 						<div class="send-v2__form-row " style="background-color: aliceblue;">
 							<div class="send-v2__form-label"><?= Yii::t('app','Asset:') ?></div>
 							<div class="send-v2__form-field">
@@ -282,7 +282,7 @@ $sendForm->from = $fromAddress;
 						</div>
 					</div>
 
-    				<div class="transaction-details list-unstyled mt-5" style="display: none;">
+    				<div class="ref-card c10 transaction-details list-unstyled mt-5" style="display: none;">
     				</div>
     				<div>
 						<a href="#" class="pay-submit hide-content">

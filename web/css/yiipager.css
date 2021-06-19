@@ -22,6 +22,7 @@ ul.pagination
 ul.pagination li
 {
 	display:inline;
+	background-color: gray;
 }
 
 ul.pagination li.active

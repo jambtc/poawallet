@@ -261,7 +261,7 @@ class SendController extends Controller
 			'id_user' => Yii::$app->user->id,
 			'status' => 'new',
 			'description' => Yii::t('app','You sent a new transaction.'),
-			'url' => Url::to(["/tokens/view",'id'=>WebApp::encrypt($tokens->id)]),
+			'url' => Url::to(["/transactions/view",'id'=>WebApp::encrypt($tokens->id)]),
 			'timestamp' => time(),
 			'price' => $tokens->token_price,
 		];
@@ -333,7 +333,7 @@ class SendController extends Controller
 					'amount' => $tokens->token_price,
 					'symbol' => $settings->smartContract->symbol,
 				]),
-				'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
+				'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
 				'timestamp' => time(),
 				'price' => $tokens->token_price,
 			];

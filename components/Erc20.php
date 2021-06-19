@@ -100,7 +100,8 @@ class Erc20 extends Component
         $decimals = self::numberOfDecimals($value);
         $bc_integer = bcmul($value, bcpow(10, $decimals));
         $bc_pow = bcmul($bc_integer, bcpow(10, ($contractDecimals - $decimals) ) );
-
+        // echo '<pre>'.print_r($bc_pow,true).'</pre>';
+        // exit;
         return $bc_pow;
     }
 

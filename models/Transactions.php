@@ -72,7 +72,7 @@ class Transactions extends \yii\db\ActiveRecord
             'from_address' => Yii::t('app', 'From Address'),
             'to_address' => Yii::t('app', 'To Address'),
             'blocknumber' => Yii::t('app', 'Blocknumber'),
-            'txhash' => Yii::t('app', 'tx Hash'),
+            'txhash' => Yii::t('app', 'Transaction Hash'),
             'message' => Yii::t('app', 'Message'),
         ];
     }

@@ -225,7 +225,7 @@ class BlockchainController extends Controller
 												   'amount' => $tokens->token_price,
 												   'symbol' => $settings->smartContract->symbol,
 											   ]),
-	                                           'url' => Url::to(['/tokens/view','id'=>WebApp::encrypt($tokens->id)],true),
+	                                           'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
 											   'timestamp' => $tokens->invoice_timestamp,
 											   'price' => $tokens->token_price,
 										   ];
@@ -297,7 +297,7 @@ class BlockchainController extends Controller
 												  'id_user' => Yii::$app->user->id,
 												  'status' => 'complete',
 												  'description' => Yii::t('app','You received a new transaction.'),
-                                                  'url' => 'index.php?r=tokens/view&id='.WebApp::encrypt($tokens->id),
+                                                  'url' => 'index.php?r=transactions/view&id='.WebApp::encrypt($tokens->id),
 												  'timestamp' => $tokens->invoice_timestamp,
 												  'price' => $tokens->token_price,
 											  ];

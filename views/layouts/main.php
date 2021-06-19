@@ -38,10 +38,10 @@ AppAsset::register($this);
 PincodeAsset::register($this);
 ServiceWorkerAsset::register($this);
 WebSocketAsset::register($this);
-// SynchronizeLatestBlocksAsset::register($this);
+SynchronizeLatestBlocksAsset::register($this);
 
 // try to fix page call to backend/notify
-// NotificationsAsset::register($this);
+NotificationsAsset::register($this);
 
 ?>
 <?php $this->beginPage() ?>
