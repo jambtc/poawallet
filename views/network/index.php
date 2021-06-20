@@ -6,7 +6,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app', 'Network info');
 ?>
 <div class="h-100 network-details ref-card c7">
-    <div class="mt-5 dash-content relative">
+    <div class="mt-5 ref-card c10">
 		<h3 class="w-text"><?= $this->title ?></h3>
 	</div>
 

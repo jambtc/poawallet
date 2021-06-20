@@ -20,6 +20,11 @@ $smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii:
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="txt-left">
+        <?php if (Yii::$app->session->hasFlash('nodeSelectedsuccess')): ?>
+            <div class="alert alert-success">
+                <?php echo  Yii::$app->session->getFlash('nodeSelectedsuccess'); ?><br>
+            </div>
+        <?php endif; ?>
         <?= $form->errorSummary($model, ['id' => 'error-summary','class'=>'col-lg-12 callout callout-danger']) ?>
     </div>
 

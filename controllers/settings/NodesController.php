@@ -84,6 +84,8 @@ class NodesController extends Controller
         $model = $this->findModel();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('nodeSelectedsuccess', Yii::t('app','Node selected succesfully!'));
+
             //return $this->redirect(['view', 'id' => $model->id]);
         }
 

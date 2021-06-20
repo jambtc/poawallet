@@ -44,7 +44,7 @@ $sendForm->from = $fromAddress;
 				<div class="d-flex justify-content-between">
 					<div>
 						<?= Yii::t('app','Balance on: ') ?></br>
-						<a href="<?= Url::to(['settings/nodes/index']) ?>">
+						<a href="<?= Url::to(['settings/nodes/update']) ?>">
 							<?= $node->blockchain->denomination ?>
 						</a>
 					</div>

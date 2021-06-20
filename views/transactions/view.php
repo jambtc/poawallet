@@ -21,7 +21,7 @@ include ('view_js.php');
 			</div> -->
 		</div>
 	</div>
-    <section class="ref-card c8 trans-sec mt-0" style="padding:15px 0px 0px 0px !important;">
+    <section class="bg-transparent trans-sec mt-0" style="padding:15px 0px 0px 0px !important;">
 
 		<div class=" ">
 			<div class="d-flex align-items-center">

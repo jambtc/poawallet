@@ -8,7 +8,7 @@ include ('manage-blockchainscan_js.php');
 
 ?>
 <div class="h-100 ref-card c5">
-	<div class="dash-balance ref-card c5">
+	<div class="mt-5 ref-card c5">
 		<div class="dash-content relative">
 			<h3 class="w-text"><?= Yii::t('app','Settings') ?></h3>
 		</div>

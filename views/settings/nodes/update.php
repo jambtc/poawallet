@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Nodes */
 
-$this->title = Yii::t('app', 'Update Node selection');
+$this->title = Yii::t('app', 'Node selection');
 ?>
 <div class="h-100 ref-card c7">
-	<div class="mt-5">
+	<div class="ref-card c1 mt-5">
 		<div class="dash-content relative">
 			<h3 class="w-text"><?= Yii::t('app','Node selection') ?></h3>
 		</div>

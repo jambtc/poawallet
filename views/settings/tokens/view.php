@@ -10,12 +10,12 @@ use yii\widgets\DetailView;
 $this->title = $model->denomination;
 ?>
 <div class="dash-balance">
-	<div class="dash-content relative">
+	<div class="ref-card c1 relative">
 		<h3 class="w-text">
             <?= Yii::t('app','Token details') ?>
         </h3>
-		<a class="text-light float-right" href="<?= Url::to(['settings/tokens/index']) ?>">
-			<?= Yii::t('app','back') ?>
+		<a class="btn btn-primary float-right" href="<?= Url::to(['settings/nodes/update']) ?>">
+			<i class="fas fa-check"></i> <?= Yii::t('app','Select') ?>
 		</a>
 	</div>
 </div>

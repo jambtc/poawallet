@@ -209,7 +209,7 @@ class WebApp extends Component
                       <div class="card shadow">
                           <div class="transaction-card-horizontal '.$newTxClass.'">
                               <div class="img-square-wrapper ">
-                                  <i class="pt-2 fas fa-2x '.$coinImg.'"></i>
+                                  <i class="pt-2 px-1 fas fa-2x '.$coinImg.'"></i>
                               </div>
                               <div class="transaction-card-body ml-1 mb-0">
                                   <span class="card-title">
@@ -219,7 +219,10 @@ class WebApp extends Component
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
                               </div>
-                              <div class="card-footer py-0">
+							  <div class="alert alert-primary p-1 m-2 align-middle">
+							  	'.$data->smartContract->symbol.'
+							  </div>
+                              <div class="card-footer py-0 px-1">
                                   <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
                                   <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
                                   .self::encrypt($data->id).'">'.$data->status.'</small>

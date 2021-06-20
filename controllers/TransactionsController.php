@@ -62,7 +62,7 @@ class TransactionsController extends Controller
 					->orwhere(['=','to_address', $fromAddress])
 					->orwhere(['=','from_address', $fromAddress]);
 
-        $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
+        // $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
         // echo '<pre>'.print_r($dataProvider,true);exit;
 
         return $this->render('index', [

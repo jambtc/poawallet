@@ -31,7 +31,7 @@ include ('index_js.php');
                               <div class="d-flex justify-content-between">
                                   <div>
                                       <?= Yii::t('app','Balance on: ') ?></br>
-                                      <a class="txt-white" href="<?= Url::to(['settings/nodes/index']) ?>">
+                                      <a class="txt-white" href="<?= Url::to(['settings/nodes/update']) ?>">
                                           <?= $node->blockchain->denomination ?>
                                       </a>
                                   </div>
