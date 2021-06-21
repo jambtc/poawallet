@@ -139,7 +139,8 @@ $wallet_send = <<<JS
 		console.log('[Send]: sendPost senza chiave',sendPost);
 
 		// USO IL SERVICE WORKER
-		if ('serviceWorker' in navigator && 'SyncManager' in window){
+        // if ('serviceWorker' in navigator && 'SyncManager' in window){
+        if ('serviceWorker' in navigator){
 			navigator.serviceWorker.ready
 			.then(function(sw) {
 				var serWork = sw; // firefox fix
@@ -170,7 +171,12 @@ $wallet_send = <<<JS
 
                                 writeData('sync-send-erc20', data).then(function() {
         							console.log('[Send]: Registered sync-send-erc20 request in indexedDB', data);
-        							return serWork.sync.register('sync-send-erc20');
+                                    if ('SyncManager' in window){
+                                        return serWork.sync.register('sync-send-erc20');
+                                    } else {
+                                        erc20.bypassIos('sync-send-erc20');
+                                        return true;
+                                    }
         						})
                                 .then(function() {
         							erc20.isReadySent(data.id);
@@ -188,7 +194,7 @@ $wallet_send = <<<JS
 				})
 			});
 		} else {
-            alert('Your browser don`t support Service worker!');
+            alert('Your browser don`t support SyncManager worker!');
         }
 	});
 
@@ -219,6 +225,38 @@ $wallet_send = <<<JS
                 }
             });
         },
+
+        bypassIos: function (tag){
+            console.log('[No SW- bypass for Ios] Evento sincronizzazione invio token trovato!');
+     			readAllData(tag)
+     			.then(function(data) {
+     				for (var dt of data) {
+    					console.log('[Service worker] fetching sync-send-erc20',dt);
+    					var postData = new FormData();
+    	  					postData.append('id', dt.id);
+    						//postData.append('chainBlock', dt.chainBlock);
+
+    	 				fetch(dt.url, {
+    	 					method: 'POST',
+    	 					body: postData,
+    	 				})
+    	 				.then(function(response) {
+    	 					return response.json();
+    	 				})
+    	 				.then(function(json) {
+    						console.log('[Service worker] Risposta di send/validateTransaction',json);
+    						writeData('np-send-erc20', json);
+
+    				 	})
+     					.catch(function(err){
+     						console.log('[Service worker] Error while checking send-erc20 data', err);
+     					})
+     				}
+     				//per sicurezza cancello tutto da indexedDB
+     				clearAllData(tag);
+                });
+
+        }
     }
 
 JS;
