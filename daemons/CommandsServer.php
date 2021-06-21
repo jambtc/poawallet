@@ -12,11 +12,15 @@ use app\models\Transactions;
 use app\models\NotificationsReaders;
 use app\models\Notifications;
 use app\models\Nodes;
+use app\models\SmartContracts;
+
 
 use yii\web\Response;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+
 
 use app\components\WebApp;
 use app\components\Settings;
@@ -26,7 +30,7 @@ use Web3\Web3;
 
 class CommandsServer extends WebSocketServer
 {
-    public $maxBlocksToScan = 21;
+    public $maxBlocksToScan = 11;
     public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
@@ -182,6 +186,18 @@ class CommandsServer extends WebSocketServer
 		// numero massimo di blocchi da scansionare
         $maxBlockToScan = $this->getMaxBlocksToScan();
 
+        // carico tutti gli smartcontract dell'utente
+		$smartContracts = SmartContracts::find()->where(['id_user'=>$client->user_id])->all();
+		$smartContractsArray = ArrayHelper::map($smartContracts, 'id',
+				function($data) {
+					return strtoupper($data->smart_contract_address);
+				}
+		);
+		foreach ($smartContracts as $key => $value) {
+			// code...
+			$smartContractsById[$value->id] = $value;
+		}
+
 		// Inizio il ciclo sui blocchi
         for ($x=0; $x < $maxBlockToScan;$x++)
 		{
@@ -211,12 +227,14 @@ class CommandsServer extends WebSocketServer
 					foreach ($transactions as $idx => $transaction)
 					{
 						//controlla transazioni ethereum
-
-						if (strtoupper($transaction->to) <> strtoupper($node->smartContract->smart_contract_address) ){
+						// if (strtoupper($transaction->to) <> strtoupper($node->smartContract->smart_contract_address) ){
+                        if (!in_array(strtoupper($transaction->to), $smartContractsArray)){
 							$this->log(" : è una transazione ether...\n");
 
 							$ReceivingType = 'ether';
 					    }else{
+                            $smartContractId = array_search(strtoupper($transaction->to),$smartContractsArray,true);
+
 						    $this->log($idx." : è una transazione token...\n");
 						    //smart contract
 						    $ReceivingType = 'token';
@@ -246,9 +264,10 @@ class CommandsServer extends WebSocketServer
 									   $timestamp = 0;
 									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $node->smartContract->decimals
+                                           $smartContractsById[$smartContractId]->decimals
 									   ); // decimali del token
-									   $rate = 1; //eth::getFiatRate('token');
+                                       //$node->smartContract->decimals
+									   // $rate = 1; //eth::getFiatRate('token');
 
 									   // con questa funzione recupero il timestamp in cui è stata minata
 									   // la  transazione
@@ -261,7 +280,8 @@ class CommandsServer extends WebSocketServer
 									   $tokens->id_user = $client->user_id;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
-                                       $tokens->id_smart_contract = $node->smartContract->id;
+                                       // $tokens->id_smart_contract = $node->smartContract->id;
+                                       $tokens->id_smart_contract = $smartContractId; //$settings->smartContract->id;
 							           $tokens->token_price	= $transactionValue;
 							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
@@ -288,7 +308,9 @@ class CommandsServer extends WebSocketServer
     										   'status' => 'complete',
                                                'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
 												   'amount' => $tokens->token_price,
-												   'symbol' => $node->smartContract->symbol,
+												   // 'symbol' => $node->smartContract->symbol,
+                                                   'symbol' => $smartContractsById[$smartContractId]->symbol, //$settings->smartContract->symbol,
+
 											   ]),
                                                // 'url' => 'index.php?r=transactions/view&id='.WebApp::encrypt($tokens->id),
                                                'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
@@ -315,7 +337,9 @@ class CommandsServer extends WebSocketServer
                                            $notification['id_user'] = $id_user_to;
                                            $notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
                                               'amount' => $tokens->token_price,
-                                              'symbol' => $node->smartContract->symbol,
+                                              'symbol' => $smartContractsById[$smartContractId]->symbol, //$settings->smartContract->symbol,
+
+                                              // 'symbol' => $node->smartContract->symbol,
                                             ]);
 
                                            $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");

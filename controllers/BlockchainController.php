@@ -13,11 +13,12 @@ use yii\db\ActiveRecord;
 
 use app\models\MPWallets;
 use app\models\Transactions;
-
+use app\models\SmartContracts;
 
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 
 use app\components\Settings;
 use app\components\WebApp;
@@ -110,7 +111,7 @@ class BlockchainController extends Controller
 		$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
 
 		//Carico i parametri della webapp
-		$settings = Settings::poa();
+		// $settings = Settings::poa();
 
 		$ERC20 = new Yii::$app->Erc20();
 		$blockLatest = $ERC20->getBlockInfo();
@@ -122,7 +123,32 @@ class BlockchainController extends Controller
 		$chainBlock = $blockLatest->number;
 		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) -14 );
 
+		// carico tutti gli smartcontract dell'utente
+		$smartContracts = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
+		$smartContractsArray = ArrayHelper::map($smartContracts, 'id',
+				function($data) {
+					return strtoupper($data->smart_contract_address);
+				}
+		);
+		foreach ($smartContracts as $key => $value) {
+			// code...
+			$smartContractsById[$value->id] = $value;
+		}
 
+		// echo '<pre>'.print_r($smartContractsById,true).'</pre>';;exit;
+
+
+		//
+		// $test = '0X82D50AD3C1091866E258FD0F1A7CC9674609D254';
+		// $result = array_search($test,$smartContractsArray,true);
+		// if (in_array($test,$smartContractsArray,true)){
+		// 	echo $test.' is in array and id is: '.array_search($test,$smartContractsArray);
+		// } else {
+		// 	echo $test." is not in array";
+		// }
+		// echo '<pre>'.print_r($smartContractsArray,true).'</pre>';;
+		// echo '<pre>'.print_r($result,true).'</pre>';;;
+		// echo '<pre>'.print_r($smartContractsById[$result],true).'</pre>';exit;
 
 		// Inizio il ciclo sui blocchi
 		for ($x=0; $x <= 15; $x++)
@@ -146,11 +172,21 @@ class BlockchainController extends Controller
 					// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
 					foreach ($transactions as $transaction)
 					{
+						// if (in_array($transaction->to,$smartContracts)){
+						// 	echo $transaction->to.' is in array and id is: '.array_search($transaction->to,$smartContracts);
+						// } else {
+						// 	echo $transaction->to."is not in array";
+						// }
+						// echo '<pre>'.print_r($smartContracts,true).'</pre>';exit;
+
 						//controlla transazioni ethereum
-						if (strtoupper($transaction->to) <> strtoupper($settings->smartContract->smart_contract_address) ){
+						//if (strtoupper($transaction->to) <> strtoupper($settings->smartContract->smart_contract_address) ){
+						if (!in_array(strtoupper($transaction->to), $smartContractsArray)){
 							// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione ether...\n");
 							$ReceivingType = 'ether';
 					    }else{
+							$smartContractId = array_search(strtoupper($transaction->to),$smartContractsArray,true);
+
 						   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : è una transazione token...\n");
 						   //smart contract
 						   $ReceivingType = 'token';
@@ -181,9 +217,10 @@ class BlockchainController extends Controller
 									   $timestamp = 0;
 									   $transactionValue = $ERC20->wei2eth(
 										   $transactionContract->logs[0]->data,
-										   $settings->smartContract->decimals
+										   $smartContractsById[$smartContractId]->decimals
 									   ); // decimali del token
-									   $rate = 1; //eth::getFiatRate('token');
+									   //$settings->smartContract->decimals
+									   // $rate = 1; //eth::getFiatRate('token');
 
 									   // con questa funzione recupero il timestamp in cui è stata minata
 									   // la  transazione
@@ -196,7 +233,7 @@ class BlockchainController extends Controller
 									   $tokens->id_user = $wallets->id_user;
 							           $tokens->status	= 'complete';
 							           $tokens->type	= 'token';
-									   $tokens->id_smart_contract = $settings->smartContract->id;
+									   $tokens->id_smart_contract = $smartContractId; //$settings->smartContract->id;
 							           $tokens->token_price	= $transactionValue;
 							           $tokens->token_received	= $transactionValue;
 							           $tokens->invoice_timestamp = hexdec($blockByHash->timestamp);
@@ -223,7 +260,7 @@ class BlockchainController extends Controller
 											   'status' => 'complete',
 											   'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
 												   'amount' => $tokens->token_price,
-												   'symbol' => $settings->smartContract->symbol,
+												   'symbol' => $smartContractsById[$smartContractId]->symbol, //$settings->smartContract->symbol,
 											   ]),
 	                                           'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
 											   'timestamp' => $tokens->invoice_timestamp,
@@ -249,7 +286,7 @@ class BlockchainController extends Controller
                                            $notification['id_user'] = $id_user_to;
     									   $notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
 											   'amount' => $tokens->token_price,
-											   'symbol' => $settings->smartContract->symbol,
+											   'symbol' => $smartContractsById[$smartContractId]->symbol, //$settings->smartContract->symbol,
 										   ]);
 
                                             // $this->log("quindi salvo il secondo messaggio\n: <pre>".print_r($notification,true)."</pre>\n");

@@ -106,28 +106,23 @@ class RestoreController extends Controller
 			if(null === $boltWallet) {
 				$boltWallet = new MPWallets;
 				$boltWallet->id_user = Yii::$app->user->id;
-				$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
+				//$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
 
 				if (null === $node){
-					$boltWallet->blocknumber = '0x0';
-					$boltWallet->save();
+					$defaultNetworkExist = true;
+					$node = $this->createDefaultNetworks();
+
+					//$boltWallet->blocknumber = $this->getLatestBlockNumber();
+					//$boltWallet->save();
 					// entro nella richiesta di selezione del nodo
 					// 2 sono stati già preinseriti
 					 //return $this->redirect(['/settings/nodes/create']);
-					$defaultNetworkExist = true;
-					$this->createDefaultNetworks();
-				} else {
-					$ERC20 = new Yii::$app->Erc20($node->id_blockchain); // blockchain id -> 1
-					$block = $ERC20->getBlockInfo();
-					// echo '<pre>'.print_r($block,true);exit;
-					$json = json_decode($block);
-
-					if (!isset($json->error)){
-						$boltWallet->blocknumber = ($block === null) ? '0x0' : $block->number;
-					} else {
-						$boltWallet->blocknumber = '0x0';
-					}
 				}
+				//  else {
+				//
+				//
+				// }
+				$boltWallet->blocknumber = $this->getLatestBlockNumber();
 				// echo '<pre> [nodes]'.print_r($nodes,true);exit;
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
@@ -152,6 +147,20 @@ class RestoreController extends Controller
 			'formModel' => $formModel,
 		]);
  	}
+
+	private function getLatestBlockNumber(){
+		$ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
+		$block = $ERC20->getBlockInfo();
+
+		// echo '<pre>'.print_r($block,true);exit;
+		$json = json_decode($block);
+
+		if (!isset($json->error)){
+			return ($block === null) ? '0x0' : $block->number;
+		} else {
+			return '0x0';
+		}
+	}
 
 	private function createDefaultNetworks()
 	{
@@ -205,12 +214,12 @@ class RestoreController extends Controller
 		// in tal modo posso utilizzare lo stesso software in più
 		// ambiti!
 		if (null === $nodes){
-			$model = new Nodes;
-			$model->id_user = Yii::$app->user->id;
-			$model->id_blockchain = Yii::$app->params['default_blockchain'];
-			$model->id_smart_contract = Yii::$app->params['default_smartcontract'];
-			if (!$model->save()){
-				var_dump( $model->getErrors());
+			$nodes = new Nodes;
+			$nodes->id_user = Yii::$app->user->id;
+			$nodes->id_blockchain = Yii::$app->params['default_blockchain'];
+			$nodes->id_smart_contract = Yii::$app->params['default_smartcontract'];
+			if (!$nodes->save()){
+				var_dump( $nodes->getErrors());
 				die();
 			}
 		}
@@ -227,7 +236,7 @@ class RestoreController extends Controller
 		//
 		// die();
 
-		return true;
+		return $nodes;
 	}
 
 
