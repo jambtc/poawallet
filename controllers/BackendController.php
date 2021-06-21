@@ -154,6 +154,7 @@ class BackendController extends Controller
 						   'You have {n,plural,=0{read all messages.} =1{one unread message.} other{# unread messages.}}', ['n' => $response['countedUnread']]
 					   ))
 					   .'</div>
+
 		 				 </div>
 		 				 <div class="notify-readAll">
 		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('app','Mark all as read') .'</small></a>

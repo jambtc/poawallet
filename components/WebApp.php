@@ -105,20 +105,61 @@ class WebApp extends Component
     //     return $request->getisOk();
     // }
 
+	private function si_classifier($val){
+		$suffixes = json_decode("{
+        	24:{'long_suffix':'yotta', 'short_suffix':'Y', 'scalar':10**24},
+        	21:{'long_suffix':'zetta', 'short_suffix':'Z', 'scalar':10**21},
+        	18:{'long_suffix':'exa', 'short_suffix':'E', 'scalar':10**18},
+        	15:{'long_suffix':'peta', 'short_suffix':'P', 'scalar':10**15},
+        	12:{'long_suffix':'tera', 'short_suffix':'T', 'scalar':10**12},
+        	9:{'long_suffix':'giga', 'short_suffix':'G', 'scalar':10**9},
+        	6:{'long_suffix':'mega', 'short_suffix':'M', 'scalar':10**6},
+        	3:{'long_suffix':'kilo', 'short_suffix':'k', 'scalar':10**3},
+        	0:{'long_suffix':'', 'short_suffix':'', 'scalar':10**0},
+        	-3:{'long_suffix':'milli', 'short_suffix':'m', 'scalar':10**-3},
+        	-6:{'long_suffix':'micro', 'short_suffix':'µ', 'scalar':10**-6},
+        	-9:{'long_suffix':'nano', 'short_suffix':'n', 'scalar':10**-9},
+        	-12:{'long_suffix':'pico', 'short_suffix':'p', 'scalar':10**-12},
+        	-15:{'long_suffix':'femto', 'short_suffix':'f', 'scalar':10**-15},
+        	-18:{'long_suffix':'atto', 'short_suffix':'a', 'scalar':10**-18},
+        	-21:{'long_suffix':'zepto', 'short_suffix':'z', 'scalar':10**-21},
+        	-24:{'long_suffix':'yocto', 'short_suffix':'y', 'scalar':10**-24}
+    	}");
+
+		$exponent = intval(floor(log10(abs($val))/3.0)*3);
+		return $suffixes[$exponent] ?? null;
+
+	}
+
+	public function si_formatter($number){
+		$classifier = self::si_classifier($number);
+		if ($classifier === null){
+			# Don't know how to classify this value
+		    return $number;
+		}
+		$scaled = $number / $classifier['scalar'];
+
+		return $scaled.' '.$classifier['short_suffix'].' '.$classifier['long_suffix'];
+	}
+
 	// Shortens a number and attaches K, M, B, etc. accordingly
     public function number_shorten($number, $precision = 3, $divisors = null) {
         // Setup default $divisors if not provided
         if (!isset($divisors)) {
             $divisors = array(
-                pow(1000, 0) => '', // 1000^0 == 1
+				pow(1000, -4) => 'p', // 0.000000000001 pico
+				pow(1000, -3) => 'n', // 0.000000001 nano
+				pow(1000, -2) => 'µ', // 0.000001 micro
+				pow(1000, -1) => 'm', // 0.001 milli
+				pow(1000, 0) => '', // 1000^0 == 1
                 pow(1000, 1) => 'k', // Thousand
-                pow(1000, 2) => 'Mega', // Mega - Million
-                pow(1000, 3) => 'Giga', // Giga - Billion
-                pow(1000, 4) => 'Tera', // Tera - Trillion
-                pow(1000, 5) => 'Peta', // Peta - Quadrillion
-                pow(1000, 6) => 'Exa', // Exa - Quintillion
-                gmp_strval('1000000000000000000000') => 'Zetta', // Sextillion
-                gmp_strval('1000000000000000000000000') => 'Yotta', // Septillion
+                pow(1000, 2) => 'M', //Yii::t('app','Million'), // Mega - Million
+                pow(1000, 3) => 'G', //Yii::t('app','Billion'), // Giga - Billion
+                pow(1000, 4) => 'T', //Yii::t('app','Trillion'), // Tera - Trillion
+                pow(1000, 5) => 'P', //Yii::t('app','Quadrillion'), // Peta - Quadrillion
+                pow(1000, 6) => 'E',// Yii::t('app','Quintillion'), // Exa - Quintillion
+                gmp_strval('1000000000000000000000') => 'Z', //Yii::t('app','Sextillion'), // Sextillion
+                gmp_strval('1000000000000000000000000') => 'Y', //Yii::t('app','Septillion'), // Septillion
             );
         }
 
@@ -404,7 +445,7 @@ class WebApp extends Component
 						  <p class="text-right card-text">
 						  	<small class="mr-2 text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
 						  </p>
-                         
+
                       </div>
                   </div>
               </div>
