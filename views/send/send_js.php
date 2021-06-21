@@ -187,7 +187,9 @@ $wallet_send = <<<JS
 					}
 				})
 			});
-		}
+		} else {
+            alert('Your browser don`t support Service worker!');
+        }
 	});
 
     var erc20 = {
