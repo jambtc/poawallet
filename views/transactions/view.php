@@ -58,7 +58,7 @@ include ('view_js.php');
                                 'format' => 'raw',
                                 'attribute' => 'token_price',
                                 'value' => function ($data) {
-                                    return WebApp::number_shorten($data->token_price).'<span class="ml-2">'.$data->smartContract->symbol.'</span>';
+                                    return WebApp::si_formatter($data->token_price,'long').'<span class="ml-2">'.$data->smartContract->symbol.'</span>';
                                 },
                             ],
                             [

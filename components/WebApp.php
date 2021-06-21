@@ -106,40 +106,112 @@ class WebApp extends Component
     // }
 
 	private function si_classifier($val){
-		$suffixes = json_decode("{
-        	24:{'long_suffix':'yotta', 'short_suffix':'Y', 'scalar':10**24},
-        	21:{'long_suffix':'zetta', 'short_suffix':'Z', 'scalar':10**21},
-        	18:{'long_suffix':'exa', 'short_suffix':'E', 'scalar':10**18},
-        	15:{'long_suffix':'peta', 'short_suffix':'P', 'scalar':10**15},
-        	12:{'long_suffix':'tera', 'short_suffix':'T', 'scalar':10**12},
-        	9:{'long_suffix':'giga', 'short_suffix':'G', 'scalar':10**9},
-        	6:{'long_suffix':'mega', 'short_suffix':'M', 'scalar':10**6},
-        	3:{'long_suffix':'kilo', 'short_suffix':'k', 'scalar':10**3},
-        	0:{'long_suffix':'', 'short_suffix':'', 'scalar':10**0},
-        	-3:{'long_suffix':'milli', 'short_suffix':'m', 'scalar':10**-3},
-        	-6:{'long_suffix':'micro', 'short_suffix':'µ', 'scalar':10**-6},
-        	-9:{'long_suffix':'nano', 'short_suffix':'n', 'scalar':10**-9},
-        	-12:{'long_suffix':'pico', 'short_suffix':'p', 'scalar':10**-12},
-        	-15:{'long_suffix':'femto', 'short_suffix':'f', 'scalar':10**-15},
-        	-18:{'long_suffix':'atto', 'short_suffix':'a', 'scalar':10**-18},
-        	-21:{'long_suffix':'zepto', 'short_suffix':'z', 'scalar':10**-21},
-        	-24:{'long_suffix':'yocto', 'short_suffix':'y', 'scalar':10**-24}
-    	}");
+		$suffixes = [
+			24 => [
+					'long_suffix' => 'yotta',
+					'short_suffix' => 'Y',
+					'scalar' => gmp_strval('1000000000000000000000000')
+			],
+			21 => [
+					'long_suffix' => 'zetta',
+					'short_suffix' => 'Z',
+					'scalar' => gmp_strval('1000000000000000000000')
+			],
+			18 => [
+					'long_suffix' => 'exa',
+					'short_suffix' => 'E',
+					'scalar' => pow(1000, 6)
+			],
+			15 => [
+					'long_suffix' => 'peta',
+					'short_suffix' => 'P',
+					'scalar' => pow(1000, 5)
+			],
+			12 => [
+					'long_suffix' => 'tera',
+					'short_suffix' => 'T',
+					'scalar' => pow(1000, 4)
+			],
+			9 => [
+					'long_suffix' => 'giga',
+					'short_suffix' => 'G',
+					'scalar' => pow(1000, 3)
+			],
+			6 => [
+					'long_suffix' => 'mega',
+					'short_suffix' => 'M',
+					'scalar' => pow(1000, 2)
+			],
+			3 => [
+					'long_suffix' => 'kilo',
+					'short_suffix' => 'k',
+					'scalar' => pow(1000, 1)
+			],
+			0 => [
+					'long_suffix' => '',
+					'short_suffix' => '',
+					'scalar' => pow(1000, 0)
+			],
+			-3 => [
+					'long_suffix' => 'milli',
+					'short_suffix' => 'm',
+					'scalar' => bcmul('1', '0.001', 10)
+			],
+			-6 => [
+					'long_suffix' => 'micro',
+					'short_suffix' => 'µ',
+					'scalar' => bcmul('1', '0.000001', 10)
+			],
+			-9 => [
+					'long_suffix' => 'nano',
+					'short_suffix' => 'n',
+					'scalar' => bcmul('1', '0.000000001', 10)
+			],
+			-12 => [
+					'long_suffix' => 'pico',
+					'short_suffix' => 'p',
+					'scalar' => bcmul('1', '0.000000000001', 13)
+			],
+			-15 => [
+					'long_suffix' => 'femto',
+					'short_suffix' => 'n',
+					'scalar' => bcmul('1', '0.000000000000001', 16)
+			],
+			-18 => [
+					'long_suffix' => 'atto',
+					'short_suffix' => 'a',
+					'scalar' => bcmul('1', '0.000000000000000001', 19)
+			],
+			-21 => [
+					'long_suffix' => 'zepto',
+					'short_suffix' => 'z',
+					'scalar' => bcmul('1', '0.000000000000000000001', 22)
+			],
+			-24 => [
+					'long_suffix' => 'yopto',
+					'short_suffix' => 'y',
+					'scalar' => bcmul('1', '0.000000000000000000000001', 25)
+			],
 
+		];
 		$exponent = intval(floor(log10(abs($val))/3.0)*3);
 		return $suffixes[$exponent] ?? null;
-
 	}
 
-	public function si_formatter($number){
+	public function si_formatter($number, $style = 'short'){
 		$classifier = self::si_classifier($number);
 		if ($classifier === null){
 			# Don't know how to classify this value
 		    return $number;
 		}
-		$scaled = $number / $classifier['scalar'];
+		$scaled = round($number / $classifier['scalar'],4);
 
-		return $scaled.' '.$classifier['short_suffix'].' '.$classifier['long_suffix'];
+		if ($style == 'short'){
+			return $scaled.' '.$classifier['short_suffix'];
+		} else {
+			return $scaled.' '.$classifier['long_suffix'];
+		}
+
 	}
 
 	// Shortens a number and attaches K, M, B, etc. accordingly
@@ -225,13 +297,13 @@ class WebApp extends Component
         $timeLN = date("H:i:s",$data->invoice_timestamp);
 
         if ($data->from_address == $fromAddress){
-          $price = '- '.self::number_shorten($data->token_price);
+          $price = '- '.self::si_formatter($data->token_price);
           $color = 'red';
           $addressToShow = $data->to_address;
           $coinImg = 'fa-arrow-up text-danger';
           $recipient = Yii::t('app','To: ');
         } else {
-          $price = self::number_shorten($data->token_price);
+          $price = self::si_formatter($data->token_price);
           $color = 'green';
           $addressToShow = $data->from_address;
           $coinImg = 'fa-arrow-down text-success';
@@ -260,13 +332,15 @@ class WebApp extends Component
                                   <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
                                   </p>
                               </div>
-							  <div class="alert alert-primary p-1 m-2 align-middle">
-							  	'.$data->smartContract->symbol.'
-							  </div>
-                              <div class="card-footer py-0 px-2">
-                                  <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
-                                  <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
-                                  .self::encrypt($data->id).'">'.$data->status.'</small>
+
+                              <div class="alert p-1 m-2">
+                                  <span class="mb-0 txt-'.$color.'">'.$price.'
+									  <small class="ml-1">
+									  	'.$data->smartContract->symbol.'
+									  </small>
+								  </span>
+								  <!-- <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
+                                  .self::encrypt($data->id).'">'.$data->status.'</small>-->
                               </div>
                           </div>';
                           ($data->message != "")

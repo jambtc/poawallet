@@ -53,7 +53,7 @@ include ('index_js.php');
                                           Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
                                       </p>
                                       <div>
-                                          <span class="h5" id="total-balance"><?= WebApp::number_shorten($balance) ?></span>
+                                          <span class="h5" id="total-balance"><?= WebApp::si_formatter($balance) ?></span>
                                           <!-- <span id="total-balance"><?= $balance ?></span> -->
                                           <small><?= $node->smartContract->symbol ?></small>
                                       </div>
@@ -65,7 +65,7 @@ include ('index_js.php');
                                           Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
                                       </p>
                                       <div>
-                                          <span class="h5" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span>
+                                          <span class="h5" id="total-balance_gas"><?= WebApp::si_formatter($balance_gas) ?></span>
                                           <!-- <span id="total-balance_gas"><?= $balance_gas ?></span> -->
                                           <small><?= $node->blockchain->symbol ?></small>
                                       </div>

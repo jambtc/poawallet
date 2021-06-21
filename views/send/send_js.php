@@ -194,7 +194,7 @@ $wallet_send = <<<JS
 				})
 			});
 		} else {
-            alert('Your browser don`t support SyncManager worker!');
+            alert('Your browser don`t support service worker!');
         }
 	});
 
