@@ -222,7 +222,7 @@ class WebApp extends Component
 							  <div class="alert alert-primary p-1 m-2 align-middle">
 							  	'.$data->smartContract->symbol.'
 							  </div>
-                              <div class="card-footer py-0 px-1">
+                              <div class="card-footer py-0 px-2">
                                   <b class="d-block mb-0 text-center txt-'.$color.'">'.$price.'</b>
                                   <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
                                   .self::encrypt($data->id).'">'.$data->status.'</small>
@@ -390,26 +390,21 @@ class WebApp extends Component
         <a href="'.$data->url.'" />
         <div class="container-fluid m-0 p-0">
               <div class="row ml-0">
-                  <div class="col-12 m-0 p-0">
+                  <div class="col-11 m-0 p-0">
                       <div class="card shadow">
-                          <div class="transaction-card-horizontal">
-                          <div class=" d-flex align-items-center">
-                              <div class="rounded-circle bg-success p-2 ml-1">
-                                 <i class="'.$notifi__icon.' text-light" style="font-size:1.5em;"></i>
-                              </div>
+                          <div class=" d-flex d-flex-grow">
+
                               <div class="transaction-card-body ml-1">
                                   <h6 class="card-title pt-2 text-break">'.$data->description.'</h6>
-                                  <p class="card-text">
-                                  <small class="text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
-                                  </p>
+
                               </div>
-                              <div class="card-footer">
-                                  <b class="d-block mb-0 text-center txt-green">'.$data->price.'</b>
-                                  <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" >'
-                                    .$data->status.'</small>
-                              </div>
+
+
                           </div>
-                         </div>
+						  <p class="text-right card-text">
+						  	<small class="mr-2 text-muted">'.$dateLN.' <span class="ml-10">'.$timeLN.'</span></small>
+						  </p>
+                         
                       </div>
                   </div>
               </div>

@@ -13,6 +13,14 @@ $secrets = require __DIR__ . '/secrets.php';
 //     ]
 // ],
 
+if (isset($_SERVER['SERVER_NAME'])){
+    $telegramClientId = $secrets['oauth_telegram']['client_id'][$_SERVER['SERVER_NAME']] ?? null;
+    $telegramClientSecret = $secrets['oauth_telegram']['secret'][$_SERVER['SERVER_NAME']] ?? null;
+} else {
+    $telegramClientId = null;
+    $telegramClientSecret = null;
+}
+
 
 
 return [
@@ -41,8 +49,8 @@ return [
 
 
     // Telegram login informations
-    'telegram.clientId' => $secrets['oauth_telegram']['client_id'][$_SERVER['SERVER_NAME']],
-    'telegram.clientSecret' => $secrets['oauth_telegram']['secret'][$_SERVER['SERVER_NAME']],
+    'telegram.clientId' => $telegramClientId,
+    'telegram.clientSecret' => $telegramClientSecret,
 
 
     // smart contract

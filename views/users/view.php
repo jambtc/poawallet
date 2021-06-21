@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\DetailView;
 use app\assets\AccountValueAsset;
+use app\components\WebApp;
 
 
 // impostazioni variabili
@@ -54,7 +55,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $percent_received ?>%"><?= $received['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= $received['sum'] ?></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($received['sum']) ?></h4>
               </div>
             </div>
         </div>
@@ -66,7 +67,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $percent_sent ?>%"><?= $sent['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= $sent['sum'] ?></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($sent['sum']) ?></h4>
               </div>
             </div>
         </div>
@@ -81,7 +82,7 @@ include ('manage-push_js.php');
                 <img class="img-xs" src="css/img/content/coin2.png" alt="coin image">
                 <div class="ml-10">
                   <h3 class="coin-name"><?= Yii::t('app','Balance') ?></h3>
-                  <small class="text-muted"><?= $userAccountValueArray['balance'] ?> </small>
+                  <small class="text-muted"><?= WebApp::number_shorten($userAccountValueArray['balance']) ?> </small>
                 </div>
             </div>
             <div>

@@ -16,6 +16,7 @@ use yii\db\ActiveRecord;
 use app\models\Notifications;
 use app\models\NotificationsReaders;
 use app\models\query\NotificationsReadersQuery;
+use app\models\MPWallets;
 
 
 use yii\helpers\Json;
@@ -23,9 +24,6 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 use app\components\WebApp;
-
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
-
 
 
 class BackendController extends Controller
@@ -119,11 +117,11 @@ class BackendController extends Controller
 	{
 		// echo "<pre>".print_r($_POST,true)."</pre>";
 		// exit;
+		$fromAddress = MPWallets::find()->userAddress(Yii::$app->user->id);
 
 		$news = NotificationsReaders::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->identity->id])
+ 	     		->andWhere(['id_user'=>Yii::$app->user->id])
 				->latest()
-				// ->orderBy('id_notification DESC')
  	    		->all();
 
 				// echo "<pre>".print_r($news,true)."</pre>";
@@ -140,20 +138,6 @@ class BackendController extends Controller
 		   ($item->alreadyread == 0 ? $response['countedUnread'] ++ : $response['countedRead'] ++);
 	   }
 
-// $x=1;
-// 	   foreach ($news as $key => $item){
-// 	   	echo "<pre>".print_r($item,true)."</pre>";
-// 		$notify = Notifications::find()
-// 			->andWhere(['id_notification'=>$item->id_notification])
-// 			->one();
-// 		echo "<pre>".print_r($notify,true)."</pre>";
-//
-// 		$x++;
-// 		if ($x>3)
-// 			break;
-// 		}
-//
-// 	   	exit;
 
 	   $x=1;
 	   foreach ($news as $key => $item) {
@@ -180,8 +164,10 @@ class BackendController extends Controller
 		   // Leggo la notifica tramite key
 		   $notify = Notifications::findOne($item->id_notification);
 
+		   //if ($data->from_address == $fromAddress){
+
 		   //$notify = Notifications::model()->findByPk($item->id_notification);
-		   $notifi__icon = WebApp::Icon($notify->type);
+		   $notifi__icon = WebApp::Icon($notify->type.'err');
 		   $notifi__color = WebApp::Color($notify->status);
 
 		   // verifico che sia un allarme
@@ -200,31 +186,33 @@ class BackendController extends Controller
 			<a onclick="notify.openEnvelope('.$notify->id.');"
 				href="'.htmlentities('index.php?'.$parsedurl['query']).'"
 				id="news_'.$notify->id.'">
-	   			<div class="d-flex align-items-center justify-content-between">
-	                   <div class="d-flex align-items-center">
-	                       <div class="notice-icon available" style="min-width:30px;">
+	   			<div class="d-flex justify-content-between">
+
+	                       <div class="p-2 text-info n otice-icon av ailable" st yle="min-width:30px;">
 	                           <i class="'.$notifi__icon.'"></i>
 	                       </div>
-	                       <div class="ml-10">
-	                         <p class="coin-name">'.Yii::t('app',$notify->description).'</p>
 
-							 <div class="text-right">';
+	                       <div class="mr-auto p-2">
+	                         <p class="coin-name">'.Yii::t('app',$notify->description).'</p>
+						   </div>
+				</div>
+
+							<div class="text-right">';
 							 // se il tipo notifica è help o contact ovviamente non mostro il prezzo della transazione
-							 if ($notify->type <> 'help'
-									 && $notify->type <> 'contact'
-									 && $notify->type <> 'alarm'
-							 ){
-								 $response['htmlContent'] .= '<b class="d-block mb-0 float-left txt-dark">'.$notify->price.'</b>';
-								 //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
-								 // $response['status'][$notify->id_tocheck] = $notify->status;
-							 }
-							 $response['htmlContent'] .= '
+							 // if ($notify->type <> 'help'
+								// 	 && $notify->type <> 'contact'
+								// 	 && $notify->type <> 'alarm'
+							 // ){
+								//  $response['htmlContent'] .= '<b class="d-block mb-0 float-left txt-dark">'.$notify->price.'</b>';
+								//  //VERIFICO QUESTE ULTIME 3 TRANSAZIONI PER AGGIORNARE IN REAL-TIME LO STATO (IN CASO CI SI TROVA SULLA PAGINA TRANSACTIONS)
+								//  // $response['status'][$notify->id_tocheck] = $notify->status;
+							 // }
+							 	$response['htmlContent'] .= '
 								 <small class="text-muted">'.Yii::$app->formatter->asRelativeTime($notify->timestamp).'</small>
 							 </div>
 
 
-	                       </div>
-	                   </div>
+
 	               </div>
 			   </a>
 	   		</li>';
