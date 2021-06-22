@@ -272,7 +272,7 @@ class SendController extends Controller
 			'id' => $WebApp->encrypt($tokens->id), //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
 			'status' => $tokens->status,
 			'url' => Url::to(['/send/validate-transaction']),
-			'row' => $WebApp->showTransactionRow($tokens,$fromAccount),
+			'row' => $WebApp->showTransactionRow($tokens,$fromAccount,false,'send'),
 			'gas' => $gasBalance,
 		];
 
@@ -357,7 +357,7 @@ class SendController extends Controller
 				'id' => $_POST['id'], //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
 				'status' => $tokens->status,
 				'success' => true,
-				'row' => $WebApp->showTransactionRow($tokens,$tokens->from_address),
+				'row' => $WebApp->showTransactionRow($tokens,$tokens->from_address,false,'send'),
 				'balance' => $ERC20->tokenBalance($tokens->from_address),
 				'pushoptions' => $pushOptions,
 			];

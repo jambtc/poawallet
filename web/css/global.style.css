@@ -701,6 +701,10 @@ select.form-element{
 	background: transparent;
 	color: #7965ff
 }
+.more-btn.disabled{
+	background: transparent;
+	color: #ddd;
+}
 .sweet-check{
 	height: 30px;
 	width: 60px;

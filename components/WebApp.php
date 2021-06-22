@@ -292,7 +292,7 @@ class WebApp extends Component
         return isset($contents[$key]) ? $contents[$key] : "";
     }
 
-    public static function showTransactionRow($data, $fromAddress,$newTransaction=false){
+    public static function showTransactionRow($data, $fromAddress,$newTransaction=false,$status=null){
         $dateLN = date("d M `y",$data->invoice_timestamp);
         $timeLN = date("H:i:s",$data->invoice_timestamp);
 
@@ -339,11 +339,15 @@ class WebApp extends Component
 									  	'.$data->smartContract->symbol.'
 									  </small>
 								  </span>
-								  <!-- <small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
-                                  .self::encrypt($data->id).'">'.$data->status.'</small>-->
-                              </div>
-                          </div>';
-                          ($data->message != "")
+								  ';
+		if ($status !== null){
+			$line .= '			<small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
+								.self::encrypt($data->id).'">'.$data->status.'</small>';
+		}
+        $line .=             '</div>
+                      </div>';
+
+				          ($data->message != "")
                           ?  $line .= '<small class="mx-2 alert alert-info d-inline-block text-truncate" style="max-width: 330px;">'.$data->message.'</small>'
                           :  $line .= '';
                           $line .= '

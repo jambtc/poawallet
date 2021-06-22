@@ -24,6 +24,7 @@ $options = [
     'recipientError' => Yii::t('app','Recipient address not entered.'),
     'htmlTransactionBody' => '<div class="alert alert-warning">
                                 <p class="generating">'.Yii::t('app','Generating transaction...').'</p>
+                                <div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>
                                 </div>',
     'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
     'zerogas' => $blockchain->blockchain->zerogas,
@@ -109,6 +110,7 @@ $wallet_send = <<<JS
                 console.log('[gaslimit]: data from send/gaslimit controller',data);
                 if (data.success){
                     $('#amount-to-send-gas').text(data.gasLimit);
+                    $('.js-confirm-submit').removeClass('disabled')
                 } else {
                     return false;
                 }
@@ -123,7 +125,11 @@ $wallet_send = <<<JS
     submitButton.addEventListener('click', function(event){
         event.preventDefault();
 		event.stopPropagation();
-        console.log('[Send]: button pressed');
+        console.log('[Send Confirm]: button pressed');
+
+        if ($('.js-confirm-submit').hasClass('disabled')){
+            return false;
+        }
 
         my_wallet = $('#sendform-from').val();
 
@@ -165,6 +171,7 @@ $wallet_send = <<<JS
             				success:function(data){
             					console.log('[send]: data from generate-transaction controller',data);
                                 $('.generating').parent().removeClass('alert alert-warning');
+                                $('.button-spinner').remove();
                                 $('.generating').html(data.row);
                                 $('.pay-close').show();
                                 console.log('[Send]: loaded gas is: ', data.gas.balance);
@@ -231,7 +238,7 @@ $wallet_send = <<<JS
      			readAllData(tag)
      			.then(function(data) {
      				for (var dt of data) {
-    					console.log('[Service worker] fetching sync-send-erc20',dt);
+    					console.log('[No SW- bypass for Ios] fetching sync-send-erc20',dt);
     					var postData = new FormData();
     	  					postData.append('id', dt.id);
     						//postData.append('chainBlock', dt.chainBlock);
@@ -244,12 +251,12 @@ $wallet_send = <<<JS
     	 					return response.json();
     	 				})
     	 				.then(function(json) {
-    						console.log('[Service worker] Risposta di send/validateTransaction',json);
+    						console.log('[No SW- bypass for Ios] Risposta di send/validateTransaction',json);
     						writeData('np-send-erc20', json);
 
     				 	})
      					.catch(function(err){
-     						console.log('[Service worker] Error while checking send-erc20 data', err);
+     						console.log('[No SW- bypass for Ios] Error while checking send-erc20 data', err);
      					})
      				}
      				//per sicurezza cancello tutto da indexedDB
