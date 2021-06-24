@@ -153,8 +153,11 @@ class RestoreController extends Controller
 		$block = $ERC20->getBlockInfo();
 
 		// echo '<pre>'.print_r($block,true);exit;
-		$json = json_decode($block);
-
+		$json = null;
+		if (!is_object($block)){
+			$json = json_decode($block);
+		}
+			
 		if (!isset($json->error)){
 			return ($block === null) ? '0x0' : $block->number;
 		} else {
