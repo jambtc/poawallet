@@ -258,23 +258,31 @@ class Erc20 extends Component
 
     public function getBlockInfo($blocknumber = 'latest', $search = false)
     {
-        // echo 'node id: <pre>'.print_r($this->user_id,true).'</pre>';
+        // echo '<pre>Response from getBlockInfo is: '.print_r($this->user_id,true).'</pre>';
+
 
         $settings = Settings::poa($this->user_id);
-        // echo 'settings: <pre>'.print_r($settings,true).'</pre>';
-        // echo 'blockchain: <pre>'.print_r($settings->blockchain,true).'</pre>';
+        // echo 'settings id: <pre>'.print_r($settings->id,true).'</pre>';
+        // echo 'blockchain url: <pre>'.print_r($settings->blockchain->url,true).'</pre>';
+
+
 
         $web3 = new Web3($settings->blockchain->url);
+
+        // echo 'set web3!';
+
 
 		$response = null;
 		$web3->eth->getBlockByNumber($blocknumber,$search, function ($err, $block) use (&$response){
 			if ($err !== null) {
 				return $this->json(['error'=>$err]);
 			}
+            // echo 'response from get is: <pre>'.print_r($block,true).'</pre>';
+
 			$response = $block;
 		});
         // echo 'block info: <pre>'.print_r($response,true).'</pre>';
-
+        // return;
         // exit;
         return $response;
     }

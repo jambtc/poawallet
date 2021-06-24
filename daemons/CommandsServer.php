@@ -76,12 +76,15 @@ class CommandsServer extends WebSocketServer
         if (!empty($request['user_id']) && $user_id = trim($request['user_id'])) {
             $client->user_id = WebApp::decrypt($user_id);
         }
+        $this->log("");
         $this->log("Subscription with user_id: $client->user_id");
+        $this->log("Waiting for getBlockNumber...");
 
         // ricerca il blocknumber adesso e restituisci il valore
         $result = $this->getBlockNumber($client->user_id);
+        // $this->log("getBlocknumber response is: <pre>".print_r($result,true).'</pre>');
+        $this->log("getBlockNumber response is OK!");
 
-        // $this->log("getBlocknumber function: <pre>".print_r($result,true).'</pre>');
 
         $client->send(json_encode($result));
     }
@@ -103,9 +106,14 @@ class CommandsServer extends WebSocketServer
    // function commandGetBlockNumber(ConnectionInterface $client, $msg)
    private function getBlockNumber($user_id)
    {
+        $this->log("OK. I'm in getBlocknumber function.");
+
+
    		$wallet = MPWallets::find()
             ->andWhere(['id_user'=>$user_id])
 			->one();
+
+        $this->log("Wallet id is: <pre>".print_r($wallet->id,true).'</pre>');
 
    		$return = [
    			 'id'=>time(),
@@ -115,21 +123,29 @@ class CommandsServer extends WebSocketServer
    			 "headerMessage"=>'',
    			 "my_address"=>$wallet->wallet_address,
    			 "relativeTime" =>'',
-   			 "success"=>false,
+   			 "success"=>true,
              'command'=>'check-transactions',
    		];
 
+        // $this->log("Return is: <pre>".print_r($return,true).'</pre>');
+
         $node = Nodes::find()->where(['id_user'=>$user_id])->one();
+        $this->log("Node id is: <pre>".print_r($node->id,true).'</pre>');
+
+
         $ERC20 = new Yii::$app->Erc20($user_id);
 
         // $this->log("return<pre>".print_r($return,true)."</pre>\n");   exit;
 
         // $this->log("node table: <pre>".print_r($node,true).'</pre>');
         // $this->log("response: <pre>".print_r($return,true).'</pre>');
-
+        $this->log("Calling getBlockInfo...");
         $blockLatest = $ERC20->getBlockInfo();
+        // $this->log("blocklatest is: <pre>".print_r($blockLatest,true).'</pre>');
 
-        // $this->log("blocklatest info: <pre>".print_r($blockLatest,true).'</pre>');
+        if (empty($blockLatest) || !(is_object($blockLatest))){
+            return $return;
+        }
 
    		//calcolo la differenza tra i blocchi
    		$difference = hexdec($blockLatest->number) - hexdec($wallet->blocknumber);
