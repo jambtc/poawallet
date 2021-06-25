@@ -31,7 +31,7 @@ use Web3\Web3;
 
 class CommandsServer extends WebSocketServer
 {
-    public $maxBlocksToScan = 11;
+    public $maxBlocksToScan = 21;
     public $transactionsFound = [];
 
 	private function setMaxBlocksToScan($maxBlocksToScan){
@@ -135,6 +135,9 @@ class CommandsServer extends WebSocketServer
         // $this->log("Return is: <pre>".print_r($return,true).'</pre>');
 
         $node = Nodes::find()->where(['id_user'=>$user_id])->one();
+        if (null === $node){
+            die('Non ho trovato il nodo con userid: '.$user_id);
+        }
         $this->log("Node id is: <pre>".print_r($node->id,true).'</pre>');
 
 
