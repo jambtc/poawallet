@@ -287,14 +287,12 @@ class SendController extends Controller
 	public function actionValidateTransaction()
 	{
 		set_time_limit(0); //imposto il time limit unlimited
+		$WebApp = new WebApp;
 		$maxrequests = 30;
 		$requests = 1;
 
 		$tokens = Transactions::findOne($WebApp->decrypt($_POST['id']));
-
-		$WebApp = new WebApp;
 		$ERC20 = new Yii::$app->Erc20($tokens->id_user);
-
 
 		while ($requests < $maxrequests)
 		{
