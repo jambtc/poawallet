@@ -176,8 +176,8 @@ class SendController extends Controller
 			throw new HttpException(404,'Cannot decrypt private key.');
 		}
 
-		$settings = Settings::poa();
-		$ERC20 = new Yii::$app->Erc20();
+		$settings = Settings::poa(Yii::$app->user->id);
+		$ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
 
 		// carico il gas in caso questo sia a 0 MA SOLO
 		// se mi trovo sul network POA 2 e 3 inserito di default
@@ -290,10 +290,11 @@ class SendController extends Controller
 		$maxrequests = 30;
 		$requests = 1;
 
-		$WebApp = new WebApp;
-		$ERC20 = new Yii::$app->Erc20();
-
 		$tokens = Transactions::findOne($WebApp->decrypt($_POST['id']));
+
+		$WebApp = new WebApp;
+		$ERC20 = new Yii::$app->Erc20($tokens->id_user);
+
 
 		while ($requests < $maxrequests)
 		{
@@ -321,7 +322,7 @@ class SendController extends Controller
 				throw new HttpException(404,$tokens->errors);
 			}
 
-			$settings = Settings::poa();
+			$settings = Settings::poa($tokens->id_user);
 
 			// notifica per chi ha inviato (from_address)
 			$id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
