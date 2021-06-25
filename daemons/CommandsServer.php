@@ -7,6 +7,7 @@ use consik\yii2websocket\WebSocketServer;
 use Ratchet\ConnectionInterface;
 
 use yii\base\Model;
+use app\models\Users;
 use app\models\MPWallets;
 use app\models\Transactions;
 use app\models\NotificationsReaders;
@@ -45,6 +46,12 @@ class CommandsServer extends WebSocketServer
 	private function getTransactionsFound(){
         return $this->transactionsFound;
 	}
+    // scrive a video
+    private function log($text){
+       $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
+       echo  $time.$text;
+       // sleep(1);
+    }
 
 
 
@@ -89,11 +96,7 @@ class CommandsServer extends WebSocketServer
         $client->send(json_encode($result));
     }
 
-    // scrive a video
-    private function log($text){
-       $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
-       echo  $time.$text;
-    }
+
 
    /**
     * Implement command's method using "command" as prefix for method name
@@ -107,11 +110,13 @@ class CommandsServer extends WebSocketServer
    private function getBlockNumber($user_id)
    {
         $this->log("OK. I'm in getBlocknumber function.");
+        $this->log("Now I'm looking for user table.");
 
+        $wallet = MPWallets::find()->where(['id_user'=>$user_id])->one();
 
-   		$wallet = MPWallets::find()
-            ->andWhere(['id_user'=>$user_id])
-			->one();
+        if (null === $wallet){
+            die('Non ho trovato il wallet con userid: '.$user_id);
+        }
 
         $this->log("Wallet id is: <pre>".print_r($wallet->id,true).'</pre>');
 
