@@ -50,7 +50,7 @@ class CommandsServer extends WebSocketServer
     private function log($text){
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
        echo  $time.$text;
-       // sleep(2);
+       // sleep(1);
     }
 
 
@@ -59,8 +59,6 @@ class CommandsServer extends WebSocketServer
     {
         parent::init();
         $this->on(self::EVENT_CLIENT_CONNECTED, function(WSClientEvent $e) {
-            // $this->log("client is: <pre>".print_r($e->client,true).'</pre>');
-
             $e->client->user_id = null;
         });
     }
@@ -90,15 +88,34 @@ class CommandsServer extends WebSocketServer
         $this->log("Waiting for getBlockNumber...");
 
         // ricerca il blocknumber adesso e restituisci il valore
-        // $result = $this->getBlockNumber($client->user_id);
+        $result = $this->getBlockNumber($client->user_id);
+        // $this->log("getBlocknumber response is: <pre>".print_r($result,true).'</pre>');
+        $this->log("getBlockNumber response is OK!");
 
+
+        $client->send(json_encode($result));
+    }
+
+
+
+   /**
+    * Implement command's method using "command" as prefix for method name
+    *
+    * method for user's command "ping"
+    */
+    // recupera il blocknumber attuale della blockchain
+     // recupera il blocknumber del wallet utente
+     // mostra la differenza dei blocchi
+   // function commandGetBlockNumber(ConnectionInterface $client, $msg)
+   private function getBlockNumber($user_id)
+   {
         $this->log("OK. I'm in getBlocknumber function.");
         $this->log("Now I'm looking for user table.");
 
-        $wallet = MPWallets::find()->where(['id_user'=>$client->user_id])->one();
+        $wallet = MPWallets::find()->where(['id_user'=>$user_id])->one();
 
         if (null === $wallet){
-            die('Non ho trovato il wallet con userid: '.$client->user_id);
+            die('Non ho trovato il wallet con userid: '.$user_id);
         }
 
         $this->log("Wallet id is: <pre>".print_r($wallet->id,true).'</pre>');
@@ -117,14 +134,14 @@ class CommandsServer extends WebSocketServer
 
         // $this->log("Return is: <pre>".print_r($return,true).'</pre>');
 
-        $node = Nodes::find()->where(['id_user'=>$client->user_id])->one();
+        $node = Nodes::find()->where(['id_user'=>$user_id])->one();
         if (null === $node){
-            die('Non ho trovato il nodo con userid: '.$client->user_id);
+            die('Non ho trovato il nodo con userid: '.$user_id);
         }
         $this->log("Node id is: <pre>".print_r($node->id,true).'</pre>');
 
 
-        $ERC20 = new Yii::$app->Erc20($client->user_id);
+        $ERC20 = new Yii::$app->Erc20($user_id);
 
         // $this->log("return<pre>".print_r($return,true)."</pre>\n");   exit;
 
@@ -155,95 +172,11 @@ class CommandsServer extends WebSocketServer
              'command'=>'check-transactions',
    		];
 
-
-        // $this->log("getBlocknumber response is: <pre>".print_r($result,true).'</pre>');
-        $this->log("getBlockNumber response is OK!");
+        // $this->log("return info: <pre>".print_r($return,true).'</pre>');
 
 
-        $client->send(json_encode($return));
-    }
-
-
-
-   /**
-    * Implement command's method using "command" as prefix for method name
-    *
-    * method for user's command "ping"
-    */
-    // recupera il blocknumber attuale della blockchain
-     // recupera il blocknumber del wallet utente
-     // mostra la differenza dei blocchi
-   // function commandGetBlockNumber(ConnectionInterface $client, $msg)
-   // private function getBlockNumber($user_id)
-   // {
-   //      $this->log("OK. I'm in getBlocknumber function.");
-   //      $this->log("Now I'm looking for user table.");
-   //
-   //      $wallet = MPWallets::find()->where(['id_user'=>$user_id])->one();
-   //
-   //      if (null === $wallet){
-   //          die('Non ho trovato il wallet con userid: '.$user_id);
-   //      }
-   //
-   //      $this->log("Wallet id is: <pre>".print_r($wallet->id,true).'</pre>');
-   //
-   // 		$return = [
-   // 			 'id'=>time(),
-   // 			 "walletBlocknumber"=>0,
-   // 			 "chainBlocknumber"=>0,
-   // 			 "difference"=>0,
-   // 			 "headerMessage"=>'',
-   // 			 "my_address"=>$wallet->wallet_address,
-   // 			 "relativeTime" =>'',
-   // 			 "success"=>true,
-   //           'command'=>'check-transactions',
-   // 		];
-   //
-   //      // $this->log("Return is: <pre>".print_r($return,true).'</pre>');
-   //
-   //      $node = Nodes::find()->where(['id_user'=>$user_id])->one();
-   //      if (null === $node){
-   //          die('Non ho trovato il nodo con userid: '.$user_id);
-   //      }
-   //      $this->log("Node id is: <pre>".print_r($node->id,true).'</pre>');
-   //
-   //
-   //      $ERC20 = new Yii::$app->Erc20($user_id);
-   //
-   //      // $this->log("return<pre>".print_r($return,true)."</pre>\n");   exit;
-   //
-   //      // $this->log("node table: <pre>".print_r($node,true).'</pre>');
-   //      // $this->log("response: <pre>".print_r($return,true).'</pre>');
-   //      $this->log("Calling getBlockInfo...");
-   //      $blockLatest = $ERC20->getBlockInfo();
-   //      // $this->log("blocklatest is: <pre>".print_r($blockLatest,true).'</pre>');
-   //
-   //      if (empty($blockLatest) || !(is_object($blockLatest))){
-   //          return $return;
-   //      }
-   //
-   // 		//calcolo la differenza tra i blocchi
-   // 		$difference = hexdec($blockLatest->number) - hexdec($wallet->blocknumber);
-   //
-   //
-   // 		$return = [
-   // 			 'id'=>time(),
-   // 			 "walletBlocknumber"=>$wallet->blocknumber,
-   // 			 "chainBlocknumber"=>$blockLatest->number,
-   // 			 "headerMessage"=> Yii::t('app', "{n} blocks left.", ['n' => $difference]),
-   // 			 "difference"=> $difference,
-   // 			 "user_address"=>$wallet->wallet_address,
-   // 			 "relativeTime" => Yii::$app->formatter->asDuration($difference),
-   // 			 "success"=>true,
-   //           'message'=>'',
-   //           'command'=>'check-transactions',
-   // 		];
-   //
-   //      // $this->log("return info: <pre>".print_r($return,true).'</pre>');
-   //
-   //
-   //      return $return;
-   // 	}
+        return $return;
+   	}
 
 
     // verifica eventuali transazioni dell'utente a partire dal getBlockNumber
