@@ -533,7 +533,7 @@ class CommandsServer extends WebSocketServer
 
 
        } // ciclo for
-       $this->log(">fine ciclo");
+       $this->log("fine ciclo");
        // echo "\r\n<pre>fine ciclo</pre>";
 	   // }
 	   // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
