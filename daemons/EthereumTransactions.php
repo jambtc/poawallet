@@ -44,7 +44,9 @@ class EthereumTransactions
 
             // distinct così le cerco solo per 1 volta
             foreach ($distinct as $row){
-                $this->log("Blockchain with user_id: $row->id_user");
+                $this->log("");
+                $this->log("");
+                $this->log('['.$row->symbol.']'." Blockchain with user_id: $row->id_user");
 
                 //$blockchains[$row->symbol] = $row->url;
 
@@ -52,7 +54,7 @@ class EthereumTransactions
                 $ERC20 = new Yii::$app->Erc20($row->id_user);
 
                 while (true){
-                    $blockInfo = $ERC20->getBlockInfo();
+                    $blockInfo = $ERC20->getBlockInfo('latest',false,$row->url);
                     // $this->log("blockinfo: <pre>".print_r($blockInfo,true).'</pre>');
                     if (null !== $blockInfo){
                         $chainBlock = $blockInfo->number;
@@ -87,7 +89,7 @@ class EthereumTransactions
         			   	// ricerco le informazioni del blocco tramite il suo numero
 
                         while (true){
-                            $block = $ERC20->getBlockInfo($searchBlock,true);
+                            $block = $ERC20->getBlockInfo($searchBlock,true,$row->url);
 
                             // $this->log("blockinfo: <pre>".print_r($blockInfo,true).'</pre>');
                             if (null !== $block){

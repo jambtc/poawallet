@@ -256,18 +256,21 @@ class Erc20 extends Component
     }
 
 
-    public function getBlockInfo($blocknumber = 'latest', $search = false)
+    public function getBlockInfo($blocknumber = 'latest', $search = false, $url = null)
     {
         // echo '<pre>Response from getBlockInfo is: '.print_r($this->user_id,true).'</pre>';
 
-
-        $settings = Settings::poa($this->user_id);
+        if (null === $url){
+            $settings = Settings::poa($this->user_id);
+            $url = $settings->blockchain->url;
+        }
         // echo 'settings id: <pre>'.print_r($settings->id,true).'</pre>';
         // echo 'blockchain url: <pre>'.print_r($settings->blockchain->url,true).'</pre>';
 
+        // echo 'blockchain url: <pre>'.print_r($url,true).'</pre>';
 
 
-        $web3 = new Web3($settings->blockchain->url);
+        $web3 = new Web3($url);
 
         // echo 'set web3!';
 
