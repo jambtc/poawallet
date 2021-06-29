@@ -101,18 +101,21 @@ class BlockchainController extends Controller
 
 		$wallets = MPWallets::find()->where(['id_user'=>$user_id])->one();
 		if (null === $wallets){
-			return Json::encode(['success'=>false]);
+			return Json::encode(['success'=>false,'message'=>'Wallet is null']);
 		}
 		$node = Nodes::find()->where(['id_user'=>$user_id])->one();
 
 		if (null === $node){
-			return Json::encode(['success'=>false]);
+			return Json::encode(['success'=>false,'message'=>'Node is null']);
 		}
 
 		$fromAddress = $wallets->wallet_address;
 		$timeToComplete = 0;
 
 		$ethTxsStatus = EthtxsStatus::find()->where(['id_blockchain'=>$node->id_blockchain])->one();
+		if (null === $ethTxsStatus){
+			return Json::encode(['success'=>false,'message'=>'EthtxsStatus is null']);
+		}
 		$searchBlock = $ethTxsStatus->blocknumber;
 
 		$ethtxs = Ethtxs::find()

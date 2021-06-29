@@ -16,13 +16,13 @@ class EthereumTransactions
     private function log($text){
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
        echo  $time.$text;
-       // sleep(2);
+       //sleep(1);
     }
 
 
     public function start() {
         set_time_limit(0); //imposto il time limit unlimited
-        $maxBlockToScan = 11; // 1 blocco ogni 2 secondi
+        $maxBlockToScan = 12; // 1 blocco ogni 2 secondi
 
         while (true){
             $blockchains = Blockchains::find()
@@ -76,7 +76,7 @@ class EthereumTransactions
                 $this->log("Start block dec is: <pre>".print_r($savedBlock,true).'</pre>');
 
                 // Inizio il ciclo sui blocchi
-                for ($x=0; $x < $maxBlockToScan;$x++)
+                for ($x=1; $x < $maxBlockToScan;$x++)
         		{
                     $this->log("");
                     $this->log('['.$row->symbol.']'.' Inizio il ciclo: '.$x. ' sul blocco n. 0x'.dechex((hexdec($savedBlock)+$x)).' ('.(hexdec($savedBlock)+$x).' => '.hexdec($chainBlock).')');
