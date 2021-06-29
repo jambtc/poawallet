@@ -22,8 +22,7 @@ class EthereumTransactions
 
     public function start() {
         set_time_limit(0); //imposto il time limit unlimited
-        $maxBlockToScan = 1201; // 1 blocco ogni 2 secondi
-
+        $maxBlockToScan = 11; // 1 blocco ogni 2 secondi
 
         while (true){
             $blockchains = Blockchains::find()
@@ -208,7 +207,7 @@ class EthereumTransactions
             //     sleep($maxBlockToScan/2);
             // echo '<pre>'.print_r($blockchains,true).'</pre>';
             $this->log("finito il ciclo ");
-            sleep(1);
+            // sleep(1);
 
         }
     }

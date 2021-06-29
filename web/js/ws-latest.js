@@ -6,6 +6,7 @@
 
 $(function () {
     'use strict';
+    var timeOut = 10000;
 
     if (typeof(Worker) !== "undefined") {
         // console.log(`[type of bcWorker]`,typeof(bcWorker));
@@ -14,12 +15,16 @@ $(function () {
             var bcWorker = new Worker("js/web-workers/latestWorker.js");
         }
         bcWorker.onmessage = function(event) {
-            console.log('[From bc-latest] data:',event.data);
+            // console.log('[From bc-latest] data:',event.data);
             var transactions = event.data;
             for (var tx of transactions) {
                 console.log('[bc latest] single transaction data:', tx);
                 showTransactionRow(tx);
             }
+            setTimeout(function(){bcWorker.postMessage({
+                    action : "latest",
+                })
+            }, timeOut);
 
         };
     } else {

@@ -14,7 +14,7 @@ $(function () {
             var notificationsWorker = new Worker("js/web-workers/notificationsWorker.js");
         }
         notificationsWorker.onmessage = function(event) {
-            console.log('[From notificationsWorker] data:',event.data);
+            // console.log('[From notificationsWorker] data:',event.data);
             var data = event.data;
             notify.handleResponse(data);
 

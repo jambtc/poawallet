@@ -1,14 +1,21 @@
 onmessage = e => {
     const message = e.data;
 
-    console.log(`[From ethtx]: ${message}`);
-
     if (message.action == `start`){
-        console.log(`[ethtx] call function: ${message.action}`);
-        var getUrl = parseUrl(`blockchain/ethtx`);
-        check(getUrl);
-    }
+        // console.log(`[ethtx] action: ${message.action}`);
+        // console.log(`[ethtx] user_id: ${message.user_id}`);
+        // call start function
 
+        ethtx.checkTransactions(message.user_id).then(function(json) {
+            // console.log('[ethtx] Json response is: ', json);
+            postMessage(json);
+        })
+        .catch(function(err){
+            console.log('[ethtx] Error while checking data', err);
+            postMessage(JSON.stringify({'success': false}));
+        });
+        
+    }
 }
 
 function parseUrl(action){
@@ -16,19 +23,20 @@ function parseUrl(action){
 }
 
 
-function check(getUrl)
-{
-    console.log('[ethtx] Start process');
-    fetch(getUrl, {
-        method: 'POST',
-        dataType: "json",
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(json) {
-        // console.log('[notification worker] Risposta di backend-notify',json);
-        postMessage(json);
-        setTimeout(function(){ check(getUrl) }, 10000);
-    })
-}
+var ethtx = {
+    checkTransactions: async function (user_id){
+        //console.log('[ethtx start sync]');
+        var url = parseUrl(`blockchain/ethtx`);
+
+        let response = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'user_id': user_id})
+        });
+        return await response.json();
+    },
+
+};

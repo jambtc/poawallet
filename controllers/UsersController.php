@@ -60,22 +60,23 @@ class UsersController extends Controller
  	     		->andWhere(['id_user'=>Yii::$app->user->id])
  	    		->one();
 
+        $node = Settings::poa(Yii::$app->user->id);
+
         $tokens_from = Transactions::find()
-                    ->andWhere(['from_address'=>$wallet->wallet_address])
-                    ->andWhere(['status'=>'complete']);
+            ->andWhere(['id_smart_contract'=>$node->smartContract->id])
+            ->andWhere(['from_address'=>$wallet->wallet_address])
+            ->andWhere(['status'=>'complete']);
 
         $tokens_to = Transactions::find()
-                    ->where(['to_address'=>$wallet->wallet_address])
-                    ->andWhere(['status'=>'complete']);
+            ->andWhere(['id_smart_contract'=>$node->smartContract->id])
+            ->andWhere(['to_address'=>$wallet->wallet_address])
+            ->andWhere(['status'=>'complete']);
 
+        $sent['sum'] = round($tokens_from->sum('token_price'), $node->smartContract->decimals);
+        $sent['count'] = round($tokens_from->count(), $node->smartContract->decimals);
 
-        $blockchain = Settings::poa();
-
-        $sent['sum'] = round($tokens_from->sum('token_price'), $blockchain->smartContract->decimals);
-        $sent['count'] = round($tokens_from->count(), $blockchain->smartContract->decimals);
-
-        $received['sum'] = round($tokens_to->sum('token_price'), $blockchain->smartContract->decimals);
-        $received['count'] = round($tokens_to->count(), $blockchain->smartContract->decimals);
+        $received['sum'] = round($tokens_to->sum('token_price'), $node->smartContract->decimals);
+        $received['count'] = round($tokens_to->count(), $node->smartContract->decimals);
 
         $total_transactions = $sent['count'] + $received['count'];
 
@@ -84,9 +85,9 @@ class UsersController extends Controller
             ->orwhere(['=','from_address', $wallet->wallet_address])
             ->orwhere(['=','to_address', $wallet->wallet_address])
             ->andWhere(['status'=>'complete'])
+            ->andWhere(['id_smart_contract'=>$node->smartContract->id])
             ->select('token_price, from_address, to_address')
             ->all();
-
 
         // echo '<pre>'.print_r($wallet->wallet_address,true);exit;
 
@@ -146,7 +147,8 @@ class UsersController extends Controller
             'transactions' => $total_transactions,
             'percent_sent' => $sent['count'] / (1+$total_transactions) * 100,
             'percent_received' => $received['count'] / (1+$total_transactions) * 100,
-            'userAccountValueArray' => $userAccountValueArray
+            'userAccountValueArray' => $userAccountValueArray,
+            'node' => $node,
         ]);
 
     }

@@ -55,7 +55,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $percent_received ?>%"><?= $received['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($received['sum']) ?></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($received['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
               </div>
             </div>
         </div>
@@ -67,7 +67,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $percent_sent ?>%"><?= $sent['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($sent['sum']) ?></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($sent['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
               </div>
             </div>
         </div>
@@ -79,9 +79,9 @@ include ('manage-push_js.php');
 	<div class="coin-box">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex align-items-center">
-                <img class="img-xs" src="css/img/content/coin2.png" alt="coin image">
+                <img class="img-xs" src="css/img/content/ref-icon3.png" alt="coin image">
                 <div class="ml-10">
-                  <h3 class="coin-name"><?= Yii::t('app','Balance') ?></h3>
+                  <h5 class="coin-name"><?= $node->smartContract->denomination; ?></h5>
                   <small class="text-muted"><?= WebApp::number_shorten($userAccountValueArray['balance']) ?> </small>
                 </div>
             </div>
@@ -158,7 +158,7 @@ include ('manage-push_js.php');
     	<div class="list-item">
             <i class="fa fa-desktop text-primary"></i>
 			<em class="seperate"></em>
-    		<span class="list-item-title"><?php echo Yii::t('app','Save app on Home');?> <small class="text-muted"></small></span>
+    		<span class="list-item-title"><?php echo Yii::t('app','Save app to Home');?> <small class="text-muted"></small></span>
     		<div class="sweet-check saveOnDesktop" onclick="js:saveOnDesktop();">
     			<div class="outline">
     				<span></span>

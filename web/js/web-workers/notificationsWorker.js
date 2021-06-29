@@ -1,10 +1,10 @@
 onmessage = e => {
     const message = e.data;
 
-    console.log(`[From Main notifications]: ${message}`);
+    // console.log(`[From Main notifications]: ${message}`);
 
     if (message.action == `start`){
-        console.log(`[call function]: ${message.action}`);
+        // console.log(`[call function]: ${message.action}`);
         var getUrl = parseUrl(`backend/notify`);
         check(getUrl);
     }
@@ -24,7 +24,7 @@ function parseUrl(action){
 
 function check(getUrl)
 {
-    console.log('[notification: check] Start process');
+    // console.log('[notification: check] Start process');
     fetch(getUrl, {
         method: 'GET',
         dataType: "json",
