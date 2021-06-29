@@ -8,10 +8,8 @@ use Yii;
  * This is the model class for table "ethtxs_status".
  *
  * @property int $id
- * @property int $id_blockchain
+ * @property string $symbol
  * @property string $blocknumber
- *
- * @property Blockchains $blockchain
  */
 class EthtxsStatus extends \yii\db\ActiveRecord
 {
@@ -29,10 +27,9 @@ class EthtxsStatus extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_blockchain', 'blocknumber'], 'required'],
-            [['id_blockchain'], 'integer'],
+            [['symbol', 'blocknumber'], 'required'],
+            [['symbol'], 'string', 'max' => 255],
             [['blocknumber'], 'string', 'max' => 50],
-            [['id_blockchain'], 'exist', 'skipOnError' => true, 'targetClass' => Blockchains::className(), 'targetAttribute' => ['id_blockchain' => 'id']],
         ];
     }
 
@@ -43,19 +40,9 @@ class EthtxsStatus extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'id_blockchain' => Yii::t('app', 'Id Blockchain'),
+            'symbol' => Yii::t('app', 'Symbol'),
             'blocknumber' => Yii::t('app', 'Blocknumber'),
         ];
-    }
-
-    /**
-     * Gets query for [[Blockchain]].
-     *
-     * @return \yii\db\ActiveQuery|\app\models\query\BlockchainsQuery
-     */
-    public function getBlockchain()
-    {
-        return $this->hasOne(Blockchains::className(), ['id' => 'id_blockchain']);
     }
 
     /**

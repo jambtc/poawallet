@@ -63,11 +63,11 @@ class EthereumTransactions
 
                 }
 
-                $EthTxsStatus = EthtxsStatus::find()->where(['id_blockchain'=>$row->id])->one();
+                $EthTxsStatus = EthtxsStatus::find()->where(['symbol'=>$row->symbol])->one();
 
                 if (null === $EthTxsStatus){
                     $EthTxsStatus = new EthtxsStatus;
-                    $EthTxsStatus->id_blockchain = $row->id;
+                    $EthTxsStatus->symbol = $row->symbol;
                     $EthTxsStatus->blocknumber = '0x0';
                     $EthTxsStatus->save();
                 }

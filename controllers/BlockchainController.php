@@ -112,7 +112,7 @@ class BlockchainController extends Controller
 		$fromAddress = $wallets->wallet_address;
 		$timeToComplete = 0;
 
-		$ethTxsStatus = EthtxsStatus::find()->where(['id_blockchain'=>$node->id_blockchain])->one();
+		$ethTxsStatus = EthtxsStatus::find()->where(['symbol'=>$node->blockchain->symbol])->one();
 		if (null === $ethTxsStatus){
 			return Json::encode(['success'=>false,'message'=>'EthtxsStatus is null']);
 		}
