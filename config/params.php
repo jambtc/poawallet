@@ -68,6 +68,8 @@ return [
 
 
     // websocker url
-    'websocket_url' => $secrets['websocket_url'],
+    // 'websocket_url' => $secrets['websocket_url'],
 
+    // infura client
+    // 'infura_client' => $secrets['infura_client'],
 ];

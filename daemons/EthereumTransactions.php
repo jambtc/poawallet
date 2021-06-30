@@ -16,7 +16,7 @@ class EthereumTransactions
     private function log($text){
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
        echo  $time.$text;
-       //sleep(1);
+       // sleep(1);
     }
 
 
@@ -26,7 +26,7 @@ class EthereumTransactions
 
         while (true){
             $blockchains = Blockchains::find()
-                ->andWhere(['zerogas'=>1])
+                //->andWhere(['zerogas'=>1])
                 ->orderby(['id'=>SORT_ASC])
                 ->all();
 
@@ -43,6 +43,7 @@ class EthereumTransactions
 
             // distinct così le cerco solo per 1 volta
             foreach ($distinct as $row){
+
                 $this->log("");
                 $this->log("");
                 $this->log('['.$row->symbol.']'." Blockchain with user_id: $row->id_user");
@@ -71,9 +72,8 @@ class EthereumTransactions
                     $EthTxsStatus->blocknumber = '0x0';
                     $EthTxsStatus->save();
                 }
-
                 $savedBlock = $EthTxsStatus->blocknumber;
-                $this->log("Start block dec is: <pre>".print_r($savedBlock,true).'</pre>');
+                $this->log("Start block is: ".print_r($savedBlock,true).'');
 
                 // Inizio il ciclo sui blocchi
                 for ($x=1; $x < $maxBlockToScan;$x++)
@@ -86,6 +86,14 @@ class EthereumTransactions
         				//somma del valore del blocco in decimali
         				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
         			   	// ricerco le informazioni del blocco tramite il suo numero
+
+                        // se è una blockchain esterna tipo BNB o MATIC,
+                        // esco e non carico le tx. Poi magari più in là...
+                        if ($row->zerogas == 0){
+                            $EthTxsStatus->blocknumber = $chainBlock;
+                            $EthTxsStatus->update();
+                            break;
+                        }
 
                         while (true){
                             $block = $ERC20->getBlockInfo($searchBlock,true,$row->url);

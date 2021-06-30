@@ -104,25 +104,22 @@ class BlockchainController extends Controller
 			return Json::encode(['success'=>false,'message'=>'Wallet is null']);
 		}
 		$node = Nodes::find()->where(['id_user'=>$user_id])->one();
-
 		if (null === $node){
 			return Json::encode(['success'=>false,'message'=>'Node is null']);
 		}
-
-		$fromAddress = $wallets->wallet_address;
-		$timeToComplete = 0;
-
 		$ethTxsStatus = EthtxsStatus::find()->where(['symbol'=>$node->blockchain->symbol])->one();
 		if (null === $ethTxsStatus){
 			return Json::encode(['success'=>false,'message'=>'EthtxsStatus is null']);
 		}
+
+		$fromAddress = $wallets->wallet_address;
+		$timeToComplete = 0;
 		$searchBlock = $ethTxsStatus->blocknumber;
 
 		$ethtxs = Ethtxs::find()
             ->orwhere(['=','txfrom', $fromAddress])
             ->orwhere(['=','txto', $fromAddress])
             ->all();
-
 
 		foreach ($ethtxs as $data){
 			// echo '<pre>'.print_r($data,true).'</pre>';

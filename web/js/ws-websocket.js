@@ -62,13 +62,13 @@ $(function () {
 
                 // analizzare la risposta delle transazioni
                 var transactions = response.transactions;
-                if (transactions){
+                if (transactions.length >0){
                     for (var tx of transactions) {
                         console.log('[w_ethtx] single transaction data:', tx);
                         showTransactionRow(tx);
                     }
                 }
-                if (response.difference > 0){
+                if (response.difference > 1){
                     $('.header-message').html(response.headerMessage);
                 } else {
                     $('.header-message').html('');
@@ -80,23 +80,9 @@ $(function () {
             }
         }
     }
-    function showTransactionRow(tx){
-        if ($('tr[data-key="' + tx.id_token + '"]').length){
-            $('tr[data-key="' + tx.id_token + '"]').html(tx.row);
-        } else {
-            $('<tr data-key="' + tx.id_token + '"><td>' + tx.row + '</td></tr>').prependTo(".table-98 > tbody");
-        }
-        $('tr[data-key="' + tx.id_token + '"]').addClass("animationTransaction");
-        console.log('[w_ethtx] push options',tx.pushoptions)
-        if (Object.keys(tx.pushoptions).length === 0){
-            console.log('[w_ethtx] push options è vuoto');
-        }else{
-            displayPushNotification(tx.pushoptions);
-        }
-        $('#total-balance').addClass('animationBalanceIn');
-        $('.star-total-balance').addClass('animationStar');
-        $('#total-balance').text(tx.balance);
-    }
+
+
+    
 
     function networkDetails(r){
         if ($('.network-details').length){
