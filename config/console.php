@@ -17,10 +17,7 @@ $config = [
     ],
     'components' => [
         'Erc20' => ['class' => 'app\components\Erc20'],
-        // 'WebApp' => ['class' => 'app\components\WebApp'],
-        // 'Logo' => ['class' => 'app\components\Logo'],
-        // 'Settings' => ['class' => 'app\components\Settings'],
-        // 'Messages' => ['class' => 'app\components\Messages'],
+        'Ethereum' => ['class' => 'app\components\Ethereum'],
         'i18n' => [
             'translations' => [
                 'app*' => [
