@@ -98,8 +98,8 @@ $wallet_send = <<<JS
             url	: yiiOptions.gasLimitUrl, // gasLimitUrl  url,
             type: "POST",
             data: {
-                'toAddress' : $("#sendform-to").val(),
-                'fromAddress' : $("#sendform-from").val(),
+                'to' : $("#sendform-to").val(),
+                'from' : $("#sendform-from").val(),
                 'amount' : $("#sendform-amount").val(),
             },
             dataType: "json",
@@ -219,9 +219,9 @@ $wallet_send = <<<JS
                     $('.star-total-balance').addClass('animationStar');
                     $('#total-balance').text(data[0].balance);
                     console.log('[push options]', data[0].pushoptions);
-                    // console.log('[push options lenght]', data[0].pushoptions.lenght);
+                    console.log('[push options title]', data[0].pushoptions.title);
 
-                    if (data[0].pushoptions.lenght != 'undefined'){
+                    if (typeof data[0].pushoptions.title !== 'undefined'){
                         displayPushNotification(data[0].pushoptions);
                     }
 
