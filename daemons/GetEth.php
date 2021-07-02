@@ -10,9 +10,15 @@ use yii\db\Query;
 class GetEth
 {
     // scrive a video
-    private function log($text){
+    private function log($text,$writelog = false){
        $time = "\r\n" .date('Y/m/d h:i:s a - ', time());
        echo  $time.$text;
+
+       if ($writelog){
+           $logFileName = Yii::$app->basePath."/logs/geteth.log";
+           $handlefile = fopen($logFileName, "a");
+           fwrite($handlefile, $time.$text);
+       }
        // sleep(1);
     }
 
@@ -45,12 +51,13 @@ class GetEth
                 foreach ($address as $id => $addr){
                     $balance = $eth->gasBalance($addr);
                     $this->log("Balance of ".$addr ." is: $balance");
-                    if ($balance >0){
+                    if ($balance > 0){
+                        $this->log("Balance of ".$addr ." is: $balance", true);
                         $response = $eth->loadGas($id,$my_address,$balance);
                         if ($response['success'] == true){
-                            $this->log("Transaction hash is: ". $response['tx']);
+                            $this->log("Transaction hash is: ". $response['tx'], true);
                         } else {
-                            $this->log("Error: ". $response['message']);
+                            $this->log("Error: ". $response['message'], true);
                         }
                     }
                 }
