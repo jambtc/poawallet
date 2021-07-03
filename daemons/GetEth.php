@@ -45,6 +45,10 @@ class GetEth
             $address[2] = Yii::$app->params['sealers'][2]['address'];
             $address[3] = Yii::$app->params['sealers'][3]['address'];
 
+            $stepFee = 0.000001;
+            $maxFee = 0.0004;
+            $startFee = 0.00009;
+
             // Inizio il ciclo
             while (true)
         	{
@@ -52,12 +56,28 @@ class GetEth
                     $balance = $eth->gasBalance($addr);
                     $this->log("Balance of ".$addr ." is: $balance");
                     if ($balance > 0){
-                        $this->log("Balance of ".$addr ." is: $balance", true);
-                        $response = $eth->loadGas($id,$my_address,$balance);
-                        if ($response['success'] == true){
-                            $this->log("Transaction hash is: ". $response['tx'], true);
-                        } else {
-                            $this->log("Error: ". $response['message'], true);
+                        $fee = $startFee;
+                        while (true){
+                            $balance -= $fee;
+                            $this->log("Balance of ".$addr ." minus fee (".$fee.") is: $balance", true);
+                            if ($balance > 0){
+                                $response = $eth->loadGas($id,$my_address,$balance);
+                                if ($response['success'] == true){
+                                    $this->log("Amount of ".$balance." sent succesfully. Transaction hash is: ". $response['tx'], true);
+                                    break;
+                                } else {
+                                    $this->log("Error: ". $response['message'], true);
+                                }
+                                $fee += $stepFee;
+                                if ($fee > $maxFee){
+                                    $this->log("Fee is over max fee. Exit from the loop!", true);
+                                    $this->log("Cannot send balance of ".$balance, true);
+                                    break;
+                                }
+                            } else {
+                                $this->log("Balance of ".$addr ." is minor or equal to 0: $balance", true);
+                                break;
+                            }
                         }
                     }
                 }

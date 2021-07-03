@@ -99,12 +99,17 @@ class Ethereum extends Component
         //recupero il balance
         $balance = 0;
         $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
-            $jsonBody = $this->getJsonBody($err);
+            if ($err !== null) {
+                $balance = 0;
+            } else {
+                $balance = $response->toString() ;
 
-            if ($jsonBody !== NULL){
-                throw new HttpException(404,$jsonBody['error']['message']);
             }
-            $balance = $response->toString() ;
+
+
+            // echo 'response: <pre>'.print_r(gmp_strval($response->value),true).'</pre>';
+            // exit;
+
         });
         $value = (string) $balance * 1;
 		//$balance = $value / (1*pow(10,18)); //1000000000000000000;
