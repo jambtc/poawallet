@@ -185,13 +185,15 @@ class BlockchainController extends Controller
 
 
 	private function saveAndSendPushMessages($array){
+		$amount = $array['data']->contract_value / pow(10, $array['smartContracts']->decimals);
+
 		$tokens = new Transactions;
 		$tokens->id_user = $array['userid'];
 		$tokens->status	= 'complete';
 		$tokens->type	= 'token';
 		$tokens->id_smart_contract = $array['smartContracts']->id; //$settings->smartContract->id;
-		$tokens->token_price	= $array['data']->contract_value;
-		$tokens->token_received	= $array['data']->contract_value;
+		$tokens->token_price	= $amount;
+		$tokens->token_received	= $amount;
 		$tokens->invoice_timestamp = $array['data']->timestamp;
 		$tokens->expiration_timestamp = $array['data']->timestamp + 60*15;
 		$tokens->from_address = $array['data']->txfrom;
@@ -213,7 +215,7 @@ class BlockchainController extends Controller
 				'id_user' => $id_user_from,
 				'status' => 'complete',
 				'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
-					'amount' => $tokens->token_price,
+					'amount' => WebApp::si_formatter($tokens->token_price),
 					'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
 				]),
 				'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
@@ -228,7 +230,7 @@ class BlockchainController extends Controller
 		if ($id_user_to !== null){
 			$notification['id_user'] = $id_user_to;
 			$notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
-				'amount' => $tokens->token_price,
+				'amount' => WebApp::si_formatter($tokens->token_price),
 				'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
 			]);
 			$messages= Messages::push($notification);
@@ -240,7 +242,7 @@ class BlockchainController extends Controller
 		$this->setTransactionsFound([
 			'id_token' => $tokens->id,
 			'pushoptions' => $messages,
-			'balance' => WebApp::number_shorten($ERC20->tokenBalance($array['fromAddress'])),
+			'balance' => WebApp::si_formatter($ERC20->tokenBalance($array['fromAddress'])),
 			'row' => WebApp::showTransactionRow($tokens,$array['fromAddress'],true),
 		]);
 	}

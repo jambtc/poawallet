@@ -198,6 +198,8 @@ class WebApp extends Component
 		return $suffixes[$exponent] ?? null;
 	}
 
+
+	// Best shortens a number and attaches K, M, B, etc. accordingly
 	public function si_formatter($number, $style = 'short'){
 		$classifier = self::si_classifier($number);
 		if ($classifier === null){
@@ -215,38 +217,38 @@ class WebApp extends Component
 	}
 
 	// Shortens a number and attaches K, M, B, etc. accordingly
-    public function number_shorten($number, $precision = 3, $divisors = null) {
-        // Setup default $divisors if not provided
-        if (!isset($divisors)) {
-            $divisors = array(
-				pow(1000, -4) => 'p', // 0.000000000001 pico
-				pow(1000, -3) => 'n', // 0.000000001 nano
-				pow(1000, -2) => 'µ', // 0.000001 micro
-				pow(1000, -1) => 'm', // 0.001 milli
-				pow(1000, 0) => '', // 1000^0 == 1
-                pow(1000, 1) => 'k', // Thousand
-                pow(1000, 2) => 'M', //Yii::t('app','Million'), // Mega - Million
-                pow(1000, 3) => 'G', //Yii::t('app','Billion'), // Giga - Billion
-                pow(1000, 4) => 'T', //Yii::t('app','Trillion'), // Tera - Trillion
-                pow(1000, 5) => 'P', //Yii::t('app','Quadrillion'), // Peta - Quadrillion
-                pow(1000, 6) => 'E',// Yii::t('app','Quintillion'), // Exa - Quintillion
-                gmp_strval('1000000000000000000000') => 'Z', //Yii::t('app','Sextillion'), // Sextillion
-                gmp_strval('1000000000000000000000000') => 'Y', //Yii::t('app','Septillion'), // Septillion
-            );
-        }
-
-        // Loop through each $divisor and find the
-        // lowest amount that matches
-        foreach ($divisors as $divisor => $shorthand) {
-            if (abs($number) < ($divisor * 1000)) {
-                // We found a match!
-                break;
-            }
-        }
-        // We found our match, or there were no matches.
-        // Either way, use the last defined value for $divisor.
-        return round(number_format($number / $divisor, $precision),$precision) .' '. $shorthand;
-    }
+    // public function number_shorten($number, $precision = 3, $divisors = null) {
+    //     // Setup default $divisors if not provided
+    //     if (!isset($divisors)) {
+    //         $divisors = array(
+	// 			pow(1000, -4) => 'p', // 0.000000000001 pico
+	// 			pow(1000, -3) => 'n', // 0.000000001 nano
+	// 			pow(1000, -2) => 'µ', // 0.000001 micro
+	// 			pow(1000, -1) => 'm', // 0.001 milli
+	// 			pow(1000, 0) => '', // 1000^0 == 1
+    //             pow(1000, 1) => 'k', // Thousand
+    //             pow(1000, 2) => 'M', //Yii::t('app','Million'), // Mega - Million
+    //             pow(1000, 3) => 'G', //Yii::t('app','Billion'), // Giga - Billion
+    //             pow(1000, 4) => 'T', //Yii::t('app','Trillion'), // Tera - Trillion
+    //             pow(1000, 5) => 'P', //Yii::t('app','Quadrillion'), // Peta - Quadrillion
+    //             pow(1000, 6) => 'E',// Yii::t('app','Quintillion'), // Exa - Quintillion
+    //             gmp_strval('1000000000000000000000') => 'Z', //Yii::t('app','Sextillion'), // Sextillion
+    //             gmp_strval('1000000000000000000000000') => 'Y', //Yii::t('app','Septillion'), // Septillion
+    //         );
+    //     }
+	//
+    //     // Loop through each $divisor and find the
+    //     // lowest amount that matches
+    //     foreach ($divisors as $divisor => $shorthand) {
+    //         if (abs($number) < ($divisor * 1000)) {
+    //             // We found a match!
+    //             break;
+    //         }
+    //     }
+    //     // We found our match, or there were no matches.
+    //     // Either way, use the last defined value for $divisor.
+    //     return round(number_format($number / $divisor, $precision),$precision) .' '. $shorthand;
+    // }
 
     /**
      * funzione che crypta un testo
