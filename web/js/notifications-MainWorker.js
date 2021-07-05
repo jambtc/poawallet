@@ -67,7 +67,11 @@ $(function () {
                     type: "POST",
                     data: {},
                     dataType: 'json',
+                    beforeSend: function() {
+                        $(".markall").html(yiiOptions.spinner);
+                    },
                     success: function(response) {
+                        // $(".markall").remove();
                         console.log('[notify] All notifications updated.',response);
                     },
                     error: function(data) {

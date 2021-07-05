@@ -24,6 +24,7 @@ function isLocalhost($whitelist = ['127.0.0.1', '::1']) {
 // impostazioni variabili globali per tutti i js
 $options = [
     'cryptedIdUser' => app\components\WebApp::encrypt(Yii::$app->user->id),
+    'spinner' => '<div class="button-spinner spinner-border text-primary" style="width:1.3rem; height:1.3rem;" role="status"><span class="sr-only">Loading...</span></div>',
     // 'WebSocketServerAddress' => isLocalhost() ? 'ws://localhost:7500' : Yii::$app->params['websocket_url'],
 ];
 $this->registerJs(
