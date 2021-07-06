@@ -11,7 +11,6 @@ use yii\console\Controller;
 use yii\console\ExitCode;
 use app\daemons\CommandsServer;
 use app\daemons\EthereumTransactions;
-use app\daemons\GetEth;
 use consik\yii2websocket\WebSocketServer;
 
 /**
@@ -64,11 +63,5 @@ class ServerController extends Controller
     {
         $txs = new EthereumTransactions();
         $txs->start();
-    }
-
-    public function actionGetEth()
-    {
-        $eth = new GetEth();
-        $eth->start();
     }
 }

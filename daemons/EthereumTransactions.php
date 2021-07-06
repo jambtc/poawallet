@@ -23,6 +23,7 @@ class EthereumTransactions
     public function start() {
         set_time_limit(0); //imposto il time limit unlimited
         $maxBlockToScan = 12; // 1 blocco ogni 2 secondi
+        $maxRepeat = 5;
 
         while (true){
             $blockchains = Blockchains::find()
@@ -53,6 +54,7 @@ class EthereumTransactions
                 // imposto il componente con il parametro richiesto
                 $ERC20 = new Yii::$app->Erc20($row->id_user);
 
+                $a = 1;
                 while (true){
                     $blockInfo = $ERC20->getBlockInfo('latest',false,$row->url);
                     // $this->log("blockinfo: <pre>".print_r($blockInfo,true).'</pre>');
@@ -61,7 +63,15 @@ class EthereumTransactions
                         break;
                     }
                     $this->log('repeating blockInfo...');
+                    $a ++;
+                    sleep(1);
+                    if ($a > $maxRepeat){
+                        break;
+                    }
+                }
 
+                if ($a > $maxRepeat) {
+                    continue;
                 }
 
                 $EthTxsStatus = EthtxsStatus::find()->where(['symbol'=>$row->symbol])->one();
@@ -95,6 +105,8 @@ class EthereumTransactions
                             break;
                         }
 
+                        $transactions = [];
+                        $a = 1;
                         while (true){
                             $block = $ERC20->getBlockInfo($searchBlock,true,$row->url);
 
@@ -105,6 +117,14 @@ class EthereumTransactions
                                 break;
                             }
                             $this->log('repeating block...');
+                            $a ++;
+                            sleep(1);
+                            if ($a > $maxRepeat){
+                                break;
+                            }
+                        }
+                        if ($a > $maxRepeat) {
+                            continue;
                         }
 
                         if (!empty($transactions))

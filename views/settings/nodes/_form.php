@@ -33,7 +33,7 @@ $smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii:
     <?= $form->field($model, 'id_user')->hiddenInput(['value' => Yii::$app->user->id])->label(false) ?>
 
 
-    <div class="form-group">
+    <div class="form-group mt-3">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
