@@ -8,7 +8,7 @@ use yii\helpers\Url;
     <p class="lead">
         <?php echo Yii::t('app','These random words will be unique in the world and will allow you to recover the contents of your wallet even in case of loss of your device.'); ?>
     </p>
-    
+
     <div class="form-divider"></div>
     <div class="container">
       <div class="float-left">
@@ -17,7 +17,7 @@ use yii\helpers\Url;
       </div>
       <div class="float-right">
         <button type="button" id="stepwizard_step2_next" class="btn btn-primary btn-md next-step">
-          <i class="fa fa-forward"></i><?php echo Yii::t('app','Next');?>
+          <i class="fa fa-forward"></i> <?php echo Yii::t('app','Next');?>
         </button>
       </div>
     </div>

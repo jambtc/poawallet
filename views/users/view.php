@@ -55,7 +55,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-primary" role="progressbar" style="width: <?= $percent_received ?>%"><?= $received['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($received['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::si_formatter($received['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
               </div>
             </div>
         </div>
@@ -67,7 +67,7 @@ include ('manage-push_js.php');
                 <div class="progress">
                     <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $percent_sent ?>%"><?= $sent['count'] ?></div>
                   </div>
-                <h4 class="mt-10 mb-0"><?= WebApp::number_shorten($sent['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
+                <h4 class="mt-10 mb-0"><?= WebApp::si_formatter($sent['sum']) ?><span class="ml-1"><small><?= $node->smartContract->symbol ?></small></span></h4>
               </div>
             </div>
         </div>
@@ -82,7 +82,7 @@ include ('manage-push_js.php');
                 <img class="img-xs" src="css/img/content/ref-icon3.png" alt="coin image">
                 <div class="ml-10">
                   <h5 class="coin-name"><?= $node->smartContract->denomination; ?></h5>
-                  <small class="text-muted"><?= WebApp::number_shorten($userAccountValueArray['balance']) ?> </small>
+                  <small class="text-muted"><?= WebApp::si_formatter($userAccountValueArray['balance']) ?> </small>
                 </div>
             </div>
             <div>

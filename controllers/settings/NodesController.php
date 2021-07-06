@@ -1,12 +1,14 @@
 <?php
-
 namespace app\controllers\settings;
 
 use Yii;
 use app\models\Nodes;
+use app\models\SmartContracts;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 
 /**
@@ -126,5 +128,15 @@ class NodesController extends Controller
         }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+    }
+
+    public function actionTokensList($id)
+    {
+        $stores = ArrayHelper::map(SmartContracts::find()
+            ->andWhere(['id_blockchain'=>$id])
+            ->andWhere(['id_user'=>Yii::$app->user->id])
+            ->all(), 'id', 'denomination');
+
+        return Json::encode($stores);
     }
 }

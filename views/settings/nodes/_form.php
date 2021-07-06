@@ -13,6 +13,7 @@ use yii\bootstrap4\ActiveForm;
 $blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 $smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 
+include ('_formjs.php');
 ?>
 
 <div class="nodes-form">

@@ -27,7 +27,7 @@ $this->title = Yii::t('app', 'Networks');
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'layout' => "{summary}\n{items}\n{pager}",
-                    'tableOptions' => ['class' => 'table m-0 table-striped table-sm'],
+                    'tableOptions' => ['class' => 'table m-0 table-striped table-sm txt-white'],
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
                             // 'id',
@@ -43,7 +43,7 @@ $this->title = Yii::t('app', 'Networks');
 
                             // 'chain_id',
                             // 'url:url',
-                            // 'symbol',
+                            'symbol',
                             // 'url_block_explorer:url',
 
 
