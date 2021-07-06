@@ -140,15 +140,27 @@ class SendController extends Controller
  	}
 	public function actionGasLimit()
 	{
-		$fromAddress = $_POST['fromAddress'];
-		$toAddress = $_POST['toAddress'];
+		// echo '<pre>'.print_r($_POST,true).'</pre>';
+		// exit;
+		$fromAddress = $_POST['from'];
+		$toAddress = $_POST['to'];
 		$amount = $_POST['amount'];
-		$settings = Settings::poa();
-		$ERC20 = new Yii::$app->Erc20();
-
-		$gasLimit = $ERC20->getGasLimit($toAddress,$fromAddress,$amount);
 
 		$return = ['success'=>false,'gasLimit'=>0];
+
+		$formModel = new SendForm; //form di input dei dati
+		if (!$formModel->validate(Yii::$app->request->post())) {
+		    // Yii::$app->response->format = Response::FORMAT_JSON;
+			// $response = [ActiveForm::validate($formModel), $return];
+		    return $response;
+		}
+
+
+
+		$ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
+		$gasLimit = $ERC20->getGasLimit($toAddress,$fromAddress,$amount);
+
+
 
 		if (null !== $gasLimit){
 			$return = ['success'=>true,'gasLimit'=>$gasLimit];

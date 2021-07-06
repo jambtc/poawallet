@@ -2,8 +2,8 @@
 importScripts('src/js/idb.js');
 importScripts('src/js/idb-utility.js');
 
-var CACHE_STATIC_NAME = 'poawallet-static-010';
-var CACHE_DYNAMIC_NAME = 'poawallet-dynamic-009';
+var CACHE_STATIC_NAME = 'poawallet-static-011';
+var CACHE_DYNAMIC_NAME = 'poawallet-dynamic-012';
 
 var OFFLINE_URL = 'offline.html';
 
@@ -24,6 +24,7 @@ var STATIC_FILES = [
 	'js/global.script.js',
 	'js/clipboard-copy.js',
 	'js/ws-websocket.js',
+	'js/web-workers/eth-tx.js',
 
 	// search latest transactions
 	'js/ws-latest.js',

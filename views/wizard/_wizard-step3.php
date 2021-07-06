@@ -19,7 +19,7 @@ use yii\helpers\Url;
       </div>
       <div class="float-right">
         <button type="button" id="stepwizard_step3_next" class="btn btn-primary btn-md next-step">
-          <i class="fa fa-forward"></i><?php echo Yii::t('app','Next');?>
+          <i class="fa fa-forward"></i> <?php echo Yii::t('app','Next');?>
         </button>
       </div>
     </div>

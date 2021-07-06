@@ -16,6 +16,15 @@ $db = require __DIR__ . '/db.php';
 //     ]
 // ],
 
+if (isset($_SERVER['SERVER_NAME'])){
+    $githubClientId = $secrets['oauth_github']['client_id'][$_SERVER['SERVER_NAME']] ?? null;
+    $githubClientSecret = $secrets['oauth_github']['secret'][$_SERVER['SERVER_NAME']] ?? null;
+} else {
+    $githubClientId = null;
+    $githubClientSecret = null;
+}
+
+
 $config = [
     'id' => 'Poa Wallet',
     'name' => 'Poa Wallet',
@@ -76,8 +85,8 @@ $config = [
                ],
                'github' => [
                    'class' => 'yii\authclient\clients\GitHub',
-                   'clientId' => $secrets['oauth_github']['client_id'][$_SERVER['SERVER_NAME']],
-                   'clientSecret' => $secrets['oauth_github']['secret'][$_SERVER['SERVER_NAME']],
+                   'clientId' => $githubClientId,
+                   'clientSecret' => $githubClientSecret,
                ],
                // 'twitter' => [
                //      'class' => 'yii\authclient\clients\Twitter',
@@ -127,9 +136,9 @@ $config = [
         // this component add timestamp to downloaded css or javascript
         // to avoid forced refresh during develop
         //
-        'assetManager' => [
-            'appendTimestamp' => true
-        ],
+        // 'assetManager' => [
+        //     'appendTimestamp' => true
+        // ],
 
     ],
     'params' => $params,

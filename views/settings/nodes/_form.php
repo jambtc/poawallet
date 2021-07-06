@@ -13,6 +13,7 @@ use yii\bootstrap4\ActiveForm;
 $blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 $smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
 
+include ('_formjs.php');
 ?>
 
 <div class="nodes-form">
@@ -33,7 +34,7 @@ $smartcontract = ArrayHelper::map(SmartContracts::find()->where(['id_user'=>Yii:
     <?= $form->field($model, 'id_user')->hiddenInput(['value' => Yii::$app->user->id])->label(false) ?>
 
 
-    <div class="form-group">
+    <div class="form-group mt-3">
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 

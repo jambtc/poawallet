@@ -14,7 +14,7 @@ $(function () {
             var notificationsWorker = new Worker("js/web-workers/notificationsWorker.js");
         }
         notificationsWorker.onmessage = function(event) {
-            console.log('[From notificationsWorker] data:',event.data);
+            // console.log('[From notificationsWorker] data:',event.data);
             var data = event.data;
             notify.handleResponse(data);
 
@@ -67,7 +67,11 @@ $(function () {
                     type: "POST",
                     data: {},
                     dataType: 'json',
+                    beforeSend: function() {
+                        $(".markall").html(yiiOptions.spinner);
+                    },
                     success: function(response) {
+                        // $(".markall").remove();
                         console.log('[notify] All notifications updated.',response);
                     },
                     error: function(data) {

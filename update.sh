@@ -15,7 +15,7 @@ chmod g+w runtime/
 echo Versioning...
 git rev-parse HEAD>version.txt
 
-echo Calling webservice...
-./wsservice.sh
+echo Calling eth-storage-service...
+./ethstorage.sh
 
 echo Done!

@@ -1,0 +1,12 @@
+[Unit]
+Description=EthereumTransactionStorage
+After=syslog.target network.target apache2.service mysql.service
+
+[Service]
+ExecStart=/var/www/wallet/yii server/txs
+TimeoutSec=300
+RestartSec=90
+Restart=always
+
+[Install]
+WantedBy=default.target

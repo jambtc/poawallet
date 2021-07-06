@@ -157,7 +157,7 @@ class BackendController extends Controller
 
 		 				 </div>
 		 				 <div class="notify-readAll">
-		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block">'. Yii::t('app','Mark all as read') .'</small></a>
+		 				   <a href="#" onclick="notify.openAllEnvelopes();"><small class="text-muted d-block markall">'. Yii::t('app','Mark all as read') .'</small></a>
 		 				 </div>
 		 			   </div>
 		 		 </li>';

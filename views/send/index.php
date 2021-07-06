@@ -55,7 +55,7 @@ $sendForm->from = $fromAddress;
 									<span class="mr-2">
 										<small class="ml-2"><i class="fa fa-star star-total-balance fa-sm"></i></small>
 									</span>
-									<span class="h5 text-dark" id="total-balance"><?= WebApp::number_shorten($balance) ?></span>
+									<span class="h5 text-dark" id="total-balance"><?= WebApp::si_formatter($balance) ?></span>
 									<small class="ml-1"><?= $node->smartContract->symbol ?></small>
 								</div>
 							</div>
@@ -65,7 +65,7 @@ $sendForm->from = $fromAddress;
 									<span class="mr-2">
 										<small class="ml-2"><i class="fab fa-ethereum fa-sm"></i></small>
 									</span>
-									<span class="h5 text-dark" id="total-balance_gas"><?= WebApp::number_shorten($balance_gas) ?></span>
+									<span class="h5 text-dark" id="total-balance_gas"><?= WebApp::si_formatter($balance_gas) ?></span>
 									<small class="ml-1"><?= $node->blockchain->symbol ?></small>
 
 								</div>
