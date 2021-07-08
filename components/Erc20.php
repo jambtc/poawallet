@@ -150,16 +150,18 @@ class Erc20 extends Component
     	$response = null;
         $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
             if ($err !== null) {
-                $jsonBody = $this->getJsonBody($err->getMessage());
-
-                if ($jsonBody === NULL){
-                    throw new HttpException(404,'ERROR: Nonce error count...');
-                }else{
-                    throw new HttpException(404,$jsonBody['error']['message']);
-                }
+                $response = [
+                    'success' => 0,
+                    'message' => $err->getMessage(),
+                    'tx' => null,
+                ];
+            }else{
+                $response = [
+                    'success' => 1,
+                    'message' => '',
+                    'tx' => $tx,
+                ];
             }
-            $response = $tx;
-
         });
         return $response;
     }
