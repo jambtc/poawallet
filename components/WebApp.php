@@ -316,6 +316,11 @@ class WebApp extends Component
         $classStatus = ($data->status == 'complete') ? 'bg-success' : 'bg-secondary';
         $newTxClass = ($newTransaction == true) ? 'bg-newtransaction' : '';
 
+		if ($data->status == 'new' && $data->txhash != ''){
+			$data->status = 'pending';
+			$status = true;
+		}
+
         $line = '
         <a href="index.php?r=transactions/view&id='. self::encrypt($data->id) . '" />
         <div class="container-fluid m-0 p-0">
@@ -343,7 +348,7 @@ class WebApp extends Component
 								  </span>
 								  ';
 		if ($status !== null){
-			$line .= '			<small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
+			$line .= '			</br><small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
 								.self::encrypt($data->id).'">'.$data->status.'</small>';
 		}
         $line .=             '</div>

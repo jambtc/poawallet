@@ -224,7 +224,7 @@ class SendController extends Controller
 				'decryptedSign' => $decrypted,
 			]);
 
-			if ($tx !== null){
+			if ($tx['success'] == true){
 				break;
 			} else {
 				$nonce++;
@@ -232,8 +232,8 @@ class SendController extends Controller
 		}
 		// echo '<pre>'.print_r($tx,true).'</pre>';
 		// exit;
-		if ($tx === null){
-			throw new HttpException(404,'Invalid nonce: '.$nonce);
+		if ($tx['success'] == false){
+			throw new HttpException(404,'Error: '.$tx['message']);
 		}
 
 		//salva la transazione ERC20 in archivio
@@ -259,7 +259,7 @@ class SendController extends Controller
 		$tokens->from_address = $fromAccount;
 		$tokens->to_address = $toAccount;
 		$tokens->blocknumber = $block->number;
-		$tokens->txhash = $tx;
+		$tokens->txhash = $tx['tx'];
 		$tokens->message = $memo;
 
 		if (!($tokens->save())){

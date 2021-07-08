@@ -44,11 +44,17 @@ include ('view_js.php');
                             [
                                 'type'=>'raw',
                                 'attribute'=>Yii::t('app','status'),
-                                'value'=>$model->status,
+                                'value'=> function ($data) {
+                                    if ($data->status == 'new' && $data->txhash != ''){
+                                        return Yii::t('app','Pending...');
+                                    } else {
+                                        return $data->status;
+                                    }
+                                },
                                 'contentOptions' => [
                                     'class' => ($model->status == 'complete') ?
                                         'trans-get button circle block green text-capitalize'
-                                        : 'trans-get button circle block gray text-capitalize',
+                                        : 'trans-get button circle block yellow text-capitalize',
                                     'id' => 'trans-get-'.$model->id
                                 ]
                             ],

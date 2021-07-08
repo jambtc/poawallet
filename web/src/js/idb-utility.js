@@ -211,3 +211,65 @@ function showTransactionRow(tx){
 	$('.star-total-balance').addClass('animationStar');
 	$('#total-balance').text(tx.balance);
 }
+
+
+var erc20 = {
+	isReadySent: function(id){
+		readFromId('np-send-erc20',id)
+		.then(function(data) {
+			console.log('[isReadySent]: checking data from np-send-erc20 salvato dal SW', data);
+			if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
+			{
+				console.log('id token è:', id);
+				$('.generating').addClass('animationTransaction');
+				$('.generating').html(data[0].row);
+				$('#total-balance').addClass('animationBalanceIn');
+				$('.star-total-balance').addClass('animationStar');
+				$('#total-balance').text(data[0].balance);
+				console.log('[push options]', data[0].pushoptions);
+				console.log('[push options title]', data[0].pushoptions.title);
+
+				if (typeof data[0].pushoptions.title !== 'undefined'){
+					displayPushNotification(data[0].pushoptions);
+				}
+
+
+				clearAllData('np-send-erc20');
+			} else {
+				setTimeout(function(){ erc20.isReadySent(id) }, 1000);
+			}
+		});
+	},
+
+	bypassIos: function (tag){
+		console.log('[No SW- bypass for Ios] Evento sincronizzazione invio token trovato!');
+			readAllData(tag)
+			.then(function(data) {
+				for (var dt of data) {
+					console.log('[No SW- bypass for Ios] fetching sync-send-erc20',dt);
+					var postData = new FormData();
+						postData.append('id', dt.id);
+						//postData.append('chainBlock', dt.chainBlock);
+
+					fetch(dt.url, {
+						method: 'POST',
+						body: postData,
+					})
+					.then(function(response) {
+						return response.json();
+					})
+					.then(function(json) {
+						console.log('[No SW- bypass for Ios] Risposta di send/validateTransaction',json);
+						writeData('np-send-erc20', json);
+
+					})
+					.catch(function(err){
+						console.log('[No SW- bypass for Ios] Error while checking send-erc20 data', err);
+					})
+				}
+				//per sicurezza cancello tutto da indexedDB
+				clearAllData(tag);
+			});
+
+	}
+}
