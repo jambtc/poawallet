@@ -8,6 +8,9 @@ $(function () {
     'use strict';
     var timeOut = 10000;
 
+    // funzione che legge i pending per verificare i pagamenti
+    checkPendingTransactions();
+
     if (typeof(Worker) !== "undefined") {
         // console.log(`[type of bcWorker]`,typeof(bcWorker));
 
@@ -37,7 +40,7 @@ $(function () {
     }
     // console.log(`[window location]`,window.location.href);
 
-    
+
     // avvio la sincronizzazione
     bcWorker.postMessage({
         action : "latest",

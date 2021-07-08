@@ -300,8 +300,13 @@ class SendController extends Controller
 	{
 		set_time_limit(0); //imposto il time limit unlimited
 		$WebApp = new WebApp;
-		$maxrequests = 30;
 		$requests = 1;
+		$receipt = null;
+		if (isset($_POST['pending']) && $_POST['pending'] == true){
+			$maxrequests = 2;
+		} else {
+			$maxrequests = 30;
+		}
 
 		$tokens = Transactions::findOne($WebApp->decrypt($_POST['id']));
 		$ERC20 = new Yii::$app->Erc20($tokens->id_user);

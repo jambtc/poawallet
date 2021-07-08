@@ -348,8 +348,12 @@ class WebApp extends Component
 								  </span>
 								  ';
 		if ($status !== null){
-			$line .= '			</br><small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
-								.self::encrypt($data->id).'">'.$data->status.'</small>';
+			$line .= '			</br>
+								<div class="d-flex justify-content-center">
+								<small class="text-light text-capitalize text-center pl-2 pr-2 '.$classStatus.'" id="transaction-status-'
+								.self::encrypt($data->id).'">'.$data->status.'</small>
+								</div>
+								';
 		}
         $line .=             '</div>
                       </div>';

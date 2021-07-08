@@ -127,7 +127,7 @@ function clearAllData(table) {
 function deleteItemFromData(table, id){
 	return dbPromise
 		.then(function(db){
-			var tx = db.transactions(table, 'readwrite');
+			var tx = db.transaction(table, 'readwrite');
 			var store = tx.objectStore(table);
 			store.delete(id);
 			return tx.complete;
@@ -212,35 +212,72 @@ function showTransactionRow(tx){
 	$('#total-balance').text(tx.balance);
 }
 
+function checkPendingTransactions(){
+	readAllData('np-send-erc20')
+	.then(function(data) {
+		for (var dt of data) {
+			console.log(`[single dt]`,dt);
+			var postData = new FormData();
+			postData.append('id', dt.id);
+			postData.append('pending', true);
+
+			fetch('index.php?r=send/validate-transaction', {
+				method: 'POST',
+				body: postData,
+			})
+			.then(function(response) {
+				return response.json();
+			})
+			.then(function(json) {
+				erc20.isPending(json.id);
+			})
+		}
+	});
+}
+
 
 var erc20 = {
 	isReadySent: function(id){
 		readFromId('np-send-erc20',id)
 		.then(function(data) {
 			console.log('[isReadySent]: checking data from np-send-erc20 salvato dal SW', data);
-			if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
-			{
-				console.log('id token è:', id);
-				$('.generating').addClass('animationTransaction');
-				$('.generating').html(data[0].row);
-				$('#total-balance').addClass('animationBalanceIn');
-				$('.star-total-balance').addClass('animationStar');
-				$('#total-balance').text(data[0].balance);
-				console.log('[push options]', data[0].pushoptions);
-				console.log('[push options title]', data[0].pushoptions.title);
-
-				if (typeof data[0].pushoptions.title !== 'undefined'){
-					displayPushNotification(data[0].pushoptions);
-				}
-
-
-				clearAllData('np-send-erc20');
-			} else {
-				setTimeout(function(){ erc20.isReadySent(id) }, 1000);
-			}
+			erc20.manageData('ready', data, id);
 		});
 	},
 
+	isPending: function(id){
+		readFromId('np-send-erc20',id)
+		.then(function(data) {
+			console.log('[isPending]: checking data from np-send-erc20 salvato dal SW', data);
+			erc20.manageData('pending', data, id);
+		});
+	},
+	manageData: function(type, data, id){
+		if (typeof data[0] !== 'undefined' && data[0].id == id && data[0].status != 'new' )
+		{
+			console.log('['+type+'] id token è:', id);
+			$('.generating').addClass('animationTransaction');
+			$('.generating').html(data[0].row);
+			$('#total-balance').addClass('animationBalanceIn');
+			$('.star-total-balance').addClass('animationStar');
+			$('#total-balance').text(data[0].balance);
+			console.log('['+type+' push options]', data[0].pushoptions);
+			console.log('['+type+' push options title]', data[0].pushoptions.title);
+
+			if (typeof data[0].pushoptions.title !== 'undefined'){
+				displayPushNotification(data[0].pushoptions);
+			}
+
+			deleteItemFromData('np-send-erc20',data[0].id);
+		} else {
+			if (type == 'pending'){
+				setTimeout(function(){ checkPendingTransactions() }, 10000);
+			} else  {
+				setTimeout(function(){ erc20.isReadySent(id) }, 2000);
+			}
+
+		}
+	},
 	bypassIos: function (tag){
 		console.log('[No SW- bypass for Ios] Evento sincronizzazione invio token trovato!');
 			readAllData(tag)
