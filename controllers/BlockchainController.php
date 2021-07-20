@@ -119,7 +119,7 @@ class BlockchainController extends Controller
 		$ethtxs = Ethtxs::find()
             ->orwhere(['=','txfrom', $fromAddress])
             ->orwhere(['=','txto', $fromAddress])
-			->andWhere(['>','blocknumber',$searchBlock])
+			//->andWhere(['>','blocknumber',$searchBlock])
             ->all();
 
 		foreach ($ethtxs as $data){
