@@ -330,7 +330,7 @@ class SendController extends Controller
 			];
 		} else {
 			$tokens->status = 'complete';
-			$tokens->token_received = 0; // fix la velocità sul server
+			//$tokens->token_received = 0; // fix la velocità sul server
 			$tokens->blocknumber = $receipt->blockNumber;
 
 			if (!($tokens->save())){
