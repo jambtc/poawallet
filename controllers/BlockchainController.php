@@ -119,6 +119,7 @@ class BlockchainController extends Controller
 		$ethtxs = Ethtxs::find()
             ->orwhere(['=','txfrom', $fromAddress])
             ->orwhere(['=','txto', $fromAddress])
+			->andWhere(['>','blocknumber',$searchBlock])
             ->all();
 
 		foreach ($ethtxs as $data){
@@ -153,8 +154,8 @@ class BlockchainController extends Controller
 						'data' => $data,
 						'fromAddress' => $fromAddress,
 						'tokens' => $tokens,
-						'receiver' => false,
-						'sender' => false,
+						'receiver' => ($tokens->token_received == 0) ? true : false,
+						'sender' => ($tokens->status == 'new') ? true : false,
 					]);
 				}
 			}
@@ -284,7 +285,7 @@ class BlockchainController extends Controller
 			// imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
 			$this->setTransactionsFound([
 				'id_token' => $tokens->id,
-				'pushoptions' => $messages,
+				'pushoptions' => $messages ?? null,
 				'balance' => WebApp::si_formatter($ERC20->tokenBalance($array['fromAddress'])),
 				'row' => WebApp::showTransactionRow($tokens,$array['fromAddress'],true),
 			]);
