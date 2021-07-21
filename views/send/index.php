@@ -215,15 +215,10 @@ $sendForm->from = $fromAddress;
 										<div class="send-v2__asset-dropdown__asset">
 											<div class="send-v2__asset-dropdown__asset-data">
 												<div class="send-v2__asset-dropdown__symbol text-center">
-													<span class="ml-auto currency-display-component__text h5"><?= WebApp::si_formatter($balance) ?></span>
+													<span class="ml-auto currency-display-component__text h5 js-initial-amount"><?= WebApp::si_formatter($balance) ?></span>
+													<span class="ml-auto currency-display-component__text h5 js-final-amount" style="display:none;"></span>
 													<small class="currency-display-component__suffix"><?= $node->smartContract->symbol ?></small>
 												</div>
-												<div class="send-v2__asset-dropdown__symbol text-center">
-													<span class="ml-auto currency-display-component__text h6"><?= WebApp::si_formatter($balance_gas) ?></span>
-													<small class="currency-display-component__suffix"><?= $node->blockchain->symbol ?></small>
-												</div>
-
-
 											</div>
 										</div>
 									</div>

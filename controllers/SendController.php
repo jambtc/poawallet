@@ -245,7 +245,7 @@ class SendController extends Controller
 		$expiration_timestamp = $timestamp + $totalseconds; //DEFAULT = 15 MINUTES
 
 		//$rate = $this->getFiatRate(); // al momento il token è peggato 1/1 sull'euro
-		$rate = 1; //eth::getFiatRate('token'); //
+		// $rate = 1; //eth::getFiatRate('token'); //
 
 		$tokens = new Transactions;
 		$tokens->id_user = Yii::$app->user->id;
@@ -369,13 +369,15 @@ class SendController extends Controller
 			}
 
 			//adesso posso uscire CON IL JSON DA REGISTRARE NEL SW.
+			$balance = $ERC20->tokenBalance($tokens->from_address);
 			$data = [
 				'id' => $_POST['id'], //NECESSARIO PER IL SALVATAGGIO IN  indexedDB quando ritorna al Service Worker
 				'status' => $tokens->status,
 				'success' => true,
 				'row' => $WebApp->showTransactionRow($tokens,$tokens->from_address,false,'send'),
-				'balance' => $ERC20->tokenBalance($tokens->from_address),
+				'balance' => $balance,
 				'pushoptions' => $pushOptions,
+				'formatted_balance' => $WebApp->si_formatter($balance),
 			];
 
 		}
