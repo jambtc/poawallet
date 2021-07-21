@@ -206,7 +206,7 @@ class WebApp extends Component
 			# Don't know how to classify this value
 		    return $number;
 		}
-		$scaled = round($number / $classifier['scalar'],4);
+		$scaled = round($number / $classifier['scalar'], 3);
 
 		if ($style == 'short'){
 			return $scaled.' '.$classifier['short_suffix'];
