@@ -116,14 +116,18 @@ class BlockchainController extends Controller
 		$timeToComplete = 0;
 		$searchBlock = $ethTxsStatus->blocknumber;
 
+		// echo $wallets->blocknumber;
+		// exit;
+
 		$ethtxs = Ethtxs::find()
             ->orwhere(['=','txfrom', $fromAddress])
             ->orwhere(['=','txto', $fromAddress])
-			//->andWhere(['>','blocknumber',$searchBlock])
+			->andWhere(['>=','dec_blocknumber',hexdec($wallets->blocknumber)])
             ->all();
 
+		// echo '<pre>'.print_r($ethtxs,true).'</pre>';
+		// exit;
 		foreach ($ethtxs as $data){
-			// echo '<pre>'.print_r($data,true).'</pre>';
 			// opero solo se è una transazione token
 			if ($data->contract_to != ''){
 				$smartContracts = SmartContracts::find()->where(['smart_contract_address'=>$data->contract_to])->one();
@@ -320,7 +324,7 @@ class BlockchainController extends Controller
 		// Inizio il ciclo sui blocchi
 		for ($x=0; $x <= $behind_blocks; $x++)
 		{
-			$transactions = [];
+			//$transactions = [];
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );

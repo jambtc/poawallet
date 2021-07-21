@@ -3,12 +3,10 @@ namespace app\daemons;
 
 use Yii;
 use yii\base\Model;
-use yii\db\Query;
 use app\models\Blockchains;
 use app\models\EthtxsStatus;
 use app\models\Ethtxs;
 use app\models\SmartContracts;
-
 
 class EthereumTransactions
 {
@@ -134,10 +132,7 @@ class EthereumTransactions
         					 // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
         					foreach ($transactions as $idx => $trans)
         					{
-                                $this->log("transazione: <pre>".print_r($trans,true)."</pre>\n");
-                                //die();
-
-
+                                //$this->log("transazione: <pre>".print_r($trans,true)."</pre>\n");
                                 $inputinfo = $trans->input;
                                 $inputinit = substr($inputinfo,0,10);
 
@@ -197,6 +192,7 @@ class EthereumTransactions
                                     $ethtxs->gas = $gas;
                                     $ethtxs->gasprice = $gasprice;
                                     $ethtxs->blocknumber = $block->number;
+                                    $ethtxs->dec_blocknumber = hexdec($block->number);
                                     $ethtxs->txhash = $txhash;
                                     $ethtxs->value = $value;
                                     $ethtxs->contract_to = $contract_to;
