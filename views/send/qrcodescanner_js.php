@@ -9,9 +9,18 @@
     console.log('[QRCode result]',result);
 
     var res = extractImport(result);
+    console.log('[QRCode res]',res);
 
     $('#sendform-to').val(res.address);
     $('#sendform-amount').val(res.amount);
+    if (res.amount != ''){
+        $('#sendform-amount').prop('readonly','readonly');
+    }
+    $('#sendform-memo').val(res.message);
+    if (res.message != ''){
+        $('#sendform-memo').prop('readonly','readonly');
+    }
+
     $('#cameraPopup').hide();
     scanner.stop();
   }
@@ -19,16 +28,23 @@
   // estrae un eventuale importo dal qrcode
   function extractImport(result){
     var str = result;
-    var spl = str.split("?",2);
+    var spl = str.split("&",3);
+
+    console.log('[QRCode split]',spl);
 
     if (typeof spl[1] !== "undefined"){
-    // if (spl[1].length != 'undefined'){
       var amount = spl[1].split("=",2);
       spl[1] = amount[1];
     }else{
       spl[1] = '';
     }
-    var ret = {'address':spl[0],'amount':spl[1]};
+    if (typeof spl[2] !== "undefined"){
+      var memo = spl[2].split("=",2);
+      spl[2] = memo[1];
+    }else{
+      spl[2] = '';
+    }
+    var ret = {'address':spl[0],'amount':spl[1],'message':spl[2]};
     return ret;
   }
 	const scanner = new QrScanner(video, result => setResult(camQrResult, result));

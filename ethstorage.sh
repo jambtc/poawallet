@@ -9,4 +9,4 @@ systemctl status ethstorage.service
 echo
 echo
 echo To view ethstorage status digit: "systemctl status ethstorage.service"
-echo To view journal digit: "journalctl -u ethstorage"
+echo To view journal digit: "journalctl -fu ethstorage"
