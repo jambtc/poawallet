@@ -37,7 +37,8 @@ $(function () {
             });
     } else {
         console.warn('[push] Push messaging is not supported');
-        pushButtonModalText.textContent = Yii.t('js','Push Not Supported');
+        $(pushButtonModal).removeClass('sweet-check');
+        pushButtonModalText.textContent = 'Push Not Supported';
     }
 
 

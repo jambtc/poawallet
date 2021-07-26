@@ -116,13 +116,18 @@ class BlockchainController extends Controller
 		$timeToComplete = 0;
 		$searchBlock = $ethTxsStatus->blocknumber;
 
+		// echo $wallets->blocknumber;
+		// exit;
+
 		$ethtxs = Ethtxs::find()
             ->orwhere(['=','txfrom', $fromAddress])
             ->orwhere(['=','txto', $fromAddress])
+			->andWhere(['>=','dec_blocknumber',hexdec($wallets->blocknumber)])
             ->all();
 
+		// echo '<pre>'.print_r($ethtxs,true).'</pre>';
+		// exit;
 		foreach ($ethtxs as $data){
-			// echo '<pre>'.print_r($data,true).'</pre>';
 			// opero solo se è una transazione token
 			if ($data->contract_to != ''){
 				$smartContracts = SmartContracts::find()->where(['smart_contract_address'=>$data->contract_to])->one();
@@ -139,7 +144,22 @@ class BlockchainController extends Controller
 						'userid' => $user_id,
 						'smartContracts' => $smartContracts,
 						'data' => $data,
-						'fromAddress' => $fromAddress
+						'fromAddress' => $fromAddress,
+						'tokens' => null,
+						'receiver' => true,
+						'sender' => true,
+					]);
+				}else{
+					// ho trovato la tx in db ma non ho ancora
+					// aggiornato il ricevente...
+					$this->saveAndSendPushMessages([
+						'userid' => $user_id,
+						'smartContracts' => $smartContracts,
+						'data' => $data,
+						'fromAddress' => $fromAddress,
+						'tokens' => $tokens,
+						'receiver' => ($tokens->token_received == 0) ? true : false,
+						'sender' => ($tokens->status == 'new') ? true : false,
 					]);
 				}
 			}
@@ -172,10 +192,10 @@ class BlockchainController extends Controller
 	   	return Json::encode($return);
 	}
 
-	private function getChainBlock($userid,$number='latest'){
+	private function getChainBlock($userid,$number='latest',$details=false){
 		$ERC20 = new Yii::$app->Erc20($userid);
 		while (true){
-			$blockInfo = $ERC20->getBlockInfo($number);
+			$blockInfo = $ERC20->getBlockInfo($number,$details);
 			if (null !== $blockInfo){
 				return $blockInfo;
 				break;
@@ -185,73 +205,104 @@ class BlockchainController extends Controller
 
 
 	private function saveAndSendPushMessages($array){
-		$amount = $array['data']->contract_value / pow(10, $array['smartContracts']->decimals);
+		// echo '<pre>'.print_r($array,true).'</pre>';
+		// exit;
+		$donothing = false;
+		$decimals = $array['smartContracts']->decimals;
 
-		$tokens = new Transactions;
-		$tokens->id_user = $array['userid'];
-		$tokens->status	= 'complete';
-		$tokens->type	= 'token';
-		$tokens->id_smart_contract = $array['smartContracts']->id; //$settings->smartContract->id;
-		$tokens->token_price	= $amount;
-		$tokens->token_received	= $amount;
-		$tokens->invoice_timestamp = $array['data']->timestamp;
-		$tokens->expiration_timestamp = $array['data']->timestamp + 60*15;
-		$tokens->from_address = $array['data']->txfrom;
-		$tokens->to_address = $array['data']->txto;
-		$tokens->blocknumber = $array['data']->blocknumber;
-		$tokens->txhash = $array['data']->txhash;
-		$tokens->message = '';
+		$amount = $array['data']->contract_value / pow(10, $decimals);
+		// echo '<pre>'.print_r($amount,true).'</pre>';
+		// exit;
+		// $amount = $array['data']->contract_value / pow(10, $array['smartContracts']->decimals);
+		$sender_notification = $array['sender'];
+		$receiver_notification = $array['receiver'];
+
+		if (null === $array['tokens']){
+			$tokens = new Transactions;
+			$tokens->id_user = $array['userid'];
+			$tokens->status	= 'complete';
+			$tokens->type	= 'token';
+			$tokens->id_smart_contract = $array['smartContracts']->id; //$settings->smartContract->id;
+			$tokens->token_price	= $amount;
+			$tokens->token_received	= $amount;
+			$tokens->invoice_timestamp = $array['data']->timestamp;
+			$tokens->expiration_timestamp = $array['data']->timestamp + 60*15;
+			$tokens->from_address = $array['data']->txfrom;
+			$tokens->to_address = $array['data']->txto;
+			$tokens->blocknumber = $array['data']->blocknumber;
+			$tokens->txhash = $array['data']->txhash;
+			$tokens->message = '';
+		} else {
+			$tokens = $array['tokens'];
+			if ($tokens->token_received == 0){
+				$tokens->status	= 'complete';
+				$tokens->token_received	= $amount;
+			} else {
+				$donothing = true;
+			}
+		}
 		$tokens->save();
 
-		$dateLN = date("d M `y",$tokens->invoice_timestamp);
-		$timeLN = date("H:i:s",$tokens->invoice_timestamp);
+		if (!$donothing){
+			$dateLN = date("d M `y",$tokens->invoice_timestamp);
+			$timeLN = date("H:i:s",$tokens->invoice_timestamp);
 
-		$id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
+			$id_user_from = MPWallets::find()->userIdFromAddress($tokens->from_address);
 
-		if ($id_user_from !== null){
-			// notifica per chi ha inviato (from_address)
-			$notification = [
-				'type' => 'token',
-				'id_user' => $id_user_from,
-				'status' => 'complete',
-				'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
-					'amount' => WebApp::si_formatter($tokens->token_price),
-					'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
-				]),
-				'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
-				'timestamp' => $tokens->invoice_timestamp,
-				'price' => $tokens->token_price,
-			];
+			if ($id_user_from !== null && $sender_notification == true){
+				// notifica per chi ha inviato (from_address)
+				$notification = [
+					'type' => 'token',
+					'id_user' => $id_user_from,
+					'status' => $tokens->status,
+					'description' => Yii::t('app','A transaction you sent of {amount} {symbol} has been completed.',[
+						'amount' => WebApp::si_formatter($tokens->token_price),
+						'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
+					]),
+					'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
+					'timestamp' => $tokens->invoice_timestamp,
+					'price' => $tokens->token_price,
+				];
 
-			$messages= Messages::push($notification);
-		}
-		// notifica per chi riceve (to_address)
-		$id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
-		if ($id_user_to !== null){
-			$notification['id_user'] = $id_user_to;
-			$notification['description'] = Yii::t('app','You received a new transaction of {amount} {symbol}.',[
-				'amount' => WebApp::si_formatter($tokens->token_price),
-				'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
+				$messages= Messages::push($notification);
+			}
+			// notifica per chi riceve (to_address)
+			$id_user_to = MPWallets::find()->userIdFromAddress($tokens->to_address);
+			if ($id_user_to !== null && $receiver_notification == true){
+				$notification = [
+					'type' => 'token',
+					'id_user' => $id_user_to,
+					'status' => $tokens->status,
+					'description' => Yii::t('app','You received a new transaction of {amount} {symbol}.',[
+						'amount' => WebApp::si_formatter($tokens->token_price),
+						'symbol' => $array['smartContracts']->symbol, //$settings->smartContract->symbol,
+					]),
+					'url' => Url::to(['/transactions/view','id'=>WebApp::encrypt($tokens->id)],true),
+					'timestamp' => $tokens->invoice_timestamp,
+					'price' => $tokens->token_price,
+				];
+				$messages= Messages::push($notification);
+			}
+
+			$ERC20 = new Yii::$app->Erc20($array['userid']);
+
+			// imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
+			$this->setTransactionsFound([
+				'id_token' => $tokens->id,
+				'pushoptions' => $messages ?? null,
+				'balance' => WebApp::si_formatter($ERC20->tokenBalance($array['fromAddress'])),
+				'row' => WebApp::showTransactionRow($tokens,$array['fromAddress'],true),
 			]);
-			$messages= Messages::push($notification);
+
 		}
 
-		$ERC20 = new Yii::$app->Erc20($array['userid']);
-
-		// imposto l'array contenente le transazioni e che sarà restituito alla funzione chiamante
-		$this->setTransactionsFound([
-			'id_token' => $tokens->id,
-			'pushoptions' => $messages,
-			'balance' => WebApp::si_formatter($ERC20->tokenBalance($array['fromAddress'])),
-			'row' => WebApp::showTransactionRow($tokens,$array['fromAddress'],true),
-		]);
 	}
 
 	// verifica eventuali transazioni dell'utente a partire dal getBlockNumber
 	// dell'utente fino ad arrivare all'ultimo blocco della blockchain
 	public function actionCheckLatest()
 	{
-		set_time_limit(30); //imposto il time limit unlimited
+		set_time_limit(60); //imposto il time limit unlimited
 
 		$user_id = Yii::$app->user->id;
 
@@ -262,53 +313,31 @@ class BlockchainController extends Controller
 			return Json::encode(['success'=>false]);
 		}
 
+		$behind_blocks = 15;
+
 		$fromAddress = $wallets->wallet_address;
-
-		//$SEARCH_ADDRESS = strtoupper($wallets->wallet_address);
-
-		//Carico i parametri della webapp
-		// $settings = Settings::poa();
-		// $ERC20 = new Yii::$app->Erc20($user_id);
-
-		// $blockLatest = $ERC20->getBlockInfo();
 		$blockLatest = $this->getChainBlock($user_id);
-
-		// if (!is_object($blockLatest))
-		// 	return Json::encode(['success'=>false]);
-
 		$chainBlock = $blockLatest->number;
-		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) -14 );
 
-		// // carico tutti gli smartcontract dell'utente
-		// $smartContracts = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
-		// $smartContractsArray = ArrayHelper::map($smartContracts, 'id',
-		// 		function($data) {
-		// 			return strtoupper($data->smart_contract_address);
-		// 		}
-		// );
-		// foreach ($smartContracts as $key => $value) {
-		// 	// code...
-		// 	$smartContractsById[$value->id] = $value;
-		// }
+		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) - $behind_blocks );
 
 		// Inizio il ciclo sui blocchi
-		for ($x=0; $x <= 15; $x++)
+		for ($x=0; $x <= $behind_blocks; $x++)
 		{
+			//$transactions = [];
 			if ((hexdec($savedBlock)+$x) <= hexdec($chainBlock)){
-				//$transactions = [];
 				//somma del valore del blocco in decimali
 				$searchBlock = '0x'. dechex (hexdec($savedBlock) + $x );
 			   	// ricerco le informazioni del blocco tramite il suo numero
-				// $block = $ERC20->getBlockInfo($searchBlock,true);
-				$block = $this->getChainBlock($user_id, $searchBlock);
-
-				// if (is_object($block))
-				// 	$transactions = $block->transactions;
-
+				$block = $this->getChainBlock($user_id, $searchBlock, true);
+				$transactions = $block->transactions;
+				// echo '\r\n<br>search: '.$searchBlock.', chain: '.$chainBlock;
 
 				if (!empty($transactions))
 				{
-					// fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : La transazione non è vuota\n");
+					// echo '<pre>'.print_r($transactions,true).'</pre>';
+					// exit;
+
 					foreach ($transactions as $idx => $trans)
 					{
 						$inputinfo = $trans->input;
@@ -326,17 +355,17 @@ class BlockchainController extends Controller
 								continue;
 							}
 
-
-							$data = [
-								'contract_value' => hexdec(substr($inputinfo,-64)),
+							$data = (object)[
+								'contract_value' => hexdec('0x'.substr($inputinfo,-64)),
 								'timestamp' => hexdec($block->timestamp),
 								'txfrom' => $trans->from,
 								'txto' => '0x'.substr($inputinfo,34,40),
 								'blocknumber' => $block->number,
 								'txhash' => $trans->hash,
 							];
+
 							// cerco la transazione nella tabella transactions tramite txhash
-							$tokens = Transactions::find()->findByHash($txhash);
+							$tokens = Transactions::find()->findByHash($trans->hash);
 
 							if (null === $tokens){
 								// ho trovato una transazinoe che non è nel DB.
@@ -344,8 +373,25 @@ class BlockchainController extends Controller
 									'userid' => $user_id,
 									'smartContracts' => $smartContracts,
 									'data' => $data,
-									'fromAddress' => $fromAddress
+									'fromAddress' => $fromAddress,
+									'tokens' => null,
+									'receiver' => true,
+									'sender' => true,
 								]);
+							}else{
+								// ho trovato la tx in db ma non ho ancora
+								// aggiornato il ricevente...
+								$this->saveAndSendPushMessages([
+									'userid' => $user_id,
+									'smartContracts' => $smartContracts,
+									'data' => $data,
+									'fromAddress' => $fromAddress,
+									'tokens' => $tokens,
+									'receiver' => ($tokens->token_received == 0) ? true : false,
+									'sender' => ($tokens->status == 'new') ? true : false,
+								]);
+
+
 							}
 
 						}
@@ -361,6 +407,7 @@ class BlockchainController extends Controller
 			   break;
 		   }
 	   } // ciclo for
+	   // exit;
 	   // // fwrite($myfile, date('Y/m/d h:i:s a', time()) . " : Searching for transactions. Latest block #: $searchBlock: \n");
 
 	   $difference = hexdec($chainBlock) - hexdec($searchBlock);

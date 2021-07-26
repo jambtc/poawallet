@@ -142,7 +142,7 @@ include ('manage-push_js.php');
 		<div class="list-item">
 			<i class="far fa-comment text-primary"></i>
 			<em class="seperate"></em>
-			<span class="list-item-title"><?php echo Yii::t('app','PUSH notifications');?> <small class="text-muted"></small></span>
+			<span class="list-item-title js-push-btn-modal-text"><?php echo Yii::t('app','PUSH notifications');?> <small class="text-muted"></small></span>
 
 			<div class="js-push-btn-modal sweet-check "
 					data-toggle="modal"

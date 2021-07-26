@@ -261,6 +261,10 @@ var erc20 = {
 			$('#total-balance').addClass('animationBalanceIn');
 			$('.star-total-balance').addClass('animationStar');
 			$('#total-balance').text(data[0].balance);
+
+			$('.js-initial-amount').hide();
+			$('.js-final-amount').html(data[0].formatted_balance).show().addClass('animationBalanceIn');
+
 			console.log('['+type+' push options]', data[0].pushoptions);
 			console.log('['+type+' push options title]', data[0].pushoptions.title);
 

@@ -9,11 +9,13 @@ use yii\bootstrap4\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model app\models\Nodes */
 
+// echo '<pre>'.print_r($model,true).'</pre>';
+// exit;
 
-$blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all(), 'id', 'denomination');
+$blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>$model->id_user])->all(), 'id', 'denomination');
 $smartcontract = ArrayHelper::map(SmartContracts::find()
-    ->andWhere(['id_user'=>Yii::$app->user->id])
     ->andWhere(['id_blockchain'=>$model->id_blockchain])
+    //->andWhere(['id_user'=>$model->id_user])
     ->all(), 'id', 'denomination');
 
 include ('_formjs.php');
