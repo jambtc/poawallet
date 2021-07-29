@@ -462,10 +462,10 @@ class Erc20 extends Component
                 'gas' => '0x200b20', // gas necessario per la transazione
                 'gasPrice' => '1000', // gasPrice giusto?
                 'value' => 1 * pow(10, 18),
-                'chainId' => $settings->chain_id,
+                'chainId' => $settings->blockchain->chain_id,
                 'data' =>  '0x0', // non ci sono dati per contratto
             ]);
-            $transaction->offsetSet('chainId', $settings->chain_id);
+            $transaction->offsetSet('chainId', $settings->blockchain->chain_id);
             $signed_transaction = $transaction->sign($prv_key); //
 
             $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
