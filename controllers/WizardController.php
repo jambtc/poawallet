@@ -16,15 +16,15 @@ use yii\db\ActiveRecord;
 
 use app\models\WizardWalletForm;
 use app\models\MPWallets;
+use app\models\Nodes;
 
 use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
 use app\components\WebApp;
+use app\components\Networks;
 
-// Yii::$classMap['settings'] = Yii::getAlias('@packages').'/settings.php';
-// Yii::$classMap['webapp'] = Yii::getAlias('@packages').'/webapp.php';
 
 class WizardController extends Controller
 {
@@ -101,43 +101,43 @@ class WizardController extends Controller
 	public function actionIndex()
  	{
 		$this->layout = 'wizard';
- 		return $this->render('index');
+		$formModel = new WizardWalletForm; //form di input dei dati
+
+		$defaultNetworkExist = false;
+		if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
+			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
+			// oppure non corrisponde a quello salvato in indexedDB
+			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
+			$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
+
+			if(null === $boltWallet) {
+				$boltWallet = new MPWallets;
+				$boltWallet->id_user = Yii::$app->user->id;
+				if (null === $node){
+					$defaultNetworkExist = true;
+					$node = Networks::createDefaults();
+				}
+				$boltWallet->blocknumber = $this->getLatestBlockNumber();
+			}
+			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
+
+			if ($boltWallet->save()){
+				if (null === $node && $defaultNetworkExist === false){
+					$node = Networks::createDefaults();
+				}
+				return $this->redirect(['/wallet/index']);
+			} else {
+				var_dump( $boltWallet->getErrors());
+				exit;
+			}
+    	}
+
+		return $this->render('index', [
+			'formModel' => $formModel,
+		]);
  	}
 
-	/**
-	 * Show Restore old wallet page
-	 */
-	// public function actionRestore()
- 	// {
-	// 	$this->layout = 'wizard';
-	//
-	// 	$formModel = new WizardWalletForm; //form di input dei dati
-	//
-	// 	if (Yii::$app->request->isAjax && $formModel->load(Yii::$app->request->post())) {
-	// 	    Yii::$app->response->format = Response::FORMAT_JSON;
-	// 		// echo '<pre>'.print_r(ActiveForm::validate($sendTokenForm),true).'</pre>';
-	// 	    return ActiveForm::validate($formModel);
-	// 	}
-	//
-	// 	if ($formModel->load(Yii::$app->request->post()) && $formModel->validate()) {
-	// 		// salvo l'indirizzo in tabella
-	// 		$boltWallet = new MPWallets;
-	// 		$boltWallet->id_user = Yii::$app->user->identity->id;
-	// 		$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];
-	// 		$boltWallet->blocknumber = '0x0';
-	//
-	// 		if ($boltWallet->save())
-    //     		return $this->redirect(['/wallet/index']);
-	// 		else
-	// 			var_dump( $boltWallet->getErrors());
-	//
-	// 		exit;
-    // 	}
-	//
- 	// 	return $this->render('restore', [
-	// 		'formModel' => $formModel,
-	// 	]);
- 	// }
+
 
 	private static function json ($data)
 	{

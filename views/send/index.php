@@ -48,7 +48,7 @@ $sendForm->from = $fromAddress;
 							<?= $node->blockchain->denomination ?>
 						</a>
 					</div>
-					<div class="ref-card c11">
+					<div class="ref-card c11" style="min-width:150px;">
 						<div class="d-flex flex-column">
 							<div class="">
 								<div class="d-flex flex-row">

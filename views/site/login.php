@@ -12,16 +12,21 @@ use yii\web\View;
 use jambtc\oauthtelegram;
 use app\components\Settings;
 $checkTelegramAuthorization = Url::to(['oauthtelegram/check-authorization']);
-
-
 $this->title = 'Login';
 ?>
 <div class="container h-100">
   <div class="row h-100 justify-content-center align-items-center">
     <div class="site-login">
-      <div class="body-content dash-balance jumbotron pb-5">
-          <div class="text-center">
-              <img src="css/images/logo.png" alt="" width="220">
+      <div class="body-content dash-balance jumbotron pb-2">
+          <div class="d-flex">
+              <img src="css/images/logo.png" alt="" width="120">
+              <h2 style="color: #ffffff;
+                /* font-family: 'Lato', sans-serif; */
+                font-size: 50px;
+                font-weight: 300;
+                line-height: 58px;
+                margin: 0 0 0 20px;
+                "><?= Yii::$app->name ?> </h2>
           </div>
           <div class="form-divider"></div>
 
@@ -48,7 +53,7 @@ $this->title = 'Login';
           ?>
           <?php $fieldOptions2 = [
               'inputTemplate' => '
-                                  <div class="form-row-group with-icons">
+                                  <div class="form-row-group mt-2 with-icons">
                                       <div class="form-row no-padding">
                                           <i class="fa fa-lock"></i>
                                           {input}
@@ -70,7 +75,7 @@ $this->title = 'Login';
 
 
 
-        <div class="form-group row">
+        <div class="form-group row mt-2">
             <div class="col-sm-12">
                 <?= Html::submitButton(Yii::t('app','Login'), ['class' => 'btn btn-block btn-primary', 'name' => 'login-button']) ?>
             </div>

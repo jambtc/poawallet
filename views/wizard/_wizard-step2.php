@@ -3,10 +3,10 @@ use yii\helpers\Url;
 ?>
 <div class="jumbotron jumbotron-fluid">
     <p class="lead">
-        <?= Yii::t('app','So, 12 words will be chosen that uniquely identify your wallet. The merit is of cryptography, in particular of the hierarchical deterministic concept, which, thanks to the use of some mathematical functions, allows users, starting from the seed, to recover everything.');  ?>
+        <?= Yii::t('app','So, 12 words will be chosen that uniquely identify your wallet.');  ?>
     </p>
     <p class="lead">
-        <?php echo Yii::t('app','These random words will be unique in the world and will allow you to recover the contents of your wallet even in case of loss of your device.'); ?>
+        <?php echo Yii::t('app','The combination of these random words is unique in the world and will allow you to recover the contents of your wallet even in case of loss of your device.'); ?>
     </p>
 
     <div class="form-divider"></div>
