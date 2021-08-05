@@ -206,11 +206,16 @@ class Erc20 extends Component
         $erc20abi = $settings->smartContract->contractType;
 		$this->setDecimals($settings->smartContract->decimals);
 
+        // echo '<pre>'.print_r($erc20abi,true).'</pre>';
+        // exit;
+
 		$utils = $web3->utils;
 		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
 		$contract->at($settings->smartContract->smart_contract_address)->call('balanceOf', $fromAddress, [
 			'from' => $fromAddress
 		], function ($err, $result) use ($contract, $utils) {
+
+
 			if ($err !== null) {
 				throw new HttpException(404,$err->getMessage());
 			}
@@ -462,10 +467,10 @@ class Erc20 extends Component
 
             // preparing items
             $fromAccount = $sealer_account; // sealer
-            $amount = 1;
+            // $amount = 1;
             $toAccount = $address;
-            $hex = dechex(21004);
-            $gas = '0x'.$hex;
+            // $hex = dechex(21000);
+            // $gas = '0x'.$hex;
 
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
@@ -475,7 +480,7 @@ class Erc20 extends Component
                 'to' => $toAccount, //indirizzo commerciante
                 'gas' => '0x200b20', // gas necessario per la transazione
                 'gasPrice' => '1000', // gasPrice giusto?
-                'value' => 1 * pow(10, 18),
+                'value' => '0xDE0B6B3A7640000', //. $amount * pow(10, 18), equivale a 1 pow(10,18): 1000000000000000000
                 'chainId' => $settings->blockchain->chain_id,
                 'data' =>  '0x0', // non ci sono dati per contratto
             ]);

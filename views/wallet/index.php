@@ -66,7 +66,8 @@ include ('index_js.php');
                                       </p>
                                       <div>
                                           <span class="h5" id="total-balance_gas"><?= WebApp::si_formatter($balance_gas) ?></span>
-                                          <!-- <span id="total-balance_gas"><?= $balance_gas ?></span> -->
+
+                                          <!-- <span id="total-balance_gas2"><?= $balance_gas ?></span> -->
                                           <small><?= $node->blockchain->symbol ?></small>
                                       </div>
                                   </p>
@@ -131,4 +132,4 @@ include ('index_js.php');
         ],
     ]); ?>
 
-    </section>
+</section>

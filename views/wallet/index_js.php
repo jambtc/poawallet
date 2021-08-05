@@ -40,7 +40,7 @@ $(function(){
             if (typeof data[0] !== 'undefined') {
                 for (var dt of data) {
                     if (null === dt.id){
-                        console.log('1');
+                        console.log('[Wallet IndexedDB]: 1');
                         window.location.href = yiiOptions.initURL;
                         break;
                     }else{
@@ -69,13 +69,13 @@ $(function(){
                         console.log('[Wallet Address recuperato]', my_address);
                         break;
                     }else{
-                        console.log('2');
+                        console.log('[Wallet IndexedDB]: 2');
                         window.location.href = yiiOptions.initURL;
                     }
 
                 }
             }else{
-                console.log('3');
+                console.log('[Wallet IndexedDB]: 3');
                 window.location.href = yiiOptions.initURL;
 
             }
@@ -84,7 +84,7 @@ $(function(){
         .then(function() {
             console.log('[is isEquel true? ',isEquel);
             if (!isEquel){
-                console.log('4');
+                console.log('[Wallet IndexedDB]: 4');
                 window.location.href = yiiOptions.initURL;
             }
         })

@@ -128,6 +128,7 @@ class WalletController extends Controller
 			return $this->redirect(['wizard/index','token' => $string]);
 		}
 
+
 		$searchModel = new TransactionsSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		$dataProvider->setPagination(['pageSize' => 5]);
@@ -137,6 +138,14 @@ class WalletController extends Controller
 					->orwhere(['=','from_address', $fromAddress]);
 
         // $dataProvider->query->andwhere(['=','id_smart_contract', $node->id_smart_contract]);
+
+		// $ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
+		//
+		// $balance =
+		// echo '<pre>'.print_r($ERC20->tokenBalance($fromAddress),true).'</pre>';
+		// exit;
+
+
 
 		return $this->render('index', [
 				'searchModel' => $searchModel,

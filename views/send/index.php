@@ -66,6 +66,7 @@ $sendForm->from = $fromAddress;
 										<small class="ml-2"><i class="fab fa-ethereum fa-sm"></i></small>
 									</span>
 									<span class="h5 text-dark" id="total-balance_gas"><?= WebApp::si_formatter($balance_gas) ?></span>
+									<!-- <span id="total-balance_gas2"><?= $balance_gas ?></span> -->
 									<small class="ml-1"><?= $node->blockchain->symbol ?></small>
 
 								</div>
