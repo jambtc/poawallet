@@ -244,7 +244,6 @@ class Erc20 extends Component
     public function gasBalance($address)
     {
         $settings = Settings::poa();
-        // $web3 = new Web3($settings->blockchain->url);
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($settings->blockchain->url)));
 
         //recupero il balance
@@ -431,19 +430,34 @@ class Erc20 extends Component
     public function loadGas($address)
     {
         $settings = Settings::poa();
-        // $web3 = new Web3($settings->blockchain->url);
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($settings->blockchain->url)));
-
         $response = null;
-        if (self::gasBalance($address) <= 0) {
-            if ($settings->blockchain->id == 2){
-                $sealer_account = Yii::$app->params['sealer_account_2'];
-                $prv_key = Yii::$app->params['sealer_prvkey_2'];
-            } else if ($settings->blockchain->id == 3) {
+
+        // echo '<pre>'.print_r(self::gasBalance($address),true).'</pre>';
+        // echo '<pre>'.print_r($settings->blockchain,true).'</pre>';exit;
+
+        $balance = self::gasBalance($address);
+        $limit = 0.1;
+
+        // if ($balance <= $limit){
+        //     echo "balance: ".WebApp::si_formatter($balance)." è minore di ".$limit;
+        // } else {
+        //     echo "balance: ".WebApp::si_formatter($balance)." è MAGGIORE di ".$limit;
+        // }
+        // exit;
+        //
+        if ($balance <= $limit) {
+            if ($settings->blockchain->zerogas == 1){
+
+            // HO LASCIATO SOLO IL SEALER DI FIDELITY!
+            //if ($settings->blockchain->id == 2){
                 $sealer_account = Yii::$app->params['sealer_account_3'];
                 $prv_key = Yii::$app->params['sealer_prvkey_3'];
+            //} else if ($settings->blockchain->id == 3) {
+            //    $sealer_account = Yii::$app->params['sealer_account_3'];
+            //    $prv_key = Yii::$app->params['sealer_prvkey_3'];
             } else {
-                return self::gasBalance($address);
+                return $balance;
             }
 
             // preparing items
@@ -462,10 +476,10 @@ class Erc20 extends Component
                 'gas' => '0x200b20', // gas necessario per la transazione
                 'gasPrice' => '1000', // gasPrice giusto?
                 'value' => 1 * pow(10, 18),
-                'chainId' => $settings->chain_id,
+                'chainId' => $settings->blockchain->chain_id,
                 'data' =>  '0x0', // non ci sono dati per contratto
             ]);
-            $transaction->offsetSet('chainId', $settings->chain_id);
+            $transaction->offsetSet('chainId', $settings->blockchain->chain_id);
             $signed_transaction = $transaction->sign($prv_key); //
 
             $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
