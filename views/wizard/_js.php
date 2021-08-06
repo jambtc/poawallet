@@ -1,13 +1,12 @@
 <?php
-
 use yii\helpers\Url;
 use yii\web\View;
 
 
 $options = [
-    'invalidSeedMessage' => Yii::t('app','Invalid seed!'),
-    'invalidSeed12Word' => Yii::t('app','Seed hasn\'t 12 words! Words inserted are: '),
-    'validSeedMessage' => Yii::t('app','Seed is correct!'),
+    // 'invalidSeedMessage' => Yii::t('app','Invalid seed!'),
+    // 'invalidSeed12Word' => Yii::t('app','Seed hasn\'t 12 words! Words inserted are: '),
+    // 'validSeedMessage' => Yii::t('app','Seed is correct!'),
     'spinner' => '<div class="button-spinner spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>',
     'baseUrl' => Yii::$app->request->baseUrl,
     'language' => Yii::$app->language,
@@ -21,7 +20,6 @@ $this->registerJs(
 );
 
 
-
 $wallet_spawn = <<<JS
 
 $(function () {
@@ -32,79 +30,33 @@ $(function () {
 
     var wizardForm = document.querySelector('#wizard-form');
     var submitButton = document.querySelector('.seed-submit');
-    var backButton = document.querySelector('.btn-back');
-    var seedField = document.querySelector('#wizardwalletform-seed');
-
-
-    // evita di copiare e incollare il seed
-    $('.no-copypaste').bind('copy paste cut drag drop', function (e) {
-      e.preventDefault();
-    });
-
-
-    seedField.addEventListener('input', function(e) {
-        var insertedSeed = $.trim(e.target.value).toLowerCase();
-        console.log('[verify]:', insertedSeed);
-        if (WordCount(insertedSeed) != 12 ){
-          $('#seed-error').show().text(yiiOptions.invalidSeed12Word+WordCount(insertedSeed) );
-          return;
-        }
-
-        if (!(isSeedValid(insertedSeed)) ){
-          $('#seed-error').show().text(yiiOptions.invalidSeedMessage);
-          return;
-        }
-        $('#seed-error').removeClass('alert-danger');
-        $('#seed-error').addClass('alert-success');
-        $('#seed-error').show().text(yiiOptions.validSeedMessage);
-        $('#seed-submit').prop('disabled', false);
-        $('#seed-submit').removeClass('disabled');
-    });
-
-
-
-    backButton.addEventListener('click', function(event){
-        $('#seedConfirm').fadeOut('fast');
-    });
 
     submitButton.addEventListener('click', function(event){
         event.preventDefault();
         event.stopPropagation();
 
-        seed = $.trim($('#wizardwalletform-seed').val()).toLowerCase();
-        if (WordCount(seed) != 12 || !(isSeedValid(seed)) ){
-            console.log('[Restore]: seed non valido', seed);
-            $('#seed-error').show().text(yiiOptions.invalidSeedMEssage);
-            return;
-        }
-        $('#seed-error').hide().text('');
+        $('#js-newseed-btn-text').html(yiiOptions.spinner);
 
-        // la password viene generata in automatico dal sistema di 32 caratteri
-        var password = generateEntropy(64);
+        newWallet().then( function(seed) {
+            // password per criptare il seed
+            var password = generateEntropy(64);
 
-        console.log('[Restore]: seed valido', seed);
-        initializeVault(password,seed);
+            console.log('[Restore]: seed valido', seed);
+            initializeVault(password,seed);
+        });
     });
 
-
-	// verifica la validità di un seed
-	function isSeedValid(seed){
-		if (!lw.keystore.isSeedValid(seed))
-			return false;
-	 	else
-			return true;
-	}
 
     /*
      * questa funzione genera il nuovo seed del wallet
      */
-    function newWallet() {
-        $('#seedText').html(yiiOptions.spinner);
-        var password = generateEntropy(64);
-    	seed = lw.keystore.generateRandomSeed(password);
+    var newWallet = async function() {
+        let walletentropy = await generateEntropy(64);
+    	seed = lw.keystore.generateRandomSeed(walletentropy);
 
-    	$('#seedText').html(seed);
-    	$('#seedInput').val(seed);
+    	$('#wizardwalletform-seed').val(seed);
+
+        return await seed;
     }
 
     // adesso salviamo in local storage il seed e la password
@@ -118,9 +70,9 @@ $(function () {
     			'seed': seed
     		},
     		dataType: "json",
-            beforeSend: function() {
-                $('.seed-submit').html(yiiOptions.spinner);
-            },
+            // beforeSend: function() {
+            //     $('.seed-submit').html(yiiOptions.spinner);
+            // },
     		success:function(data){
     			var pwd_crypted  = data.cryptedpass;
     			var seed_crypted  = data.cryptedseed;
@@ -159,7 +111,6 @@ $(function () {
                                     writeData('wallet', walletPost)
                                     .then(function() {
                                         console.log('[Restore]: Saved wallet info in indexedDB', walletPost);
-                                        //$('#cryptConferma').html('<img width=20 src="'+ajax_loader_url+'" alt="'+Yii.t('js','loading...')+'">');
                                     })
                                     .then(function() {
                                         var seedPost = {
@@ -210,10 +161,6 @@ $(function () {
     		deferredPrompt = null;
     	}
     }
-
-
-    newWallet();
-
 
 });
 

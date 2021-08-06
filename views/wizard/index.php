@@ -9,8 +9,8 @@ $this->title = Yii::$app->id;
 
 $form = ActiveForm::begin([
 	'id' => 'wizard-form',
-	'enableAjaxValidation' => true,
-	'enableClientValidation' => false,
+	// 'enableAjaxValidation' => true,
+	// 'enableClientValidation' => false,
 	'layout' => 'horizontal',
 	'fieldConfig' => [
 		'template' => "{label}\n<div class=\"col-lg-12\">{input}</div>\n{error}\n<div class=\"col-lg-8\">{error}</div>",
@@ -19,7 +19,7 @@ $form = ActiveForm::begin([
 
 ]);
 
-
+include ('_js.php');
 
 $wizard_config = [
 	'id' => 'stepwizard',
@@ -115,6 +115,9 @@ $wizard_config = [
         <?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>
 	</div>
 </div>
+
+<?= $form->field($formModel, 'seed')->hiddenInput()->label(false) ?>
+<?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
 
 
 <?php ActiveForm::end(); ?>

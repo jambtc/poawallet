@@ -206,11 +206,16 @@ class Erc20 extends Component
         $erc20abi = $settings->smartContract->contractType;
 		$this->setDecimals($settings->smartContract->decimals);
 
+        // echo '<pre>'.print_r($erc20abi,true).'</pre>';
+        // exit;
+
 		$utils = $web3->utils;
 		$contract = new Contract($web3->provider, $erc20abi->smart_contract_abi);
 		$contract->at($settings->smartContract->smart_contract_address)->call('balanceOf', $fromAddress, [
 			'from' => $fromAddress
 		], function ($err, $result) use ($contract, $utils) {
+
+
 			if ($err !== null) {
 				throw new HttpException(404,$err->getMessage());
 			}
@@ -244,7 +249,6 @@ class Erc20 extends Component
     public function gasBalance($address)
     {
         $settings = Settings::poa();
-        // $web3 = new Web3($settings->blockchain->url);
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($settings->blockchain->url)));
 
         //recupero il balance
@@ -431,27 +435,42 @@ class Erc20 extends Component
     public function loadGas($address)
     {
         $settings = Settings::poa();
-        // $web3 = new Web3($settings->blockchain->url);
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($settings->blockchain->url)));
-
         $response = null;
-        if (self::gasBalance($address) <= 0) {
-            if ($settings->blockchain->id == 2){
-                $sealer_account = Yii::$app->params['sealer_account_2'];
-                $prv_key = Yii::$app->params['sealer_prvkey_2'];
-            } else if ($settings->blockchain->id == 3) {
+
+        // echo '<pre>'.print_r(self::gasBalance($address),true).'</pre>';
+        // echo '<pre>'.print_r($settings->blockchain,true).'</pre>';exit;
+
+        $balance = self::gasBalance($address);
+        $limit = 0.1;
+
+        // if ($balance <= $limit){
+        //     echo "balance: ".WebApp::si_formatter($balance)." è minore di ".$limit;
+        // } else {
+        //     echo "balance: ".WebApp::si_formatter($balance)." è MAGGIORE di ".$limit;
+        // }
+        // exit;
+        //
+        if ($balance <= $limit) {
+            if ($settings->blockchain->zerogas == 1){
+
+            // HO LASCIATO SOLO IL SEALER DI FIDELITY!
+            //if ($settings->blockchain->id == 2){
                 $sealer_account = Yii::$app->params['sealer_account_3'];
                 $prv_key = Yii::$app->params['sealer_prvkey_3'];
+            //} else if ($settings->blockchain->id == 3) {
+            //    $sealer_account = Yii::$app->params['sealer_account_3'];
+            //    $prv_key = Yii::$app->params['sealer_prvkey_3'];
             } else {
-                return self::gasBalance($address);
+                return $balance;
             }
 
             // preparing items
             $fromAccount = $sealer_account; // sealer
-            $amount = 1;
+            // $amount = 1;
             $toAccount = $address;
-            $hex = dechex(21004);
-            $gas = '0x'.$hex;
+            // $hex = dechex(21000);
+            // $gas = '0x'.$hex;
 
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
@@ -461,7 +480,7 @@ class Erc20 extends Component
                 'to' => $toAccount, //indirizzo commerciante
                 'gas' => '0x200b20', // gas necessario per la transazione
                 'gasPrice' => '1000', // gasPrice giusto?
-                'value' => 1 * pow(10, 18),
+                'value' => '0xDE0B6B3A7640000', //. $amount * pow(10, 18), equivale a 1 pow(10,18): 1000000000000000000
                 'chainId' => $settings->blockchain->chain_id,
                 'data' =>  '0x0', // non ci sono dati per contratto
             ]);

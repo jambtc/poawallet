@@ -195,6 +195,8 @@ class SendController extends Controller
 		// se mi trovo sul network POA 2 e 3 inserito di default
 		// nel DB
 		// zerogas => 1
+
+		// echo '<pre>'.print_r($settings->blockchain,true).'</pre>';exit;
 		if ($settings->blockchain->zerogas == 1){
 			$gasBalance = $ERC20->loadGas($fromAccount);
 		} else {

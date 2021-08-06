@@ -579,7 +579,7 @@ div.container{
 	height: 40px;
 	outline: none;
 	line-height: 40px;
-	background-color: #FFF;
+	background-color: transparent;
 
 }
 select.form-element{

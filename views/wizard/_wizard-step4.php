@@ -1,5 +1,7 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
+
 // make restore session id
 $session = Yii::$app->session;
 $string = Yii::$app->security->generateRandomString(32);
@@ -15,7 +17,7 @@ $session->set('token-spawn', $string );
 
     <hr class="my-4">
     <p class="lead">
-        <?php echo Yii::t('app','If you want to generate a new digital wallet, click on the <i><b>"New"</b> </i> button and follow the recommended instructions.');?>
+        <?php echo Yii::t('app','If you want to generate a new digital wallet, click on the <i><b>"New keys"</b> </i> button.');?>
     </p>
     <div class="form-divider"></div>
 
@@ -29,11 +31,22 @@ $session->set('token-spawn', $string );
                 <i class="glyphicon glyphicon-repeat"></i> <?php echo Yii::t('app','Restore');?>
             </button>
         </a>
-        <a href="<?php echo Url::to(['/spawn/index','token' => $string]) ?>" />
+        <!-- <a href="<?php echo Url::to(['/spawn/index','token' => $string]) ?>" />
             <button type="button"  class="btn btn-primary btn-md" >
                 <i class="fas fa-key"></i> <?php echo Yii::t('app','New');?>
             </button>
-        </a>
+        </a> -->
+
+        <div class="float-right">
+                  <?= Html::Button('<i class="fas fa-key"></i> <span id="js-newseed-btn-text">'.Yii::t('app','New keys').'</span>', [
+                  'class' => 'btn btn-success btn-md seed-submit ml-2',
+                  'id' => 'seed-submit',
+                  'data-method' => 'post',
+              ]);
+            ?>
+        </div>
+
+
     </div>
 
 </div>

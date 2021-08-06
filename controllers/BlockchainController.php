@@ -194,11 +194,22 @@ class BlockchainController extends Controller
 
 	private function getChainBlock($userid,$number='latest',$details=false){
 		$ERC20 = new Yii::$app->Erc20($userid);
+		$x = 0;
+		$limit = 30;
 		while (true){
+			$x++;
 			$blockInfo = $ERC20->getBlockInfo($number,$details);
 			if (null !== $blockInfo){
 				return $blockInfo;
-				break;
+				// break;
+			}
+			if ($x > $limit){
+				$return = (object) [
+					'number'=>'0x0000000000000000000000000000000000000000000000000000000000000001',
+					'timestamp' => time(),
+				];
+				return $return;
+				// break;
 			}
 		}
 	}
