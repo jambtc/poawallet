@@ -23,18 +23,18 @@ class m210607_140150_create_standard_smart_contract_values_table extends Migrati
         ]);
 
         // INSERT BINANCE SMART CHAIN DATA
-        $this->insert('standard_smart_contract_values', [
-            'id_blockchain' => 1,
-            'id_contract_type' => 2,
-           'denomination' => 'Cat`s owner (on BSC)',
-           'smart_contract_address' => Yii::$app->params['smartcontract_address'],
-           'decimals' => '9',
-           'symbol' => 'CZN',
-        ]);
+        // $this->insert('standard_smart_contract_values', [
+        //     'id_blockchain' => 1,
+        //     'id_contract_type' => 2,
+        //    'denomination' => 'Cat`s owner (on BSC)',
+        //    'smart_contract_address' => Yii::$app->params['smartcontract_address'],
+        //    'decimals' => '9',
+        //    'symbol' => 'CZN',
+        // ]);
 
         // INSERT CZN POA BLOCKCHAIN DATA
         $this->insert('standard_smart_contract_values', [
-            'id_blockchain' => 2,
+            'id_blockchain' => 1,
             'id_contract_type' => 1,
            'denomination' => 'Cat`s Owner (on POA)',
            'smart_contract_address' => '0x3A95470a698449d73Aa3608312D1E30a8d9E457C',
@@ -44,12 +44,12 @@ class m210607_140150_create_standard_smart_contract_values_table extends Migrati
 
         // INSERT FIDELITY SMART CONTRACT
         $this->insert('standard_smart_contract_values',[
-            'id_blockchain' => 3,
+            'id_blockchain' => 2,
             'id_contract_type' => 1,
             'denomination' => 'Fidelity Token (on POA)',
-            'smart_contract_address' => '0x9a3DBCa554e9f6b9257aAa24010DA8377C57c17e',
+            'smart_contract_address' => '0xb5B49A84664B52b808E9FDe9096fc6BEd94F8D91',
             'decimals' => '2',
-            'symbol' => 'FID',
+            'symbol' => 'FIDES',
         ]);
 
 

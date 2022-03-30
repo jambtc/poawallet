@@ -24,6 +24,7 @@ class EthereumTransactions
         $maxRepeat = 5;
 
         while (true){
+            $distinct = [];
             $blockchains = Blockchains::find()
                 //->andWhere(['zerogas'=>1])
                 ->orderby(['id'=>SORT_ASC])
@@ -39,6 +40,10 @@ class EthereumTransactions
 
             // $this->log("distinct: <pre>".print_r($distinct,true).'</pre>');
             // die();
+            if (empty($distinct)){
+                sleep(1);
+                continue;
+            }
 
             // distinct così le cerco solo per 1 volta
             foreach ($distinct as $row){

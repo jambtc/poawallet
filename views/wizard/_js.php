@@ -104,6 +104,9 @@ $(function () {
         							prv_php 	: CryptoJS.AES.encrypt(JSON.stringify(prv_key), password, {format: CryptoJSAesJson}).toString(),
         							prv_pas		: pwd_crypted,
         						};
+                                console.log('[Restore]: seed: ', seed);
+                                console.log('[Restore]: prv_key: ', prv_key);
+                                console.log('[Restore]: address: ', address);
         						console.log('[Restore]: address and key in post: ', walletPost);
 
                                 clearAllData('wallet')

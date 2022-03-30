@@ -219,18 +219,23 @@ class Erc20 extends Component
 			if ($err !== null) {
 				throw new HttpException(404,$err->getMessage());
 			}
-			// echo '<pre>'.print_r($result,true).'</pre>';
+			// echo '<pre>'.print_r($result[0]->toString(),true).'</pre>';
 			// exit;
+
+
 			if (isset($result)) {
 				//$balance = (string) $result[0]->value;
-                if (isset($result[0])){
-                    $value = $utils->toEther((string)$result[0]->value, 'ether');
-                } else {
-                    $value = $utils->toEther((string)$result['balance']->value, 'ether');
-                }
-				$Value0 = (string) $value[0]->value;
-                $Value1 = (string) $value[1]->value;
-                $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
+                // if (isset($result[0])){
+                //
+                //
+                //     $value = $utils->toEther((string)$result[0]->value, 'ether');
+                // } else {
+                //     $value = $utils->toEther((string)$result['balance']->value, 'ether');
+                // }
+				// $Value0 = (string) $value[0]->value;
+                // $Value1 = (string) $value[1]->value;
+                // $Value2 = ($Value0 + $Value1) / pow(10, $this->getDecimals());
+                $Value2 = $result[0]->toString();
 
 				$this->setBalance($Value2);
 			}

@@ -22,13 +22,13 @@ class m210607_135621_create_standard_blockchain_values_table extends Migration
         ]);
 
         // INSERT BINANCE SMART CHAIN DATA
-        $this->insert('standard_blockchain_values', [
-           'denomination' => 'BSC - Smart Chain',
-           'chain_id' => '56',
-           'url' => 'https://bsc-dataseed.binance.org/',
-           'symbol' => 'BNB',
-           'url_block_explorer' => 'https://bscscan.com',
-        ]);
+        // $this->insert('standard_blockchain_values', [
+        //    'denomination' => 'BSC - Smart Chain',
+        //    'chain_id' => '56',
+        //    'url' => 'https://bsc-dataseed.binance.org/',
+        //    'symbol' => 'BNB',
+        //    'url_block_explorer' => 'https://bscscan.com',
+        // ]);
 
         // // INSERT BINANCE TEST CHAIN DATA
         // $this->insert('standard_blockchain_values', [
@@ -51,9 +51,9 @@ class m210607_135621_create_standard_blockchain_values_table extends Migration
         // INSERT FIDELITY POA BLOCKCHAIN DATA
         $this->insert('standard_blockchain_values', [
            'denomination' => 'Fidelity POA',
-           'chain_id' => '2018',
+           'chain_id' => '2118',
            'url' => 'https://poa.fid3lize.tk/',
-           'symbol' => 'FID',
+           'symbol' => 'FIDGAS',
            'url_block_explorer' => 'https://explorer.fid3lize.tk',
         ]);
     }

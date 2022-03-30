@@ -65,3 +65,7 @@ chmod g+w ./runtime/
 ```
 ./yii migrate
 ```
+
+
+### PHP Setup
+Install php7.3-gmp and php7.3-bcmath 
