@@ -284,9 +284,9 @@ class Erc20 extends Component
         }
         // echo 'settings id: <pre>'.print_r($settings->id,true).'</pre>';
         // echo 'blockchain url: <pre>'.print_r($settings->blockchain->url,true).'</pre>';
-
+        //
         // echo 'blockchain url: <pre>'.print_r($url,true).'</pre>';
-
+        // exit;
 
         // $web3 = new Web3($url);
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($url)));
@@ -298,9 +298,11 @@ class Erc20 extends Component
 		$response = null;
 		$web3->eth->getBlockByNumber($blocknumber,$search, function ($err, $block) use (&$response){
 			if ($err !== null) {
+                // echo 'response from get is: <pre>'.print_r($err,true).'</pre>';exit;
+
 				return $this->json(['error'=>$err]);
 			}
-            // echo 'response from get is: <pre>'.print_r($block,true).'</pre>';
+            // echo 'response from get is: <pre>'.print_r($block,true).'</pre>';exit;
 
 			$response = $block;
 		});

@@ -199,6 +199,8 @@ class BlockchainController extends Controller
 		while (true){
 			$x++;
 			$blockInfo = $ERC20->getBlockInfo($number,$details);
+			// echo '<pre> blockinfo: '.print_r($blockInfo,true).'</pre>';exit;
+
 			if (null !== $blockInfo){
 				return $blockInfo;
 				// break;
@@ -316,6 +318,11 @@ class BlockchainController extends Controller
 		set_time_limit(60); //imposto il time limit unlimited
 
 		$user_id = Yii::$app->user->id;
+		// echo '<pre>'.print_r($user_id,true).'</pre>';exit;
+
+		// POSTMAN fix
+		if (null === $user_id) $user_id = 1;
+
 
 		//carico info del wallet
 		$wallets = MPWallets::find()->where(['id_user'=>$user_id])->one();
@@ -330,7 +337,11 @@ class BlockchainController extends Controller
 		$blockLatest = $this->getChainBlock($user_id);
 		$chainBlock = $blockLatest->number;
 
+
+
 		$savedBlock = '0x'. dechex (hexdec($blockLatest->number) - $behind_blocks );
+
+		// echo '<pre>'.print_r($blockLatest,true).'</pre>';exit;
 
 		// Inizio il ciclo sui blocchi
 		for ($x=0; $x <= $behind_blocks; $x++)
