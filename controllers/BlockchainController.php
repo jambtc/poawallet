@@ -172,6 +172,8 @@ class BlockchainController extends Controller
 		$walletBlock = $this->getChainBlock($user_id, $searchBlock);
 		$timeToComplete = hexdec($chainBlock->timestamp) - hexdec($walletBlock->timestamp);
 
+		// echo '<pre>'.print_r($walletBlock,true).'</pre>';exit;
+
 		$difference = hexdec($chainBlock->number) - hexdec($searchBlock);
         $percentageCompletion = round(hexdec($searchBlock) / hexdec($chainBlock->number) * 100, 4);
 
@@ -187,7 +189,7 @@ class BlockchainController extends Controller
             "relativeTime" => Yii::$app->formatter->asDuration($timeToComplete),
             "percentageCompletion" => $percentageCompletion."%",
             "latestBlockHash"=>Html::a($chainBlock->hash,$node->blockchain->url_block_explorer.'/block/'.hexdec($chainBlock->number),['target'=>'_blank']),
-            "walletBlockHash"=>Html::a($walletBlock->hash,$node->blockchain->url_block_explorer.'/block/'.hexdec($searchBlock),['target'=>'_blank']),
+            "walletBlockHash"=>Html::a($walletBlock->number,$node->blockchain->url_block_explorer.'/block/'.hexdec($searchBlock),['target'=>'_blank']),
 	   	];
 	   	return Json::encode($return);
 	}
