@@ -146,6 +146,8 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
+        // echo "<pre>".print_r($_POST,true)."</pre>";exit;
+		// exit;
         // setcookie('tg_user', '');
         // setcookie('stel_ssid', '');
         // setcookie('stel_token', '');

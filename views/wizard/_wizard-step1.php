@@ -14,10 +14,12 @@ use yii\helpers\Url;
     <div class="form-divider"></div>
     <div class="container">
       <div class="float-left">
-        <a href="<?php echo Url::to(['/site/logout']); ?>" data-method="post">
-            <button class="btn btn-warning btn-md">
-                <i class="fas fa-sign-out-alt"></i> <?php echo Yii::t('app','Logout');?></button>
-        </a>
+        <form action="<?php echo Url::to(['/site/logout']); ?>" method="POST" id="form-logout">
+            <a href="#">
+                <button class="btn btn-warning btn-md site-logout">
+                    <i class="fas fa-sign-out-alt"></i> <?php echo Yii::t('app','Logout');?></button>
+            </a>
+        </form>
       </div>
       <div class="float-right">
         <button type="button" id="stepwizard_step1_next" class="btn btn-primary btn-md next-step" >
