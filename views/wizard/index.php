@@ -18,7 +18,13 @@ $form = ActiveForm::begin([
 	],
 
 ]);
+?>
+<?= $form->field($formModel, 'seed')->hiddenInput()->label(false) ?>
+<?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
 
+
+<?php ActiveForm::end(); ?>
+<?php 
 include ('_js.php');
 
 $wizard_config = [
@@ -115,9 +121,3 @@ $wizard_config = [
         <?= \drsdre\wizardwidget\WizardWidget::widget($wizard_config); ?>
 	</div>
 </div>
-
-<?= $form->field($formModel, 'seed')->hiddenInput()->label(false) ?>
-<?= $form->field($formModel, 'address')->hiddenInput()->label(false) ?>
-
-
-<?php ActiveForm::end(); ?>

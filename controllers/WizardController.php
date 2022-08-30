@@ -137,6 +137,23 @@ class WizardController extends Controller
 		]);
  	}
 
+	private function getLatestBlockNumber(){
+		$ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
+		$block = $ERC20->getBlockInfo();
+
+		// echo '<pre>'.print_r($block,true);exit;
+		$json = null;
+		if (!is_object($block)){
+			$json = json_decode($block);
+		}
+
+		if (!isset($json->error)){
+			return ($block === null) ? '0x0' : $block->number;
+		} else {
+			return '0x0';
+		}
+	}
+
 
 
 	private static function json ($data)

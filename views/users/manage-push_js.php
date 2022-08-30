@@ -175,29 +175,15 @@ $(function () {
             dataType: "json",
             success:function(res){
                 console.log(res.response);
-
             },
             error: function(j){
                 console.log('[push] ERRORE Update subscription',j);
             }
         });
     }
-
-
-
-
-
-
-
-
 });
-
-
-
-
-
-
 JS;
+
 $this->registerJs(
     $managePush,
     yii\web\View::POS_READY, //POS_END
