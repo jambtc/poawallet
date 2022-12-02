@@ -175,7 +175,7 @@ class SiteController extends Controller
 
         $user = Users::findOne($id_decrypted);
         
-        if (null !== $user){
+        if (null !== $user && $user->status_activation_code == Users::STATUS_INSERTED){
             $b = substr($user->activation_code, 1, 9) * 1;
     
             $diff = $a - $b;
