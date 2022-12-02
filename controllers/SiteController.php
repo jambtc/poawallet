@@ -204,7 +204,7 @@ class SiteController extends Controller
             }
 
         } else {
-            Yii::$app->session->setFlash('registerError', Yii::t('app', '<strong>Error!</strong> Your account doesn\'t exist. You have to register again!'));
+            Yii::$app->session->setFlash('registerError', Yii::t('app', '<strong>Error!</strong> Your account doesn\'t exist or you have already registered!'));
         }
         // exit;
         return $this->render('activate', [
