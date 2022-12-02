@@ -18,7 +18,6 @@ use app\models\WizardWalletForm;
 use app\models\MPWallets;
 use app\models\Nodes;
 
-use yii\bootstrap4\ActiveForm;
 use yii\helpers\Json;
 use yii\helpers\Url;
 
@@ -108,7 +107,7 @@ class WizardController extends Controller
 			// se sono giunto qui, l'indirizzo dell'utente non doveva essere in tabella
 			// oppure non corrisponde a quello salvato in indexedDB
 			$boltWallet = MPWallets::find()->where( [ 'id_user' => Yii::$app->user->id ] )->one();
-			$node = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
+			$node = Nodes::find()->byUserId(Yii::$app->user->id)->one();
 
 			if(null === $boltWallet) {
 				$boltWallet = new MPWallets;
@@ -117,6 +116,7 @@ class WizardController extends Controller
 					$defaultNetworkExist = true;
 					$node = Networks::createDefaults();
 				}
+				// echo '<pre>node'.print_r($node,true);exit;
 				$boltWallet->blocknumber = $this->getLatestBlockNumber();
 			}
 			$boltWallet->wallet_address = Yii::$app->request->post('WizardWalletForm')['address'];

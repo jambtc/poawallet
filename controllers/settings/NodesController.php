@@ -119,10 +119,8 @@ class NodesController extends Controller
      */
     protected function findModel()
     {
-        $model = Nodes::find()
- 	     		->andWhere(['id_user'=>Yii::$app->user->id])
- 	    		->one();
-
+        $model = Nodes::find()->byUserId(Yii::$app->user->id)->one();
+       
         if ($model !== null) {
             return $model;
         }
@@ -132,11 +130,11 @@ class NodesController extends Controller
 
     public function actionTokensList($id)
     {
-        $stores = ArrayHelper::map(SmartContracts::find()
-            ->andWhere(['id_blockchain'=>$id])
-            ->andWhere(['id_user'=>Yii::$app->user->id])
-            ->all(), 'id', 'denomination');
+        $smartcontract = ArrayHelper::map(SmartContracts::find()
+        ->byUserId(Yii::$app->user->id)
+        ->byBlockchainId($id)
+        ->all(), 'id', 'denomination');
 
-        return Json::encode($stores);
+        return Json::encode($smartcontract);
     }
 }

@@ -12,10 +12,11 @@ use yii\bootstrap4\ActiveForm;
 // echo '<pre>'.print_r($model,true).'</pre>';
 // exit;
 
-$blockchains = ArrayHelper::map(Blockchains::find()->where(['id_user'=>$model->id_user])->all(), 'id', 'denomination');
+$blockchains = ArrayHelper::map(Blockchains::find()->byUserId($model->id_user)->all(), 'id', 'denomination');
+
 $smartcontract = ArrayHelper::map(SmartContracts::find()
-    ->andWhere(['id_blockchain'=>$model->id_blockchain])
-    ->andWhere(['id_user'=>$model->id_user])
+    ->byUserId($model->id_user)
+    ->byBlockchainId($model->id_blockchain)
     ->all(), 'id', 'denomination');
 
 include ('_formjs.php');

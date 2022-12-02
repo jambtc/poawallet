@@ -9,10 +9,19 @@ namespace app\models\query;
  */
 class SmartContractsQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function byUserId($id)
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere([
+            'id_user' => $id
+        ]);
+    }
+
+    public function byBlockchainId($id)
+    {
+        return $this->andWhere([
+            'id_blockchain' => $id
+        ]);
+    }
 
     /**
      * {@inheritdoc}

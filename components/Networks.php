@@ -14,17 +14,19 @@ use app\models\Nodes;
 
 class Networks extends Component
 {
-    public static function createDefaultS()
+    public static function createDefaults()
 	{
 		$default_blockchains = StandardBlockchainValues::find()->all();
 
+		foreach ($default_blockchains as $default_blockchain){
+			// cerca se già inserita
+			$blockchain = Blockchains::find()
+			->byUserId(Yii::$app->user->id)
+			->byChain($default_blockchain->chain_id)
+			->bySymbol($default_blockchain->symbol)
+			->one();
 
-		$blockchain = Blockchains::find()->where(['id_user'=>Yii::$app->user->id])->all();
-		$smartcontract = SmartContracts::find()->where(['id_user'=>Yii::$app->user->id])->all();
-		$nodes = Nodes::find()->where(['id_user'=>Yii::$app->user->id])->one();
-
-		if (empty($blockchain)) {
-			foreach ($default_blockchains as $default_blockchain){
+			if (null === $blockchain){
 				$blockchain = new Blockchains;
 				$blockchain->id_user = Yii::$app->user->id;
 				$blockchain->denomination = $default_blockchain->denomination;
@@ -37,9 +39,17 @@ class Networks extends Component
 					var_dump( $blockchain->getErrors());
 					die();
 				}
+			}
 
-				$default_smartcontract = StandardSmartContractValues::find()->where(['id_blockchain'=>$default_blockchain->id])->one();
+			$default_smartcontract = StandardSmartContractValues::find()->where(['id_blockchain'=>$default_blockchain->id])->one();
 
+			// cerca se già inserita
+			$smartcontract = SmartContracts::find()
+			->byUserId(Yii::$app->user->id)
+			->byBlockchainId($blockchain->id)
+			->one();
+
+			if (null === $smartcontract) {
 				$smartcontract = new SmartContracts;
 				$smartcontract->id_user = Yii::$app->user->id;
 				$smartcontract->id_blockchain = $blockchain->id;
@@ -54,22 +64,28 @@ class Networks extends Component
 					die();
 				}
 			}
-		}
-		// inserisco la blockchain INSERITA NEI PARAMS come default
-		// Poi l'utente può successivamente cambiarla
-		// in tal modo posso utilizzare lo stesso software in più
-		// ambiti!
-		if (null === $nodes){
-			$nodes = new Nodes;
-			$nodes->id_user = Yii::$app->user->id;
-			$nodes->id_blockchain = Yii::$app->params['default_blockchain'];
-			$nodes->id_smart_contract = Yii::$app->params['default_smartcontract'];
-			if (!$nodes->save()){
-				var_dump( $nodes->getErrors());
-				die();
+
+			// cerca se già inserita
+			$node = Nodes::find()
+			->byUserId(Yii::$app->user->id)
+			->one();
+
+			if (null === $node) {
+				$node = new Nodes;
+				$node->id_user = Yii::$app->user->id;
+				$node->id_blockchain = $blockchain->id;
+				$node->id_smart_contract = $smartcontract->id;
+				if (!$node->save()) {
+					var_dump($node->getErrors());
+					die();
+				}
 			}
 		}
-		return $nodes;
+
+		// echo '<pre>node in networks' . print_r($node, true);
+		// exit;
+		
+		return $node;
 
 	}
 }

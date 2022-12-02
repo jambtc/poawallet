@@ -9,10 +9,14 @@ namespace app\models\query;
  */
 class NodesQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function byUserId($id)
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere([
+            'id_user' => $id
+        ]);
+    }
+
+   
 
     /**
      * {@inheritdoc}

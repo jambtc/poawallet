@@ -9,10 +9,24 @@ namespace app\models\query;
  */
 class BlockchainsQuery extends \yii\db\ActiveQuery
 {
-    /*public function active()
+    public function byUserId($id)
     {
-        return $this->andWhere('[[status]]=1');
-    }*/
+        return $this->andWhere([
+            'id_user' => $id
+        ]);
+    }
+    public function byChain($chain)
+    {
+        return $this->andWhere([
+            'chain_id' => $chain
+        ]);
+    }
+    public function bySymbol($symbol)
+    {
+        return $this->andWhere([
+            'symbol' => $symbol
+        ]);
+    }
 
     /**
      * {@inheritdoc}
