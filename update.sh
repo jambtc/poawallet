@@ -13,10 +13,10 @@ chmod g+w web/assets/
 chgrp www-data runtime
 chmod g+w runtime/
 
-echo Versioning...
-git rev-parse HEAD>version.txt
+echo Version
+git rev-parse HEAD
 
-echo Calling eth-storage-service...
-./ethstorage.sh
+echo To call eth-storage-service please launch ethstorage.sh
+#./ethstorage.sh
 
 echo Done!
