@@ -33,8 +33,8 @@ class LoginForm extends Model
 					[['username', 'password'], 'required'],
 					// rememberMe must be a boolean value
 					['rememberMe', 'boolean'],
-					// password is validated by authenticate()
-					['password', 'authenticate'],
+					// password is validated by validatePassword()
+					['password', 'validatePassword'],
 
 					[['oauth_provider'], 'string', 'max' => 100],
 
@@ -57,19 +57,24 @@ class LoginForm extends Model
 		);
 	}
 
+	
+
 	/**
-	 * Authenticates the password.
-	 * This is the 'authenticate' validator as declared in rules().
-	 * @param string $attribute the name of the attribute to be validated.
-	 * @param array $params additional parameters passed with rule when being executed.
+	 * Validates the password.
+	 * This method serves as the inline validation for password.
+	 *
+	 * @param string $attribute the attribute currently being validated
+	 * @param array $params the additional name-value pairs given in the rule
 	 */
-	public function authenticate($attribute,$params)
+	public function validatePassword($attribute, $params)
 	{
 		if (!$this->hasErrors()) {
 			$user = $this->getUser();
 
 			if (!$user || !$user->validatePassword($this->password)) {
-				$this->addError($attribute, 'Incorrect username or password.');
+				$this->addError($attribute, Yii::t('app', 'Incorrect username or password.'));
+			} else if (!$user->validateStatus()) {
+				$this->addError($attribute, Yii::t('app', 'User not active.'));
 			}
 		}
 	}

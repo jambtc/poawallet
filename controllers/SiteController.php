@@ -16,9 +16,6 @@ use app\models\ResetPasswordForm;
 use app\components\WebApp;
 use app\components\AuthHandler;
 
-
-define ('NONCE_TIMEOUT', 24 * 60 * 60); // 1 day
-
 class SiteController extends Controller
 {
     /**
@@ -79,10 +76,6 @@ class SiteController extends Controller
     	return parent::beforeAction($action);
 	}
 
-    // private static function setCookieForGoogleLogout()
-    // {
-    //   setcookie('G_AUTHUSER_LOGOUT','AVOID');
-    // }
 
     public function actionError(){
         $this->layout = 'auth';
@@ -101,9 +94,6 @@ class SiteController extends Controller
         if (!Yii::$app->user->isGuest) {
             return $this->redirect(['wallet/index']);
         }
-
-        // $this->setCookieForGoogleLogout();
-
 
         return $this->render('index');
     }
@@ -131,8 +121,6 @@ class SiteController extends Controller
             return $this->redirect(['wallet/index']);
         }
 
-        // $this->setCookieForGoogleLogout();
-
         $model->password = '';
         return $this->render('login', [
             'model' => $model,
@@ -146,46 +134,11 @@ class SiteController extends Controller
      */
     public function actionLogout()
     {
-        // echo "<pre>".print_r($_POST,true)."</pre>";exit;
-		// exit;
-        // setcookie('tg_user', '');
-        // setcookie('stel_ssid', '');
-        // setcookie('stel_token', '');
-        // setcookie('G_AUTHUSER_LOGOUT','TRUE');
-        // $this->setCookieForGoogleLogout();
-
         Yii::$app->user->logout();
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    // public function actionContact()
-    // {
-    //     $model = new ContactForm();
-    //     if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-    //         Yii::$app->session->setFlash('contactFormSubmitted');
-    //
-    //         return $this->refresh();
-    //     }
-    //     return $this->render('contact', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    // public function actionAbout()
-    // {
-    //     return $this->render('about');
-    // }
-
+    
     public function actionRegister()
     {
         if (!Yii::$app->user->isGuest){
@@ -193,13 +146,10 @@ class SiteController extends Controller
         }
         $this->layout = 'auth';
 
-        // echo "<pre>".print_r($_POST,true)."</pre>";
-		// exit;
 
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('registerFormSubmitted');
-            // return $this->refresh();
         }
 
         $model->password = '';
@@ -208,75 +158,58 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionActivate()
+    /**
+     * Activate registered user.
+     *
+     * @return Response|string
+     */
+    public function actionActivate($id, $sign)
     {
         $this->layout = 'auth';
-
-        // echo "<pre>".print_r($_POST,true)."</pre>";
-		// exit;
-        $id = WebApp::decrypt($_GET['id']);
-        // echo "<pre>".print_r($id,true)."</pre>";
-        // exit;
+        $id_decrypted = WebApp::decrypt($id);
 
         // check if the message is outdated
         $microtime = explode(' ', microtime());
         $nonce = $microtime[1] . str_pad(substr($microtime[0], 2, 6), 6, '0');
-        $a = substr($nonce,1,9)*1;
+        $a = substr($nonce, 1, 9) * 1;
 
-        $user = $this->findModel($id);
-        $b = substr($user->activation_code,1,9)*1;
+        $user = Users::findOne($id_decrypted);
+        
+        if (null !== $user){
+            $b = substr($user->activation_code, 1, 9) * 1;
+    
+            $diff = $a - $b;
+            if ($diff > Yii::$app->params['nonce.timeout']) {
+                // verifica che non sia attivo e lo cancella
+                if ($user->status_activation_code == 0) {
+                    $user->delete();
+                    Yii::$app->session->setFlash('registerError', Yii::t('app', '<strong>Error!</strong> The registration time has expired. You have to register again!'));
+                }
+            }
+            // Now do the sign
+            $signature = base64_encode(hash_hmac('sha512', hash('sha256', $user->activation_code . $user->accessToken, true), base64_decode($user->authKey), true));
+    
+            // compare the two signatures
+            if (strcmp($signature, $sign) == 0) {
+                // echo "<pre>".print_r('sono uguali',true)."</pre>";exit;
+                $user->activation_code = '000';
+                $user->accessToken = '000';
+                $user->status_activation_code = Users::STATUS_ACTIVE;
+                $user->save();
+                Yii::$app->session->setFlash('userActived', Yii::t('app', 'You have registered your account successfully.'));
+                // exit;
+            } else {
+                $user->delete();
+                Yii::$app->session->setFlash('registerError', Yii::t('app', '<strong>Error!</strong> The registration time has expired. You have to register again!'));
+            }
 
-        // echo "<pre>".print_r($a,true)."</pre>";
-        // echo "<pre>".print_r($b,true)."</pre>";
-        // echo "<pre>".print_r($a-$b,true)."</pre>";
-        // echo "<pre>".print_r(NONCE_TIMEOUT,true)."</pre>";
-        // exit;
-
-        // if (($a - $b) > 1){
-        if (($a - $b) > NONCE_TIMEOUT){
-            // verifica che non sia attivo e lo cancella
-            $delete = Users::find()
-                ->andWhere(['id'=>$id])
-                ->andWhere(['status_activation_code'=>0])
-            ->one();
-            $delete->delete();
-            Yii::$app->session->setFlash('dataOutdated');
-            // return $this->refresh();
-        }
-        // Now do the sign
-        $sign = base64_encode(hash_hmac('sha512', hash('sha256', $user->activation_code . $user->accessToken, true), base64_decode($user->authKey), true));
-
-        // echo "<pre>".print_r($sign,true)."</pre>";
-        // echo "<pre>".print_r($_GET['sign'],true)."</pre>";
-
-
-        // exit;
-
-
-        // compare the two signatures
-        if (strcmp($sign, $_GET['sign']) == 0){
-            // echo "<pre>".print_r('sono uguali',true)."</pre>";
-            $user->activation_code = '0';
-            $user->accessToken = '0';
-            $user->status_activation_code = Users::STATUS_ACTIVE;
-            $user->save();
-            // exit;
-        }else{
-            // echo "<pre>".print_r('sono diver',true)."</pre>";
-            $delete = Users::find()
-                ->andWhere(['id'=>$id])
-                ->andWhere(['status_activation_code'=>0])
-            ->one();
-            $delete->delete();
-            Yii::$app->session->setFlash('dataNotSigned');
+        } else {
+            Yii::$app->session->setFlash('registerError', Yii::t('app', '<strong>Error!</strong> Your account doesn\'t exist. You have to register again!'));
         }
         // exit;
-
-
         return $this->render('activate', [
             'model' => $user,
         ]);
-
     }
 
     /**

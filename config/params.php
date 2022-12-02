@@ -47,6 +47,11 @@ return [
     //
     'user.rememberMeDuration' => 7776000, // This number is 60sec * 60min * 24h * 90days
 
+    /**
+     * Set the nonce timeout for activate user
+     */
+    'nonce.timeout' => 24 * 60 * 60,
+
 
     // Telegram login informations
     'telegram.clientId' => $telegramClientId,

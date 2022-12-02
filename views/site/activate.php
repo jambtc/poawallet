@@ -14,54 +14,40 @@ $this->title = 'Activation';
 
 ?>
 <div class="container h-100">
-  <div class="row h-100 justify-content-center align-items-center">
-    <div class="site-login">
-      <div class="body-content dash-balance jumbotron pb-5">
-          <div class="text-center">
-              <img src="css/images/logo.png" alt="" width="220">
-          </div>
-          <div class="form-divider"></div>
-          <h3 class="alert alert-info"><?= Yii::t('app','Activation form') ?></h3>
-
-          <?php if (Yii::$app->session->hasFlash('dataOutdated')): ?>
-
-              <div class="alert alert-warning">
-                  <?php echo Yii::t('app','The registration time has expired.');?><br>
-                  <?php echo Yii::t('app','You have to register again.');?>
-              </div>
-                <div class="form-row txt-center text-light mt-15">
-                  <?php echo Yii::t('app','Please, repeat the registration.');?>
-                  <a style="color:#007bff;" href="<?php echo Url::to(['site/register']); ?>" data-loader="show">
-                      <?php echo Yii::t('app','Sign Up');?>
-                  </a>
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="site-login">
+            <div class="body-content dash-balance jumbotron pb-5">
+                <div class="text-center">
+                    <img src="css/images/logo.png" alt="" width="220">
                 </div>
-        <?php endif; ?>
+                <div class="form-divider"></div>
+                <h3 class="alert alert-info"><?= Yii::t('app', 'Activation form') ?></h3>
 
-        <?php if (Yii::$app->session->hasFlash('dataNotSigned')): ?>
-            <div class="alert alert-warning">
-                <?php echo Yii::t('app','The registration data isn\'t valid.');?><br>
-                <?php echo Yii::t('app','You have to register again.');?>
-            </div>
-            <div class="form-row txt-center text-light mt-15">
-                <?php echo Yii::t('app','Please, repeat the registration.');?>
-                <a style="color:#007bff;" href="<?php echo Url::to(['site/register']); ?>" data-loader="show">
-                    <?php echo Yii::t('app','Sign Up');?>
-                </a>
-            </div>
+                <?php if (Yii::$app->session->hasFlash('userActived')) : ?>
+                    <div class="card-body login-card-body">
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <?php echo Yii::$app->session->getFlash('userActived'); ?>
+                            <a class="mt-3 btn btn-primary btn-block" href="<?php echo Url::to(['site/login']); ?>" data-loader="show">
+                                <?php echo Yii::t('app', 'Login'); ?>
+                            </a>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                <?php endif; ?>
 
-        <?php else: ?>
-            <div class="alert alert-success">
-                <?php echo Yii::t('app','You have registered your account successfully.');?><br>
-            </div>
-            <div class="form-row txt-center text-light mt-15">
-                <?php echo Yii::t('app','You can now login.');?>
-                <a style="color:#007bff;" href="<?php echo Url::to(['site/login']); ?>" data-loader="show">
-                    <?php echo Yii::t('app','Sign In');?>
-                </a>
-            </div>
+                <?php if (Yii::$app->session->hasFlash('registerError')) : ?>
+                    <div class="alert alert-warning">
+                        <?php echo Yii::$app->session->getFlash('registerError'); ?><br>
 
-        <?php endif; ?>
-      </div>
+                        <a class="mt-3 btn btn-primary btn-block" href="<?php echo Url::to(['site/index']); ?>" data-loader="show">
+                            <?php echo Yii::t('app', 'Back to home!'); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+
+            </div>
+        </div>
     </div>
-  </div>
 </div>

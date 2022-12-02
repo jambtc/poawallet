@@ -325,4 +325,14 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $this->activation_code = Yii::$app->security->generateRandomString() . '_' . time();
     }
 
+    /**
+     * Validates user activation
+     *
+     * @return bool if status is valid for current user
+     */
+    public function validateStatus()
+    {
+        return $this->status_activation_code;
+    }
+
 }
