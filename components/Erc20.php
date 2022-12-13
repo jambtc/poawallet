@@ -368,12 +368,15 @@ class Erc20 extends Component
                 'from'=>$fromAddress,
             ]
             , function ($err, $result) use (&$gasLimit) {
-			if ($err !== null) {
-				throw new HttpException(404,$err->getMessage());
-			}
-            if (isset($result)) {
-                $gasLimit = gmp_strval($result->value);
-			}
+                // echo '<pre>' . print_r($result, true) . '</pre>';
+                // echo '<pre>' . print_r($err, true) . '</pre>';
+		        // exit;
+                // if ($err !== null) {
+                //     throw new HttpException(404,$err->getMessage());
+                // }
+                if (isset($result)) {
+                    $gasLimit = gmp_strval($result->value);
+                }
 		});
 
         return $gasLimit;
@@ -481,6 +484,10 @@ class Erc20 extends Component
 
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
+
+            // echo '<pre>' . print_r($fromAccount, true) . '</pre>';
+            // echo '<pre>'.print_r('0x' . dechex($nonce),true).'</pre>';exit;
+
             $transaction = new Transaction([
                 'nonce' => '0x'.dechex($nonce), //è un object BigInteger
                 'from' => $fromAccount, //indirizzo sealer Blockchain

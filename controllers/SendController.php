@@ -209,6 +209,9 @@ class SendController extends Controller
 		// imposto il valore del nonce attuale
 		$nonce = $ERC20->getNonce($fromAccount);
 
+        // echo '<pre>' . print_r($nonce, true) . '</pre>';exit;
+
+
 		// genero la transazione nell'intervallo del nonce
 		$maxNonce = $nonce + 10;
 		while ($nonce < $maxNonce)
@@ -235,7 +238,7 @@ class SendController extends Controller
 		// echo '<pre>'.print_r($tx,true).'</pre>';
 		// exit;
 		if ($tx['success'] == false){
-			throw new HttpException(404,'Error: '.$tx['message']);
+			throw new HttpException(505,'Error: '.$tx['message']);
 		}
 
 		//salva la transazione ERC20 in archivio
