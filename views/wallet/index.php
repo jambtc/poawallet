@@ -53,8 +53,19 @@ include ('index_js.php');
                                           Token <small class="ml-1"><i class="fa fa-star star-total-balance fa-sm"></i></small>
                                       </p>
                                       <div>
-                                          <span class="h5" id="total-balance"><?= WebApp::si_formatter($balance) ?></span>
-                                          <!-- <span id="total-balance"><?= $balance ?></span> -->
+                                          <span class="h5" id="total-balance">
+                                            <?php 
+                                            // WebApp::si_formatter($balance) 
+                                            echo Yii::$app->formatter->asDecimal(
+                                                $balance, 
+                                                [
+                                                    NumberFormatter::MIN_FRACTION_DIGITS => 0,
+                                                    NumberFormatter::MAX_FRACTION_DIGITS => $node->smartContract->decimals,
+                                                ]
+                                            );
+                                            ?>
+                                           </span>
+                                          
                                           <small><?= $node->smartContract->symbol ?></small>
                                       </div>
                                   </p>
@@ -65,7 +76,17 @@ include ('index_js.php');
                                           Gas <small class="ml-1"><i class="fab fa-ethereum fa-sm"></i></small>
                                       </p>
                                       <div>
-                                          <span class="h5" id="total-balance_gas"><?= WebApp::si_formatter($balance_gas) ?></span>
+                                          <span class="h5" id="total-balance_gas">
+                                            <?php
+                                            //WebApp::si_formatter($balance_gas) 
+                                            echo Yii::$app->formatter->asDecimal(
+                                                $balance_gas,
+                                                8
+                                                
+                                            );
+                                             
+                                             ?>
+                                        </span>
 
                                           <!-- <span id="total-balance_gas2"><?= $balance_gas ?></span> -->
                                           <small><?= $node->blockchain->symbol ?></small>

@@ -74,7 +74,11 @@ class Messages extends Component
     public function push($attributes, $app='wallet')
     {
         self::log("Salvo il messaggio in db");
-        $notification = self::save($attributes);
+        // $notification = self::save($attributes);
+
+        unset($attributes['id_user']);
+        $notification = new Notifications;
+        $notification->attributes = $attributes;
 
         //Carico i parametri della webapp
         $settings = Settings::Vapid();
