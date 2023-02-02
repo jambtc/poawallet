@@ -40,13 +40,13 @@ class m210607_135621_create_standard_blockchain_values_table extends Migration
         // ]);
 
         // INSERT CZN POA BLOCKCHAIN DATA
-        $this->insert('standard_blockchain_values', [
-           'denomination' => 'POA Cat`s Owner',
-           'chain_id' => '1337',
-           'url' => 'https://poa-node.catsowner.tk/',
-           'symbol' => 'CZN',
-           'url_block_explorer' => 'https://explorer.catsowner.tk',
-        ]);
+        // $this->insert('standard_blockchain_values', [
+        //    'denomination' => 'POA Cat`s Owner',
+        //    'chain_id' => '1337',
+        //    'url' => 'https://poa-node.catsowner.tk/',
+        //    'symbol' => 'CZN',
+        //    'url_block_explorer' => 'https://explorer.catsowner.tk',
+        // ]);
 
         // INSERT FIDELITY POA BLOCKCHAIN DATA
         $this->insert('standard_blockchain_values', [
@@ -54,7 +54,7 @@ class m210607_135621_create_standard_blockchain_values_table extends Migration
            'chain_id' => '2118',
            'url' => 'https://poa.fid3lize.tk/',
            'symbol' => 'FIDGAS',
-           'url_block_explorer' => 'https://explorer.fid3lize.tk',
+           'url_block_explorer' => 'https://blockscout.fid3lize.tk',
         ]);
     }
 
