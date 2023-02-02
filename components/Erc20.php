@@ -177,7 +177,7 @@ class Erc20 extends Component
     	$response = null;
 		$web3->eth->getTransactionCount($address, function ($err, $nonce) use (&$response) {
 			if($err !== null) {
-				throw new HttpException(404,$err->getMessage());
+				throw new HttpException(501,$err->getMessage());
 			}
             $response = gmp_intval($nonce->value);
 		});
@@ -259,10 +259,10 @@ class Erc20 extends Component
         //recupero il balance
         $balance = 0;
         $web3->eth->getBalance($address, function ($err, $response) use (&$balance){
-            $jsonBody = $this->getJsonBody($err);
+            // $jsonBody = $this->getJsonBody($err);
 
-            if ($jsonBody !== NULL){
-                throw new HttpException(404,$jsonBody['error']['message']);
+            if ($err !== NULL){
+                throw new HttpException(504,$err->getMessage());
             }
             $balance = $response->toString() ;
         });
@@ -445,11 +445,12 @@ class Erc20 extends Component
     public function loadGas($address)
     {
         $settings = Settings::poa();
+        
         $web3 = new Web3(new HttpProvider(new HttpRequestManager($settings->blockchain->url)));
         $response = null;
-
+        
         // echo '<pre>'.print_r(self::gasBalance($address),true).'</pre>';
-        // echo '<pre>'.print_r($settings->blockchain,true).'</pre>';exit;
+        // echo '<pre>'.print_r($settings,true).'</pre>';exit;
 
         $balance = self::gasBalance($address);
         $limit = 0.1;
@@ -485,6 +486,7 @@ class Erc20 extends Component
             // recupero la nonce per l'account
             $nonce = $this->getNonce($fromAccount);
 
+            // echo '<pre>' . print_r($nonce, true) . '</pre>';exit;
             // echo '<pre>' . print_r($fromAccount, true) . '</pre>';
             // echo '<pre>'.print_r('0x' . dechex($nonce),true).'</pre>';exit;
 
@@ -499,17 +501,21 @@ class Erc20 extends Component
                 'data' =>  '0x0', // non ci sono dati per contratto
             ]);
             $transaction->offsetSet('chainId', $settings->blockchain->chain_id);
+            // $transaction->offsetSet('nonce', '0x' . dechex($nonce));
             $signed_transaction = $transaction->sign($prv_key); //
+
+            // echo '<pre>' . print_r($transaction, true) . '</pre>';exit;
+
 
             $web3->eth->sendRawTransaction(sprintf('0x%s', $signed_transaction), function ($err, $tx) use (&$response){
                 if ($err !== null) {
-                    $jsonBody = $this->getJsonBody($err->getMessage());
+                    // $jsonBody = $this->getJsonBody($err->getMessage());
 
-                    if ($jsonBody === NULL){
-                        throw new HttpException(404,'ERROR: Nonce error count...');
-                    }else{
-                        throw new HttpException(404,$jsonBody['error']['message']);
-                    }
+                    // if ($jsonBody === NULL){
+                        throw new HttpException(502,'ERROR: '. $err->getMessage());
+                    // }else{
+                    //     throw new HttpException(503,$jsonBody['error']['message']);
+                    // }
                 }
                 $response = $tx;
             });

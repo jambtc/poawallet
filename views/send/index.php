@@ -60,7 +60,7 @@ $sendForm->from = $fromAddress;
                                         <?php
                                         //WebApp::si_formatter($balance) 
                                         echo Yii::$app->formatter->asDecimal(
-                                            $balance,
+                                            ($balance / (10 ** $node->smartContract->decimals)),
                                             [
                                                 NumberFormatter::MIN_FRACTION_DIGITS => 0,
                                                 NumberFormatter::MAX_FRACTION_DIGITS => $node->smartContract->decimals,

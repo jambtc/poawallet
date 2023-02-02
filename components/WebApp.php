@@ -299,13 +299,19 @@ class WebApp extends Component
         $timeLN = date("H:i:s",$data->invoice_timestamp);
 
         if ($data->from_address == $fromAddress){
-          $price = '- '.self::si_formatter($data->token_price);
+        //   $price = '- '.self::si_formatter($data->token_price);
+        $price = '- '. Yii::$app->formatter->asDecimal(
+                $data->token_price
+            );
           $color = 'red';
           $addressToShow = $data->to_address;
           $coinImg = 'fa-arrow-up text-danger';
           $recipient = Yii::t('app','To: ');
         } else {
-          $price = self::si_formatter($data->token_price);
+            //   $price = self::si_formatter($data->token_price);
+            $price = Yii::$app->formatter->asDecimal(
+                $data->token_price
+            );
           $color = 'green';
           $addressToShow = $data->from_address;
           $coinImg = 'fa-arrow-down text-success';

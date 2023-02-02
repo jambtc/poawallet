@@ -64,7 +64,7 @@ class SendController extends Controller
 							'generateTransaction',
 							'validateTransaction'
 						],
-						'roles' => ['@'],
+						'roles' => ['@'], // to permit postman working
 					],
 				],
 			],
@@ -188,15 +188,27 @@ class SendController extends Controller
 			throw new HttpException(404,'Cannot decrypt private key.');
 		}
 
-		$settings = Settings::poa(Yii::$app->user->id);
-		$ERC20 = new Yii::$app->Erc20(Yii::$app->user->id);
+
+		// postman FIX
+		if (Yii::$app->user->id == null) {
+			$id_user = 1;
+ 		} else{
+			$id_user = Yii::$app->user->id;
+		}
+		// echo '<pre>' . print_r($id_user, true) . '</pre>';
+		// exit;
+
+
+
+		$settings = Settings::poa($id_user);
+		$ERC20 = new Yii::$app->Erc20($id_user);
 
 		// carico il gas in caso questo sia a 0 MA SOLO
 		// se mi trovo sul network POA 2 e 3 inserito di default
 		// nel DB
 		// zerogas => 1
 
-		// echo '<pre>'.print_r($settings->blockchain,true).'</pre>';exit;
+		// echo '<pre>'.print_r($settings,true).'</pre>';exit;
 		if ($settings->blockchain->zerogas == 1){
 			$gasBalance = $ERC20->loadGas($fromAccount);
 		} else {
@@ -253,7 +265,7 @@ class SendController extends Controller
 		// $rate = 1; //eth::getFiatRate('token'); //
 
 		$tokens = new Transactions;
-		$tokens->id_user = Yii::$app->user->id;
+		$tokens->id_user = $id_user;
 		$tokens->status = 'new';
 		$tokens->type = 'token';
 		$tokens->id_smart_contract = $settings->smartContract->id;
@@ -275,7 +287,7 @@ class SendController extends Controller
 		// notifica per chi ha inviato (from_address)
 		$notification = [
 			'type' => 'token',
-			'id_user' => Yii::$app->user->id,
+			'id_user' => $id_user,
 			'status' => 'new',
 			'description' => Yii::t('app','You sent a new transaction.'),
 			'url' => Url::to(["/transactions/view",'id'=>WebApp::encrypt($tokens->id)]),
